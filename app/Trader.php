@@ -3,7 +3,6 @@
 namespace App;
 
 use App\Tauri\CharacterClasses;
-use App\Tauri\SmartParser;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
