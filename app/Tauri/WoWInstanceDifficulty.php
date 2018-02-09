@@ -2,9 +2,7 @@
 
 namespace App\Tauri;
 
-use Illuminate\Database\Eloquent\Model;
-
-class WoWInstanceDifficulty extends Model
+class WoWInstanceDifficulty
 {
     const WOW_INSTANCE_DIFFICULTY_NAMES = array(
         'Normal',

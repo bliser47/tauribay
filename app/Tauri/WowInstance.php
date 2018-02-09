@@ -2,9 +2,7 @@
 
 namespace App\Tauri;
 
-use Illuminate\Database\Eloquent\Model;
-
-class WowInstance extends Model
+class WowInstance
 {
     const WOW_INSTANCE_NAMES = array(
         'Blacwing descent',

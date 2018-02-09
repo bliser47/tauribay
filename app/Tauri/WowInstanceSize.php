@@ -2,9 +2,7 @@
 
 namespace App\Tauri;
 
-use Illuminate\Database\Eloquent\Model;
-
-class WowInstanceSize extends Model
+class WowInstanceSize
 {
 
     /*
