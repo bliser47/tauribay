@@ -1,0 +1,67 @@
+@media screen and (max-width: 1024px)
+{
+    header {
+        margin:0px;
+    }
+
+    .navbar {
+        margin:0px;
+        border-radius:0px;
+        border:none;
+    }
+
+    .container {
+        border-radius:0px;
+        border:none;
+        width:100%;
+    }
+
+    .class-checkboxes .checkbox {
+        width:24%;
+        margin:0px;
+    }
+
+    .nopadding-left, .nopadding-right {
+        padding:0px;
+    }
+}
+
+
+@media screen and (max-width: 480px)
+{
+    .class-checkboxes .checkbox {
+        width:30%;
+    }
+}
+
+@media screen and (min-width: 1024px)
+{
+    .register {
+        position: relative;
+    }
+
+    .register-left {
+        position: absolute;
+        width:222px;
+        height:300px;
+        bottom:0px;
+        background:url('../img/register/left.png') no-repeat center left;
+    }
+
+    .register-right {
+        position: absolute;
+        width:301px;
+        height:298px;
+        bottom:0px;
+        right:0px;
+        background:url('../img/register/right.png') no-repeat center left;
+    }
+
+    .register form {
+        margin-left:35px;
+    }
+
+    .register .g-recaptcha {
+        margin-left:-13px;
+    }
+}

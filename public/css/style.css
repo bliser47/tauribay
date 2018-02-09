@@ -1,0 +1,372 @@
+html {
+    background: url('../img/back.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+* {
+    font-family: 'Play', sans-serif;
+}
+
+body {
+    background:transparent;
+}
+
+header {
+    max-width:1024px;
+    margin:auto;
+    margin-top:100px;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------------------------------- */
+
+.checkbox-white-tick input[type="checkbox"]:checked + label::after, .checkbox input[type="radio"]:checked + label::after {
+    color:#fff;
+}
+
+
+/* Warrior Checkbox */
+.checkbox-warrior input[type="checkbox"]:checked + label::before, .checkbox-warrior input[type="radio"]:checked + label::before {
+    background-color: #C79C6E;
+    border-color: #C79C6E;
+}
+
+/* Paladin Checkbox */
+.checkbox-paladin input[type="checkbox"]:checked + label::before, .checkbox-paladin input[type="radio"]:checked + label::before {
+    background-color: #F58CBA;
+    border-color: #F58CBA;
+}
+
+/* Hunter Checkbox */
+.checkbox-hunter input[type="checkbox"]:checked + label::before, .checkbox-hunter input[type="radio"]:checked + label::before {
+    background-color: #ABD473;
+    border-color: #ABD473;
+}
+
+/* Rogue Checkbox */
+.checkbox-rogue input[type="checkbox"]:checked + label::before, .checkbox-rogue input[type="radio"]:checked + label::before {
+    background-color: #FFF569;
+    border-color: #FFF569;
+}
+
+/* Death Knight Checkbox */
+.checkbox-deathknight input[type="checkbox"]:checked + label::before, .checkbox-deathknight input[type="radio"]:checked + label::before {
+    background-color: #C41F3B;
+    border-color: #C41F3B;
+}
+
+/* Shaman Checkbox */
+.checkbox-shaman input[type="checkbox"]:checked + label::before, .checkbox-shaman input[type="radio"]:checked + label::before {
+    background-color: #0070DE;
+    border-color: #0070DE;
+}
+
+/* Mage Checkbox */
+.checkbox-mage input[type="checkbox"]:checked + label::before, .checkbox-mage input[type="radio"]:checked + label::before {
+    background-color: #69CCF0;
+    border-color: #69CCF0;
+}
+
+/* Warlock Checkbox */
+.checkbox-warlock input[type="checkbox"]:checked + label::before, .checkbox-warlock input[type="radio"]:checked + label::before {
+    background-color: #9482C9;
+    border-color: #9482C9;
+}
+
+/* Druid Checkbox */
+.checkbox-druid input[type="checkbox"]:checked + label::before, .checkbox-druid input[type="radio"]:checked + label::before {
+    background-color: #FF7D0A;
+    border-color: #FF7D0A;
+}
+
+/* Alliance Checkbox */
+.checkbox-alliance input[type="checkbox"]:checked + label::before, .checkbox-alliance input[type="radio"]:checked + label::before {
+    background-color: #323cb2;
+    border-color: #323cb2;
+}
+
+/* Horde Checkbox */
+.checkbox-horde input[type="checkbox"]:checked + label::before, .checkbox-horde input[type="radio"]:checked + label::before {
+    background-color: #a82e1c;
+    border-color: #a82e1c;
+}
+
+/* Uknown Checkbox */
+.checkbox-unknown input[type="checkbox"]:checked + label::before, .checkbox-unknown input[type="radio"]:checked + label::before {
+    background-color: #ffcf00;
+    border-color: #ffcf00;
+}
+
+/* Balackwing Descent Checkbox */
+.checkbox-bwc input[type="checkbox"]:checked + label::before, .checkbox-bwc input[type="radio"]:checked + label::before {
+    background-color: #f7933e;;
+    border-color: #f7933e;
+}
+
+/* Bastion of Twillight Checkbox */
+.checkbox-bot input[type="checkbox"]:checked + label::before, .checkbox-bot input[type="radio"]:checked + label::before {
+    background-color: #6b2886;
+    border-color: #6b2886;
+}
+
+/* Throne of The Four Winds Checkbox */
+.checkbox-totfw input[type="checkbox"]:checked + label::before, .checkbox-totfw input[type="radio"]:checked + label::before {
+    background-color: #51a5c4;
+    border-color: #51a5c4;
+}
+
+/* Firelands Checkbox */
+.checkbox-fl input[type="checkbox"]:checked + label::before, .checkbox-fl input[type="radio"]:checked + label::before {
+    background-color: #ba401c;
+    border-color: #ba401c;
+}
+
+
+/* Dragon Soul Checkbox */
+.checkbox-ds input[type="checkbox"]:checked + label::before, .checkbox-ds input[type="radio"]:checked + label::before {
+    background-color: #596387;
+    border-color: #596387;
+}
+
+
+
+
+
+.checkbox input[type="checkbox"]:focus + label::before {
+    outline: 0px !important;
+    -webkit-appearance:none !important;
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+.radio input[type=radio], .radio-inline input[type=radio], .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox]
+{
+    margin-left:0px;
+}
+
+.checkbox label
+{
+    line-height: 18px;
+}
+
+
+/* --------------------------------------------------------------------------------------------------------------------------------------- */
+
+html{
+    -o-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
+    -o-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.navbar-brand{
+    font-size:2em;
+}
+
+.navbar-default .navbar-brand
+{
+    color:#dd5e2b;
+}
+
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+    color:#af3820;
+}
+
+.btn-tauribay {
+    color:#fff;
+    background:#dd5e2b;
+}
+
+.btn-tauribay:hover {
+    color:#fff;
+    background:#af3820;
+}
+
+.navbar-default {
+    border-color:#fee459;
+}
+
+.navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
+    background:#fee459;
+}
+
+.navbar-nav>li>a {
+    font-family: 'Jockey One', sans-serif;
+    font-size:1.25em;
+}
+
+.glyphicon {
+    padding-right:10px;
+}
+
+.dropdown-menu>li>a {
+    font-family: 'Jockey One', sans-serif;
+    font-size:1em;
+}
+
+.trade-types-dropdown-menu {
+    min-width:113.5px;
+}
+
+.caret {
+    margin-left:5px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px dashed;
+}
+
+.container {
+    max-width:1024px;
+    margin-bottom:50px;
+    border-radius:4px;
+    padding:15px;
+}
+
+.well {
+    background:#FFFFFF;
+    margin-top:20px;
+    padding:10px;
+}
+
+.well img {
+    border-radius:4px;
+}
+
+.well .media-body
+{
+    padding-top:10px;
+}
+
+.nopadding {
+    padding:0px;
+}
+
+.nomargin {
+    margin:0px;
+}
+
+.nopadding-right {
+    padding-right:0px;
+}
+
+.nopadding-left {
+    padding-left:0px;
+}
+
+.nopadding-bottom {
+    padding-bottom:0px;
+}
+
+.nopadding-top {
+    padding-top:0px;
+}
+
+.panel {
+    background-color:rgba(255,255,255,0.8);
+}
+
+.panel-heading .accordion-toggle:after {
+    /* symbol for "opening" panels */
+    font-family: 'Glyphicons Halflings';  /* essential for enabling glyphicon */
+    content: "\e114";    /* adjust as needed, taken from bootstrap.css */
+    float: right;        /* adjust as needed */
+    color: grey;         /* adjust as needed */
+}
+.panel-heading .accordion-toggle.collapsed:after {
+    /* symbol for "collapsed" panels */
+    content: "\e080";    /* adjust as needed, taken from bootstrap.css */
+}
+
+
+.trade-filter h4 {
+    color:#5cb85c;
+}
+
+.flashit{
+    -webkit-animation: flash linear 1s 2;
+    animation: flash linear 1s;
+}
+@-webkit-keyframes flash {
+    0% { opacity: 1; }
+    50% { opacity: .1; }
+    100% { opacity: 1; }
+}
+@keyframes flash {
+    0% { opacity: 1; }
+    50% { opacity: .1; }
+    100% { opacity: 1; }
+}
+
+
+
+.help-block{
+    padding-left:24px;
+    background-size:17px 17px;
+    background-image:url("../img/alert.png");
+    background-repeat:no-repeat;
+    margin:10px 0px 0px 0px;
+}
+
+.table-classes tr > td:first-child {
+    width:50px;
+}
+
+.table-classes td {
+    vertical-align: middle !important;
+}
+
+.text-italic {
+    font-style: italic;
+}
+
+.warlock, .warlock:hover {
+    color:#9482C9;
+}
+
+.blog-main p {
+    text-align: justify;
+}
+
+.panel-title a {
+    display: block;
+    padding: 10px 15px;
+    text-align: center;
+}
+
+.instance-difficulty, .gdkp-faction {
+    text-align: center;
+}
+
+.blog-main .well {
+    min-height:200px;
+    margin-bottom:10px;
+}
+
+input:not(.disabled):-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
+    -webkit-text-fill-color: #000;
+}
+
+input.disabled:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px rgb(235, 235, 228) inset;
+    -webkit-text-fill-color: rgb(84,84,84);
+}
+
+.panel-body.register {
+    min-height:320px;
+}
+
+.register-left,.register-right
+{
+    position:relative;
+    bottom:0px;
+}
