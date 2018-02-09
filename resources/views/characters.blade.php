@@ -124,7 +124,7 @@
                 </div>
             </div>
             <div class="table-responsive">
-                <table class="table table-bordered table-classes">
+                <table class="panel table table-bordered table-classes">
                     <tr>
                         <th>Idő</th>
                         <th>Eladó</th>
