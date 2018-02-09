@@ -31,7 +31,8 @@
                     <li><a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span>Regisztráció</a></li>
                     <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span>Bejelentkezés</a></li>
                 @else
-                    <li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out"></span>Kijelentkezés</a></li>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                    <li><a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span>Kijelentkezés</a></li>
                 @endif
             </ul>
         </div>
