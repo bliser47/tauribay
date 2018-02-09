@@ -20,7 +20,7 @@ class CharacterTrade extends Model
 
         usort($traderTradesArray,function($a,$b)
         {
-           return $a["simmilarity"] < $b["simmilarity"];
+            return $a["simmilarity"] < $b["simmilarity"];
         });
 
 
