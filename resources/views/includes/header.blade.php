@@ -16,12 +16,8 @@
                     <a href="/hirdetesek" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hirdetések<span class="caret"></span></a>
                     <ul class="dropdown-menu trade-types-dropdown-menu">
                         <li><a href="/hirdetesek/karakter">Karakter</a></li>
-                        <li>
-                            <a href="/hirdetesek/gdkp">
-                                GDKP
-                            </a>
-                        </li>
-                        <li class="disabled"><a href="/hirdetesek/kredit">Kredit</a></li>
+                        <li class="disabled"><a>GDKP</a></li>
+                        <li class="disabled"><a>Kredit</a></li>
                     </ul>
                 </li>
                 <li><a href="/changelog">Changelog</a></li>
