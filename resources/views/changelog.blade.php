@@ -6,6 +6,12 @@
                 <div class="table-responsive">
                     <table class="table table-bordered table-classes nomargin">
                         <tr>
+                            <td> 2018.02.10 </td>
+                            <td> 11.17 </td>
+                            <td> Bliser </td>
+                            <td> <a href="https://github.com/bliser47/tauribay/commits/master">Github</a> </td>
+                        </tr>
+                        <tr>
                             <td> 2016.06.29 </td>
                             <td> 21.29 </td>
                             <td> Bliser </td>
