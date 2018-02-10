@@ -19,7 +19,7 @@ var messages = [];
 function sendMessages()
 {
     request({
-        url: 'http://http://51.15.212.167/api/receiveData',
+        url: 'http://51.15.212.167/api/receiveData',
         method: 'POST',
         json: true,
         body: JSON.stringify(messages)
