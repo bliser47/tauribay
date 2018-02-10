@@ -123,8 +123,8 @@
                     </div>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="panel table table-bordered table-classes">
+            <div class="panel table-responsive">
+                <table class="table table-bordered table-classes">
                     <tr>
                         <th>Idő</th>
                         <th>Eladó</th>
