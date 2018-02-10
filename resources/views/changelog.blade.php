@@ -7,25 +7,25 @@
                     <table class="table table-bordered table-classes nomargin">
                         <tr>
                             <td> 2018.02.10 </td>
-                            <td> 11.17 </td>
+                            <td> 11:17 </td>
                             <td> Bliser </td>
                             <td> <a href="https://github.com/bliser47/tauribay/commits/master">Github</a> </td>
                         </tr>
                         <tr>
                             <td> 2016.06.29 </td>
-                            <td> 21.29 </td>
+                            <td> 21:29 </td>
                             <td> Bliser </td>
                             <td> Felhasználó rendszer kialakítva. </td>
                         </tr>
                         <tr>
                             <td> 2016.06.25 </td>
-                            <td> 17.00 </td>
+                            <td> 17:00 </td>
                             <td> Bliser </td>
                             <td> Hirdetések szűrésének egyszerűsítése. </td>
                         </tr>
                         <tr>
                             <td> 2016.06.25 </td>
-                            <td> 10.00 </td>
+                            <td> 10:00 </td>
                             <td> Bliser </td>
                             <td> GDKP hirdetések bevezetése </td>
                         </tr>
