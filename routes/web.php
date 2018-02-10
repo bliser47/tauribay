@@ -13,6 +13,7 @@
 
 Route::get('/', 'IndexController@Start');
 
+Route::get('api/receiveData', 'IndexController@Start');
 Route::post('api/receiveData', 'ApiController@ReceiveData');
 
 

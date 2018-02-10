@@ -22,7 +22,6 @@ class CreateGdkpTradesTable extends Migration
             $table->integer('instance');
             $table->integer('size');
             $table->integer('difficulty');
-            $table->integer('time');
             $table->timestamps();
         });
     }

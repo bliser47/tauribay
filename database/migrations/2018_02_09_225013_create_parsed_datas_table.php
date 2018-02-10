@@ -19,7 +19,6 @@ class CreateParsedDatasTable extends Migration
             $table->string('text');
             $table->integer('faction');
             $table->integer('class');
-            $table->integer('time');
             $table->timestamps();
         });
     }

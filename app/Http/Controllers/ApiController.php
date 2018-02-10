@@ -75,7 +75,6 @@ class ApiController extends Controller
 
             $parsedData->faction = $traderData["faction"];
             $parsedData->class = $traderData["class"];
-            $parsedData->time = $_time;
             $parsedData->updated_at = Carbon::now();
             $parsedData->save();
             if ( !$no_smart) {
@@ -104,7 +103,9 @@ class ApiController extends Controller
         for ( $s = $_from; $s < $_till ; $s++ )
         {
             $trade = TradeData::find($s);
-            $this->ParseSpecificData($trade->data,true);
+            if ( $trade ) {
+                $this->ParseSpecificData($trade->data, true);
+            }
         }
     }
 
@@ -134,7 +135,6 @@ class ApiController extends Controller
                 $characterTrade->faction = $parseData->faction ? $parseData->faction : 3;
                 $characterTrade->intent = $smartResult['character_intent'];
                 $characterTrade->class = $smartResult['character_class'];
-                $characterTrade->time = $parseData->time;
                 if ( !$no_update )
                 {
                     $characterTrade->updated_at = Carbon::now();
@@ -173,7 +173,6 @@ class ApiController extends Controller
                 $gdkpTrade->instance = $smartResult['gdkp_data']['wow_instance_id'] !== false ? $smartResult['gdkp_data']['wow_instance_id'] : 5;
                 $gdkpTrade->size = $smartResult['gdkp_data']['wow_instance_size_id'] !== false ? $smartResult['gdkp_data']['wow_instance_size_id'] : 2;
                 $gdkpTrade->difficulty = $smartResult['gdkp_data']['wow_instance_difficulty_id'] !== false ? $smartResult['gdkp_data']['wow_instance_difficulty_id'] : 2;
-                $gdkpTrade->time = $parseData->time;
 
                 if ( !$no_update )
                 {

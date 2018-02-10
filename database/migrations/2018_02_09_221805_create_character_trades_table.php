@@ -20,7 +20,6 @@ class CreateCharacterTradesTable extends Migration
             $table->integer('faction');
             $table->integer('intent');
             $table->integer('class');
-            $table->integer('time');
             $table->timestamps();
         });
     }
