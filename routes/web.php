@@ -17,8 +17,6 @@ Route::get('api/receiveData', 'IndexController@Start');
 Route::post('api/receiveData', 'ApiController@ReceiveData');
 
 
-
-
 Route::get('/admin/kiskarik', 'AdminController@ShowLowLevels');
 Route::post('/admin/kiskarik', 'AdminController@UpdateLowLevel');
 

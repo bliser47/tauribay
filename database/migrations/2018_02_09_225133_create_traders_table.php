@@ -20,7 +20,6 @@ class CreateTradersTable extends Migration
             $table->integer('race');
             $table->integer('class');
             $table->integer('level');
-            $table->integer('ach_points');
             $table->timestamps();
         });
     }

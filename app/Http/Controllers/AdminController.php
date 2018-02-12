@@ -26,7 +26,6 @@ class AdminController extends Controller
                 "level" => $_request->get('level'),
                 "race" => $_request->get('race'),
                 "class" => $_request->get('class'),
-                "ach_points" => $_request->get('ach_points'),
                 "updated_at" => Carbon::now()
              ));
         }

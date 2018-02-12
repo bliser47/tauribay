@@ -37,7 +37,6 @@ class Trader extends Model
                     "race" => $traderData["race"],
                     "class" => $traderData["class"],
                     "level" => $traderData["level"],
-                    "ach_points" => 0,
                     "updated_at" => Carbon::now()
                 ));
                 return $traderData;

@@ -55,7 +55,6 @@
                                                 <option value="10">Druid</option>
                                             </select>
                                         </td>
-                                        <td> <input type="number" name="ach_points" placeholder="ach_points"/> </td>
                                         <td> <button> Mentés </button></td>
                                     </tr>
                                 </table>
