@@ -81,6 +81,13 @@ header {
     border-color: #FF7D0A;
 }
 
+/* Monk Checkbox */
+.checkbox-monk input[type="checkbox"]:checked + label::before, .checkbox-monk input[type="radio"]:checked + label::before {
+    background-color: #00FF96;
+    border-color: #00FF96;
+}
+
+
 /* Alliance Checkbox */
 .checkbox-alliance input[type="checkbox"]:checked + label::before, .checkbox-alliance input[type="radio"]:checked + label::before {
     background-color: #323cb2;

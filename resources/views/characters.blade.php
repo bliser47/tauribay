@@ -104,6 +104,10 @@
                                         {!! Form::checkbox('druid',1,Input::get('druid'),array("id"=>"class-druid","class"=>"class")) !!}
                                         <label for="class-druid"> Druid </label>
                                     </div>
+                                    <div class="checkbox checkbox-inline checkbox-monk checkbox-white-tick checkbox-class">
+                                        {!! Form::checkbox('monk',1,Input::get('monk'),array("id"=>"class-monk","class"=>"class")) !!}
+                                        <label for="class-monk"> Monk </label>
+                                    </div>
                                     <div class="checkbox checkbox-inline checkbox-all-classes">
                                         {!! Form::checkbox('classall',1,Input::get('classall'),array("id"=>"class-all","class"=>"class")) !!}
                                         <label for="class-all"> Mind </label>

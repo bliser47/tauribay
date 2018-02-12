@@ -66,7 +66,7 @@ class CharacterTrade extends Model
             }
 
             $classes = [];
-            $classNames = array("karakter", "warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock", "druid");
+            $classNames = array("karakter", "warrior", "paladin", "hunter", "rogue", "priest", "dk", "shaman", "mage", "warlock", "druid", "monk");
             foreach ($classNames as $classId => $className) {
                 if ($_request->has($className)) {
                     array_push($classes, $classId);
