@@ -20,17 +20,24 @@ class ApiController extends Controller
 {
     public function ReceiveData(Request $_request)
     {
-        $tradeDataJSON = json_decode($_request->all()[0]);
-        $insertArray = array();
-        for ( $t = 0 ; $t < count($tradeDataJSON) ; $t++ )
-        {
-            array_push($insertArray,array(
-                "data" => $tradeDataJSON[$t],
-                "date" => Carbon::now()
-            ));
+        $tradeDataJSON = $_request->all();
+        $passPhrase = $tradeDataJSON["passphrase"];
+        if ( $passPhrase == env('API_PASS_PHRASE') ) {
+            $messages = json_decode($tradeDataJSON["messages"]);
+            $insertArray = array();
+            for ($t = 0; $t < count($messages); $t++) {
+                array_push($insertArray, array(
+                    "data" => $messages[$t],
+                    "date" => Carbon::now()
+                ));
+            }
+            TradeData::insert($insertArray);
+            return $this->ParseData($messages);
         }
-        TradeData::insert($insertArray);
-        return $this->ParseData($tradeDataJSON);
+        else
+        {
+            return "Incorrect API pass phrase";
+        }
     }
 
     public function ParseData($_data)
