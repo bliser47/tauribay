@@ -12,6 +12,11 @@
                         <p class="text-left text-italic">
                             írta <span class="warlock">Bliser</span> 2018.02.09
                         </p>
+                        <p>
+                            Sziasztok! Végre újra fut az oldal és egyenlőre a karakter hirdetésekben tudtok keresgélni.
+                            Az elkövetkező hetekben megírom a GDKP, a Kredit és a Guild hirdetések felismerését is amit
+                            a kézzel felvihető hirdetések lehetősége követ a regisztrált felhasználóknak.
+                        </p>
                     </div>
                 </div>
             </div>

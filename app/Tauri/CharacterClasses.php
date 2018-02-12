@@ -16,10 +16,11 @@ class CharacterClasses
      * 8 Mage
      * 9 Warlock
      * 10 Druid
+     * 11 Monk
      */
 
     const CHARACTER_CLASS_NAMES = array(
-        'Karakter', 'Warrior', 'Paladin', 'Hunter', 'Rogue', 'Priest', 'Death Knight', 'Shaman', 'Mage', 'Warlock', 'Druid'
+        'Karakter', 'Warrior', 'Paladin', 'Hunter', 'Rogue', 'Priest', 'Death Knight', 'Shaman', 'Mage', 'Warlock', 'Druid', 'Monk'
     );
 
     const CHARACTER_CLASS_WARRIOR = array
@@ -219,6 +220,14 @@ class CharacterClasses
         ' druidamat '
     );
 
+    const CHARACTER_CLASS_MONK = array
+    (
+        ' monk ',
+        ' monkot ',
+        ' monkom ',
+        ' monkomat '
+    );
+
     const CHARACTER_CLASS_UNKNOWN = array
     (
         ' kari ',
@@ -237,7 +246,8 @@ class CharacterClasses
         self::CHARACTER_CLASS_SHAMAN,
         self::CHARACTER_CLASS_MAGE,
         self::CHARACTER_CLASS_WARLOCK,
-        self::CHARACTER_CLASS_DRUID
+        self::CHARACTER_CLASS_DRUID,
+        self::CHARACTER_CLASS_MONK
     );
 
     public static function GetCharacterClass($_text)
@@ -265,7 +275,7 @@ class CharacterClasses
 
     public static function ConvertRaceToFaction($_race)
     {
-        if ( in_array($_race,array(2,5,6,8,9,10)) )
+        if ( in_array($_race,array(2,5,6,8,9,10,26)) )
         {
             return 1;
         }
