@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 var config = {
     channels: ["#trade-tauri"],
     server: "irc.tauri.hu",
@@ -21,13 +19,10 @@ var messages = [];
 function sendMessages()
 {
     request({
-        url: 'http://51.15.212.167/api/receiveData',
+        url: 'http://tauribay.hu/api/receiveData',
         method: 'POST',
         json: true,
-        body: {
-            passphrase : process.env.API_PASS_PHRASE,
-            messages : JSON.stringify(messages)
-        }
+        body: JSON.stringify(messages)
     }, function(error, response, body){
         if(error) {
             console.log("Error inserting!!!");
