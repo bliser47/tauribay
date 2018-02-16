@@ -11,18 +11,26 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="{{ Request::path() == '/' ? 'active' : '' }}"><a href="/">Főoldal</a></li>
-                <li class="dropdown {{ Request::segment(1) == 'hirdetesek' ? 'active' : '' }}">
-                    <a href="/hirdetesek" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hirdetések<span class="caret"></span></a>
+                <li class="{{ Request::path() == '/' ? 'active' : '' }}">
+                    <a href="/">
+                        {{ __("Főoldal") }}
+                    </a>
+                </li>
+                <li class="dropdown {{ Request::segment(1) == 'trade' ? 'active' : '' }}">
+                    <a href="/trade" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {{ __("Hirdetések") }}
+                        <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu trade-types-dropdown-menu">
-                        <li><a href="/hirdetesek/karakter">Karakter</a></li>
+                        <li><a href="/trade/char">{{ __("Karakter") }}</a></li>
                         <li class="disabled"><a>GDKP</a></li>
-                        <li class="disabled"><a>Kredit</a></li>
+                        <li class="disabled"><a>{{ __("Kredit") }}</a></li>
                     </ul>
                 </li>
                 <li><a href="/changelog">Changelog</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                {{--
                 @if (Auth::guest())
                     <li><a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span>Regisztráció</a></li>
                     <li><a href="{{ url('/login') }}"><span class="glyphicon glyphicon-log-in"></span>Bejelentkezés</a></li>
@@ -30,6 +38,15 @@
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
                     <li><a href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span>Kijelentkezés</a></li>
                 @endif
+                --}}
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {!! language()->flag()  !!}<span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu trade-types-dropdown-menu">
+                        {!! language()->flags() !!}
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>

@@ -11,7 +11,6 @@
 |
 */
 
-Route::get('/', 'IndexController@Start');
 
 Route::get('api/receiveData', 'IndexController@Start');
 Route::post('api/receiveData', 'ApiController@ReceiveData');
@@ -25,16 +24,25 @@ Route::get('/debug/smart/parserange/{_parsed_from_id}/{_parse_till_id}', 'ApiCon
 Route::get('/debug/trade/parserange/{_parsed_from_id}/{_parse_till_id}', 'ApiController@TradeParseRangeDebug');
 */
 
-Route::get('/changelog', 'ChangelogController@ShowChanges');
 
 
-Route::get('/hirdetesek', 'TradesController@ShowAll');
-Route::get('/hirdetesek/karakter', 'TradesController@ShowCharacters');
+Route::group(['middleware' => 'language'], function () {
+
+    Route::get('/', 'IndexController@Start');
+    Route::get('/home', 'HomeController@index');
+
+    // Here your routes
+    Route::get('/trade', 'TradesController@ShowAll');
+    Route::get('/trade/char', 'TradesController@ShowCharacters');
+
+    Route::get('/changelog', 'ChangelogController@ShowChanges');
+
+});
 
 /*
-Route::get('/hirdetesek/gdkp', 'TradesController@ShowGdkps');
-Route::get('/hirdetesek/kredit', 'TradesController@ShowCredits');
+Route::get('/trade/gdkp', 'TradesController@ShowGdkps');
+Route::get('/trade/kredit', 'TradesController@ShowCredits');
 */
 
 Route::auth();
-Route::get('/home', 'HomeController@index');
+

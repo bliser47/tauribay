@@ -7,7 +7,7 @@
                     <div class="panel-heading nopadding" role="tab" id="headingOne">
                         <h4 class="panel-title">
                             <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                Szűrés
+                                {{ __("Szűrés") }}
                             </a>
                         </h4>
                     </div>
@@ -18,7 +18,7 @@
 
 
                             <div class="form-group col-md-6 nopadding-left">
-                                <legend>Frakció</legend>
+                                <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
                                         {!! Form::checkbox('alliance',2,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
@@ -28,41 +28,43 @@
                                         {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                                         <label for="faction-horde"> Horde </label>
                                     </div>
+                                    {{--
                                     <div class="checkbox checkbox-inline checkbox-unknown checkbox-white-tick checkbox-faction">
                                         {!! Form::checkbox('ismeretlen',3,Input::get('ismeretlen'),array("id"=>"faction-ismeretlen","class"=>"faction")) !!}
                                         <label for="faction-ismeretlen"> Ismeretlen </label>
                                     </div>
+                                    --}}
                                     <div class="checkbox checkbox-inline checkbox-all-factions">
                                         {!! Form::checkbox('factionall',3,Input::get('factionall'),array("id"=>"faction-all","class"=>"faction")) !!}
-                                        <label for="faction-all"> Mind </label>
+                                        <label for="faction-all"> {{ __("Mind") }} </label>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group col-md-6 nopadding-right">
-                                <legend>Hirdető szándéka</legend>
+                                <legend> {{ __("Hirdető szándéka") }}</legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-intent">
                                         {!! Form::checkbox('elado',1,Input::get('elado'),array("id"=>"intent-sell","class"=>"intent")) !!}
-                                        <label for="intent-sell"> Eladás </label>
+                                        <label for="intent-sell">  {{ __("Eladás") }} </label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-intent">
                                         {!! Form::checkbox('vetel',2,Input::get('vetel'),array("id"=>"intent-buy","class"=>"intent")) !!}
-                                        <label for="intent-buy"> Vétel </label>
+                                        <label for="intent-buy">  {{ __("Vétel") }} </label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-intent">
                                         {!! Form::checkbox('csere',3,Input::get('csere'),array("id"=>"intent-trade","class"=>"intent")) !!}
-                                        <label for="intent-trade"> Csere </label>
+                                        <label for="intent-trade">  {{ __("Csere") }} </label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-all-intents">
                                         {!! Form::checkbox('intentall',4,Input::get('intentall'),array("id"=>"intent-all","class"=>"intent")) !!}
-                                        <label for="intent-all"> Mind </label>
+                                        <label for="intent-all">  {{ __("Mind") }} </label>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group class-checkboxes">
-                                <legend>Kaszt </legend>
+                                <legend> {{ __("Kaszt") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-warrior checkbox-white-tick checkbox-class">
                                         {!! Form::checkbox('warrior',2,Input::get('warrior'),array("id"=>"class-warrior","class"=>"class")) !!}
@@ -110,15 +112,17 @@
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-all-classes">
                                         {!! Form::checkbox('classall',1,Input::get('classall'),array("id"=>"class-all","class"=>"class")) !!}
-                                        <label for="class-all"> Mind </label>
+                                        <label for="class-all"> {{ __("Mind") }} </label>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="input-group col-md-12">
-                                <input type="text" class="form-control" name="search" value="{!! Input::get('search') !!}" placeholder="Keresés a hirdetésben...">
+                                <input type="text" class="form-control" name="search" value="{!! Input::get('search') !!}" placeholder="{{ __("Keresés a hirdetésben...") }}">
                                   <span class="input-group-btn">
-                                    <button class="btn btn-success" name="filter" value="1" type="submit">Szűrés!</button>
+                                    <button class="btn btn-success" name="filter" value="1" type="submit">
+                                        {{ __("Szűrés") }}
+                                    </button>
                                   </span>
                             </div>
 
@@ -130,19 +134,19 @@
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
                     <tr>
-                        <th>Idő</th>
-                        <th>Eladó</th>
-                        <th>Frakció</th>
-                        <th>Szándék</th>
-                        <th>Kaszt</th>
-                        <th>Hirdetés</th>
+                        <th>{{ __("Idő") }}</th>
+                        <th>{{ __("Név") }}</th>
+                        <th>{{ __("Frakció") }}</th>
+                        <th>{{ __("Szándék") }}</th>
+                        <th>{{ __("Kaszt") }}</th>
+                        <th>{{ __("Hirdetés") }}</th>
                     </tr>
                     @foreach ( $characterTrades as $character )
                         <tr>
                             <td class="time" data-time="{{$character->updated_at}}"> {{ $character->updated_at }}</td>
                             <td> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
                             <td class="faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
-                            <td> {{ $characterIntents[$character->intent] }}</td>
+                            <td> {{ __($characterIntents[$character->intent]) }}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
                             <td> {{ $character->text }} </td>
                         </tr>
