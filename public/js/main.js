@@ -113,15 +113,15 @@ $(function()
             var passed = "";
             if ( days > 0 )
             {
-                passed = days + " napja";
+                passed = days + TIME_LOCAL_DAY;
             } else if ( hours > 0 )
             {
-                passed = hours + " órája";
+                passed = hours + TIME_LOCAL_HOUR;
             } else if ( minutes > 0 )
             {
-                passed = Math.floor(minutes) + " perc";
+                passed = Math.floor(minutes) + TIME_LOCAL_MINUTE;
             } else if ( seconds > 0 ){
-                passed = Math.floor(seconds) + " mp";
+                passed = Math.floor(seconds) + TIME_LOCAL_SECOND;
             }
             else {
                 passed = "Most!";

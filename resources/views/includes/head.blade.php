@@ -8,6 +8,12 @@
 <link rel="stylesheet" href="{{ URL::asset('css/style.css?v=1') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
 
+<script>
+    var TIME_LOCAL_DAY = "{{ __(" napja") }}";
+    var TIME_LOCAL_HOUR = "{{ __(" órája") }}";
+    var TIME_LOCAL_MINUTE = "{{ __(" perce") }}";
+    var TIME_LOCAL_SECOND = "{{ __(" mp") }}";
+</script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -17,7 +23,7 @@
 
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/power.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=1') }}"></script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 

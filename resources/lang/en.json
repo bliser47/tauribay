@@ -19,7 +19,10 @@
   "Kredit" : "Tauri Credits",
   "Keresés a hirdetésben..." : "Search in the message...",
 
-
+  " napja" : "d",
+  " órája" : "h",
+  " perce" : "m",
+  " mp" : "s",
 
   "írta" : "by",
   "Sziasztok! Végre újra fut az oldal és egyenlőre a karakter hirdetésekben tudtok keresgélni. Az elkövetkező hetekben megírom a GDKP, a Kredit és a Guild hirdetések felismerését is amit a kézzel felvihető hirdetések lehetősége követ a regisztrált felhasználóknak." :
