@@ -60,6 +60,7 @@ class CharacterTrade extends Model
                 if ($_request->has('vetel')) {
                     array_push($intent, 2);
                 } else if ($_request->has('csere')) {
+                    array_push($intent, 0);
                     array_push($intent, 3);
                 }
                 $characterTrades = $characterTrades->whereIn('intent', $intent);
