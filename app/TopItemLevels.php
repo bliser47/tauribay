@@ -9,7 +9,7 @@ class TopItemLevels extends Model
 {
     public static function GetTopItemLevels($_request)
     {
-        $characters = DB::table('top_item_levels')->orderBy('updated_at', 'desc');
+        $characters = DB::table('top_item_levels')->groupBy('name','realm')->orderBy('ilvl', 'desc');
 
         /*
         if ( $_request->has("filter") ) {

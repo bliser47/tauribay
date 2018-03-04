@@ -74,6 +74,32 @@ $(function()
     });
 
 
+
+    $(document).on('submit','newcharacter-form',function(){
+        console.log('here');
+    });
+
+
+    $("#newcharacter-form").submit(function(e) {
+
+        var url = "http://www.tauribay.hu/ilvl";
+
+        $("#newcharacter-form").hide();
+        $(".loader").css("display","block");
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#newcharacter-form").serialize(),
+            success: function(data)
+            {
+                $(".loader").css("display","none");
+                $("#newcharacter-form").show();
+            }
+        });
+
+        e.preventDefault();
+    });
     
     $(".register-form").validate({
         ignore: [],
@@ -94,7 +120,8 @@ $(function()
                 }
             }
         }
-    })
+    });
+
 
     function UpdateTimes() {
         $(".time").each(function () {
@@ -123,9 +150,6 @@ $(function()
             } else if ( seconds > 0 ){
                 passed = Math.floor(seconds) + TIME_LOCAL_SECOND;
             }
-            else {
-                passed = "Most!";
-            }
 
             $(this).html(passed);
 
@@ -133,7 +157,4 @@ $(function()
     }
 
     UpdateTimes();
-
-    $('#collapseOne').collapse("hide");
-
 });

@@ -28,6 +28,7 @@
                     </ul>
                 </li>
                 <li><a href="/changelog">Changelog</a></li>
+                <li><a href="/ilvl">iLvL Toplist</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {{--

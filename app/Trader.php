@@ -9,10 +9,10 @@ use Carbon\Carbon;
 class Trader extends Model
 {
 
-    public static function GetCharacterDataFromTauriAPI($_name)
+    public static function GetCharacterDataFromTauriAPI($_name, $_realm = '[HU] Tauri WoW Server')
     {
         $api = new Tauri\ApiClient();
-        return $api->getCharacterTooltipData('[HU] Tauri WoW Server',$_name);
+        return $api->getCharacterTooltipData($_realm,$_name);
     }
 
     public static function GetData($_name)
