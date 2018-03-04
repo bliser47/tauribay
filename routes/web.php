@@ -13,7 +13,11 @@
 
 
 Route::get('api/receiveData', 'IndexController@Start');
+Route::post('api/receiveBattlegrounds', 'IndexController@Start');
+
+
 Route::post('api/receiveData', 'ApiController@ReceiveData');
+Route::post('api/receiveBattlegrounds', 'ApiController@ReceiveBattlegroundData');
 
 /*
 Route::get('/admin/kiskarik', 'AdminController@ShowLowLevels');
@@ -36,6 +40,9 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/trade/char', 'TradesController@ShowCharacters');
 
     Route::get('/changelog', 'ChangelogController@ShowChanges');
+
+    Route::get('/bg', 'BattlegroundController@index');
+    Route::get('/ilvl', 'TopItemLevelsController@index');
 
 });
 

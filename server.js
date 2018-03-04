@@ -1,7 +1,7 @@
 var config = {
     channels: ["#trade-tauri"],
     server: "irc.tauri.hu",
-    botName: "Bliserb"
+    botName: "Bro"
 };
 
 var irc = require("irc");
@@ -13,7 +13,10 @@ var bot = new irc.Client(config.server, config.botName, {
 });
 
 var messageTimeout;
+var battlegroundTimeout;
+
 var messages = [];
+var battlegrounds = [];
 
 
 function sendMessages()
@@ -33,14 +36,55 @@ function sendMessages()
     messages = [];
 }
 
-bot.addListener("message", function(from, to, text, message) {
-    if ( from == "T-etu" && message["args"][0] == "#trade-tauri" )
-    {
-        messages.push(text);
-        if ( messageTimeout )
-        {
-            clearTimeout(messageTimeout);
+function sendBattlegrounds()
+{
+    console.log("sending battlegrounds");
+    request({
+        url: 'http://tauribay.hu/api/receiveBattlegrounds',
+        method: 'POST',
+        json: true,
+        body: JSON.stringify(battlegrounds)
+    }, function(error, response, body){
+        if(error) {
+            console.log("Error inserting!!!");
+        } else {
+            console.log(response.statusCode, body);
         }
-        messageTimeout = setTimeout(sendMessages,1000);
+    });
+    battlegrounds = [];
+}
+
+bot.addListener("message", function(from, to, text, message) {
+    console.log(text);
+    if ( from === "T-etu" ) {
+        if (message["args"][0] === "#trade-tauri") {
+            messages.push(text);
+            if (messageTimeout) {
+                clearTimeout(messageTimeout);
+            }
+            messageTimeout = setTimeout(sendMessages, 1000);
+        }
+    }
+    else if ( from === "-T-etu-" && text.indexOf("[BGQueue]") !== -1)
+    {
+        console.log("Found battleground");
+        battlegrounds.push(text);
+        if ( battlegroundTimeout )
+        {
+            clearTimeout(battlegroundTimeout);
+        }
+        battlegroundTimeout = setTimeout(sendBattlegrounds,1000);
     }
 });
+
+bot.addListener('error', function(message) {
+    console.log('error: ', message);
+});
+
+function requestBGqueue()
+{
+    console.log("sent");
+    bot.say("T-etu","!bg");
+}
+setInterval(requestBGqueue,30000);
+setTimeout(requestBGqueue,3000);

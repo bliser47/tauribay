@@ -38,6 +38,19 @@ class ApiController extends Controller
         }
     }
 
+    public function ReceiveBattlegroundData(Request $_request)
+    {
+        if ( $_request->ip() == env('WEBSITE_IP')  ) {
+            $battlegroundDataJSON = json_decode($_request->all()[0]);
+            return true;
+        }
+        else
+        {
+            return "Not permitted";
+        }
+    }
+
+
     public function ParseData($_data)
     {
         for ( $d = 0 ; $d < count($_data) ; $d++ )
