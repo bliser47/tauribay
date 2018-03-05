@@ -104,6 +104,10 @@ $(function()
                     $(".loader").css("display", "none");
                     $("#newcharacter-form").show();
                 }
+            },
+            error: function(xhr, textStatus, errorThrown){
+                $(".loader").css("display", "none");
+                $("#newcharacter-form").show();
             }
         });
     }

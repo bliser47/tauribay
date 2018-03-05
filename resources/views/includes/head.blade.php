@@ -24,7 +24,7 @@
 
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/power.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=11') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=12') }}"></script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
