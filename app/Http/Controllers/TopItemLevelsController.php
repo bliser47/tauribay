@@ -75,9 +75,8 @@ class TopItemLevelsController extends Controller
                     $character->class = 10;
                 }
                 $character->realm = $_realmId;
-                $character->ilvl = 0;
+                $character->ilvl = $characterSheetResponse["avgitemlevel"];
                 $character->created_at = Carbon::now();
-                TopItemLevelsController::UpdateCharacter($characterSheet, $character);
             }
         }
     }
@@ -124,7 +123,7 @@ class TopItemLevelsController extends Controller
      */
     public function show(TopItemLevels $topItemLevels)
     {
-        //
+
     }
 
     /**
@@ -162,15 +161,7 @@ class TopItemLevelsController extends Controller
 
     public static function UpdateCharacter($_sheet,$_character)
     {
-        if (!$_character->ilvl) {
-            if ( $_sheet && array_key_exists("response", $_sheet) ) {
-                $averageItemLevel = TopItemLevelsController::getAverageItemLevel($_sheet["response"]["characterItems"]);
-                if ($averageItemLevel > $_character->ilvl) {
-                    $_character->ilvl = $averageItemLevel;
-                    $_character->save();
-                }
-            }
-        }
+
     }
 
     /**
