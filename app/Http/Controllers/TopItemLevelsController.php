@@ -66,6 +66,7 @@ class TopItemLevelsController extends Controller
                 $character->name = $_name;
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
+                // TODO: Fix this
                 if ( $character->class == 10 )
                 {
                     $character->class = 11;
@@ -77,6 +78,7 @@ class TopItemLevelsController extends Controller
                 $character->realm = $_realmId;
                 $character->ilvl = $characterSheetResponse["avgitemlevel"];
                 $character->created_at = Carbon::now();
+                $character->save();
             }
         }
     }
