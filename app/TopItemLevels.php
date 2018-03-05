@@ -11,7 +11,7 @@ class TopItemLevels extends Model
     {
         $characters = DB::table('top_item_levels')->orderBy('ilvl', 'desc');
 
-        /*
+
         if ( $_request->has("filter") ) {
             // 1. Faction filter
             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
@@ -25,23 +25,7 @@ class TopItemLevels extends Model
                 if ($_request->has('ismeretlen')) {
                     array_push($factions, 3);
                 }
-                $characterTrades = $characterTrades->whereIn('faction', $factions);
-            }
-
-            // 2. Intent filter
-            if ($_request->has('elado') || $_request->has('vetel') || $_request->has('csere')) {
-                $intent = [];
-                if ($_request->has('elado')) {
-                    array_push($intent, 0);
-                    array_push($intent, 1);
-                }
-                if ($_request->has('vetel')) {
-                    array_push($intent, 2);
-                } else if ($_request->has('csere')) {
-                    array_push($intent, 0);
-                    array_push($intent, 3);
-                }
-                $characterTrades = $characterTrades->whereIn('intent', $intent);
+                $characters = $characters->whereIn('faction', $factions);
             }
 
             $classes = [];
@@ -53,14 +37,13 @@ class TopItemLevels extends Model
             }
 
             if (count($classes) > 0) {
-                $characterTrades = $characterTrades->whereIn('class', $classes);
+                $characters = $characters->whereIn('class', $classes);
             }
 
             if ($_request->has('search')) {
-                $characterTrades = $characterTrades->where('text', 'LIKE', '%' . $_request->get('search') . '%');
+                $characters = $characters->where('name', 'LIKE', '%' . $_request->get('search') . '%');
             }
         }
-        */
 
         return $characters;
     }
