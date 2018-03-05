@@ -114,8 +114,6 @@ class TopItemLevelsController extends Controller
                 }
             }
         }
-
-        return redirect('ilvl');
     }
 
     /**

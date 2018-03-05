@@ -82,24 +82,31 @@ $(function()
 
     $("#newcharacter-form").submit(function(e) {
 
-        var url = "http://www.tauribay.hu/ilvl";
-
         $("#newcharacter-form").hide();
         $(".loader").css("display","block");
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: $("#newcharacter-form").serialize(),
-            success: function(data)
-            {
-                $(".loader").css("display","none");
-                $("#newcharacter-form").show();
-            }
-        });
-
+        sendIlvlAjax($("#newcharacter-form").serialize());
         e.preventDefault();
     });
+
+    function sendIlvlAjax(data)
+    {
+        $.ajax({
+            type: "POST",
+            url: "http://www.tauribay.hu/ilvl",
+            data: data,
+            success: function(response)
+            {
+                if ( response.indexOf("Operation timed out") !== -1 )
+                {
+                    sendIlvlAjax(data);
+                }
+                else {
+                    $(".loader").css("display", "none");
+                    $("#newcharacter-form").show();
+                }
+            }
+        });
+    }
     
     $(".register-form").validate({
         ignore: [],
