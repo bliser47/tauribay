@@ -445,3 +445,10 @@ a.changelog:hover
 {
     background-position:0px 32px;
 }
+
+@media (max-width: 640px) {
+    .well img {
+        width:90px;
+        height:90px;
+    }
+}
