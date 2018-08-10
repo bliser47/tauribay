@@ -175,22 +175,27 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
     user-select: text;
 }
 
+.navbar
+{
+    background:rgba(255,255,255,0.8);
+}
+
 .navbar-brand{
     font-size:2em;
 }
 
 .navbar-default .navbar-brand
 {
-    color:#dd5e2b;
+    color:#336633;
 }
 
 .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
-    color:#af3820;
+    color:#669933;
 }
 
 .btn-tauribay {
     color:#fff;
-    background:#dd5e2b;
+    background:#336633;
 }
 
 .btn-tauribay:hover {
@@ -199,11 +204,12 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 }
 
 .navbar-default {
-    border-color:#fee459;
+    border-color:#669933;
 }
 
 .navbar-default .navbar-nav>.active>a, .navbar-default .navbar-nav>.active>a:focus, .navbar-default .navbar-nav>.active>a:hover {
-    background:#fee459;
+    background:#669933;
+    color:#fff;
 }
 
 .navbar-nav>li>a {
@@ -422,4 +428,20 @@ input.disabled:-webkit-autofill {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
     }
+}
+
+
+a.changelog
+{
+    display:block;
+    width:32px;
+    height:32px;
+    margin:9px;
+    content:"";
+    background:url("../img/github.png");
+}
+
+a.changelog:hover
+{
+    background-position:0px 32px;
 }

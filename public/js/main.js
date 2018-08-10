@@ -148,6 +148,9 @@ $(function()
             var minutes = Math.floor(delta / 60) % 60;
             var seconds = delta % 60;
 
+            // Az adatok GMT+1-ben vannak
+            hours = hours + -1 + now.getTimezoneOffset();
+
             var passed = "";
             if ( days > 0 )
             {

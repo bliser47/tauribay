@@ -22,15 +22,16 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu trade-types-dropdown-menu">
+                        <li><a href="/trade">{{ __("Minden") }}</a></li>
                         <li><a href="/trade/char">{{ __("Karakter") }}</a></li>
                         <li class="disabled"><a>GDKP</a></li>
                         <li class="disabled"><a>{{ __("Kredit") }}</a></li>
                     </ul>
                 </li>
-                <li><a href="/changelog">Changelog</a></li>
                 <li><a href="/ilvl">iLvL Toplist</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a class="changelog" href="/changelog"></a></li>
                 {{--
                 @if (Auth::guest())
                     <li><a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span>Regisztráció</a></li>

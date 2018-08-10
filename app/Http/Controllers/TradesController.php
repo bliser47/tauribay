@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CharacterTrade;
+use App\ParsedData;
 use App\GdkpTrade;
 use App\Tauri\GdkpIntent;
 use App\Tauri\WowInstance;
@@ -13,12 +14,14 @@ use App\Tauri\CharacterClasses;
 use App\Tauri\CharacterIntent;
 use App\Http\Requests;
 use DB;
+use Carbon\Carbon;
 
 class TradesController extends Controller
 {
     public function ShowAll(Request $_request)
     {
-        return $this->ShowCharacters($_request);
+        $trades = ParsedData::where('created_at','>',Carbon::now()->subHours(1))->where('faction','!=',0)->orderBy('created_at','desc')->paginate(16);
+        return view('trades')->with(compact('trades'));
     }
 
     public function ShowCharacters(Request $_request)
