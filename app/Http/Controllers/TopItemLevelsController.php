@@ -139,31 +139,14 @@ class TopItemLevelsController extends Controller
         //
     }
 
-
-    public static function getAverageItemLevel(Array $_items)
-    {
-        $memberItemsCount = count($_items);
-        $totalItemLevel = 0;
-        $totalItemCount = 0;
-
-        for ( $itemIndex = 0 ; $itemIndex < $memberItemsCount ; ++$itemIndex )
-        {
-            $itemLevel = $_items[$itemIndex]["ilevel"];
-            if ( $itemLevel > 1 )
-            {
-                $totalItemLevel += $itemLevel;
-                $totalItemCount++;
-            }
-        }
-        if ( $totalItemCount > 0 ) {
-            return floor($totalItemLevel / $totalItemCount);
-        }
-        return 0;
-    }
-
     public static function UpdateCharacter($_sheet,$_character)
     {
-
+        if ($_sheet && array_key_exists("response", $_sheet)) {
+            $characterSheetResponse = $_sheet["response"];
+            $_character->ilvl = $characterSheetResponse["avgitemlevel"];
+            $_character->updated_at = Carbon::now();
+            $_character->save();
+        }
     }
 
     /**
@@ -174,11 +157,11 @@ class TopItemLevelsController extends Controller
      */
     public function update(Request $request)
     {
-        $characters = TopItemLevels::all();
+        // Get all characters that were updates 24 hours ago
+        $characters = TopItemLevels::where('ilvl','>',400)->where('updated_at', '<', Carbon::now()->subHours(1)->toDateTimeString())->get();
         $api = new Tauri\ApiClient();
         foreach ( $characters as $character )
         {
-
             TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(self::REALMS[$character->realm], $character->name), $character);
         }
     }
