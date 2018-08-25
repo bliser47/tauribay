@@ -21,7 +21,7 @@ Route::post('api/receiveBattlegrounds', 'ApiController@ReceiveBattlegroundData')
 
 
 Route::post('/ilvl', 'TopItemLevelsController@store');
-//Route::get('/ilvlupdate', 'TopItemLevelsController@update');
+Route::get('/ilvlupdate', 'TopItemLevelsController@update');
 
 /*
 Route::get('/admin/kiskarik', 'AdminController@ShowLowLevels');
@@ -42,6 +42,7 @@ Route::group(['middleware' => 'language'], function () {
     // Here your routes
     Route::get('/trade', 'TradesController@ShowAll');
     Route::get('/trade/char', 'TradesController@ShowCharacters');
+    Route::get('/trade/raid', 'TradesController@ShowGdkps');
 
     Route::get('/changelog', 'ChangelogController@ShowChanges');
 

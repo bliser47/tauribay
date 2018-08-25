@@ -5,6 +5,10 @@ namespace App\Tauri;
 class WowInstance
 {
     const WOW_INSTANCE_NAMES = array(
+        "Throne of Thunder",
+        "Terrace of Endless Spring",
+        "Heart of Fear",
+        "Mogu'shan Vaults",
         'Blacwing descent',
         'Bastion of Twilight',
         'Throne of the Four Winds',
@@ -14,20 +18,69 @@ class WowInstance
     );
 
     const WOW_INSTANCE_SHORT_NAMES = array(
-        'bwc','bot','totfw','fl','ds'
+        'tot','toes','hof','msv','bwc','bot','totfw','fl','ds'
     );
 
-    const WOW_INSTANCE_BLACKWING_DESCENT = array(
 
-        ' bwd ',
-        ' bwdt ',
-        ' bwdre ',
-        ' bwdra ',
-        ' blackwing descent ',
-        ' blackwing descentet ',
-        ' blackwing descentre ',
-        ' blackwing decentra '
+    const WOW_INSTANCE_THRONE_OF_THUNDER = array(
+            ' tot ',
+            ' totra ',
+            ' totre ',
+            ' totba ',
+            ' totbe ',
+            ' tot-ra ',
+            ' tot-re ',
+            ' tot-ba ',
+            ' tot-be ',
+            ' throne of thunder ',
+        );
 
+    const WOW_INSTANCE_TERRACE_OF_ENDLESS_SPRING = array(
+        ' toes ',
+        ' toesra ',
+        ' toesre ',
+        ' toes-ra ',
+        ' toes-re ',
+        ' toesba ',
+        ' toesbe ',
+        ' toes-be ',
+        ' toes-ba',
+        ' terracera ',
+        ' terracere ',
+        ' terraceba ',
+        ' terracebe ',
+        ' terrace-ra ',
+        ' terrace-re ',
+        ' terrace-ba ',
+        ' terrace-be ',
+        ' terrace of endless spring '
+    );
+
+    const WOW_INSTANCE_HEART_OF_FEAR = array(
+            ' hof ',
+            ' hofra',
+            ' hofre ',
+            ' hof-ra ',
+            ' hof-re ',
+            ' hofba ',
+            ' hofbe ',
+            ' hof-be ',
+            ' hof-ba ',
+            ' hear of fear '
+    );
+
+    const WOW_INSTANCE_MOGU_SHAN_VAULTS = array(
+            ' msv ',
+            ' msvra',
+            ' msvre ',
+            ' msv-ra ',
+            ' msv-re ',
+            ' msvba ',
+            ' msvbe ',
+            ' msv-be ',
+            ' msv-ba ',
+            ' mogushan vaults ',
+            " mogu'shan vaults "
     );
 
     const WOW_INSTANCE_BASTION_OF_TWILIGHT = array(
@@ -103,6 +156,10 @@ class WowInstance
     );
 
     const WOW_INSTANCES = array(
+        self::WOW_INSTANCE_THRONE_OF_THUNDER,
+        self::WOW_INSTANCE_TERRACE_OF_ENDLESS_SPRING,
+        self::WOW_INSTANCE_HEART_OF_FEAR,
+        self::WOW_INSTANCE_MOGU_SHAN_VAULTS,
         self::WOW_INSTANCE_BLACKWING_DESCENT,
         self::WOW_INSTANCE_BASTION_OF_TWILIGHT,
         self::WOW_INSTANCE_THRONE_OF_THE_FOUR_WINDS,

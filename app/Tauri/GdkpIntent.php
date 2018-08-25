@@ -18,7 +18,7 @@ class GdkpIntent
 
     const GDKP_INTENT_MAKE = array
     (
-        ' gdkp '
+        ' invelek '
     );
 
     const GDKP_INTENT_JOIN = array
@@ -38,7 +38,6 @@ class GdkpIntent
         ' gdkp t keresek  ',
         ' gdkp-t keresek  ',
         ' gdkpt keresek  '
-
     );
 
 
@@ -54,6 +53,8 @@ class GdkpIntent
             $pos = SmartParser::TextContainsArrayPart($_text,$gdkp_intent);
             if ( $pos !== false )
             {
+                return $gdkp_intent_id;
+                /*
                 if ( $gdkp_intent_id < 1 )
                 {
                     return $gdkp_intent_id;
@@ -62,14 +63,17 @@ class GdkpIntent
                     "pos" => $pos,
                     "gdkp_intent_id" => $gdkp_intent_id
                 ));
+                */
             }
         }
+        /*
         if ( count($foundIntents) > 0 ) {
             usort($foundIntents, function ($a, $b) {
                 return $a["pos"] > $b["pos"];
             });
             return $foundIntents[0]["gdkp_intent_id"];
         }
+        */
         return false;
     }
 

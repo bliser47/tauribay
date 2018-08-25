@@ -106,28 +106,28 @@ header {
     border-color: #ffcf00;
 }
 
-/* Balackwing Descent Checkbox */
-.checkbox-bwc input[type="checkbox"]:checked + label::before, .checkbox-bwc input[type="radio"]:checked + label::before {
+/* Mago'shan Vaults Checkbox */
+.checkbox-msv input[type="checkbox"]:checked + label::before, .checkbox-msv input[type="radio"]:checked + label::before {
     background-color: #f7933e;;
     border-color: #f7933e;
 }
 
-/* Bastion of Twillight Checkbox */
-.checkbox-bot input[type="checkbox"]:checked + label::before, .checkbox-bot input[type="radio"]:checked + label::before {
+/* Hear of Fear Checkbox */
+.checkbox-hof input[type="checkbox"]:checked + label::before, .checkbox-hof input[type="radio"]:checked + label::before {
     background-color: #6b2886;
     border-color: #6b2886;
 }
 
-/* Throne of The Four Winds Checkbox */
-.checkbox-totfw input[type="checkbox"]:checked + label::before, .checkbox-totfw input[type="radio"]:checked + label::before {
+/* Terrace of Endless Spring Checkbox */
+.checkbox-toes input[type="checkbox"]:checked + label::before, .checkbox-toes input[type="radio"]:checked + label::before {
     background-color: #51a5c4;
     border-color: #51a5c4;
 }
 
-/* Firelands Checkbox */
-.checkbox-fl input[type="checkbox"]:checked + label::before, .checkbox-fl input[type="radio"]:checked + label::before {
-    background-color: #ba401c;
-    border-color: #ba401c;
+/* Throne of Thunder Checkbox */
+.checkbox-tot input[type="checkbox"]:checked + label::before, .checkbox-tot input[type="radio"]:checked + label::before {
+    background-color: #0320ae;
+    border-color: #0320ae;
 }
 
 

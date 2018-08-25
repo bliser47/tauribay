@@ -55,25 +55,21 @@
                             <div class="form-group class-checkboxes">
                                 <legend> Insta </legend>
                                 <div class="input-group">
-                                    <div class="checkbox checkbox-inline checkbox-bwc checkbox-white-tick checkbox-instance">
-                                        {!! Form::checkbox('bwd',1,Input::get('bwd'),array("id"=>"instance-bwd","class"=>"instance")) !!}
-                                        <label for="instance-bwd"> Blackwing Descent </label>
+                                    <div class="checkbox checkbox-inline checkbox-msv checkbox-white-tick checkbox-instance">
+                                        {!! Form::checkbox('msv',1,Input::get('msv'),array("id"=>"instance-msv","class"=>"instance")) !!}
+                                        <label for="instance-msv"> Mogu'shan Vaults </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-bot checkbox-white-tick checkbox-instance">
-                                        {!! Form::checkbox('bot',2,Input::get('bot'),array("id"=>"instance-bot","class"=>"instance")) !!}
-                                        <label for="instance-bot"> Bastion of Twillight </label>
+                                    <div class="checkbox checkbox-inline checkbox-hof checkbox-white-tick checkbox-instance">
+                                        {!! Form::checkbox('hof',2,Input::get('hof'),array("id"=>"instance-hof","class"=>"instance")) !!}
+                                        <label for="instance-hof"> Heart of Fear </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-totfw checkbox-white-tick checkbox-instance">
-                                        {!! Form::checkbox('totfw',3,Input::get('totfw'),array("id"=>"instance-totfw","class"=>"instance")) !!}
-                                        <label for="instance-totfw"> Throne of the Four Winds </label>
+                                    <div class="checkbox checkbox-inline checkbox-toes checkbox-white-tick checkbox-instance">
+                                        {!! Form::checkbox('toes',3,Input::get('toes'),array("id"=>"instance-toes","class"=>"instance")) !!}
+                                        <label for="instance-toes"> Terrace of Endless Spring </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-fl checkbox-white-tick checkbox-instance">
-                                        {!! Form::checkbox('fl',4,Input::get('fl'),array("id"=>"instance-fl","class"=>"instance")) !!}
-                                        <label for="instance-fl"> Firelands </label>
-                                    </div>
-                                    <div class="checkbox checkbox-inline checkbox-ds checkbox-white-tick checkbox-instance">
-                                        {!! Form::checkbox('ds',5,Input::get('ds'),array("id"=>"instance-ds","class"=>"instance")) !!}
-                                        <label for="instance-ds"> Dragon Soul </label>
+                                    <div class="checkbox checkbox-inline checkbox-tot checkbox-white-tick checkbox-instance">
+                                        {!! Form::checkbox('tot',4,Input::get('tot'),array("id"=>"instance-tot","class"=>"instance")) !!}
+                                        <label for="instance-tot"> Throne of Thunder </label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-all-instances">
                                         {!! Form::checkbox('instanceall',1,Input::get('instanceall'),array("id"=>"instance-all","class"=>"instance")) !!}
