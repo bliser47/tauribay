@@ -22,13 +22,13 @@ var battlegrounds = [];
 function sendMessages()
 {
     request({
-        url: 'http://tauribay.hu/api/receiveData',
+        url: 'http://51.15.212.167/api/receiveData',
         method: 'POST',
         json: true,
         body: JSON.stringify(messages)
     }, function(error, response, body){
         if(error) {
-            console.log("Error inserting!!!");
+            console.log(error)
         } else {
             console.log(response.statusCode, body);
         }
@@ -40,13 +40,13 @@ function sendBattlegrounds()
 {
     console.log("sending battlegrounds");
     request({
-        url: 'http://tauribay.hu/api/receiveBattlegrounds',
+        url: 'http://51.15.212.167/api/receiveBattlegrounds',
         method: 'POST',
         json: true,
         body: JSON.stringify(battlegrounds)
     }, function(error, response, body){
         if(error) {
-            console.log("Error inserting!!!");
+            console.log(error)
         } else {
             console.log(response.statusCode, body);
         }
@@ -65,7 +65,7 @@ bot.addListener("message", function(from, to, text, message) {
             messageTimeout = setTimeout(sendMessages, 1000);
         }
     }
-    else if ( from === "-T-etu-" && text.indexOf("[BGQueue]") !== -1)
+    else if ( from === "T-etu-" && text.indexOf("[BGQueue]") !== -1)
     {
         console.log("Found battleground");
         battlegrounds.push(text);

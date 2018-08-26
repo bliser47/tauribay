@@ -22,7 +22,7 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu trade-types-dropdown-menu">
-                        <li><a href="/trade">{{ __("Minden") }}</a></li>
+                        {{-- <li><a href="/trade">{{ __("Minden") }}</a></li> --}}
                         <li><a href="/trade/char">{{ __("Karakter") }}</a></li>
                         <li class="disabled"><a>GDKP</a></li>
                         <li class="disabled"><a>{{ __("Kredit") }}</a></li>
