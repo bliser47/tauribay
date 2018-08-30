@@ -184,6 +184,8 @@ $(function()
         var t = time.split(/[- :]/);
         var d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
         var now = new Date();
+        d.setMinutes(d.getMinutes() - now.getTimezoneOffset());
+
         var delta = Math.abs(d-now) / 1000;
         var days = Math.floor(delta / 86400);
         delta -= days * 86400;
@@ -191,9 +193,6 @@ $(function()
         delta -= hours * 3600;
         var minutes = Math.floor(delta / 60) % 60;
         var seconds = delta % 60;
-
-        // Az adatok GMT+1-ben vannak
-        //hours = hours + -1 + now.getTimezoneOffset();
 
         var passed = "";
         if ( days > 0 )
