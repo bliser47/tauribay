@@ -92,7 +92,7 @@ $(function()
     {
         $.ajax({
             type: "POST",
-            url: "http://www.tauribay.hu/ilvl",
+            url: "https://www.tauribay.hu/ilvl",
             data: data,
             success: function(response)
             {
@@ -134,39 +134,88 @@ $(function()
     });
 
 
+    function sendIlvlAjaxUpdate(form, data, row)
+    {
+        $(form).hide();
+        $(form).parent().find(".update-loader").css("display","block");
+        $.ajax({
+            type: "POST",
+            url: "https://www.tauribay.hu/ilvl",
+            data: data,
+            success: function(response)
+            {
+                if ( response.indexOf("Operation timed out") !== -1 )
+                {
+                    sendIlvlAjaxUpdate(data);
+                }
+                else
+                {
+                    if ( response.length )
+                    {
+                        $(row).html(response);
+                        parseTime($(row).find(".time"));
+                        $(row).find(".ilvlupdate-form").submit(function(e) {
+
+                            sendIlvlAjaxUpdate($(this),$(this).serialize(), $(this).parent().parent());
+                            e.preventDefault();
+                        });
+                    }
+                    else
+                    {
+                        $(row).remove();
+                    }
+                }
+            },
+            error: function(xhr, textStatus, errorThrown){
+            }
+        });
+    }
+
+
+    $(".ilvlupdate-form").submit(function(e) {
+
+        sendIlvlAjaxUpdate($(this),$(this).serialize(), $(this).parent().parent());
+        e.preventDefault();
+    });
+
+    function parseTime(elem)
+    {
+        var time = $(elem).data("time");
+        var t = time.split(/[- :]/);
+        var d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+        var now = new Date();
+        var delta = Math.abs(d-now) / 1000;
+        var days = Math.floor(delta / 86400);
+        delta -= days * 86400;
+        var hours = Math.floor(delta / 3600) % 24;
+        delta -= hours * 3600;
+        var minutes = Math.floor(delta / 60) % 60;
+        var seconds = delta % 60;
+
+        // Az adatok GMT+1-ben vannak
+        //hours = hours + -1 + now.getTimezoneOffset();
+
+        var passed = "";
+        if ( days > 0 )
+        {
+            passed = days + TIME_LOCAL_DAY;
+        } else if ( hours > 0 )
+        {
+            passed = hours + TIME_LOCAL_HOUR;
+        } else if ( minutes > 0 )
+        {
+            passed = Math.floor(minutes) + TIME_LOCAL_MINUTE;
+        } else if ( seconds > 0 ){
+            passed = Math.floor(seconds) + TIME_LOCAL_SECOND;
+        }
+
+        $(elem).html(passed);
+
+    }
+
     function UpdateTimes() {
         $(".time").each(function () {
-            var time = $(this).data("time");
-            var t = time.split(/[- :]/);
-            var d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
-            var now = new Date();
-            var delta = Math.abs(d-now) / 1000;
-            var days = Math.floor(delta / 86400);
-            delta -= days * 86400;
-            var hours = Math.floor(delta / 3600) % 24;
-            delta -= hours * 3600;
-            var minutes = Math.floor(delta / 60) % 60;
-            var seconds = delta % 60;
-
-            // Az adatok GMT+1-ben vannak
-            //hours = hours + -1 + now.getTimezoneOffset();
-
-            var passed = "";
-            if ( days > 0 )
-            {
-                passed = days + TIME_LOCAL_DAY;
-            } else if ( hours > 0 )
-            {
-                passed = hours + TIME_LOCAL_HOUR;
-            } else if ( minutes > 0 )
-            {
-                passed = Math.floor(minutes) + TIME_LOCAL_MINUTE;
-            } else if ( seconds > 0 ){
-                passed = Math.floor(seconds) + TIME_LOCAL_SECOND;
-            }
-
-            $(this).html(passed);
-
+            parseTime($(this));
         });
     }
 

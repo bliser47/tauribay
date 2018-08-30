@@ -39,8 +39,9 @@ class TopItemLevelsController extends Controller
 
         $characterFactions = array("Ismeretlen", "Horde", "Alliance");
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+        $wrapper = true;
 
-        return view('top_item_levels')->with(compact('characters','realms', 'realmsShort', 'characterFactions', 'characterClasses'));
+        return view('top_item_levels')->with(compact('characters','realms', 'realmsShort', 'characterFactions', 'characterClasses','wrapper'));
     }
 
     /**
@@ -57,29 +58,37 @@ class TopItemLevelsController extends Controller
     public static function AddCharacter($_api, $_name, $_realmId)
     {
         $character = TopItemLevels::where(array("name" => $_name, 'realm' => $_realmId))->first();
-        if (!$character) {
-
-            $characterSheet = $_api->getCharacterSheet(self::REALMS[$_realmId], $_name);
-            if ($characterSheet && array_key_exists("response", $characterSheet)) {
-                $characterSheetResponse = $characterSheet["response"];
+        $characterSheet = $_api->getCharacterSheet(self::REALMS[$_realmId], $_name);
+        if ($characterSheet && array_key_exists("response", $characterSheet)) {
+            $characterSheetResponse = $characterSheet["response"];
+            if (!$character) {
                 $character = new TopItemLevels;
-                $character->name = $_name;
-                $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-                $character->class = $characterSheetResponse["class"];
-                // TODO: Fix this
-                if ( $character->class == 10 )
-                {
-                    $character->class = 11;
-                }
-                else if ( $character->class == 11)
-                {
-                    $character->class = 10;
-                }
-                $character->realm = $_realmId;
-                $character->ilvl = $characterSheetResponse["avgitemlevel"];
                 $character->created_at = Carbon::now();
-                $character->save();
             }
+            else
+            {
+                $character->updated_at = Carbon::now();
+            }
+            $character->name = $_name;
+            $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
+            $character->class = $characterSheetResponse["class"];
+            // TODO: Fix this
+            if ( $character->class == 10 )
+            {
+                $character->class = 11;
+            }
+            else if ( $character->class == 11)
+            {
+                $character->class = 10;
+            }
+            $character->realm = $_realmId;
+            $character->ilvl = $characterSheetResponse["avgitemlevel"];
+            $character->save();
+            return $character;
+        }
+        else if ( $character )
+        {
+            $character->delete();
         }
     }
 
@@ -92,6 +101,7 @@ class TopItemLevelsController extends Controller
     public function store(Request $_request)
     {
         $realmId = $_request->get('realm');
+        $characters = array();
         if ( !is_null($realmId) ) {
             $realms = self::REALMS;
             if (array_key_exists($realmId, $realms)) {
@@ -99,7 +109,11 @@ class TopItemLevelsController extends Controller
                 $guildName = $_request->get('guildName');
                 $api = new Tauri\ApiClient();
                 if (strlen($characterName)) {
-                    TopItemLevelsController::AddCharacter($api, $characterName,$realmId);
+                    $char = TopItemLevelsController::AddCharacter($api, $characterName,$realmId);
+                    if ( $char )
+                    {
+                        array_push($characters, $char);
+                    }
                 }
                 if ( strlen($guildName) )
                 {
@@ -109,12 +123,21 @@ class TopItemLevelsController extends Controller
                         $api = new Tauri\ApiClient();
                         foreach ( $members as $member )
                         {
-                            TopItemLevelsController::AddCharacter($api,$member["name"],$realmId);
+                            $char = TopItemLevelsController::AddCharacter($api,$member["name"],$realmId);
+                            if ( $char )
+                            {
+                                array_push($characters, $char);
+                            }
                         }
                     }
                 }
             }
         }
+        $realmsShort = self::REALMS_SHORT;
+        $realms = self::REALMS;
+        $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+        $wrapper = false;
+        return view('top_item_levels_characters')->with(compact('characters','realmsShort','realms','characterClasses','wrapper'));
     }
 
     /**
@@ -146,6 +169,10 @@ class TopItemLevelsController extends Controller
             $_character->ilvl = $characterSheetResponse["avgitemlevel"];
             $_character->updated_at = Carbon::now();
             $_character->save();
+        }
+        else
+        {
+            $_character->delete();
         }
     }
 

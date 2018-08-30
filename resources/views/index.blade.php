@@ -19,9 +19,8 @@
                         </div>
                         <ul>
                             <li> {{ __("Új zöld design") }} </li>
-                            <li> {{ __("Összes hirdetés (utolsó 1 óra) feature") }} </li>
                             <li> {{ __("ItemLevel oldal frissítés") }} </li>
-                            <li> {{ __("Időzóna javítás") }} </li>
+                            <li> <b> {{ __("Szept. 30") }} </b> {{ __(": Manuális iLvl frissítés!") }} </li>
                         </ul>
                     </div>
                 </div>

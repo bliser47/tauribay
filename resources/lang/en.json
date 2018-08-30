@@ -30,10 +30,10 @@
   "1. Válaszd ki a realmet!" : "1. Select the realm!",
   "2. Add meg a guild és/vagy a karakter nevét" : "2. Enter the name of the character and/or the guild",
   "Minden" : "All",
-  " napja" : "d",
-  " órája" : "h",
-  " perce" : "m",
-  " mp" : "s",
+  "n" : "d",
+  "ó" : "h",
+  "p" : "m",
+  "mp" : "s",
 
   "írta" : "by",
   "Sziasztok! Végre újra fut az oldal és egyenlőre a karakter hirdetésekben tudtok keresgélni. Az elkövetkező hetekben megírom a GDKP, a Kredit és a Guild hirdetések felismerését is amit a kézzel felvihető hirdetések lehetősége követ a regisztrált felhasználóknak." :
@@ -44,5 +44,7 @@
   "Új zöld design" : "New green design",
   "Összes hirdetés (utolsó 1 óra) feature" : "All trades (last 1 hour) feature",
   "ItemLevel oldal frissítés" : "ItemLevel page refreshing",
-  "Időzóna javítás" : "Timzone fix"
+  "Időzóna javítás" : "Timzone fix",
+  "Szept. 30" : "Sept. 30",
+  ": Manuális iLvl frissítés!" : ": Manual iLvL refreshing!"
 }

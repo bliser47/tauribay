@@ -31,7 +31,7 @@
                 <li><a href="/ilvl">iLvL Toplist</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a class="changelog" href="/changelog"></a></li>
+                <li><a class="changelog" href="https://github.com/bliser47/tauribay/commits/master"></a></li>
                 {{--
                 @if (Auth::guest())
                     <li><a href="{{ url('/register') }}"><span class="glyphicon glyphicon-user"></span>Regisztráció</a></li>

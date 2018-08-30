@@ -141,17 +141,9 @@
                         <th>{{ __("Frakció") }}</th>
                         <th>{{ __("Kaszt") }}</th>
                         <th>{{ __("iLvL") }}</th>
+                        <th width=32></th>
                     </tr>
-                    @foreach ( $characters as $character )
-                        <tr>
-                            <td class="time" data-time="{{$character->updated_at}}"> {{ $character->updated_at }}</td>
-                            <td> {{ $realmsShort[$character->realm]  }}</td>
-                            <td> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$character->realm] }}&n={{ $character->name }}"> {{ $character->name }} </a></td>
-                            <td class="faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
-                            <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                            <td> {{ $character->ilvl }} </td>
-                        </tr>
-                    @endforeach
+                    @include('top_item_levels_characters')
                 </table>
             </div>
             <div class="text-center">

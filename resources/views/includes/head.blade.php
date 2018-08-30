@@ -6,14 +6,14 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
 <link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=5') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=14') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
 
 <script>
-    var TIME_LOCAL_DAY = "{{ __(" napja") }}";
-    var TIME_LOCAL_HOUR = "{{ __(" órája") }}";
-    var TIME_LOCAL_MINUTE = "{{ __(" perce") }}";
-    var TIME_LOCAL_SECOND = "{{ __(" mp") }}";
+    var TIME_LOCAL_DAY = "{{ __("n") }}";
+    var TIME_LOCAL_HOUR = "{{ __("ó") }}";
+    var TIME_LOCAL_MINUTE = "{{ __("p") }}";
+    var TIME_LOCAL_SECOND = "{{ __("mp") }}";
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -23,12 +23,10 @@
 
 
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/power.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=12') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=22') }}"></script>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/i18n/defaults-*.min.js"></script>
 
 <meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1">

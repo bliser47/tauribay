@@ -22,6 +22,7 @@ Route::post('api/receiveBattlegrounds', 'ApiController@ReceiveBattlegroundData')
 
 Route::post('/ilvl', 'TopItemLevelsController@store');
 Route::get('/ilvlupdate', 'TopItemLevelsController@update');
+Route::post('/ilvlupdate', 'TopItemLevelsController@update');
 
 /*
 Route::get('/admin/kiskarik', 'AdminController@ShowLowLevels');
