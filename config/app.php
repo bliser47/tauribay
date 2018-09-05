@@ -149,6 +149,7 @@ return [
         Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
         Akaunting\Language\Provider::class,
+        HTMLMin\HTMLMin\HTMLMinServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -161,8 +162,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-
+        App\Providers\RouteServiceProvider::class
     ],
 
     /*

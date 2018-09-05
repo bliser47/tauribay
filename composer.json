@@ -9,6 +9,7 @@
         "akaunting/language": "^1.0",
         "fideloper/proxy": "~4.0",
         "greggilbert/recaptcha": "dev-master",
+        "htmlmin/htmlmin": "^5.6",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.2.0"

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Carbon\Carbon;
 
 class CharacterTrade extends Model
 {
@@ -32,7 +33,7 @@ class CharacterTrade extends Model
 
     public static function GetTrades($_request) {
 
-        $characterTrades = DB::table('character_trades')->orderBy('updated_at','desc');
+        $characterTrades = DB::table('character_trades')->where('created_at','>',Carbon::now()->subDays(30))->orderBy('updated_at','desc');
 
         if ( $_request->has("filter") ) {
             // 1. Faction filter
