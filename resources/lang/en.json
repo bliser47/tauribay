@@ -46,5 +46,39 @@
   "ItemLevel oldal frissítés" : "ItemLevel page refreshing",
   "Időzóna javítás" : "Timzone fix",
   "Szept. 30" : "Sept. 30",
-  ": Manuális iLvl frissítés!" : ": Manual iLvL refreshing!"
+  ": Manuális iLvl frissítés!" : ": Manual iLvL refreshing!",
+
+
+
+
+  "Regisztráció" : "Register",
+  "Bejelentkezés" : "Log in",
+  "Felhasználónév" : "Username",
+  "E-Mail cím" : "E-Mail Address",
+  "Jelszó" : "Password",
+  "Jelszó újra" : "Confirm pass.",
+  "Emlékezz rám!" : "Remember me!",
+  "Elfelejtett jelszó?" : "Forgot password?",
+  "Jelszó emlékeztető" : "Password reminder",
+  "Jelszó emlékeztető küldése" : "Send password reminder",
+  "Kattints ide, hogy új jelszót állíts be:" : "Click here, to set a new password:",
+
+
+  "Kötelező megadni." : "This field is required.",
+  "Legfeljebb {0} karakter hosszú legyen." : "Please enter no more than {0} characters.",
+  "Legalább {0} karakter hosszú legyen." : "Please enter at least {0} characters.",
+  "A számnak {0} és {1} között kell lennie." : "Please enter a value between {0} and {1} characters long.",
+  "Érvényes e-mail címnek kell lennie." : "Please enter a valid email address.",
+  "Érvényes URL-nek kell lennie." : "Please enter a valid URL.",
+  "Dátumnak kell lennie." : "Please enter a valid date.",
+  "Számnak kell lennie." : "Please enter a valid number.",
+  "Csak számjegyek lehetnek." : "Please enter only digits.",
+  "Meg kell egyeznie a két értéknek." : "Please enter the same value again.",
+  "{0} és {1} közé kell esnie." : "Please enter a value between {0} and {1}.",
+  "Nem lehet nagyobb, mint {0}." : "Please enter a value less than or equal to {0}.",
+  "Nem lehet kisebb, mint {0}." : "Please enter a value greater than or equal to {0}.",
+  "Érvényes hitelkártyaszámnak kell lennie." : "Please enter a valid credit card number.",
+  "Kérem javítsa ki ezt a mezőt." : "Please fix this field.",
+  "Kérem írjon be egy érvényes dátumot (ISO)." : "Please enter a valid date (ISO)."
+
 }

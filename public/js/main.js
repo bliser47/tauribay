@@ -25,22 +25,22 @@ $(function()
 
 
     $.extend( $.validator.messages, {
-        required: "Kötelező megadni.",
-        maxlength: $.validator.format( "Legfeljebb {0} karakter hosszú legyen." ),
-        minlength: $.validator.format( "Legalább {0} karakter hosszú legyen." ),
-        rangelength: $.validator.format( "Legalább {0} és legfeljebb {1} karakter hosszú legyen." ),
-        email: "Érvényes e-mail címnek kell lennie.",
-        url: "Érvényes URL-nek kell lennie.",
-        date: "Dátumnak kell lennie.",
-        number: "Számnak kell lennie.",
-        digits: "Csak számjegyek lehetnek.",
-        equalTo: "Meg kell egyeznie a két értéknek.",
-        range: $.validator.format( "{0} és {1} közé kell esnie." ),
-        max: $.validator.format( "Nem lehet nagyobb, mint {0}." ),
-        min: $.validator.format( "Nem lehet kisebb, mint {0}." ),
-        creditcard: "Érvényes hitelkártyaszámnak kell lennie.",
-        remote: "Kérem javítsa ki ezt a mezőt.",
-        dateISO: "Kérem írjon be egy érvényes dátumot (ISO)."
+        required: VALIDATION_LOCAL_REQUIRED,
+        maxlength: $.validator.format( VALIDATION_LOCAL_MAXLENGTH ),
+        minlength: $.validator.format( VALIDATION_LOCAL_MINLENGTH ),
+        rangelength: $.validator.format( VALIDATION_LOCAL_RANGELENGTH ),
+        email: VALIDATION_LOCAL_EMAIL,
+        url: VALIDATION_LOCAL_URL,
+        date: VALIDATION_LOCAL_DATE,
+        number: VALIDATION_LOCAL_NUMBER,
+        digits: VALIDATION_LOCAL_DIGIT,
+        equalTo: VALIDATION_LOCAL_EQUAL,
+        range: $.validator.format(VALIDATION_LOCAL_RANGE),
+        max: $.validator.format(VALIDATION_LOCAL_MIN),
+        min: $.validator.format(VALIDATION_LOCAL_MAX),
+        creditcard: VALIDATION_LOCAL_CREDITCARD,
+        remote: VALIDATION_LOCAL_REMOTE,
+        dateISO: VALIDATION_LOCAL_DATEISO
     } );
 
     $.validator.setDefaults({

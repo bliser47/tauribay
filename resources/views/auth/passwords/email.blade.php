@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default nomargin">
-                <div class="panel-heading">Jelszó emlékeztető</div>
+                <div class="panel-heading">{{ __("Jelszó emlékeztető") }}</div>
                 <div class="panel-body forgot">
                     @if (session('status'))
                         <div class="alert alert-success">
@@ -15,7 +15,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail cím</label>
+                            <label for="email" class="col-md-4 control-label">{{ __("E-Mail cím") }}</label>
 
                             <div class="col-md-4">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
@@ -31,7 +31,7 @@
                         <div class="form-group">
                             <div class="col-md-4 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary btn-block">
-                                    <i class="fa fa-btn fa-envelope"></i> Jelszó emlékeztető küldése
+                                    <i class="fa fa-btn fa-envelope"></i> {{ __("Jelszó emlékeztető küldése") }}
                                 </button>
                             </div>
                         </div>

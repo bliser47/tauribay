@@ -11,7 +11,7 @@
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
-                            <label for="email" class="col-md-4 control-label">E-Mail cím</label>
+                            <label for="email" class="col-md-4 control-label">{{__("E-Mail cím")}}</label>
 
                             <div class="col-md-4">
                                 <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}">
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                            <label for="password" class="col-md-4 control-label">Jelszó</label>
+                            <label for="password" class="col-md-4 control-label">{{ __("Jelszó") }}</label>
 
                             <div class="col-md-4">
                                 <input id="password" type="password" class="form-control" name="password">
@@ -42,18 +42,18 @@
                             <div class="col-md-2 col-md-offset-4">
                                 <div class="checkbox">
                                     <input id="remember" type="checkbox" name="remember">
-                                    <label for="remember">Emlékezz rám!</label>
+                                    <label for="remember">{{ __("Emlékezz rám!") }}</label>
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">Elfelejtett jelszó?</a>
+                                <a class="btn btn-link" href="{{ url('/password/reset') }}">{{ __("Elfelejtett jelszó?") }}</a>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="col-md-4 col-md-offset-4">
                                 <button type="submit" class="btn btn-block btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i> Bejelentkezés
+                                    <i class="fa fa-btn fa-sign-in"></i> {{ __("Bejelentkezés") }}
                                 </button>
                             </div>
                         </div>
