@@ -92,7 +92,7 @@ $(function()
     {
         $.ajax({
             type: "POST",
-            url: "https://www.tauribay.hu/ilvl",
+            url: "https://tauribay.hu/ilvl",
             data: data,
             success: function(response)
             {
@@ -140,7 +140,7 @@ $(function()
         $(form).parent().find(".update-loader").css("display","block");
         $.ajax({
             type: "POST",
-            url: "https://www.tauribay.hu/ilvl",
+            url: "https://tauribay.hu/ilvl",
             data: data,
             success: function(response)
             {

@@ -150,7 +150,6 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Akaunting\Language\Provider::class,
         HTMLMin\HTMLMin\HTMLMinServiceProvider::class,
-
         /*
          * Package Service Providers...
          */

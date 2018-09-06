@@ -20,7 +20,8 @@
                         <ul>
                             <li> {{ __("Új zöld design") }} </li>
                             <li> {{ __("ItemLevel oldal frissítés") }} </li>
-                            <li> <b> {{ __("Szept. 30") }} </b> {{ __(": Manuális iLvl frissítés!") }} </li>
+                            <li> {{ __("Aug. 30") }} {{ __(": Manuális iLvl frissítés!") }} </li>
+                            <li> <b> {{ __("Szept. 6") }} </b> {{ __(": Manuális iLvl frissítés fixed") }} </li>
                         </ul>
                     </div>
                 </div>
