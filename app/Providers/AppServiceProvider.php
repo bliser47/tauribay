@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace TauriBay\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -27,8 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-         if (env('APP_ENV') === 'production') {
-            $this->app['url']->forceScheme('https');
-         }
+        $this->app['url']->forceScheme('https');
     }
 }

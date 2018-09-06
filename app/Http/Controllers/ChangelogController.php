@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use TauriBay\Http\Requests;
 
 class ChangelogController extends Controller
 {

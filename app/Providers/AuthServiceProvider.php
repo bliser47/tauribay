@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace TauriBay\Providers;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -13,7 +13,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        'TauriBay\Model' => 'TauriBay\Policies\ModelPolicy',
     ];
 
     /**
@@ -23,8 +23,21 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerPolicies();
+         $this->registerPolicies();
+         if(env('REDIRECT_HTTPS')) {
+             $url->formatScheme('https');
+         }
+    }
 
-        //
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+         if (env('APP_ENV') === 'production') {
+            $this->app['url']->forceScheme('https');
+         }
     }
 }

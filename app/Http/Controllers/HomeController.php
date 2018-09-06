@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
-use App\Http\Requests;
+use TauriBay\Http\Requests;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller

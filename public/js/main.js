@@ -1,6 +1,5 @@
 $(function()
 {
-
     $(".pagination").rPage();
 
 
@@ -22,7 +21,6 @@ $(function()
     $(".checkbox-all-instance-difficulty input").change(function(){
         $(".checkbox-instance-difficulty input").prop('checked', $(this).prop("checked"));
     });
-
 
     $.extend( $.validator.messages, {
         required: VALIDATION_LOCAL_REQUIRED,
@@ -92,7 +90,7 @@ $(function()
     {
         $.ajax({
             type: "POST",
-            url: "https://tauribay.hu/ilvl",
+            url: URL_WEBSITE + "/ilvl",
             data: data,
             success: function(response)
             {
@@ -140,7 +138,7 @@ $(function()
         $(form).parent().find(".update-loader").css("display","block");
         $.ajax({
             type: "POST",
-            url: "https://tauribay.hu/ilvl",
+            url: URL_WEBSITE + "/ilvl",
             data: data,
             success: function(response)
             {

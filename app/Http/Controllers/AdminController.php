@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
-use App\Trader;
+use TauriBay\Trader;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use DB;
-use App\Http\Requests;
+use TauriBay\Http\Requests;
 
 class AdminController extends Controller
 {

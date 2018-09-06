@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
-use App\Battleground;
+use TauriBay\Battleground;
 use Illuminate\Http\Request;
 
 class BattlegroundController extends Controller
@@ -41,7 +41,7 @@ class BattlegroundController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Battleground  $battleground
+     * @param  \TauriBay\Battleground  $battleground
      * @return \Illuminate\Http\Response
      */
     public function show(Battleground $battleground)
@@ -52,7 +52,7 @@ class BattlegroundController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Battleground  $battleground
+     * @param  \TauriBay\Battleground  $battleground
      * @return \Illuminate\Http\Response
      */
     public function edit(Battleground $battleground)
@@ -64,7 +64,7 @@ class BattlegroundController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Battleground  $battleground
+     * @param  \TauriBay\Battleground  $battleground
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Battleground $battleground)
@@ -75,7 +75,7 @@ class BattlegroundController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Battleground  $battleground
+     * @param  \TauriBay\Battleground  $battleground
      * @return \Illuminate\Http\Response
      */
     public function destroy(Battleground $battleground)

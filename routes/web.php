@@ -11,7 +11,6 @@
 |
 */
 
-
 Route::get('api/receiveData', 'IndexController@Start');
 Route::post('api/receiveBattlegrounds', 'IndexController@Start');
 

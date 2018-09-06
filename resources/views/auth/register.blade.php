@@ -7,7 +7,7 @@
                 <div class="panel-body register">
                     <div class="register-left"></div>
                     <div class="register-right"></div>
-                    <form class="form-horizontal register-form" role="form" method="POST" action="{{ url('/register') }}">
+                    <form class="form-horizontal register-form" role="form" method="POST" action="{{URL::to('/register')}}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -66,7 +66,13 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-4 col-md-offset-4">
+                            <div id="recaptcha-container" class="col-md-4 col-md-offset-4">
+                                <script>
+                                    function onRecaptchaLoaded()
+                                    {
+                                        document.getElementById("recaptcha-container").style.opacity = 1;
+                                    }
+                                </script>
                                 {!! Recaptcha::render(array(
                                     'lang' => language()->country()
                                 )) !!}

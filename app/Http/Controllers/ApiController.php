@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
-use App\CharacterTrade;
-use App\GdkpTrade;
-use App\ParsedData;
-use App\TradeData;
-use App\Trader;
-use App\Tauri\SmartParser;
+use TauriBay\CharacterTrade;
+use TauriBay\GdkpTrade;
+use TauriBay\ParsedData;
+use TauriBay\TradeData;
+use TauriBay\Trader;
+use TauriBay\Tauri\SmartParser;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use DB;
-use App\Tauri\ApiClient;
-use App\Http\Requests;
+use TauriBay\Tauri\ApiClient;
+use TauriBay\Http\Requests;
 use DateTime;
 
 class ApiController extends Controller
 {
     public function ReceiveData(Request $_request)
     {
-        if ( $_request->ip() == env('WEBSITE_IP')  ) {
+        //if ( $_request->ip() == env('WEBSITE_IP')  ) {
             $tradeDataJSON = json_decode($_request->all()[0]);
             $insertArray = array();
             for ($t = 0; $t < count($tradeDataJSON); $t++) {
@@ -31,11 +31,13 @@ class ApiController extends Controller
             }
             TradeData::insert($insertArray);
             return $this->ParseData($tradeDataJSON);
+        /*
         }
         else
         {
             return "Not permitted";
         }
+        */
     }
 
     public function ReceiveBattlegroundData(Request $_request)

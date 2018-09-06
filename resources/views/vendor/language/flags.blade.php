@@ -2,7 +2,7 @@
     @if ( language()->flag()->name != $name )
         <li>
             <a href="{{ language()->back($code) }}">
-                <img src="{{ asset('img/flags/'. language()->country($code) .'.png') }}" alt="{{ $name }}" width="{{ config('language.flags.width') }}" />
+                <img src="{{ URL::asset('img/flags/'. language()->country($code) .'.png') }}" alt="{{ $name }}" width="{{ config('language.flags.width') }}" />
                 {!! $name !!}
             </a>
         </li>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tauri;
+namespace TauriBay\Tauri;
 
 class SmartParser
 {

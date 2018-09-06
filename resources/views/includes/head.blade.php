@@ -6,10 +6,12 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 
 <link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=20') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=32') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
 
 <script>
+    var URL_WEBSITE = "{{ URL::to('/') }}";
+
     var TIME_LOCAL_DAY = "{{ __("n") }}";
     var TIME_LOCAL_HOUR = "{{ __("ó") }}";
     var TIME_LOCAL_MINUTE = "{{ __("p") }}";
@@ -40,7 +42,7 @@
 
 
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=31') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=35') }}"></script>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>

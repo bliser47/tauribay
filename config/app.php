@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Tauribay'),
+    'name' => env('APP_NAME', 'TauriBay'),
 
     /*
     |--------------------------------------------------------------------------
@@ -157,11 +157,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class
+        TauriBay\Providers\AppServiceProvider::class,
+        TauriBay\Providers\AuthServiceProvider::class,
+        // TauriBay\Providers\BroadcastServiceProvider::class,
+        TauriBay\Providers\EventServiceProvider::class,
+        TauriBay\Providers\RouteServiceProvider::class
     ],
 
     /*

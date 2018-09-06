@@ -499,3 +499,16 @@ a.changelog:hover
     background-position:0px 32px;
     cursor:pointer;
 }
+
+.glyphicon
+{
+    line-height:0px;
+}
+
+#recaptcha-container
+{
+    height:78px;
+    opacity:0;
+    -webkit-transition: opacity 1s; /* Safari */
+    transition: opacity 1s;
+}

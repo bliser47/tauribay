@@ -7,7 +7,7 @@
                 <div class="panel-body login nopadding-bottom">
                     <div class="login-left"></div>
                     <div class="login-right"></div>
-                    <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="{{URL::to('/login')}}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
@@ -46,7 +46,7 @@
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <a class="btn btn-link" href="{{ url('/password/reset') }}">{{ __("Elfelejtett jelszó?") }}</a>
+                                <a class="btn btn-link" href="{{ URL::to('/password/reset') }}">{{ __("Elfelejtett jelszó?") }}</a>
                             </div>
                         </div>
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace TauriBay;
 
-use App\Tauri\WowInstance;
+use TauriBay\Tauri\WowInstance;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 

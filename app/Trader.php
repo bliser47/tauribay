@@ -1,8 +1,8 @@
 <?php
 
-namespace App;
+namespace TauriBay;
 
-use App\Tauri\CharacterClasses;
+use TauriBay\Tauri\CharacterClasses;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 

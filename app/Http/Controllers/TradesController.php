@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
-use App\CharacterTrade;
-use App\ParsedData;
-use App\GdkpTrade;
-use App\Tauri\GdkpIntent;
-use App\Tauri\WowInstance;
-use App\Tauri\WoWInstanceDifficulty;
-use App\Tauri\WowInstanceSize;
+use TauriBay\CharacterTrade;
+use TauriBay\ParsedData;
+use TauriBay\GdkpTrade;
+use TauriBay\Tauri\GdkpIntent;
+use TauriBay\Tauri\WowInstance;
+use TauriBay\Tauri\WoWInstanceDifficulty;
+use TauriBay\Tauri\WowInstanceSize;
 use Illuminate\Http\Request;
-use App\Tauri\CharacterClasses;
-use App\Tauri\CharacterIntent;
-use App\Http\Requests;
+use TauriBay\Tauri\CharacterClasses;
+use TauriBay\Tauri\CharacterIntent;
+use TauriBay\Http\Requests;
 use DB;
 use Carbon\Carbon;
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace TauriBay\Http\Controllers;
 
 
-use App\TopItemLevels;
+use TauriBay\TopItemLevels;
 use Illuminate\Http\Request;
-use App\Trader;
-use App\Tauri;
-use App\Tauri\CharacterClasses;
+use TauriBay\Trader;
+use TauriBay\Tauri;
+use TauriBay\Tauri\CharacterClasses;
 use Carbon\Carbon;
 
 class TopItemLevelsController extends Controller
@@ -143,7 +143,7 @@ class TopItemLevelsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TopItemLevels  $topItemLevels
+     * @param  \TauriBay\TopItemLevels  $topItemLevels
      * @return \Illuminate\Http\Response
      */
     public function show(TopItemLevels $topItemLevels)
@@ -154,7 +154,7 @@ class TopItemLevelsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\TopItemLevels  $topItemLevels
+     * @param  \TauriBay\TopItemLevels  $topItemLevels
      * @return \Illuminate\Http\Response
      */
     public function edit(TopItemLevels $topItemLevels)
@@ -196,7 +196,7 @@ class TopItemLevelsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\TopItemLevels  $topItemLevels
+     * @param  \TauriBay\TopItemLevels  $topItemLevels
      * @return \Illuminate\Http\Response
      */
     public function destroy(TopItemLevels $topItemLevels)

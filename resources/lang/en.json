@@ -64,7 +64,10 @@
   "Jelszó emlékeztető" : "Password reminder",
   "Jelszó emlékeztető küldése" : "Send password reminder",
   "Kattints ide, hogy új jelszót állíts be:" : "Click here, to set a new password:",
-
+  "Jelszó Frissítése" : "Reset Password",
+  "Kijelentkezés" : "Log out",
+  "Sikeres bejelentkezés" : "You are logged in!",
+  "Üdvözlettel" : "Regards",
 
   "Kötelező megadni." : "This field is required.",
   "Legfeljebb {0} karakter hosszú legyen." : "Please enter no more than {0} characters.",
@@ -82,5 +85,4 @@
   "Érvényes hitelkártyaszámnak kell lennie." : "Please enter a valid credit card number.",
   "Kérem javítsa ki ezt a mezőt." : "Please fix this field.",
   "Kérem írjon be egy érvényes dátumot (ISO)." : "Please enter a valid date (ISO)."
-
 }
