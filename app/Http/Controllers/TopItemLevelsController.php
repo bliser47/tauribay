@@ -66,25 +66,26 @@ class TopItemLevelsController extends Controller
                 $character->name = $_name;
                 $character->created_at = Carbon::now();
             }
-            else
+            else if ( Carbon::parse($character->updated_at) < Carbon::now()->subMinutes(1) )
             {
                 $character->updated_at = Carbon::now();
+                $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
+                $character->class = $characterSheetResponse["class"];
+                // TODO: Fix this
+                if ( $character->class == 10 )
+                {
+                    $character->class = 11;
+                }
+                else if ( $character->class == 11)
+                {
+                    $character->class = 10;
+                }
+                $character->realm = $_realmId;
+                $character->ilvl = $characterSheetResponse["avgitemlevel"];
+                $character->save();
+                return $character;
             }
-            $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-            $character->class = $characterSheetResponse["class"];
-            // TODO: Fix this
-            if ( $character->class == 10 )
-            {
-                $character->class = 11;
-            }
-            else if ( $character->class == 11)
-            {
-                $character->class = 10;
-            }
-            $character->realm = $_realmId;
-            $character->ilvl = $characterSheetResponse["avgitemlevel"];
-            $character->save();
-            return $character;
+
         }
         else if ( $character )
         {
