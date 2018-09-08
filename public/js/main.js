@@ -104,8 +104,14 @@ $(function()
                 }
             },
             error: function(xhr, textStatus, errorThrown){
-                $(".loader").css("display", "none");
-                $("#newcharacter-form").show();
+                if ( xhr && xhr.responseText.indexOf("A timeout occurred") !== -1 )
+                {
+                    sendIlvlAjax(data);
+                }
+                else {
+                    $(".loader").css("display", "none");
+                    $("#newcharacter-form").show();
+                }
             }
         });
     }
