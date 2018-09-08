@@ -12,7 +12,7 @@
                         </div>
                     </div>
                     <div class="col-md-10">
-                         <h4> Avatar csere </h4>
+                         <h4>{{__("Avatar csere")}}</h4>
                          <form enctype="multipart/form-data" action="/profile" method="POST">
                              <div class="form-group">
                                  <div class="input-group input-file" name="avatar">

@@ -57,19 +57,19 @@ class TopItemLevelsController extends Controller
 
     public static function AddCharacter($_api, $_name, $_realmId)
     {
-        $character = TopItemLevels::where(array("name" => $_name, 'realm' => $_realmId))->first();
+        $character = TopItemLevels::where("name",'=',$_name)->where('realm','=',$_realmId)->first();
         $characterSheet = $_api->getCharacterSheet(self::REALMS[$_realmId], $_name);
         if ($characterSheet && array_key_exists("response", $characterSheet)) {
             $characterSheetResponse = $characterSheet["response"];
-            if (!$character) {
+            if ($character === null) {
                 $character = new TopItemLevels;
+                $character->name = $_name;
                 $character->created_at = Carbon::now();
             }
             else
             {
                 $character->updated_at = Carbon::now();
             }
-            $character->name = $_name;
             $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
             $character->class = $characterSheetResponse["class"];
             // TODO: Fix this
