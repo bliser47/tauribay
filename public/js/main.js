@@ -9,6 +9,9 @@ $(function()
     $(".checkbox-all-factions input").change(function(){
         $(".checkbox-faction input").prop('checked', $(this).prop("checked"));
     });
+    $(".checkbox-all-realms input").change(function(){
+        $(".checkbox-realm input").prop('checked', $(this).prop("checked"));
+    });
     $(".checkbox-all-intents input").change(function(){
         $(".checkbox-intent input").prop('checked', $(this).prop("checked"));
     });

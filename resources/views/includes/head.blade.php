@@ -42,7 +42,7 @@
 
 
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=41') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=42') }}"></script>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>

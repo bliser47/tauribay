@@ -40,6 +40,21 @@ class TopItemLevels extends Model
                 $characters = $characters->whereIn('class', $classes);
             }
 
+            if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                $realms = array();
+                if ($_request->has('tauri')) {
+                    array_push($realms, 0);
+                }
+                if ($_request->has('wod')) {
+                    array_push($realms, 1);
+                }
+                if ($_request->has('evermoon')) {
+                    array_push($realms, 2);
+                }
+                $characters = $characters->whereIn('realm', $realms);
+            }
+
+
             if ($_request->has('search')) {
                 $characters = $characters->where('name', 'LIKE', '%' . $_request->get('search') . '%');
             }

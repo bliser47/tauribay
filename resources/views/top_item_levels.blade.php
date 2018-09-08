@@ -48,7 +48,27 @@
 
                             {!! Form::open(array("method" => "get","id"=>"filter-form")) !!}
 
-
+                            <div class="form-group col-md-6">
+                                 <legend> {{ __("Realm") }} </legend>
+                                  <div class="input-group">
+                                    <div class="checkbox checkbox-inline checkbox-realm">
+                                        {!! Form::checkbox('tauri',2,Input::get('tauri'),array("id"=>"realm-tauri","class"=>"realm")) !!}
+                                        <label for="realm-tauri"> Tauri </label>
+                                    </div>
+                                    <div class="checkbox checkbox-inline checkbox-realm">
+                                        {!! Form::checkbox('wod',1,Input::get('wod'),array("id"=>"realm-wod","class"=>"realm")) !!}
+                                        <label for="realm-wod"> WoD </label>
+                                    </div>
+                                    <div class="checkbox checkbox-inline checkbox-realm">
+                                        {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
+                                        <label for="realm-evermoon"> Evermoon </label>
+                                    </div>
+                                    <div class="checkbox checkbox-inline checkbox-all-realms">
+                                        {!! Form::checkbox('realmall',3,Input::get('realmall'),array("id"=>"realm-all","class"=>"realm")) !!}
+                                        <label for="realm-all"> {{ __("Mind") }} </label>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group col-md-6 nopadding-left">
                                 <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
@@ -66,7 +86,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group class-checkboxes">
+                            <div class="form-group col-md-12 class-checkboxes">
                                 <legend> {{ __("Kaszt") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-warrior checkbox-white-tick checkbox-class">
