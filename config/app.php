@@ -161,7 +161,8 @@ return [
         TauriBay\Providers\AuthServiceProvider::class,
         // TauriBay\Providers\BroadcastServiceProvider::class,
         TauriBay\Providers\EventServiceProvider::class,
-        TauriBay\Providers\RouteServiceProvider::class
+        TauriBay\Providers\RouteServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
     ],
 
     /*
@@ -214,7 +215,8 @@ return [
         'Form' => Collective\Html\FormFacade::class,
         'Html' => Collective\Html\HtmlFacade::class,
         'Input' => Illuminate\Support\Facades\Input::class,
-        'Language'   => Akaunting\Language\Facade::class
+        'Language'   => Akaunting\Language\Facade::class,
+        'Image' => Intervention\Image\Facades\Image::class
     ],
 
 

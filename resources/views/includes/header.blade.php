@@ -36,6 +36,7 @@
                     <li><a href="{{URL::to('/login')}}"><span class="glyphicon glyphicon-log-in"></span>{{ __("Bejelentkezés") }} </a></li>
                 @else
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
+                    <li><a href="{{URL::to('/home')}}"><span class="glyphicon glyphicon-user"></span>{{__("Profil")}}</a></li>
                     <li><a href="{{URL::to('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span>{{__("Kijelentkezés")}}</a></li>
                 @endif
                 <li><a class="changelog" href="https://github.com/bliser47/tauribay/commits/master"></a></li>

@@ -18,6 +18,7 @@ Route::post('api/receiveBattlegrounds', 'IndexController@Start');
 Route::post('api/receiveData', 'ApiController@ReceiveData');
 Route::post('api/receiveBattlegrounds', 'ApiController@ReceiveBattlegroundData');
 
+Route::post('profile', 'HomeController@update_avatar');
 
 Route::post('/ilvl', 'TopItemLevelsController@store');
 Route::get('/ilvlupdate', 'TopItemLevelsController@update');
