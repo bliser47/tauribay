@@ -86,5 +86,23 @@ function requestBGqueue()
     console.log("sent");
     bot.say("T-etu","!bg");
 }
+
+function updateIlvls()
+{
+    request({
+        url: 'http://51.15.212.167/ilvlupdate',
+        method: 'POST',
+        json: true,
+        body: JSON.stringify(battlegrounds)
+    }, function(error, response, body){
+        if(error) {
+            console.log(error)
+        } else {
+            console.log(response.statusCode, body);
+        }
+    });
+}
+
+setInterval(updateIlvls, 10000);
 setInterval(requestBGqueue,30000);
 setTimeout(requestBGqueue,3000);

@@ -188,8 +188,7 @@ class TopItemLevelsController extends Controller
      */
     public function update(Request $request)
     {
-        // Get all characters that were updates 24 hours ago
-        $characters = TopItemLevels::where('ilvl','>',400)->where('updated_at', '<', Carbon::now()->subHours(1)->toDateTimeString())->get();
+        $characters = TopItemLevels::where('ilvl','>',400)->where('updated_at', '<', Carbon::now()->subDays(1)->toDateTimeString())->orderBy('ilvl', 'desc')->limit(10)->get();
         $api = new Tauri\ApiClient();
         foreach ( $characters as $character )
         {
