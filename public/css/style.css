@@ -535,6 +535,7 @@ a.changelog:hover
 
 .avatarContainer
 {
+    margin-top:10px;
     width:150px;
 }
 
@@ -551,4 +552,104 @@ a.changelog:hover
 .avatarContainer form
 {
 
+}
+
+.change-form-errors
+{
+    display:table;
+}
+
+.change-form-errors div
+{
+    display:table-cell;
+}
+
+.nav-tabs li.disabled { color: grey; }
+.nav-tabs li.disabled a:hover { border-color: transparent; }
+
+
+.inactive-ad-realm
+{
+    display:none;
+}
+
+.disabled-ad-section input
+{
+    opacity:0.75 !important;
+}
+
+.disabled-ad-section legend, .disabled-ad-section h5
+{
+    opacity:0.5 !important;
+}
+
+.home-main-tab
+{
+    font-size:16px;
+}
+
+.home-sub-tab
+{
+    font-size:14px;
+}
+
+.input-group .help-block
+{
+    float:left;
+}
+
+#new-character-advert .input-group-btn
+{
+    vertical-align: top;
+}
+
+.rarityglow
+{
+    border:2px solid rgba(88,88,88,0.5);
+}
+
+.rarity4
+{
+    border-color:rgba(139,42,180,1);
+}
+
+.gearItem
+{
+    width:48px;
+    height:48px;
+    margin-bottom:2px;
+    overflow:hidden;
+}
+
+.gearItem img
+{
+    position: relative;
+    left:-5px;
+    top:-5px;
+    width:58px;
+    height:58px;
+}
+
+.left-items
+{
+    float:left;
+}
+
+.right-items
+{
+    float:right;
+}
+
+.bottom-items
+{
+    display: table;
+    margin:0px auto;
+    float:none;
+    clear:both;
+}
+
+.bottom-items .gearItem
+{
+    float:left;
+    margin:0px 2px 0px 2px;
 }

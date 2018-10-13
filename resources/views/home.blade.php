@@ -4,30 +4,17 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default nomargin">
-                <div class="panel-heading">{{ $user->name . __(" profilja") }}</div>
-                <div class="panel-body login">
-                    <div class="col-md-2">
-                        <div class="avatarContainer">
-                             <img src="/uploads/avatars/{{ $user->avatar }}">
-                        </div>
-                    </div>
-                    <div class="col-md-10">
-                         <h4>{{__("Avatar csere")}}</h4>
-                         <form enctype="multipart/form-data" action="/profile" method="POST">
-                             <div class="form-group">
-                                 <div class="input-group input-file" name="avatar">
-                                     <span class="input-group-btn">
-                                         <button class="btn btn-default btn-choose" type="button">{{__("Tallózás")}}</button>
-                                     </span>
-                                     <input type="text" class="form-control" placeholder='{{__("Válassz fájlt...")}}' />
-                                     <span class="input-group-btn">
-                                          <button class="btn btn-primary" type="submit">{{__("Avatar csere")}}</button>
-                                      </span>
-                                 </div>
-                             </div>
-                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                         </form>
-                    </div>
+                 <ul class="nav nav-tabs" role="tablist">
+                    <li class="home-main-tab active" role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">{{__("Profil")}}</a></li>
+                    {{--<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">{{__("Üzenetek")}}</a></li>--}}
+                    {{--<li role="presentation"><a href="#mytrades" aria-controls="mytrades" role="tab" data-toggle="tab">{{__("Hirdetéseim")}}</a></li>--}}
+                    <li class="home-main-tab" role="presentation"><a href="#newtrade" aria-controls="newtrade" role="tab" data-toggle="tab"><b>{{__("Új hirdetés")}}</b></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="profile">@include('home.profile')</div>
+                    <div role="tabpanel" class="tab-pane" id="messages">@include('home.messages')</div>
+                    <div role="tabpanel" class="tab-pane" id="mytrades">@include('home.mytrades')</div>
+                    <div role="tabpanel" class="tab-pane" id="newtrade">@include('home.newtrade')</div>
                 </div>
             </div>
         </div>

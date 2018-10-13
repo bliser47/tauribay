@@ -92,8 +92,7 @@ function updateIlvls()
     request({
         url: 'http://51.15.212.167/ilvlupdate',
         method: 'POST',
-        json: true,
-        body: JSON.stringify(battlegrounds)
+        json: true
     }, function(error, response, body){
         if(error) {
             console.log(error)

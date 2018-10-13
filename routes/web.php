@@ -11,6 +11,8 @@
 |
 */
 
+Route::post('armory', 'ArmoryController@Request');
+
 Route::get('api/receiveData', 'IndexController@Start');
 Route::post('api/receiveBattlegrounds', 'IndexController@Start');
 
@@ -18,7 +20,8 @@ Route::post('api/receiveBattlegrounds', 'IndexController@Start');
 Route::post('api/receiveData', 'ApiController@ReceiveData');
 Route::post('api/receiveBattlegrounds', 'ApiController@ReceiveBattlegroundData');
 
-Route::post('profile', 'HomeController@update_avatar');
+Route::post('profile/avatar', 'HomeController@ChangeAvatar');
+Route::post('profile/password', 'HomeController@ChangePassword');
 
 Route::post('/ilvl', 'TopItemLevelsController@store');
 Route::get('/ilvlupdate', 'TopItemLevelsController@update');
@@ -50,6 +53,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/bg', 'BattlegroundController@index');
     Route::get('/ilvl', 'TopItemLevelsController@index');
 
+    Route::auth();
 });
 
 /*
@@ -57,5 +61,4 @@ Route::get('/trade/gdkp', 'TradesController@ShowGdkps');
 Route::get('/trade/kredit', 'TradesController@ShowCredits');
 */
 
-Route::auth();
 

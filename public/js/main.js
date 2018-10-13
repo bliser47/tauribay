@@ -118,7 +118,7 @@ $(function()
             }
         });
     }
-    
+
     $(".register-form").validate({
         ignore: [],
         rules : {
@@ -137,6 +137,115 @@ $(function()
                     return grecaptcha.getResponse() == '';
                 }
             }
+        }
+    });
+
+    var characterAdvert = $("#new-character-advert");
+
+    characterAdvert.validate({
+        ignore: [],
+        rules : {
+            intent : "required",
+            realm : "required",
+            name : "required"
+        }
+    });
+
+    characterAdvert.submit(function(e){
+
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/armory",
+            data: $(this).serialize(),
+            success: function(response)
+            {
+                if ( response.length )
+                {
+                    $('#character-gear-container').html(response);
+                }
+            },
+            error: function(xhr, textStatus, errorThrown){
+            }
+        });
+        e.preventDefault();
+    });
+
+    $(".change-password-form").validate({
+        ignore: [],
+        rules : {
+            password: {
+                required: true,
+                minlength: 6
+            },
+            password_confirmation: {
+                required : true,
+                equalTo: "#password"
+            }
+        },
+        errorPlacement: function(error, element) {
+            var errorContainer = "#"+element.attr("name")+"-error-container";
+            $(errorContainer).html( error );
+            var setWidth = $(element).outerWidth(true);
+            if ( element.attr("name") == "password" )
+            {
+                setWidth += $("#change-password-splitter").outerWidth(true);
+            }
+            $(errorContainer).css("width",setWidth);
+        }
+    });
+
+    $(".change-avatar-form").validate({
+        ignore: [],
+        rules : {
+            avatar: "required"
+        },
+        errorPlacement: function(error, element) {
+            $("#avatar-error-container").html(error);
+        }
+    });
+
+    $('#ad-intent').change(function()
+    {
+        var adRealm = $('#ad-realm-section');
+        adRealm.addClass('disabled-ad-section');
+
+        var buyRealm = $('#buy-realm');
+        buyRealm.addClass('inactive-ad-realm');
+
+        var tradeRealm = $('#trade-realm');
+        tradeRealm.addClass('inactive-ad-realm');
+
+        var value = this.value;
+        if ( value !== undefined && value !== "" ) {
+            adRealm.removeClass('disabled-ad-section');
+            value = parseInt(value);
+            if ( value === 4 )
+            {
+                buyRealm.removeClass('inactive-ad-realm');
+            }
+            else
+            {
+                tradeRealm.removeClass('inactive-ad-realm');
+            }
+        }
+        else
+        {
+            $('#ad-realm').val(null).change();
+        }
+    });
+
+    $('#ad-realm').change(function()
+    {
+        var adCharacterSection = $('#ad-character-section');
+        adCharacterSection.addClass('disabled-ad-section');
+
+        var adCharacter = $('#ad-character');
+        adCharacter.attr('disabled',true);
+
+        var value = this.value;
+        if ( value !== undefined && value !== "" ) {
+            adCharacterSection.removeClass('disabled-ad-section');
+            adCharacter.attr('disabled', false);
         }
     });
 
