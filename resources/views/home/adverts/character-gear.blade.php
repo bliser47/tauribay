@@ -1,5 +1,5 @@
 @if ( isset($armoryData) )
-     <div class="character-items">
+     <div class="character-items col-md-6">
      @foreach ( $armoryData["response"]["characterItems"] as $itemNumber => $item )
         @if ( $itemNumber == 0 )
             <div class="left-items">
@@ -8,17 +8,33 @@
         @elseif ( $itemNumber == 16 )
             <div class="bottom-items">
         @endif
-        <div class="gearItem rarityglow rarity{{ $item['rarity'] }}" >
-        @if ( $item['entry'] > 0 )
-              <img src="http://mop-static.tauri.hu/images/icons/large/{{ $item['icon'] }}.png">
-              <a class="itemToolTip gearFrame" href="http://mop-shoot.tauri.hu/?item={{ $item['entry'] }}" id="{{ $item['guid'] }}&amp;r={{ $armoryData['response']['realm'] }}&amp;{{ $item['queryParams'] }}">
-                  <span class="upgradeBox"></span>
-              </a>
+        @if ( $itemNumber < 18 )
+            <div class="gearItem rarityglow rarity{{ $item['rarity'] }}" >
+            @if ( $item['entry'] > 0 )
+                  <img src="http://mop-static.tauri.hu/images/icons/large/{{ $item['icon'] }}.png">
+                  <a class="itemToolTip gearFrame" href="http://mop-shoot.tauri.hu/?item={{ $item['entry'] }}" id="{{ $item['guid'] }}&amp;r={{ $armoryData['response']['realm'] }}&amp;{{ $item['queryParams'] }}">
+                      <span class="upgradeBox"></span>
+                  </a>
+             @endif
+             @if ( $itemNumber == 7 || $itemNumber == 15 || $itemNumber == 17)
+                </div>
+             @endif
+             </div>
          @endif
-         @if ( $itemNumber == 7 || $itemNumber == 15 || $itemNumber == 18)
-            </div>
-         @endif
-         </div>
      @endforeach
+     </div>
+     <div class="col-md-6">
+            <legend> {{ __("Item level") }}</legend>
+            <div class="form-group">
+                 <div class="input-group col-md-12">
+                        <input disabled type="number" class="form-control" value="{{ $armoryData['response']['avgitemlevel'] }}"/>
+                 </div>
+             </div>
+             <legend> {{ __("Achievements") }}</legend>
+             <div class="form-group">
+                  <div class="input-group col-md-12">
+                         <input disabled type="number" class="form-control" value="{{ $armoryData['response']['pts'] }}"/>
+                  </div>
+              </div>
      </div>
 @endif

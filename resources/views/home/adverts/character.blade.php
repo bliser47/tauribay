@@ -55,7 +55,7 @@
     {!! Form::close() !!}
     <div id="ad-gear-section" class="form-group col-md-12 disabled-ad-section">
         <legend> {{ __("Gear") }}</legend>
-        <div id="character-gear-container" class="col-md-6">
+        <div id="character-gear-container">
             @include('home.adverts.character-gear')
         </div>
     </div>
