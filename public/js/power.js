@@ -281,22 +281,15 @@ if (typeof $TauriPower == "undefined") {
         function N() {
             Y(q, z("link", {
                 type: "text/css",
-                href: "http://chris.tauri.hu/work/tdb/power.css",
+                href:  URL_WEBSITE + "/css/power.css?v=3",
                 rel: "stylesheet"
             }));
             if (A) {
                 Y(q, z("link", {
                     type: "text/css",
-                    href: "http://chris.tauri.hu/work/tdb/power_ie.css",
+                    href: URL_WEBSITE + "/css/power_ie.css",
                     rel: "stylesheet"
                 }));
-                if (c) {
-                    Y(q, z("link", {
-                        type: "text/css",
-                        href: "http://chris.tauri.hu/work/tdb/power_ie6.css",
-                        rel: "stylesheet"
-                    }))
-                }
             }
             ar(document, "mouseover", n)
         }
@@ -503,7 +496,7 @@ if (typeof $TauriPower == "undefined") {
                 U.style.display = (ap && !aD ? "" : "none")
             }
             if (an && aC) {
-                V.style.backgroundImage = "url(http://static.tauri.hu/images/icons/medium/" + aC.toLowerCase() + ".png)";
+                V.style.backgroundImage = "url(https://wow.zamimg.com/images/wow/icons/medium/" + aC.toLowerCase() + ".jpg)";
                 V.style.display = ""
             } else {
                 V.style.backgroundImage = "none";
@@ -654,9 +647,9 @@ if (typeof $TauriPower == "undefined") {
             if (F == R) {
                 az += "http://profiler.tauri.com"
             } else {
-                az += "http://shoot.tauri.hu"
+                az += URL_WEBSITE
             }
-            az += "/ajax.php?" + af[aG][1] + "=" + aC + "&power2" + aB;
+            az += "/tooltip?" + af[aG][1] + "=" + aC + "&power2" + aB;
             console.log(az);
             X(az)
         }

@@ -174,7 +174,11 @@ class TopItemLevelsController extends Controller
     {
         if ($_sheet && array_key_exists("response", $_sheet)) {
             $characterSheetResponse = $_sheet["response"];
-            $_character->ilvl = $characterSheetResponse["avgitemlevel"];
+            $newItemLevel = $characterSheetResponse["avgitemlevel"];
+            if ( $newItemLevel > $_character->ilvl )
+            {
+                $_character->ilvl = $newItemLevel;
+            }
             $_character->updated_at = Carbon::now();
             $_character->save();
         }
@@ -192,11 +196,35 @@ class TopItemLevelsController extends Controller
      */
     public function update(Request $request)
     {
-        $characters = TopItemLevels::where('ilvl','>',400)->where('updated_at', '<', Carbon::now()->subDays(1)->toDateTimeString())->orderBy('ilvl', 'desc')->limit(10)->get();
-        $api = new Tauri\ApiClient();
-        foreach ( $characters as $character )
+        $refreshData = array(
+            530 => 1,
+            520 => 2,
+            510 => 3,
+            500 => 4,
+            490 => 8,
+            480 => 12
+        );
+        $refreshed = false;
+
+        foreach ( $refreshData as $limit => $refreshTime )
         {
-            TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(self::REALMS[$character->realm], $character->name), $character);
+            $characters = TopItemLevels::where('ilvl','>',$limit)->where('updated_at', '<', Carbon::now()->subHours($refreshTime)->toDateTimeString())->orderBy('ilvl', 'desc')->limit(10)->get();
+            if ( $characters->count() )
+            {
+                $api = new Tauri\ApiClient();
+                foreach ( $characters as $character )
+                {
+                    TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(self::REALMS[$character->realm], $character->name), $character);
+                }
+                print("Updating item levels above " . $limit . " that are older than " . $refreshTime . " hours.");
+                $refreshed = true;
+                break;
+            }
+        }
+
+        if ( !$refreshed )
+        {
+            print("No refresh required.");
         }
     }
 

@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'api/receiveData', 'api/receiveBattlegrounds'
+        'api/receiveData', 'api/receiveBattlegrounds', 'ilvlupdate'
     ];
 }

@@ -615,8 +615,8 @@ a.changelog:hover
 
 .gearItem
 {
-    width:48px;
-    height:48px;
+    width:38px;
+    height:38px;
     margin-bottom:2px;
     overflow:hidden;
 }
@@ -624,10 +624,10 @@ a.changelog:hover
 .gearItem img
 {
     position: relative;
-    left:-5px;
-    top:-5px;
-    width:58px;
-    height:58px;
+    left:-4px;
+    top:-4px;
+    width:42px;
+    height:42px;
 }
 
 .left-items
