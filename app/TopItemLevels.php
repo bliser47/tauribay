@@ -9,8 +9,12 @@ class TopItemLevels extends Model
 {
     public static function GetTopItemLevels($_request)
     {
-
-        $characters = DB::table('top_item_levels')->where('ilvl','>=',480)->orderBy('ilvl', 'desc');
+        $orderBy = 'ilvl';
+        if ( $_request->has('sort') )
+        {
+            $orderBy = $_request->get('sort');
+        }
+        $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc');
 
         if ( $_request->has("filter") ) {
             // 1. Faction filter

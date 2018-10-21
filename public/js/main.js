@@ -97,13 +97,15 @@ $(function()
             data: data,
             success: function(response)
             {
-                if ( response.indexOf("Operation timed out") !== -1 )
+                if ( response.indexOf("timed out") !== -1)
                 {
                     sendIlvlAjax(data);
                 }
                 else {
                     $(".loader").css("display", "none");
                     $("#newcharacter-form").show();
+                    $("#topResponseBody").html(response);
+                    $("#topResponseModal").modal('show');
                 }
             },
             error: function(xhr, textStatus, errorThrown){
@@ -118,6 +120,12 @@ $(function()
             }
         });
     }
+
+    $('.sortByTop.sortInactive').click(function(){
+        $("select[name='sort']").val($(this).data("sort"));
+        $(".selectpicker").selectpicker("refresh");
+        $("#top-filter-submit").click();
+    });
 
     $(".register-form").validate({
         ignore: [],
@@ -260,21 +268,29 @@ $(function()
             data: data,
             success: function(response)
             {
-                if ( response.indexOf("Operation timed out") !== -1 )
+                if ( typeof response === "string" && response.indexOf("timed out") !== -1 )
                 {
                     sendIlvlAjaxUpdate(data);
                 }
                 else
                 {
-                    if ( response.length )
-                    {
-                        $(row).html(response);
-                        parseTime($(row).find(".time"));
-                        $(row).find(".ilvlupdate-form").submit(function(e) {
+                    if ( response.characters ) {
+                        var characterData = response.characters[0];
+                        if ( characterData )
+                        {
+                            $(row).find(".topItemLevel").html(characterData.ilvl);
+                            $(row).find(".topAchievementPoints").html(characterData.achievement_points);
 
-                            sendIlvlAjaxUpdate($(this),$(this).serialize(), $(this).parent().parent());
-                            e.preventDefault();
-                        });
+                            var form = $(row).find(".ilvlupdate-form");
+                            form.submit(function (e) {
+                                sendIlvlAjaxUpdate($(this), $(this).serialize(), $(this).parent().parent());
+                                e.preventDefault();
+                            });
+                            form.show();
+                            form.parent().find(".update-loader").css("display","none");
+
+                            parseTime($(row).find(".time").data('time',characterData.updated_at));
+                        }
                     }
                     else
                     {

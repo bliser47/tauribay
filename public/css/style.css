@@ -653,3 +653,34 @@ a.changelog:hover
     float:left;
     margin:0px 2px 0px 2px;
 }
+
+.sortActive
+{
+    color:black;
+}
+
+.sortActive:hover
+{
+    color:black;
+    text-decoration: none;
+}
+
+.sortInactive:hover
+{
+    cursor:pointer;
+}
+
+.columnActive
+{
+    font-weight:bold;
+}
+
+.columnInactive
+{
+    opacity:0.5;
+}
+
+.modal-header .closed
+{
+    font-weight:bold;
+}

@@ -52,7 +52,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/changelog', 'ChangelogController@ShowChanges');
 
     Route::get('/bg', 'BattlegroundController@index');
-    Route::get('/ilvl', 'TopItemLevelsController@index');
+    Route::get('/top', 'TopItemLevelsController@index');
 
     Route::auth();
 });

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class RemoveUniqueFromTopItemLevels extends Migration
+class TopItemLevelsCollation extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class RemoveUniqueFromTopItemLevels extends Migration
      */
     public function up()
     {
-        Schema::table('top_item_levels', function($table) {
-            $table->unique(['name','realm']);
+        Schema::table('top_item_levels', function (Blueprint $table) {
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_bin';
         });
     }
 
@@ -25,8 +26,9 @@ class RemoveUniqueFromTopItemLevels extends Migration
      */
     public function down()
     {
-        Schema::table('top_item_levels', function($table) {
-            $table->dropUnique(['name','realm']);
+        Schema::table('top_item_levels', function (Blueprint $table) {
+             $table->charset = 'utf8mb4';
+             $table->collation = 'utf8mb4_unicode_ci';
         });
     }
 }

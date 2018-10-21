@@ -10,6 +10,7 @@ use TauriBay\Tauri;
 use TauriBay\Tauri\CharacterClasses;
 use Carbon\Carbon;
 
+
 class TopItemLevelsController extends Controller
 {
 
@@ -41,7 +42,12 @@ class TopItemLevelsController extends Controller
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
         $wrapper = true;
 
-        return view('top_item_levels')->with(compact('characters','realms', 'realmsShort', 'characterFactions', 'characterClasses','wrapper'));
+        $sortBy = array(
+            "ilvl" => "iLvL",
+            "achievement_points" => "Achi"
+        );
+
+        return view('top_item_levels')->with(compact('characters','realms', 'realmsShort', 'characterFactions', 'characterClasses','sortBy','wrapper'));
     }
 
     /**
@@ -82,6 +88,7 @@ class TopItemLevelsController extends Controller
                 }
                 $character->realm = $_realmId;
                 $character->ilvl = $characterSheetResponse["avgitemlevel"];
+                $character->achievement_points = $characterSheetResponse["pts"];
                 $character->save();
                 return $character;
             }
@@ -144,8 +151,20 @@ class TopItemLevelsController extends Controller
         $realmsShort = self::REALMS_SHORT;
         $realms = self::REALMS;
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
-        $wrapper = false;
-        return view('top_item_levels_characters')->with(compact('characters','realmsShort','realms','characterClasses','wrapper'));
+        if ( $_request->has('fromAdd') )
+        {
+            return view('top_item_levels_characters_added')->with(compact('characters','realmsShort','realms','characterClasses'));
+        }
+        else if ( $_request->has('refreshTop') )
+        {
+            return response()->json([
+                'characters' => $characters
+            ]);
+        }
+        else
+        {
+            return view('top_item_levels_characters')->with(compact('characters','realmsShort','realms','characterClasses'));
+        }
     }
 
     /**
@@ -179,6 +198,7 @@ class TopItemLevelsController extends Controller
             {
                 $_character->ilvl = $newItemLevel;
             }
+            $_character->achievement_points = $characterSheetResponse["pts"];
             $_character->updated_at = Carbon::now();
             $_character->save();
         }

@@ -28,7 +28,7 @@
                         <li class="disabled"><a>{{ __("Kredit") }}</a></li>
                     </ul>
                 </li>
-                <li><a href="/ilvl">iLvL Toplist</a></li>
+                <li><a href="/top">{{ __("Toplista") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
