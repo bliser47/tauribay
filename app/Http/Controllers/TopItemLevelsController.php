@@ -130,7 +130,7 @@ class TopItemLevelsController extends Controller
                         $api = new Tauri\ApiClient();
                         foreach ( $members as $member )
                         {
-                            $char = TopItemLevelsController::AddCharacter($api,$member["name"],$realmId, 1440);
+                            $char = TopItemLevelsController::AddCharacter($api,$member["name"],$realmId, 14400);
                             if ( $char )
                             {
                                 array_push($characters, $char);
