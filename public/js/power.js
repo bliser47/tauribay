@@ -447,7 +447,7 @@ if (typeof $TauriPower == "undefined") {
             }
         }
 
-        function j(aB, aC) {
+        function j(aB, aC, itemID) {
             var aD = false;
             if (!ao) {
                 aq()
@@ -457,6 +457,27 @@ if (typeof $TauriPower == "undefined") {
                 aC = "inv_misc_questionmark";
                 aD = true
             } else {
+
+                var armoryData = characterArmoryData;
+                if ( armoryData && armoryData.response )
+                {
+                    var armoryItems = characterArmoryData.response.characterItems;
+                    var armoryItem;
+                    for ( var itemEntry = 0 ; itemEntry < armoryItems.length ; ++itemEntry )
+                    {
+                        if ( armoryItems[itemEntry].entry === itemID )
+                        {
+                            armoryItem = armoryItems[itemEntry];
+                            break;
+                        }
+                    }
+
+                    if ( armoryItem )
+                    {
+
+                    }
+                }
+
                 if (g != null) {
                     if (g.pcs && g.pcs.length) {
                         var aE = 0;
@@ -606,7 +627,7 @@ if (typeof $TauriPower == "undefined") {
             x(az, aA, aB);
             var ay = af[az][0];
             if (ay[aA].status[aB] == H || ay[aA].status[aB] == e) {
-                j(ay[aA][k(aB)], ay[aA].icon)
+                j(ay[aA][k(aB)], ay[aA].icon, parseInt(aD))
             } else {
                 if (ay[aA].status[aB] == M) {
                     j(at.tooltip_loading)
@@ -685,7 +706,7 @@ if (typeof $TauriPower == "undefined") {
                 ay[aC].status[aB] = e
             }
             if (F == aA && aC == m && T == aB) {
-                j(ay[aC][k(aB)], ay[aC].icon)
+                j(ay[aC][k(aB)], ay[aC].icon, aC)
             }
         };
         this.registerNpc = function(aA, az, ay) {

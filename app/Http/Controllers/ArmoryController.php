@@ -31,7 +31,6 @@ class ArmoryController extends Controller
              $api = new Tauri\ApiClient();
              $characterSheet = $api->getCharacterSheet(self::REALMS[$_request->get('realm')], $_request->get('characterName'));
 
-             //return $characterSheet;
              return view('home.adverts.character-gear', array("armoryData" => $characterSheet));
          }
          else

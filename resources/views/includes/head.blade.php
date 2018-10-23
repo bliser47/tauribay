@@ -43,7 +43,7 @@
 
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/main.js?v=125') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/power.js?v=10') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/power.js?v=14') }}"></script>
 
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>

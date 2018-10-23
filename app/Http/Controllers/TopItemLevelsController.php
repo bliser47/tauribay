@@ -69,10 +69,19 @@ class TopItemLevelsController extends Controller
             $characterSheet = $_api->getCharacterSheet(self::REALMS[$_realmId], $_name);
             if ($characterSheet && array_key_exists("response", $characterSheet)) {
                 $characterSheetResponse = $characterSheet["response"];
+                $characterItemLevel = $characterSheetResponse["avgitemlevel"];
                 if ($character === null) {
                     $character = new TopItemLevels;
                     $character->name = $_name;
+                    $character->ilvl = $characterItemLevel;
                     $character->created_at = Carbon::now();
+                }
+                else
+                {
+                    if ( $characterItemLevel > $character->ilvl )
+                    {
+                        $character->ilvl = $characterItemLevel;
+                    }
                 }
                 $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
@@ -87,7 +96,6 @@ class TopItemLevelsController extends Controller
                     $character->class = 10;
                 }
                 $character->realm = $_realmId;
-                $character->ilvl = $characterSheetResponse["avgitemlevel"];
                 $character->achievement_points = $characterSheetResponse["pts"];
                 $character->save();
                 return $character;
@@ -112,7 +120,7 @@ class TopItemLevelsController extends Controller
         if ( !is_null($realmId) ) {
             $realms = self::REALMS;
             if (array_key_exists($realmId, $realms)) {
-                $characterName = $_request->get('name');
+                $characterName = ucfirst($_request->get('name'));
                 $guildName = $_request->get('guildName');
                 $api = new Tauri\ApiClient();
                 if (strlen($characterName)) {
@@ -222,7 +230,9 @@ class TopItemLevelsController extends Controller
             510 => 3,
             500 => 4,
             490 => 8,
-            480 => 12
+            480 => 12,
+            400 => 24,
+            300 => 48
         );
         $refreshed = false;
 

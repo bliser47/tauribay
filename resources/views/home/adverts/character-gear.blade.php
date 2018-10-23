@@ -1,4 +1,7 @@
 @if ( isset($armoryData) )
+     <script>
+        {!! "var characterArmoryData = " . json_encode($armoryData) !!}
+     </script>
      <div class="character-items col-md-4">
      @foreach ( $armoryData["response"]["characterItems"] as $itemNumber => $item )
         @if ( $itemNumber == 0 )

@@ -13,6 +13,8 @@
 
 Route::post('armory', 'ArmoryController@Request');
 Route::get('tooltip', 'TooltipController@Request');
+Route::get('tooltip2', 'TooltipController@ArmoryRequest');
+Route::get('online', 'OnlineController@Request');
 
 Route::get('api/receiveData', 'IndexController@Start');
 Route::post('api/receiveBattlegrounds', 'IndexController@Start');

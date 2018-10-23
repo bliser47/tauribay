@@ -14,8 +14,14 @@ class TopItemLevels extends Model
         {
             $orderBy = $_request->get('sort');
         }
-        $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc');
-
+        if ( $orderBy == 'ilvl' )
+        {
+            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc');
+        }
+        else
+        {
+            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc');
+        }
         if ( $_request->has("filter") ) {
             // 1. Faction filter
             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
@@ -60,7 +66,7 @@ class TopItemLevels extends Model
 
 
             if ($_request->has('search')) {
-                $characters = $characters->where('name', 'LIKE', '%' . $_request->get('search') . '%');
+                $characters = $characters->where('name', 'LIKE', '%' . ucfirst($_request->get('search')) . '%');
             }
         }
 
