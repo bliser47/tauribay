@@ -2,11 +2,17 @@
      <script>
         {!! "var characterArmoryData = " . json_encode($armoryData) !!}
      </script>
-     <div class="character-items col-md-4">
+     <div class="character-items col-md-4 col-sm-6 col-xs-12">
      @foreach ( $armoryData["response"]["characterItems"] as $itemNumber => $item )
         @if ( $itemNumber == 0 )
             <div class="left-items">
         @elseif ( $itemNumber == 8 )
+                <div class="middle-items">
+                    <p>{{ __("Az itemek tooltipjei a gemeket és enchantokat és reforgeokat nem, viszont az itemek Upgrade szintjét helyesen mutatják!") }}</p>
+                    <p><i>{{ __("A közeljövőben a fentiek illetve a set itemek is helyesen lesznek feltüntetve.") }}</i></p>
+                    <p><i>{{ __("Elnézést kérünk,") }}</i></p>
+                    <p><i>Tauri Bay</i></p>
+                </div>
             <div class="right-items">
         @elseif ( $itemNumber == 16 )
             <div class="bottom-items">
@@ -25,18 +31,18 @@
          @endif
      @endforeach
      </div>
-     <div class="col-md-8">
-            <legend> {{ __("Item level") }}</legend>
+     <div class="col-md-8 col-sm-6 col-xs-12">
+         <div class="col-sm-6">
+            <h4> {{ __("Item level") }}</h4>
             <div class="form-group">
-                 <div class="input-group col-md-12">
-                        <input disabled type="number" class="form-control" value="{{ $armoryData['response']['avgitemlevel'] }}"/>
-                 </div>
+                <input disabled type="number" class="form-control" value="{{ $armoryData['response']['avgitemlevel'] }}"/>
              </div>
-             <legend> {{ __("Achievements") }}</legend>
+         </div>
+         <div class="col-sm-6">
+             <h4> {{ __("Achievements") }}</h4>
              <div class="form-group">
-                  <div class="input-group col-md-12">
-                         <input disabled type="number" class="form-control" value="{{ $armoryData['response']['pts'] }}"/>
-                  </div>
-              </div>
+                 <input disabled type="number" class="form-control" value="{{ $armoryData['response']['pts'] }}"/>
+             </div>
+         </div>
      </div>
 @endif

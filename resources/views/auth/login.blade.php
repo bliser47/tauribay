@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-default nomargin">
-                <div class="panel-heading">Bejelentkezés</div>
+                <div class="panel-heading">{{__("Bejelentkezés")}}</div>
                 <div class="panel-body login nopadding-bottom">
                     <div class="login-left"></div>
                     <div class="login-right"></div>

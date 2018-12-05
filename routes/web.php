@@ -11,7 +11,7 @@
 |
 */
 
-Route::post('armory', 'ArmoryController@Request');
+Route::get('gdkp', 'BliserGdkpController@index');
 Route::get('tooltip', 'TooltipController@Request');
 Route::get('tooltip2', 'TooltipController@ArmoryRequest');
 Route::get('online', 'OnlineController@Request');
@@ -30,21 +30,13 @@ Route::post('/ilvl', 'TopItemLevelsController@store');
 Route::get('/ilvlupdate', 'TopItemLevelsController@update');
 Route::post('/ilvlupdate', 'TopItemLevelsController@update');
 
-/*
-Route::get('/admin/kiskarik', 'AdminController@ShowLowLevels');
-Route::post('/admin/kiskarik', 'AdminController@UpdateLowLevel');
-
-Route::get('/debug/parse/{_parsed_data_id}', 'ApiController@SmartParseDebug');
-Route::get('/debug/smart/parserange/{_parsed_from_id}/{_parse_till_id}', 'ApiController@SmartParseRangeDebug');
-Route::get('/debug/trade/parserange/{_parsed_from_id}/{_parse_till_id}', 'ApiController@TradeParseRangeDebug');
-*/
-
-
 
 Route::group(['middleware' => 'language'], function () {
 
     Route::get('/', 'IndexController@Start');
     Route::get('/home', 'HomeController@index');
+    Route::get('armory', 'ArmoryController@Request');
+
 
     // Here your routes
     Route::get('/trade', 'TradesController@ShowAll');
@@ -55,13 +47,7 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/bg', 'BattlegroundController@index');
     Route::get('/top', 'TopItemLevelsController@index');
+    Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
 
     Route::auth();
 });
-
-/*
-Route::get('/trade/gdkp', 'TradesController@ShowGdkps');
-Route::get('/trade/kredit', 'TradesController@ShowCredits');
-*/
-
-

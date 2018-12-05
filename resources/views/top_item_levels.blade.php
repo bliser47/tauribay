@@ -62,7 +62,7 @@
                         <div class="panel-body">
 
                             {!! Form::open(array("method" => "get","id"=>"top-filter-form")) !!}
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-2">
                                 <legend> {{ __("Rendezés") }} </legend>
                                 <div id="top-sort-by" class="form-group">
                                     <div class="input-group col-md-12">
@@ -70,7 +70,7 @@
                                      </div>
                                  </div>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-5">
                                  <legend> {{ __("Realm") }} </legend>
                                   <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-realm">
@@ -91,7 +91,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4 nopadding-left">
+                            <div class="form-group col-md-5">
                                 <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
@@ -176,7 +176,7 @@
             </div>
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
-                    <tr>
+                    <tr class="rowDesktop">
                         <th>{{ __("Nr") }}</th>
                         <th>{{ __("Idő") }}</th>
                         <th>{{ __("Realm") }}</th>
@@ -186,6 +186,13 @@
                         <th><a id="sortByLevel" data-sort="ilvl" class="sortByTop {{ (!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'sortActive'  : 'sortInactive' }}">{{ __("iLvL") }}</a></th>
                         <th><a id="sortByAchi" data-sort="achievement_points" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'achievement_points') ? 'sortActive'  : 'sortInactive' }}">{{ __("Achi") }}</a></th>
                         <th width=32></th>
+                    </tr>
+                    <tr class="rowMobile">
+                        <th>{{ __("Nr") }}</th>
+                        <th>{{ __("Név") }}</th>
+                        <th>{{ __("Kaszt") }}</th>
+                        <th><a id="sortByLevel" data-sort="ilvl" class="sortByTop {{ (!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'sortActive'  : 'sortInactive' }}">{{ __("iLvL") }}</a></th>
+                        <th><a id="sortByAchi" data-sort="achievement_points" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'achievement_points') ? 'sortActive'  : 'sortInactive' }}">{{ __("Achi") }}</a></th>
                     </tr>
                     @include('top_item_levels_characters')
                 </table>
@@ -197,4 +204,7 @@
             </div>
         </div>
     </div>
+@stop
+@section('pagespecificscripts')
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 @stop

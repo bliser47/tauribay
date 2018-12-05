@@ -447,6 +447,11 @@ if (typeof $TauriPower == "undefined") {
             }
         }
 
+        function recreateItem(itemData, oldItemString)
+        {
+            return oldItemString;
+        }
+
         function j(aB, aC, itemID) {
             var aD = false;
             if (!ao) {
@@ -457,27 +462,91 @@ if (typeof $TauriPower == "undefined") {
                 aC = "inv_misc_questionmark";
                 aD = true
             } else {
+                if ( characterArmoryData ) {
+                    var armoryData = characterArmoryData;
+                    if (armoryData && armoryData.response) {
+                        var armoryItems = characterArmoryData.response.characterItems;
+                        var armoryItem;
+                        for (var itemEntry = 0; itemEntry < armoryItems.length; ++itemEntry) {
+                            if (armoryItems[itemEntry].entry === itemID) {
+                                armoryItem = armoryItems[itemEntry];
+                                break;
+                            }
+                        }
 
-                var armoryData = characterArmoryData;
-                if ( armoryData && armoryData.response )
-                {
-                    var armoryItems = characterArmoryData.response.characterItems;
-                    var armoryItem;
-                    for ( var itemEntry = 0 ; itemEntry < armoryItems.length ; ++itemEntry )
-                    {
-                        if ( armoryItems[itemEntry].entry === itemID )
-                        {
-                            armoryItem = armoryItems[itemEntry];
-                            break;
+                        var before,after;
+                        if (armoryItem) {
+                            var itemLevelStartString = ">Item Level ";
+                            var itemLevelStart = aB.indexOf(itemLevelStartString);
+                            if ( itemLevelStart >= 0 )
+                            {
+                                var itemLevelEndString = "<";
+                                var itemLevelEnd = aB.indexOf(itemLevelEndString,itemLevelStart);
+                                if ( itemLevelEnd >= 0 )
+                                {
+                                    before = aB.substr(0,itemLevelStart+itemLevelStartString.length);
+                                    after = aB.substr(itemLevelEnd);
+                                    aB =  before + armoryItem['ilevel'] + after;
+                                }
+                            }
+
+                            var upgradeLevelStartString = ">Upgrade Level ";
+                            var upgradeLevelStart = aB.indexOf(upgradeLevelStartString);
+                            if ( upgradeLevelStart >= 0 )
+                            {
+                                var upgradeLevelEndString = "<";
+                                var upgradeLevelEnd = aB.indexOf(itemLevelEndString,upgradeLevelStart);
+                                if ( upgradeLevelEnd >= 0 )
+                                {
+                                    before = aB.substr(0,upgradeLevelStart+upgradeLevelStartString.length);
+                                    after = aB.substr(upgradeLevelEnd);
+                                    var upgradeLevel = 0;
+                                    var upgradeTotal = 2;
+                                    switch(armoryItem['ilevel'])
+                                    {
+                                        case 545: // ToT Heroic Thunderforged 1/2
+                                        case 539: // ToT Heroic 1/2
+                                        case 532: // ToT Normal Thunderforged 1/2
+                                        case 526: // ToT Normal 1/2
+                                        case 520: // ToES Heroic Elite 1/2
+                                        case 513: // ToES Heroic 1/2
+                                        case 507: // ToES Normal Elite 1/2
+                                        case 506: // ToT LFR 1/2 && MSV Heroic 1/2
+                                        case 500: // ToES Normal 1/2
+                                        case 494: // PVP 2/2
+                                        case 493: // MSV Normal 1/2
+                                        case 487: // ToES LFR 1/2 & PVP 1/2
+                                        case 480: // Dark Moon Trinket 1/2 && MSV LFR 1/2
+                                            upgradeLevel = 1;
+                                            break;
+
+                                        case 549: // ToT Heroic Thunderforged 2/2
+                                        case 543: // ToT Heroic 2/2
+                                        case 536: // ToT Normal Thunderforged 2/2
+                                        case 530: // ToT Normal 2/2
+                                        case 524: // ToES Heroic Elite 2/2
+                                        case 517: // ToES Heroic 2/2
+                                        case 511: // ToES Normal Elite 2/2
+                                        case 510: // ToT LFR 2/2 && MSV Heroic 2/2
+                                        case 504: // ToES Normal 2/2
+                                        case 498: // PVP 2/2
+                                        case 497: // MSV Normal 2/2
+                                        case 491: // ToES LFR 2/2 & PVP 2/2
+                                        case 484: // Dark Moon Trinket 2/2 && MSV LFR 2/2
+                                            upgradeLevel = 2;
+                                            break;
+
+                                        case 471:
+                                            upgradeLevel = 1;
+                                            upgradeTotal = 1;
+                                        break;
+                                    }
+                                    aB =  before + upgradeLevel + "/" + upgradeTotal + after;
+                                }
+                            }
                         }
                     }
-
-                    if ( armoryItem )
-                    {
-
-                    }
                 }
-
                 if (g != null) {
                     if (g.pcs && g.pcs.length) {
                         var aE = 0;

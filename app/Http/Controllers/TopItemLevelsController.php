@@ -72,7 +72,7 @@ class TopItemLevelsController extends Controller
                 $characterItemLevel = $characterSheetResponse["avgitemlevel"];
                 if ($character === null) {
                     $character = new TopItemLevels;
-                    $character->name = $_name;
+                    $character->name = ucfirst(strtolower($_name));
                     $character->ilvl = $characterItemLevel;
                     $character->created_at = Carbon::now();
                 }
@@ -120,7 +120,7 @@ class TopItemLevelsController extends Controller
         if ( !is_null($realmId) ) {
             $realms = self::REALMS;
             if (array_key_exists($realmId, $realms)) {
-                $characterName = ucfirst($_request->get('name'));
+                $characterName = ucfirst(strtolower($_request->get('name')));
                 $guildName = $_request->get('guildName');
                 $api = new Tauri\ApiClient();
                 if (strlen($characterName)) {

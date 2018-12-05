@@ -162,7 +162,7 @@ $(function()
     characterAdvert.submit(function(e){
 
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: URL_WEBSITE + "/armory",
             data: $(this).serialize(),
             success: function(response)
@@ -170,6 +170,7 @@ $(function()
                 if ( response.length )
                 {
                     $('#character-gear-container').html(response);
+                    $('#ad-gear-section').removeClass('disabled-ad-section');
                 }
             },
             error: function(xhr, textStatus, errorThrown){
@@ -283,7 +284,7 @@ $(function()
 
                             var form = $(row).find(".ilvlupdate-form");
                             form.submit(function (e) {
-                                sendIlvlAjaxUpdate($(this), $(this).serialize(), $(this).parent().parent());
+                                sendIlvlAjaxUpdate($(this), $(this).serialize(), $(this).closest(".charRow"));
                                 e.preventDefault();
                             });
                             form.show();
@@ -306,7 +307,7 @@ $(function()
 
     $(".ilvlupdate-form").submit(function(e) {
 
-        sendIlvlAjaxUpdate($(this),$(this).serialize(), $(this).parent().parent());
+        sendIlvlAjaxUpdate($(this),$(this).serialize(), $(this).closest('.charRow'));
         e.preventDefault();
     });
 

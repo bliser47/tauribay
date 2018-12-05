@@ -16,11 +16,11 @@ class TopItemLevels extends Model
         }
         if ( $orderBy == 'ilvl' )
         {
-            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc');
+            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
         else
         {
-            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc');
+            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
         if ( $_request->has("filter") ) {
             // 1. Faction filter
@@ -66,7 +66,7 @@ class TopItemLevels extends Model
 
 
             if ($_request->has('search')) {
-                $characters = $characters->where('name', 'LIKE', '%' . ucfirst($_request->get('search')) . '%');
+                $characters = $characters->where('name', 'LIKE', '%' . ucfirst(strtolower($_request->get('search'))) . '%');
             }
         }
 
