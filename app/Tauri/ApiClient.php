@@ -361,7 +361,7 @@ class ApiClient {
         } else {
             if ( $noParse )
             {
-                return $response;
+                return urldecode($response);
             }
             else {
                 $ret = json_decode(urldecode($response), true);

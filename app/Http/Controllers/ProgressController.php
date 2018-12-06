@@ -58,19 +58,24 @@ class ProgressController extends Controller
 
     public function updateRaids(Request $_request)
     {
-        error_reporting(E_ALL);
-        ini_set('display_errors', 'on');
-
         $api = new Tauri\ApiClient();
         $realmId = $_request->has("data") ? $_request->get("data") : 0;
         $realmName = self::REALM_NAMES[$realmId];
+
         $latestRaids = $api->getRaidLast($realmName);
-        return $latestRaids["response"]["logs"][0];
 
+        $start = "\"response\":{\"logs\":[{";
+        $startPos = strpos ($latestRaids,$start);
+        $end = "]}}";
+        $endPos = strrpos($latestRaids,$end);
+        $delimiter = "},{";
 
-        foreach ( $latestRaids["response"]["logs"] as $raid )
+        $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
+        $logs = explode($delimiter,$logs);
+        
+        for ( $i = 0 ; $i < count($logs) ; ++$i)
         {
-            //Encounter::store($raid, $realmId);
+            Encounter::store(json_decode( "{" . $logs[$i]."}" , true), $realmId);
         }
     }
 }

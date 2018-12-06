@@ -9,16 +9,19 @@ class Guild extends Model
 
     public static function getOrCreate($_data, $_realmId)
     {
-        $guildName = $_data["name"];
-        $guild = Guild::where("name",'=',$guildName)->where('realm','=',$_realmId)->first();
-        if ( $guild === null )
-        {
-            $guild = new Guild;
-            $guild->realm = $_realmId;
-            $guild->name = $guildName;
-            $guild->faction = $_data["faction"];
-            $guild->save();
+        if ( array_key_exists("name", $_data)) {
+            $guildName = $_data["name"];
+            if (strlen($guildName) > 0) {
+                $guild = Guild::where("name", '=', $guildName)->where('realm', '=', $_realmId)->first();
+                if ($guild === null) {
+                    $guild = new Guild;
+                    $guild->realm = $_realmId;
+                    $guild->name = $guildName;
+                    $guild->faction = $_data["faction"];
+                    $guild->save();
+                }
+                return $guild;
+            }
         }
-        return $guild;
     }
 }
