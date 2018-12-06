@@ -6,7 +6,6 @@
 <link rel="stylesheet" href="{{ URL::asset('css/style.css?v=153') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-
 <script>
     var URL_WEBSITE = "{{ URL::to('/') }}";
 
@@ -36,6 +35,7 @@
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/main.js?v=134') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>

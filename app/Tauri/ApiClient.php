@@ -340,8 +340,10 @@ class ApiClient {
      * The request is json and urlencoded.
      * The request is url and json decoded.
      * Stops execution on error.
+     * @param bool $noParse
+     * @return mixed
      */
-    private function communicate () {
+    private function communicate ($noParse = false) {
         $this->request['secret'] = $this->secret;
 
         $ch = curl_init($this->baseurl . '?apikey=' . $this->apikey);
@@ -357,15 +359,91 @@ class ApiClient {
             print $err;
             exit;
         } else {
-            $ret = json_decode(urldecode($response), true);
-            if (json_last_error() != JSON_ERROR_NONE){
-                print 'JSON Error: ' . json_last_error();
-                print $response;
-                exit;
-            } else {
-                return $ret;
+            if ( $noParse )
+            {
+                return $response;
+            }
+            else {
+                $ret = json_decode(urldecode($response), true);
+                if (json_last_error() != JSON_ERROR_NONE) {
+                    print 'JSON Error: ' . json_last_error();
+                    print $response;
+                    exit;
+                } else {
+                    return $ret;
+                }
             }
         }
+    }
+
+    public function getRaidMaps($realm)
+    {
+        $this->request['url'] = 'raid-maps';
+        $this->request['params'] = array(
+            'r'  => $realm
+        );
+        return $this->communicate();
+    }
+
+    public function getRaidLog($realm, $id)
+    {
+        $this->request['url'] = 'raid-log';
+        $this->request['params'] = array(
+            'r'  => $realm,
+            'id' => $id
+        );
+        return $this->communicate();
+    }
+
+    public function getRaidLast($realm)
+    {
+        $this->request['url'] = 'raid-last';
+        $this->request['params'] = array(
+            'r'  => $realm,
+        );
+        return $this->communicate(true);
+    }
+
+    public function getRaidPlayer($realm, $character)
+    {
+        $this->request['url'] = 'raid-player';
+        $this->request['params'] = array(
+            'r'  => $realm,
+            'cn' => $character
+        );
+        return $this->communicate();
+    }
+
+    public function getRaidGuild($realm, $guild)
+    {
+        $this->request['url'] = 'raid-guild';
+        $this->request['params'] = array(
+            'r'  => $realm,
+            'gn' => $guild
+        );
+        return $this->communicate();
+    }
+
+    public function getRaidRank($realm, $encounter, $difficulty)
+    {
+        $this->request['url'] = 'raid-rank-encounter';
+        $this->request['params'] = array(
+            'r'  => $realm,
+            'encounter' => $encounter,
+            'difficulty' => $difficulty,
+        );
+        return $this->communicate();
+    }
+
+    public function getRaidGuildRank($realm, $encounter, $difficulty)
+    {
+        $this->request['url'] = 'raid-guildrank-encounter';
+        $this->request['params'] = array(
+            'r'  => $realm,
+            'encounter' => $encounter,
+            'difficulty' => $difficulty,
+        );
+        return $this->communicate();
     }
 }
 

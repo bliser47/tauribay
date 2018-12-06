@@ -28,7 +28,8 @@
                         <li class="disabled"><a>{{ __("Kredit") }}</a></li>
                     </ul>
                 </li>
-                <li><a href="/top">{{ __("Toplista") }}</a></li>
+                <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
+                <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Progress") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())

@@ -5,7 +5,7 @@ namespace TauriBay;
 use Illuminate\Database\Eloquent\Model;
 use DB;
 
-class TopItemLevels extends Model
+class Characters extends Model
 {
     public static function GetTopItemLevels($_request)
     {
@@ -16,11 +16,11 @@ class TopItemLevels extends Model
         }
         if ( $orderBy == 'ilvl' )
         {
-            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
+            $characters = DB::table('characters')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
         else
         {
-            $characters = DB::table('top_item_levels')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
+            $characters = DB::table('characters')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
         if ( $_request->has("filter") ) {
             // 1. Faction filter

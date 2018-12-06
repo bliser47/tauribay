@@ -205,6 +205,3 @@
         </div>
     </div>
 @stop
-@section('pagespecificscripts')
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-@stop

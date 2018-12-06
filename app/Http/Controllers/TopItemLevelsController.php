@@ -3,7 +3,7 @@
 namespace TauriBay\Http\Controllers;
 
 
-use TauriBay\TopItemLevels;
+use TauriBay\Characters;
 use Illuminate\Http\Request;
 use TauriBay\Trader;
 use TauriBay\Tauri;
@@ -34,7 +34,7 @@ class TopItemLevelsController extends Controller
      */
     public function index(Request $_request)
     {
-        $characters = TopItemLevels::GetTopItemLevels($_request)->paginate(16);
+        $characters = Characters::GetTopItemLevels($_request)->paginate(16);
         $realms = self::REALMS;
         $realmsShort = self::REALMS_SHORT;
 
@@ -63,7 +63,7 @@ class TopItemLevelsController extends Controller
 
     public static function AddCharacter($_api, $_name, $_realmId, $_subMinutes)
     {
-        $character = TopItemLevels::where("name",'=',$_name)->where('realm','=',$_realmId)->first();
+        $character = Characters::where("name",'=',$_name)->where('realm','=',$_realmId)->first();
         if ( $character === null || Carbon::parse($character->updated_at) < Carbon::now()->subMinutes($_subMinutes) )
         {
             $characterSheet = $_api->getCharacterSheet(self::REALMS[$_realmId], $_name);
@@ -238,7 +238,7 @@ class TopItemLevelsController extends Controller
 
         foreach ( $refreshData as $limit => $refreshTime )
         {
-            $characters = TopItemLevels::where('ilvl','>',$limit)->where('updated_at', '<', Carbon::now()->subHours($refreshTime)->toDateTimeString())->orderBy('ilvl', 'desc')->limit(10)->get();
+            $characters = Characters::where('ilvl','>',$limit)->where('updated_at', '<', Carbon::now()->subHours($refreshTime)->toDateTimeString())->orderBy('ilvl', 'desc')->limit(10)->get();
             if ( $characters->count() )
             {
                 $api = new Tauri\ApiClient();

@@ -20,37 +20,18 @@ class ApiController extends Controller
 {
     public function ReceiveData(Request $_request)
     {
-        //if ( $_request->ip() == env('WEBSITE_IP')  ) {
-            $tradeDataJSON = json_decode($_request->all()[0]);
-            $insertArray = array();
-            for ($t = 0; $t < count($tradeDataJSON); $t++) {
-                array_push($insertArray, array(
-                    "data" => $tradeDataJSON[$t],
-                    "date" => Carbon::now()
-                ));
-            }
-            TradeData::insert($insertArray);
-            return $this->ParseData($tradeDataJSON);
-        /*
+        $tradeDataJSON = json_decode($_request->all()[0]);
+        $insertArray = array();
+        for ($t = 0; $t < count($tradeDataJSON); $t++) {
+            array_push($insertArray, array(
+                "data" => $tradeDataJSON[$t],
+                "date" => Carbon::now()
+            ));
         }
-        else
-        {
-            return "Not permitted";
-        }
-        */
+        TradeData::insert($insertArray);
+        return $this->ParseData($tradeDataJSON);
     }
 
-    public function ReceiveBattlegroundData(Request $_request)
-    {
-        if ( $_request->ip() == env('WEBSITE_IP')  ) {
-            $battlegroundDataJSON = json_decode($_request->all()[0]);
-            return true;
-        }
-        else
-        {
-            return "Not permitted";
-        }
-    }
 
 
     public function ParseData($_data)

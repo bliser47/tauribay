@@ -13,10 +13,7 @@ var bot = new irc.Client(config.server, config.botName, {
 });
 
 var messageTimeout;
-var battlegroundTimeout;
-
 var messages = [];
-var battlegrounds = [];
 
 
 function sendMessages()
@@ -36,24 +33,6 @@ function sendMessages()
     messages = [];
 }
 
-function sendBattlegrounds()
-{
-    console.log("sending battlegrounds");
-    request({
-        url: 'http://51.15.212.167/api/receiveBattlegrounds',
-        method: 'POST',
-        json: true,
-        body: JSON.stringify(battlegrounds)
-    }, function(error, response, body){
-        if(error) {
-            console.log(error)
-        } else {
-            console.log(response.statusCode, body);
-        }
-    });
-    battlegrounds = [];
-}
-
 bot.addListener("message", function(from, to, text, message) {
     console.log(text);
     if ( from === "T-etu" ) {
@@ -65,34 +44,19 @@ bot.addListener("message", function(from, to, text, message) {
             messageTimeout = setTimeout(sendMessages, 1000);
         }
     }
-    else if ( from === "T-etu-" && text.indexOf("[BGQueue]") !== -1)
-    {
-        console.log("Found battleground");
-        battlegrounds.push(text);
-        if ( battlegroundTimeout )
-        {
-            clearTimeout(battlegroundTimeout);
-        }
-        battlegroundTimeout = setTimeout(sendBattlegrounds,1000);
-    }
 });
 
 bot.addListener('error', function(message) {
     console.log('error: ', message);
 });
 
-function requestBGqueue()
-{
-    console.log("sent");
-    bot.say("T-etu","!bg");
-}
-
-function updateIlvls()
+function callTauriBay(url, data)
 {
     request({
-        url: 'http://51.15.212.167/ilvlupdate',
+        url: 'http://51.15.212.167/' + url,
         method: 'POST',
-        json: true
+        json: true,
+        data : data
     }, function(error, response, body){
         if(error) {
             console.log(error)
@@ -102,6 +66,21 @@ function updateIlvls()
     });
 }
 
+function updateIlvls()
+{
+    callTauriBay('ilvlupdate');
+}
+
+var currentRealmID = 0;
+function updateRaids()
+{
+    ++currentRealmID;
+    if ( currentRealmID > 2 )
+    {
+        currentRealmID = 0;
+    }
+    callTauriBay('raidupdate', currentRealmID);
+}
+
 setInterval(updateIlvls, 10000);
-setInterval(requestBGqueue,30000);
-setTimeout(requestBGqueue,3000);
+setInterval(updateRaids, 10000);
