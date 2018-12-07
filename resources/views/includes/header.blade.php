@@ -29,7 +29,15 @@
                     </ul>
                 </li>
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
-                <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Progress") }}</a></li>
+                <li class="dropdown {{ Request::segment(1) == 'progress' ? 'active' : '' }}">
+                    <a href="/progress" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {{ __("Progress") }}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu progress-types-dropdown-menu">
+                        <li><a href="/progress/guild">{{ __("Guild") }}</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())

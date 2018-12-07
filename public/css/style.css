@@ -473,7 +473,7 @@ a.changelog:hover
     }
 }
 
-.refreshIlvl
+.refreshIlvl, .refreshProgress
 {
     display:block;
     color: inherit;
@@ -489,7 +489,7 @@ a.changelog:hover
     background:url("../img/refresh2.png");
 }
 
-.refreshIlvl:hover
+.refreshIlvl:hover, .refreshProgress:hover
 {
     background-position:0px 32px;
     cursor:pointer;

@@ -19,18 +19,32 @@ class ProgressController extends Controller
         2 => "[EN] Evermoon"
     );
 
+    const SHORT_REALM_NAMES = array(
+        0 => "Tauri",
+        1 => "WoD",
+        2 => "Evermoon"
+    );
+
+
     public function index(Request $_request)
     {
         $data = DB::table('encounters')->where('created_at','>',Carbon::now()->subDays(14))->orderBy('killtime','desc')->paginate(16);
-        $shortRealms = self::REALM_NAMES;
+        $shortRealms = self::SHORT_REALM_NAMES;
         return view("progress", compact("data", 'shortRealms'));
+    }
+
+    public function guild(Request $_request)
+    {
+        $data = DB::table('guilds')->paginate(16);
+        $shortRealms = self::SHORT_REALM_NAMES;
+        return view("progress_guild", compact("data", 'shortRealms'));
     }
 
 
     public function updateRaids(Request $_request)
     {
         $api = new Tauri\ApiClient();
-        $realmId = 1;//$_request->has("data") ? $_request->get("data") : 2;
+        $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
         $realmName = self::REALM_NAMES[$realmId];
 
         $latestRaids = $api->getRaidLast($realmName);
