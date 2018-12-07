@@ -11,9 +11,19 @@
                         <th>{{ __("Idő") }}</th>
                     </tr>
                     @foreach ( $data as $d )
-
+                    <tr>
+                        <th> {{ $shortRealms[$d->realm_id] }} </th>
+                        <th> {{ TauriBay\Guild::getName($d->guild_id) }} </th>
+                        <th> {{ TauriBay\Encounter::getName( $d->encounter_id)  }} </th>
+                        <th> {{ date('i:s', mktime(0, 0, $d->fight_time/1000))}} </th>
+                    </tr>
                     @endforeach
                 </table>
+            </div>
+            <div class="text-center">
+                <div>
+                    {{ $data->appends(Illuminate\Support\Facades\Input::except('page')) }}
+                </div>
             </div>
         </div>
     </div>

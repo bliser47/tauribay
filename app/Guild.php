@@ -24,4 +24,14 @@ class Guild extends Model
             }
         }
     }
+
+    public static function getName($id)
+    {
+        if ( $id !== null ) {
+            $guild = Guild::where("id", "=", $id)->first();
+            if ($guild !== null) {
+                return $guild->name;
+            }
+        }
+    }
 }

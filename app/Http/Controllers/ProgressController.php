@@ -8,6 +8,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
 use TauriBay\Tauri;
+use DB;
+use Carbon\Carbon;
 
 class ProgressController extends Controller
 {
@@ -17,49 +19,18 @@ class ProgressController extends Controller
         2 => "[EN] Evermoon"
     );
 
-    const ENCOUNTER_IDS = array(
-        "Jin'rokh the Breaker" => 1577
-        /*
-        "Horridon" => 1575,
-        "Council of Elders" => 1570,
-        "Tortos" => 1565,
-        "Megaera" => 1578,
-        "Ji-Kun" => 1573,
-        "Durumu the Forgotten" => 1572,
-        "Primordius" => 1574,
-        "Dark Animus" => 1576,
-        "Iron Qon" => 1559,
-        "Twin Consorts" => 1560,
-        "Lei Shen" => 1579,
-        "Ra-den" => 1580
-        */
-    );
-
     public function index(Request $_request)
     {
-        $api = new Tauri\ApiClient();
-        $maps = $api->getRaidMaps("[HU] Tauri WoW Server");
-        //$maps = $api->getRaidGuildRank("[HU] Tauri WoW Server", 1580, 5);
-
-        $data = array();
-        foreach ( self::REALM_NAMES as $realmName )
-        {
-            $data[$realmName] = array();
-            foreach ( self::ENCOUNTER_IDS as $encounterName => $encounterId )
-            {
-                $data[$realmName][$encounterName] = $api->getRaidGuildRank($realmName,$encounterId,5);
-            }
-        }
-
-
-        return view("progress", compact("data"));
+        $data = DB::table('encounters')->where('created_at','>',Carbon::now()->subDays(14))->orderBy('killtime','desc')->paginate(16);
+        $shortRealms = self::REALM_NAMES;
+        return view("progress", compact("data", 'shortRealms'));
     }
 
 
     public function updateRaids(Request $_request)
     {
         $api = new Tauri\ApiClient();
-        $realmId = $_request->has("data") ? $_request->get("data") : 0;
+        $realmId = 1;//$_request->has("data") ? $_request->get("data") : 2;
         $realmName = self::REALM_NAMES[$realmId];
 
         $latestRaids = $api->getRaidLast($realmName);
@@ -72,10 +43,17 @@ class ProgressController extends Controller
 
         $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
         $logs = explode($delimiter,$logs);
-        
+
+        $result = array();
         for ( $i = 0 ; $i < count($logs) ; ++$i)
         {
-            Encounter::store(json_decode( "{" . $logs[$i]."}" , true), $realmId);
+            $encounter = Encounter::store(json_decode( "{" . $logs[$i]."}" , true), $realmId);
+            $result[] = $encounter;
+            if ( !$encounter["result"] )
+            {
+                break;
+            }
         }
+        return json_encode($result);
     }
 }
