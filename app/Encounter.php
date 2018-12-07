@@ -31,6 +31,7 @@ class Encounter extends Model
                 $guild = Guild::getOrCreate($_data["guilddata"], $_realmId);
                 $encounter = new Encounter;
                 $encounter->log_id = $logId;
+                $encounter->realm_id = $_realmId;
                 $encounter->map_id = $_data["map_id"];
                 if ($guild !== null) {
                     $encounter->guild_id = $guild->id;
