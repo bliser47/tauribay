@@ -25,6 +25,10 @@ $(function()
         $(".checkbox-instance-difficulty input").prop('checked', $(this).prop("checked"));
     });
 
+    $(".checkbox-all-difficulties input").change(function(){
+        $(".checkbox-difficulty input").prop('checked', $(this).prop("checked"));
+    });
+
     $.extend( $.validator.messages, {
         required: VALIDATION_LOCAL_REQUIRED,
         maxlength: $.validator.format( VALIDATION_LOCAL_MAXLENGTH ),
