@@ -68,6 +68,7 @@ class ProgressController extends Controller
 
                 if ($encounter && $encounter->realm !== null) {
                     $encounters[] = array(
+                        "id" => $encounter->encounter_id,
                         "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
                         "faction" => $encounter->faction,
                         "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
@@ -81,6 +82,7 @@ class ProgressController extends Controller
                     if ($encounter && $encounter->realm_id !== null) {
                         // Find the fastest pug?
                         $encounters[] = array(
+                            "id" => $encounter->encounter_id,
                             "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
                             "faction" => -1,
                             "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
@@ -93,6 +95,20 @@ class ProgressController extends Controller
             return view("progress_times", compact("encounters"));
         }
         return "";
+    }
+
+    public function kills2encounter(Request $_request, $_encounter_id)
+    {
+        $bossName = Encounter::ENCOUNTER_IDS[$_encounter_id]["name"];
+        $boss_kills = Encounter::where("encounter_id", "=", $_encounter_id)
+                    ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
+                    ->whereIn("difficulty_id", array(5,6))
+                    ->orderBy("fight_time","asc")->paginate(16);
+
+        $shortRealms = self::SHORT_REALM_NAMES;
+        $longRealms = self::REALM_NAMES;
+
+        return view("progress_kills_boss", compact("boss_kills", "shortRealms", "longRealms", "bossName"));
     }
 
     public function kills2(Request $_request)

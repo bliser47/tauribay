@@ -8,7 +8,7 @@
     </tr>
     @foreach( $encounters as $encounter )
         <tr>
-            <td style="white-space:nowrap;"><a>{{ $encounter["name"] }}</a></td>
+            <td style="white-space:nowrap;"><a href="{{ URL::to('/progress/kills/') ."/" . $encounter["id"] }}">{{ $encounter["name"] }}</a></td>
             <td>{{ $encounter["realm"] }}</td>
             <td class="faction-{{ $encounter["faction"] }}">
                 @if ( $encounter["faction"] >= 0 )
