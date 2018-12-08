@@ -11,24 +11,22 @@ class Encounter extends Model
 
 
     const MAPS = array(
-        array(
+        1098 => array(
             "name" => "Throne of Thunder",
             "id" => 1098
         ),
-        array(
+        996 => array(
             "name" => "Terrace of Endless Spring",
             "id" => 996
         ),
-        array(
+        1009 => array(
             "name" => "Heart of Fear",
             "id" => 1009
         ),
-        /*
-        array(
+        1008 => array(
             "name" => "Mogu'shan Vaults",
             "id" => 1008
         )
-        */
     );
 
     const MAP_ENCOUNTERS = array(
@@ -97,6 +95,14 @@ class Encounter extends Model
             1498,
             1499,
             1501
+        ),
+        1008 => array(
+            1395,
+            1390,
+            1434,
+            1436,
+            1500,
+            1407
         )
     );
 

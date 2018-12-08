@@ -463,4 +463,30 @@ $(function()
         );
     }
     bs_input_file();
+
+    $(".encounters_loading").each(function()
+    {
+        var loader = $(this);
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/progress/killsFrom",
+            data: {
+                "map_id" : $(this).data("mapid")
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                $(loader).html(response);
+                $(loader).find(".guildClearTime").each(function () {
+                    var time = $(this).html();
+                    if ( time.length > 0 ) {
+                        $(this).html((parseInt(time)).toString().toHHMMSS());
+                    }
+                });
+            }
+        });
+    })
+
 });

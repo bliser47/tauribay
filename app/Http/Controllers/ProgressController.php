@@ -53,7 +53,49 @@ class ProgressController extends Controller
         return view("progress", compact("data", 'shortRealms'));
     }
 
-    public function kills(Request $_request)
+    public function killsFrom(Request $_request)
+    {
+        if ( $_request->has("map_id")) {
+
+            $mapId = $_request->get("map_id");
+            $encounters = array();
+            foreach (Encounter::MAP_ENCOUNTERS_MERGED[$mapId] as $encounterId) {
+                $encountersIds = is_array($encounterId) ? $encounterId : array($encounterId);
+                $encounter = Encounter::whereIn("encounter_id", $encountersIds)
+                    ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
+                    ->whereIn("difficulty_id", array(5, 6))
+                    ->orderBy("fight_time")->first();
+
+                if ($encounter && $encounter->realm !== null) {
+                    $encounters[] = array(
+                        "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
+                        "faction" => $encounter->faction,
+                        "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
+                        "guild" => $encounter->name,
+                        "time" => $encounter->fight_time
+                    );
+                } else {
+                    $encounter = Encounter::whereIn("encounter_id", $encountersIds)
+                        ->whereIn("difficulty_id", array(5, 6))
+                        ->orderBy("fight_time")->first();
+                    if ($encounter && $encounter->realm_id !== null) {
+                        // Find the fastest pug?
+                        $encounters[] = array(
+                            "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
+                            "faction" => -1,
+                            "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
+                            "guild" => "Random",
+                            "time" => $encounter->fight_time
+                        );
+                    }
+                }
+            }
+            return view("progress_times", compact("encounters"));
+        }
+        return "";
+    }
+
+    public function kills2(Request $_request)
     {
         $maps = Encounter::MAPS;
         $data = array();
@@ -65,41 +107,18 @@ class ProgressController extends Controller
             );
             foreach ( Encounter::MAP_ENCOUNTERS_MERGED[$map["id"]] as $encounterId )
             {
-                $encountersIds = is_array($encounterId) ? $encounterId : array($encounterId);
-                $encounter = Encounter::whereIn("encounter_id", $encountersIds)
-                        ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                        ->whereIn("difficulty_id", array(5,6))
-                        ->orderBy("fight_time")->first();
-
-                if ( $encounter && $encounter->realm !== null ) {
-                    $data[$map["id"]]["encounters"][] = array(
-                        "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
-                        "faction" => $encounter->faction,
-                        "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
-                        "guild" => $encounter->name,
-                        "time" => $encounter->fight_time
-                    );
-                }
-                else
-                {
-                    $encounter = Encounter::whereIn("encounter_id", $encountersIds)
-                        ->whereIn("difficulty_id", array(5,6))
-                        ->orderBy("fight_time")->first();
-                    if ( $encounter && $encounter->realm_id !== null ) {
-                        // Find the fastest pug?
-                        $data[$map["id"]]["encounters"][] = array(
-                            "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
-                            "faction" => -1,
-                            "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
-                            "guild" => "Random",
-                            "time" => $encounter->fight_time
-                        );
-                    }
-                }
+                $encounterId = is_array($encounterId) ? $encounterId[0] : $encounterId;
+                $data[$map["id"]]["encounters"][] = array(
+                    "realm" => "",
+                    "faction" => -1,
+                    "name" =>  Encounter::ENCOUNTER_IDS[$encounterId]["name"],
+                    "guild" => "",
+                    "time" => 0
+                );
             }
         }
 
-        return view("progress_kills", compact("data"));
+        return view("progress_kills2", compact("data"));
     }
 
     public function guild(Request $_request)
