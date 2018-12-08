@@ -3,7 +3,7 @@
 <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=155') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=158') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script>
@@ -37,14 +37,14 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=150') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=156') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>
 @yield('pagespecificscripts')
 <script>
     $(window).on('load', function() {
         $(".loadWrapper").fadeTo(500,0);
         $("<img src=\"{{ URL::asset("img/back.jpg") }}\">").load(function() {
-            $(".wrapper").css("background-image","url({{ URL::asset("img/back.jpg") }})");
+            $(".wrapper").addClass("backLoaded");
             $(".wrapper").fadeTo(500,1);
         });
     });

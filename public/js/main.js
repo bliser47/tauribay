@@ -2,6 +2,13 @@ $(function()
 {
     $(".pagination").rPage();
 
+    $(window).scroll(function(){
+        var sticky = $('.sticky'),
+            scroll = $(window).scrollTop();
+
+        if (scroll >= 51) sticky.addClass('fixed');
+        else if(scroll === 0) sticky.removeClass('fixed');
+    });
 
     $(".checkbox-all-classes input").change(function(){
         $(".checkbox-class input").prop('checked', $(this).prop("checked"));

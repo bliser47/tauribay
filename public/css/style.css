@@ -1,3 +1,11 @@
+.backLoaded {
+    background: url('../img/back.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
 * {
     font-family: 'Play', sans-serif;
 }
@@ -8,6 +16,31 @@ body {
 
 header {
     margin:auto;
+    opacity:1;
+}
+
+header.fixed
+{
+    position: fixed;
+    width:100%;
+    z-index: 50000;
+    animation:slide-down 0.7s;
+}
+
+@keyframes slide-down {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 0.9;
+        transform: translateY(0);
+    }
+}
+
+header.fixed .navbar
+{
+    margin-bottom: 0px;
 }
 
 /* ---------------------------------------------------------------------------------------------------------------------------------------- */
@@ -169,10 +202,13 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 {
     background:rgba(255,255,255,1);
     border-top:0px;
+    border-left:0px;
+    border-right:0px;
+    border-bottom:1px solid;
     border-radius:0px;
-    -webkit-box-shadow: 0px 0px 10px 2.5px rgba(0,0,0,0.25);
-    -moz-box-shadow: 0px 0px 10px 2.5px rgba(0,0,0,0.25);
-    box-shadow: 0px 0px 10px 2.5px rgba(0,0,0,0.25);
+    -webkit-box-shadow: 0px 0px 20px 2.5px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 20px 2.5px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 20px 2.5px rgba(0,0,0,0.5);
 }
 
 .navbar-brand{
@@ -234,7 +270,6 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 
 .container {
     max-width:1024px;
-    margin-bottom:50px;
     border-radius:4px;
     padding:15px;
 }

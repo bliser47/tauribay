@@ -2,18 +2,19 @@
 <meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
-    html {
-        background-color: #669933;
-        background-image: linear-gradient(141deg, #99cc66 0%, #669933 51%, #336600 100%);
-        min-height:100%;
-    }
-    body, .loadWrapper
+    body, .loadWrapper, .wrapper
     {
         min-height:100%;
+    }
+    .loadWrapper
+    {
+        position: fixed;
+        width: 100%;
     }
     .wrapper
     {
         opacity:0;
+        overflow: hidden;
     }
     .loader {
         opacity:0;
@@ -36,10 +37,11 @@
         position: absolute;
         top:50%;
         left:50%;
+        right:50%;
         margin-left: -30px;
         margin-top:-30px;
         display: block;
-        border-left: 1.1em solid #FFF;
+        border-left: 1.1em solid #669933;
     }
     @-webkit-keyframes load8 {
         0% {

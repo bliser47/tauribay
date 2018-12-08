@@ -8,7 +8,7 @@
             <div class="loader pageLoader"></div>
         </div>
         <div class="wrapper">
-            <header>
+            <header class="sticky">
                 @include('includes.header')
             </header>
             <div class="container">
