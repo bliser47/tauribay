@@ -36,16 +36,11 @@ class ProgressController extends Controller
 
     public function guild(Request $_request)
     {
-        $guilds = DB::table('guilds')->get();
-        foreach ($guilds as $guild )
-        {
-            $progress = GuildProgress::getProgression($guild->id);;
-            $guild->progress = $progress["progress"];
-            $guild->progressText = $progress["progress"] . "/" . $progress["total"];
-        }
-        $guilds = $guilds->sortByDesc(function ($guild, $key) {
-            return $guild->progress;
-        });
+        $guilds = DB::table('guild_progresses')
+            ->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
+            ->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))
+            ->where("guild_progresses.progress", ">", 0)
+            ->orderBy("guild_progresses.progress", "desc")->get();
         $shortRealms = self::SHORT_REALM_NAMES;
         return view("progress_guild", compact("guilds", 'shortRealms'));
     }
@@ -55,9 +50,7 @@ class ProgressController extends Controller
     {
         if ( $_request->has("name") && $_request->has("realm") )
         {
-            return response()->json([
-                "progress" =>GuildProgress::reCalculateProgressionFromNameAndRealm($_request->get("name"),$_request->get("realm"))
-            ]);
+            return response()->json(GuildProgress::reCalculateProgressionFromNameAndRealm($_request->get("name"),$_request->get("realm")));
         }
         return "";
     }

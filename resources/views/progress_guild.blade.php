@@ -16,7 +16,7 @@
                             <td> {{ $loop->index+1 }} </td>
                             <td> {{ $shortRealms[$guild->realm] }} </td>
                             <td> {{ $guild->name }} </td>
-                            <td class="guildProgress"> {{ $guild->progressText }} </td>
+                            <td class="guildProgress"> {{ $guild->progress }}/13 </td>
                             <td>
                                 <div class="update-loader" id="updated-loader{{$guild->id}}"></div>
                                 {!! Form::open(array("method" => "post","class"=>"progressupdate-form")) !!}

@@ -321,7 +321,7 @@ $(function()
                 else
                 {
                     if ( response.progress ) {
-                        $(row).find(".guildProgress").html(response.progress.progress+"/"+response.progress.total);
+                        $(row).find(".guildProgress").html(Math.max(response.progress[5],response.progress[6])+"/13");
 
                         var form = $(row).find(".progressupdate-form");
                         form.submit(function (e) {

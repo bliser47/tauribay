@@ -6,33 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class GuildProgress extends Model
 {
-    // Defaults to ToT Heroic
-    public static function getProgression($_guildId, $mapId = 1098, $_difficultyId = 5, $_totalProgression = 13)
-    {
-        if ( $_guildId !== null ) {
-            $progress = GuildProgress::where("guild_id", "=", $_guildId)
-                ->where("map_id", "=", $mapId)
-                ->where("difficulty_id", "=", $_difficultyId)
-                ->get();
-            if ($progress !== null) {
-                return array(
-                    "progress" =>$progress->count(),
-                    "total" => $_totalProgression
-                );
-            }
-        }
-        return array(
-            "progress" => 0,
-            "total" => $_totalProgression
-        );
-    }
-
     public static function reCalculateProgressionFromNameAndRealm($_name, $_realmId)
     {
         $guild = Guild::where("name", "=", $_name)->where("realm", "=", $_realmId)->first();
         if ( $guild !== null )
         {
-            self::reCalculateProgression($guild->id);
+            self::reCalculateProgression($guild,5); // 10 man
+            self::reCalculateProgression($guild,6); // 25 man
             return self::getProgression($guild->id);
         }
     }
@@ -42,32 +22,41 @@ class GuildProgress extends Model
         $guilds = Guild::all();
         foreach ( $guilds as $guild )
         {
-            self::reCalculateProgression($guild->id);
+            self::reCalculateProgression($guild,5); // 10 man
+            self::reCalculateProgression($guild,6); // 25 man
         }
     }
 
-
-    public static function reCalculateProgression($_guildId)
+    public static function getProgression($_guildId, $_mapId = 1098)
     {
-        GuildProgress::where("guild_id", "=", $_guildId)->delete();
-        $guildEncounters = Encounter::where("guild_id", "=", $_guildId)->get();
-        foreach ( $guildEncounters as $encounter )
+        $size10 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
+        $size25 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 6)->orderBy("progress")->first();
+        return array(
+            "progress" => array(
+                5 => $size10->progress,
+                6 => $size25->progress
+            )
+        );
+    }
+
+
+    public static function reCalculateProgression($_guild, $_difficultyId, $_mapId = 1098)
+    {
+        $progress = GuildProgress::where("guild_id", "=", $_guild->id)
+                ->where("map_id", "=", $_mapId)
+                ->where("difficulty_id", "=", $_difficultyId)->first();
+        if ( $progress == null  )
         {
-            $progress = GuildProgress::where("guild_id", "=", $_guildId)
-                ->where("map_id", "=", $encounter->map_id)
-                ->where("difficulty_id", "=", $encounter->difficulty_id)
-                ->where("encounter_id", "=", $encounter->encounter_id)->first();
-            if ( $progress == null )
-            {
-                $progress = new GuildProgress;
-                $progress->guild_id = $_guildId;
-                $progress->map_id = $encounter->map_id;
-                $progress->encounter_id = $encounter->encounter_id;
-                $progress->difficulty_id = $encounter->difficulty_id;
-                $progress->kill_count = 0;
-            }
-            $progress->kill_count = $progress->kill_count + 1;
-            $progress->save();
+            $progress = new GuildProgress;
+            $progress->guild_id = $_guild->id;
+            $progress->realm_id = $_guild->realm;
+            $progress->map_id = $_mapId;
+            $progress->difficulty_id = $_difficultyId;
         }
+        $progress->progress = Encounter::where("guild_id", "=", $_guild->id)
+            ->where("map_id", "=", $_mapId)
+            ->where("difficulty_id", "=", $_difficultyId)
+            ->distinct("encounter_id")->count("encounter_id");
+        $progress->save();
     }
 }
