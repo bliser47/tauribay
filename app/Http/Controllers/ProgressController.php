@@ -40,7 +40,8 @@ class ProgressController extends Controller
             ->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
             ->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))
             ->where("guild_progresses.progress", ">", 0)
-            ->orderBy("guild_progresses.progress", "desc")->get();
+            ->orderBy("guild_progresses.progress", "desc")
+            ->orderBy("guild_progresses.clear_time")->get();
         $shortRealms = self::SHORT_REALM_NAMES;
         return view("progress_guild", compact("guilds", 'shortRealms'));
     }

@@ -32,11 +32,60 @@ class GuildProgress extends Model
         $size10 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
         $size25 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 6)->orderBy("progress")->first();
         return array(
-            "progress" => array(
-                5 => $size10->progress,
-                6 => $size25->progress
+            "difficulty" => array(
+                5 => array(
+                    "progress" => $size10->progress,
+                    "clear_time" => $size10->clear_time,
+                    "first_kill_log_id" => $size10->first_kill_log_id,
+                    "last_kill_log_id" => $size10->last_kill_log_id
+                ),
+                6 => array(
+                    "progress" => $size25->progress,
+                    "clear_time" => $size25->clear_time,
+                    "first_kill_log_id" => $size25->first_kill_log_id,
+                    "last_kill_log_id" => $size25->last_kill_log_id
+                )
             )
         );
+    }
+
+    public static function calculateClearTime($_guildId, $_difficultyId, $_mapId)
+    {
+        $mapEncounters = Encounter::MAP_ENCOUNTERS[$_mapId][$_difficultyId];
+
+        $firstEncounterId = $mapEncounters[0];
+        $lastEncounterId = $mapEncounters[count($mapEncounters)-1];
+
+        $firstEncounterKills = Encounter::where("guild_id", "=", $_guildId)
+                    ->where("map_id", "=", $_mapId)
+                    ->where("difficulty_id", "=", $_difficultyId)
+                    ->where("encounter_id", "=", $firstEncounterId)->get();
+
+        $lastEncounterKills = Encounter::where("guild_id", "=", $_guildId)
+            ->where("map_id", "=", $_mapId)
+            ->where("difficulty_id", "=", $_difficultyId)
+            ->where("encounter_id", "=", $lastEncounterId)->get();
+
+        $shortestClear = array(
+            "time" => -1,
+            "first" => 0,
+            "last" => 0
+        );
+        foreach ( $firstEncounterKills as $firstKill ) {
+            foreach ( $lastEncounterKills as $lastKill )
+            {
+                $timeDifference = $lastKill->killtime - $firstKill->killtime;
+                if ( $timeDifference > 0 && ($shortestClear["time"] < 0 || $timeDifference < $shortestClear["time"]) )
+                {
+                    $shortestClear = array(
+                        "time" => $timeDifference,
+                        "last" => $lastKill->id,
+                        "first" => $firstKill->id
+                    );
+                }
+            }
+        }
+        return $shortestClear;
     }
 
 
@@ -57,6 +106,10 @@ class GuildProgress extends Model
             ->where("map_id", "=", $_mapId)
             ->where("difficulty_id", "=", $_difficultyId)
             ->distinct("encounter_id")->count("encounter_id");
+        $shortestClear = self::calculateClearTime($_guild->id, $_difficultyId, $_mapId);
+        $progress->clear_time = $shortestClear["time"];
+        $progress->first_kill_log_id = $shortestClear["first"];
+        $progress->last_kill_log_id = $shortestClear["last"];
         $progress->save();
     }
 }

@@ -320,8 +320,20 @@ $(function()
                 }
                 else
                 {
-                    if ( response.progress ) {
-                        $(row).find(".guildProgress").html(Math.max(response.progress[5],response.progress[6])+"/13");
+                    if ( response.difficulty ) {
+
+                        var difficultyId = 5;
+                        if ( response.difficulty[6].progress > response.difficulty[5].progress )
+                        {
+                            difficultyId = 6;
+                        }
+                        var progress = response.difficulty[difficultyId];
+
+                        $(row).find(".guildProgress").html(progress["progress"]+"/13");
+
+                        var clearTime = parseInt(progress["clear_time"]).toString().toHHMMSS();
+
+                        $(row).find(".guildClearTime").html(clearTime);
 
                         var form = $(row).find(".progressupdate-form");
                         form.submit(function (e) {
@@ -389,9 +401,29 @@ $(function()
 
     }
 
+    String.prototype.toHHMMSS = function () {
+        /* extend the String by using prototypical inheritance */
+        var seconds = parseInt(this, 10); // don't forget the second param
+        var hours   = Math.floor(seconds / 3600);
+        var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+        seconds = seconds - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        var time    = hours+':'+minutes+':'+seconds;
+        return time;
+    }
+
     function UpdateTimes() {
         $(".time").each(function () {
             parseTime($(this));
+        });
+        $(".guildClearTime").each(function () {
+            var time = $(this).html();
+            if ( time.length > 0 ) {
+                $(this).html((parseInt(time)).toString().toHHMMSS());
+            }
         });
     }
 
