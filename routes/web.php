@@ -57,6 +57,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/top', 'TopItemLevelsController@index');
     Route::get('/progress', 'ProgressController@index');
     Route::get('/progress/guild', 'ProgressController@guild');
+    Route::get('/progress/kills', 'ProgressController@kills');
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
 
     Route::auth();

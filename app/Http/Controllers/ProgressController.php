@@ -34,6 +34,13 @@ class ProgressController extends Controller
         return view("progress", compact("data", 'shortRealms'));
     }
 
+    public function kills(Request $_request)
+    {
+        $maps = Encounter::MAPS;
+
+        return view("progress_kills", compact("maps"));
+    }
+
     public function guild(Request $_request)
     {
         $guilds = DB::table('guild_progresses')
