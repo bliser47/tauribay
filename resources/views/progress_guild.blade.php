@@ -4,7 +4,7 @@
         <div class="col-md-12">
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
-                    <tr>
+                    <tr class="rowDesktop">
                         <th>{{ __("Nr.") }}</th>
                         <th>{{ __("Realm") }}</th>
                         <th>{{ __("Guild") }}</th>
@@ -14,11 +14,18 @@
                         <th>{{ __("Legjobb idő") }}</th>
                         <th></th>
                     </tr>
+                    <tr class="rowMobile">
+                        <th>{{ __("Nr.") }}</th>
+                        <th>{{ __("Realm") }}</th>
+                        <th>{{ __("Guild") }}</th>
+                        <th>{{ __("Progress") }}</th>
+                        <th>{{ __("Legjobb idő") }}</th>
+                    </tr>
                     @foreach ( $guilds as $nr => $guild )
-                        <tr class="progressRow">
+                        <tr class="progressRow rowDesktop">
                             <td> {{ $loop->index+1 }} </td>
                             <td> {{ $shortRealms[$guild->realm] }} </td>
-                            <td> {{ $guild->name }} </td>
+                            <td> <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $longRealms[$guild->realm] }}&gn={{ $guild->name }}">{{ $guild->name }}</a> </td>
                             <td class="faction-{{ $guild->faction  }}">
                                 <img src="{{ URL::asset("img/factions/small/" . ($guild->faction == 1 ? 1 : 2) . ".png") }}" alt=""/>
                             </td>
@@ -34,6 +41,13 @@
                                 <button class="refreshProgress" name="updateProgress" value="1" type="submit"></button>
                                 {!! Form::close() !!}
                             </td>
+                        </tr>
+                        <tr class="progressRow rowMobile factionRow faction-{{ $guild->faction  }}-row">
+                            <td> {{ $loop->index+1 }} </td>
+                            <td> {{ $shortRealms[$guild->realm] }} </td>
+                            <td> <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $longRealms[$guild->realm] }}&gn={{ $guild->name }}">{{ $guild->name }}</a> </td>
+                            <td class="guildProgress"> {{ $guild->progress }}/13 </td>
+                            <td class="guildClearTime">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
                         </tr>
                     @endforeach
                 </table>

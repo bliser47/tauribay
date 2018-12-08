@@ -43,7 +43,8 @@ class ProgressController extends Controller
             ->orderBy("guild_progresses.progress", "desc")
             ->orderBy("guild_progresses.clear_time")->get();
         $shortRealms = self::SHORT_REALM_NAMES;
-        return view("progress_guild", compact("guilds", 'shortRealms'));
+        $longRealms = self::REALM_NAMES;
+        return view("progress_guild", compact("guilds", 'shortRealms', 'longRealms'));
     }
 
 
