@@ -23,10 +23,12 @@ class Encounter extends Model
             "name" => "Heart of Fear",
             "id" => 1009
         ),
+        /*
         array(
             "name" => "Mogu'shan Vaults",
             "id" => 1008
         )
+        */
     );
 
     const MAP_ENCOUNTERS = array(
@@ -39,10 +41,10 @@ class Encounter extends Model
                 1578,
                 1573,
                 1574,
-                1575,
+                1572,
                 1576,
-                1577,
-                1578,
+                1559,
+                1560,
                 1579,
                 1580,
             ),
@@ -54,13 +56,47 @@ class Encounter extends Model
                 1578,
                 1573,
                 1574,
-                1575,
+                1572,
                 1576,
-                1577,
-                1578,
+                1559,
+                1560,
                 1579,
                 1581,
             )
+        )
+    );
+
+    const MAP_ENCOUNTERS_MERGED = array(
+        1098 => array(
+            1577,
+            1575,
+            1570,
+            1565,
+            1578,
+            1573,
+            1574,
+            1572,
+            1576,
+            1559,
+            1560,
+            1579,
+            array(
+                1580, 1581
+            )
+        ),
+        996 => array(
+            1409,
+            1505,
+            1506,
+            1431
+        ),
+        1009 => array(
+            1507,
+            1504,
+            1463,
+            1498,
+            1499,
+            1501
         )
     );
 

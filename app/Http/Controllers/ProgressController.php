@@ -26,6 +26,25 @@ class ProgressController extends Controller
         2 => "Evermoon"
     );
 
+    public function debug(Request $_request)
+    {
+        $api = new Tauri\ApiClient();
+        $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
+        $realmName = self::REALM_NAMES[$realmId];
+
+        $latestRaids = $api->getRaidLast($realmName);
+
+        $start = "\"response\":{\"logs\":[{";
+        $startPos = strpos ($latestRaids,$start);
+        $end = "]}}";
+        $endPos = strrpos($latestRaids,$end);
+        $delimiter = "},{";
+
+        $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
+        $logs = explode($delimiter,$logs);
+
+        return "{".$logs[0]."}";
+    }
 
     public function index(Request $_request)
     {
@@ -37,8 +56,50 @@ class ProgressController extends Controller
     public function kills(Request $_request)
     {
         $maps = Encounter::MAPS;
+        $data = array();
+        foreach ( $maps as $map)
+        {
+            $data[$map["id"]] = array(
+                "name" => $map["name"],
+                "encounters" => array()
+            );
+            foreach ( Encounter::MAP_ENCOUNTERS_MERGED[$map["id"]] as $encounterId )
+            {
+                $encountersIds = is_array($encounterId) ? $encounterId : array($encounterId);
+                $encounter = Encounter::whereIn("encounter_id", $encountersIds)
+                        ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
+                        ->whereIn("difficulty_id", array(5,6))
+                        ->orderBy("fight_time")->first();
 
-        return view("progress_kills", compact("maps"));
+                if ( $encounter && $encounter->realm !== null ) {
+                    $data[$map["id"]]["encounters"][] = array(
+                        "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
+                        "faction" => $encounter->faction,
+                        "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
+                        "guild" => $encounter->name,
+                        "time" => $encounter->fight_time
+                    );
+                }
+                else
+                {
+                    $encounter = Encounter::whereIn("encounter_id", $encountersIds)
+                        ->whereIn("difficulty_id", array(5,6))
+                        ->orderBy("fight_time")->first();
+                    if ( $encounter && $encounter->realm_id !== null ) {
+                        // Find the fastest pug?
+                        $data[$map["id"]]["encounters"][] = array(
+                            "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
+                            "faction" => -1,
+                            "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
+                            "guild" => "Random",
+                            "time" => $encounter->fight_time
+                        );
+                    }
+                }
+            }
+        }
+
+        return view("progress_kills", compact("data"));
     }
 
     public function guild(Request $_request)
@@ -119,7 +180,7 @@ class ProgressController extends Controller
     public function updateRaids(Request $_request)
     {
         $api = new Tauri\ApiClient();
-        $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
+        $realmId = 1;//$_request->has("data") ? $_request->get("data") : 2;
         $realmName = self::REALM_NAMES[$realmId];
 
         $latestRaids = $api->getRaidLast($realmName);

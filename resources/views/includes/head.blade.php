@@ -2,7 +2,11 @@
 <meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style type="text/css">
-    body, .loadWrapper, .wrapper
+    html, body
+    {
+        height:100%;
+    }
+    .loadWrapper, .wrapper
     {
         min-height:100%;
     }
