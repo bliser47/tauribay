@@ -11,17 +11,17 @@
                         <th>{{ __("Progress") }}</th>
                         <th></th>
                     </tr>
-                    @foreach ( $data as $key => $d )
-                        <tr>
-                            <td> {{ $key+1 }} </td>
-                            <td> {{ $shortRealms[$d->realm] }} </td>
-                            <td> {{ $d->name }} </td>
-                            <td> {{ TauriBay\GuildProgress::getProgression($d->id) }} </td>
+                    @foreach ( $guilds as $nr => $guild )
+                        <tr class="progressRow">
+                            <td> {{ $loop->index+1 }} </td>
+                            <td> {{ $shortRealms[$guild->realm] }} </td>
+                            <td> {{ $guild->name }} </td>
+                            <td class="guildProgress"> {{ $guild->progressText }} </td>
                             <td>
-                                <div class="update-loader" id="updated-loader{{$d->id}}"></div>
-                                {!! Form::open(array("method" => "post","class"=>"ilvlupdate-form")) !!}
-                                <input type="hidden" name="name" value="{{$d->name}}">
-                                <input type="hidden" name="realm" value="{{$d->realm}}">
+                                <div class="update-loader" id="updated-loader{{$guild->id}}"></div>
+                                {!! Form::open(array("method" => "post","class"=>"progressupdate-form")) !!}
+                                <input type="hidden" name="name" value="{{$guild->name}}">
+                                <input type="hidden" name="realm" value="{{$guild->realm}}">
                                 <input type="hidden" name="refreshProgress" value="1">
                                 <button class="refreshProgress" name="updateProgress" value="1" type="submit"></button>
                                 {!! Form::close() !!}
@@ -29,11 +29,6 @@
                         </tr>
                     @endforeach
                 </table>
-            </div>
-            <div class="text-center">
-                <div>
-                    {{ $data->appends(Illuminate\Support\Facades\Input::except('page')) }}
-                </div>
             </div>
         </div>
     </div>

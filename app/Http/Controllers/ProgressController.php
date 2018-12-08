@@ -3,6 +3,7 @@
 namespace TauriBay\Http\Controllers;
 
 use TauriBay\Encounter;
+use TauriBay\GuildProgress;
 use Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
@@ -35,9 +36,35 @@ class ProgressController extends Controller
 
     public function guild(Request $_request)
     {
-        $data = DB::table('guilds')->paginate(16);
+        $guilds = DB::table('guilds')->get();
+        foreach ($guilds as $guild )
+        {
+            $progress = GuildProgress::getProgression($guild->id);;
+            $guild->progress = $progress["progress"];
+            $guild->progressText = $progress["progress"] . "/" . $progress["total"];
+        }
+        $guilds = $guilds->sortByDesc(function ($guild, $key) {
+            return $guild->progress;
+        });
         $shortRealms = self::SHORT_REALM_NAMES;
-        return view("progress_guild", compact("data", 'shortRealms'));
+        return view("progress_guild", compact("guilds", 'shortRealms'));
+    }
+
+
+    public function updateGuildProgress(Request $_request)
+    {
+        if ( $_request->has("name") && $_request->has("realm") )
+        {
+            return response()->json([
+                "progress" =>GuildProgress::reCalculateProgressionFromNameAndRealm($_request->get("name"),$_request->get("realm"))
+            ]);
+        }
+        return "";
+    }
+
+    public function updateGuildProgressAll(Request $_request)
+    {
+        GuildProgress::reCalculateProgressionForAll();
     }
 
 

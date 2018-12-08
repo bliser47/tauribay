@@ -15,11 +15,37 @@ class GuildProgress extends Model
                 ->where("difficulty_id", "=", $_difficultyId)
                 ->get();
             if ($progress !== null) {
-                return count($progress) . "/" . $_totalProgression;
+                return array(
+                    "progress" =>$progress->count(),
+                    "total" => $_totalProgression
+                );
             }
         }
-        return "";
+        return array(
+            "progress" => 0,
+            "total" => $_totalProgression
+        );
     }
+
+    public static function reCalculateProgressionFromNameAndRealm($_name, $_realmId)
+    {
+        $guild = Guild::where("name", "=", $_name)->where("realm", "=", $_realmId)->first();
+        if ( $guild !== null )
+        {
+            self::reCalculateProgression($guild->id);
+            return self::getProgression($guild->id);
+        }
+    }
+
+    public static function reCalculateProgressionForAll()
+    {
+        $guilds = Guild::all();
+        foreach ( $guilds as $guild )
+        {
+            self::reCalculateProgression($guild->id);
+        }
+    }
+
 
     public static function reCalculateProgression($_guildId)
     {
@@ -27,18 +53,21 @@ class GuildProgress extends Model
         $guildEncounters = Encounter::where("guild_id", "=", $_guildId)->get();
         foreach ( $guildEncounters as $encounter )
         {
-            $bossSkill = GuildProgress::where("guild_id", "=", $_guildId)
+            $progress = GuildProgress::where("guild_id", "=", $_guildId)
                 ->where("map_id", "=", $encounter->map_id)
-                ->where("difficulty_id", "=", $encounter->encounter_difficulty_id)
-                ->where("encounter_id", "=", $encounter->encounter_id);
-            if ( $bossSkill == null )
+                ->where("difficulty_id", "=", $encounter->difficulty_id)
+                ->where("encounter_id", "=", $encounter->encounter_id)->first();
+            if ( $progress == null )
             {
-                $bossSkill = new GuildProgress;
-                $bossSkill->map_id = $encounter->map_id;
-                $bossSkill->encounter_id = $encounter->encounter_id;
-                $bossSkill->difficulty_id = $encounter->encounter_difficulty_id;
+                $progress = new GuildProgress;
+                $progress->guild_id = $_guildId;
+                $progress->map_id = $encounter->map_id;
+                $progress->encounter_id = $encounter->encounter_id;
+                $progress->difficulty_id = $encounter->difficulty_id;
+                $progress->kill_count = 0;
             }
-            ++$bossSkill->killcount;
+            $progress->kill_count = $progress->kill_count + 1;
+            $progress->save();
         }
     }
 }

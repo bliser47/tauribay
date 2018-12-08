@@ -27,12 +27,17 @@ Route::post('profile/avatar', 'HomeController@ChangeAvatar');
 Route::post('profile/password', 'HomeController@ChangePassword');
 
 Route::post('/ilvl', 'TopItemLevelsController@store');
+
 Route::get('/ilvlupdate', 'TopItemLevelsController@update');
 
 Route::post('/ilvlupdate', 'TopItemLevelsController@update');
 Route::post('/raidupdate', 'ProgressController@updateRaids');
 Route::get('/raidupdate', 'ProgressController@updateRaids');
 
+
+
+Route::get('/guildprogress', 'ProgressController@updateGuildProgressAll');
+Route::post('/guildprogress', 'ProgressController@updateGuildProgress');
 
 Route::group(['middleware' => 'language'], function () {
 

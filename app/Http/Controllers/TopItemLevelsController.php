@@ -178,10 +178,10 @@ class TopItemLevelsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \TauriBay\TopItemLevels  $topItemLevels
+     * @param  \TauriBay\Characters  $characters
      * @return \Illuminate\Http\Response
      */
-    public function show(TopItemLevels $topItemLevels)
+    public function show(Characters $characters)
     {
 
     }
@@ -189,10 +189,10 @@ class TopItemLevelsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \TauriBay\TopItemLevels  $topItemLevels
+     * @param  \TauriBay\Characters  $characters
      * @return \Illuminate\Http\Response
      */
-    public function edit(TopItemLevels $topItemLevels)
+    public function edit(Characters $characters)
     {
         //
     }

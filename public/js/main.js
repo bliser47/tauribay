@@ -304,10 +304,54 @@ $(function()
         });
     }
 
+    function sendProgressAjaxUpdate(form, data, row)
+    {
+        $(form).hide();
+        $(form).parent().find(".update-loader").css("display","block");
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/guildprogress",
+            data: data,
+            success: function(response)
+            {
+                if ( typeof response === "string" && response.indexOf("timed out") !== -1 )
+                {
+                    sendProgressAjaxUpdate(data);
+                }
+                else
+                {
+                    if ( response.progress ) {
+                        $(row).find(".guildProgress").html(response.progress.progress+"/"+response.progress.total);
+
+                        var form = $(row).find(".progressupdate-form");
+                        form.submit(function (e) {
+                            sendProgressAjaxUpdate($(this), $(this).serialize(), $(this).closest(".progressRow"));
+                            e.preventDefault();
+                        });
+                        form.show();
+                        form.parent().find(".update-loader").css("display","none");
+                    }
+                    else
+                    {
+                        $(row).remove();
+                    }
+                }
+            },
+            error: function(xhr, textStatus, errorThrown){
+            }
+        });
+    }
+
 
     $(".ilvlupdate-form").submit(function(e) {
 
         sendIlvlAjaxUpdate($(this),$(this).serialize(), $(this).closest('.charRow'));
+        e.preventDefault();
+    });
+
+    $(".progressupdate-form").submit(function(e) {
+
+        sendProgressAjaxUpdate($(this),$(this).serialize(), $(this).closest('.progressRow'));
         e.preventDefault();
     });
 
