@@ -27,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['url']->forceScheme('https');
+        if(env('REDIRECT_HTTPS')) {
+            $this->app['url']->forceScheme('https');
+        }
     }
 }
