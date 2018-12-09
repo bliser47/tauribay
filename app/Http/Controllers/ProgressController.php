@@ -61,34 +61,37 @@ class ProgressController extends Controller
             $encounters = array();
             foreach (Encounter::MAP_ENCOUNTERS_MERGED[$mapId] as $encounterId) {
                 $encountersIds = is_array($encounterId) ? $encounterId : array($encounterId);
-                $encounter = Encounter::whereIn("encounter_id", $encountersIds)
-                    ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                    ->whereIn("difficulty_id", array(5, 6))
-                    ->orderBy("fight_time")->first();
 
-                if ($encounter && $encounter->realm !== null) {
-                    $encounters[] = array(
-                        "id" => $encounter->encounter_id,
-                        "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
-                        "faction" => $encounter->faction,
-                        "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
-                        "guild" => $encounter->name,
-                        "time" => $encounter->fight_time
-                    );
-                } else {
-                    $encounter = Encounter::whereIn("encounter_id", $encountersIds)
+                foreach ( $encountersIds as $encountersId2 ) {
+                    $encounter = Encounter::where("encounter_id", "=", $encountersId2)
                         ->whereIn("difficulty_id", array(5, 6))
+                        ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
                         ->orderBy("fight_time")->first();
-                    if ($encounter && $encounter->realm_id !== null) {
-                        // Find the fastest pug?
+
+                    if ($encounter && $encounter->realm !== null) {
                         $encounters[] = array(
                             "id" => $encounter->encounter_id,
                             "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
-                            "faction" => -1,
-                            "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
-                            "guild" => "Random",
+                            "faction" => $encounter->faction,
+                            "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"] . ( $encountersId2 == 1581 ? " (25)" : ""),
+                            "guild" => $encounter->name,
                             "time" => $encounter->fight_time
                         );
+                    } else {
+                        $encounter = Encounter::where("encounter_id", "=", $encountersId2)
+                            ->whereIn("difficulty_id", array(5, 6))
+                            ->orderBy("fight_time")->first();
+                        if ($encounter && $encounter->realm_id !== null) {
+                            // Find the fastest pug?
+                            $encounters[] = array(
+                                "id" => $encounter->encounter_id,
+                                "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
+                                "faction" => -1,
+                                "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
+                                "guild" => "Random",
+                                "time" => $encounter->fight_time
+                            );
+                        }
                     }
                 }
             }
@@ -101,8 +104,8 @@ class ProgressController extends Controller
     {
         $bossName = Encounter::ENCOUNTER_IDS[$_encounter_id]["name"];
         $boss_kills = Encounter::where("encounter_id", "=", $_encounter_id)
-                    ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
                     ->whereIn("difficulty_id", array(5,6))
+                    ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
                     ->orderBy("fight_time","asc")->paginate(16);
 
         $shortRealms = self::SHORT_REALM_NAMES;
@@ -114,37 +117,14 @@ class ProgressController extends Controller
     public function kills2(Request $_request)
     {
         $maps = Encounter::MAPS;
-        $data = array();
-        foreach ( $maps as $map)
-        {
-            $data[$map["id"]] = array(
-                "name" => $map["name"],
-                "encounters" => array()
-            );
-            foreach ( Encounter::MAP_ENCOUNTERS_MERGED[$map["id"]] as $encounterId )
-            {
-                $encounterId = is_array($encounterId) ? $encounterId[0] : $encounterId;
-                $data[$map["id"]]["encounters"][] = array(
-                    "realm" => "",
-                    "faction" => -1,
-                    "name" =>  Encounter::ENCOUNTER_IDS[$encounterId]["name"],
-                    "guild" => "",
-                    "time" => 0
-                );
-            }
-        }
-
-        return view("progress_kills2", compact("data"));
+        return view("progress_kills2", compact("maps"));
     }
 
     public function guild(Request $_request)
     {
         $guilds = DB::table('guild_progresses')
-            ->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
             ->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))
-            ->where("guild_progresses.progress", ">", 0)
-            ->orderBy("guild_progresses.progress", "desc")
-            ->orderBy("guild_progresses.clear_time")->get();
+            ->where("guild_progresses.progress", ">", 0);
 
         if ( $_request->has("filter") ) {
 
@@ -190,6 +170,11 @@ class ProgressController extends Controller
                 $guilds = $guilds->whereIn('difficulty_id', $difficulties);
             }
         }
+
+        $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
+            ->orderBy("guild_progresses.progress", "desc")
+            ->orderBy("guild_progresses.clear_time")->get();
+
 
         $shortRealms = self::SHORT_REALM_NAMES;
         $longRealms = self::REALM_NAMES;

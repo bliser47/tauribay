@@ -19,7 +19,7 @@
                     </tr>
                     @foreach ( $boss_kills as $kill )
                         <tr class="progressRow rowDesktop">
-                            <td> {{ $loop->index+1 }} </td>
+                            <td> {{ (($boss_kills->currentPage()-1)*16)+$loop->index+1}} </td>
                             <td> {{ $shortRealms[$kill->realm_id] }} </td>
                             <td>
                                 @if ( strlen($kill->name) )
