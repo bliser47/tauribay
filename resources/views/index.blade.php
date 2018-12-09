@@ -5,6 +5,35 @@
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
+                        <img class="media-object" src="img/cms/news/progress_adatok.jpg" alt="Új progress adatok">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-header">
+                            <h3 class="media-heading"> {{ __("Progress oldal") }} </h3>
+                            <p class="text-left text-italic">
+                                {{ __("írta") }} <span class="warlock">Bliser</span> 2018.12.09
+                            </p>
+                            <p>
+                                {{ __("Örömmel jelentem be, hogy a progress oldal első rész kész van!") }}
+                            </p>
+                        </div>
+                        <ul>
+                            <li> {{ __("A szerver összes guildjének ToT (HC) progressje:") }}  <a href="{{ URL::to("/progress/guild") }}">{{ __("ITT") }}</a> </li>
+                            <li> {{ __("A content legjobb boss kill idői:") }} <a href="{{ URL::to("/progress/kills") }}">{{ __("ITT") }}</a> </li>
+                        </ul>
+                        <p>
+                            {{ __("Hamarosan a progress oldal sokkal több statisztikával bővűl!") }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 blog-main">
+            <div class="well nomargin">
+                <div class="media">
+                    <a class="pull-left" href="#">
                         <img class="media-object" src="img/cms/news/ujitas_az_oldalon.jpg" alt="Újítások az oldalon">
                     </a>
                     <div class="media-body">

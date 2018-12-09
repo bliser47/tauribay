@@ -110,5 +110,12 @@
   "Nem lehet kisebb, mint {0}." : "Please enter a value greater than or equal to {0}.",
   "Érvényes hitelkártyaszámnak kell lennie." : "Please enter a valid credit card number.",
   "Kérem javítsa ki ezt a mezőt." : "Please fix this field.",
-  "Kérem írjon be egy érvényes dátumot (ISO)." : "Please enter a valid date (ISO)."
+  "Kérem írjon be egy érvényes dátumot (ISO)." : "Please enter a valid date (ISO).",
+
+  "Progress oldal" : "Progress page",
+  "ITT" : "HERE",
+  "Örömmel jelentem be, hogy a progress oldal első rész kész van!" : "I am pleased to announce that the first part of the progress page is complete!",
+  "A szerver összes guildjének ToT (HC) progressje:" : "The ToT (HC) progress of all guilds on the server:",
+  "A content legjobb boss kill idői:" : "The best kill times from the current content:",
+  "Hamarosan a progress oldal sokkal több statisztikával bővűl!" : "Even more statistics to come!"
 }
