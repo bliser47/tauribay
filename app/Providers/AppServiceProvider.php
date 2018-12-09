@@ -16,7 +16,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
         if(env('REDIRECT_HTTPS')) {
-            //$this->app['url']->formatScheme('https');
+            $this->app['url']->formatScheme('https');
         }
     }
 
@@ -27,6 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //$this->app['url']->forceScheme('https');
+        $this->app['url']->forceScheme('https');
     }
 }
