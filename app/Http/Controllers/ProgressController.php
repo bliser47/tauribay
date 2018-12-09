@@ -48,7 +48,7 @@ class ProgressController extends Controller
 
     public function index(Request $_request)
     {
-        $data = DB::table('encounters')->where('created_at','>',Carbon::now()->subDays(14))->orderBy('killtime','desc')->paginate(16);
+        $data = DB::table('encounters')->where('created_at','>',Carbon::now()->subDays(14))->paginate(16);
         $shortRealms = self::SHORT_REALM_NAMES;
         return view("progress", compact("data", 'shortRealms'));
     }
