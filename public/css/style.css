@@ -819,3 +819,114 @@ a.changelog:hover
     position: absolute;
     top: 22px;
 }
+
+
+.memberClass1
+{
+    background-color: #C79C6E;
+}
+
+.memberClass2
+{
+    background-color: #F58CBA;
+    border-color: #F58CBA;
+}
+
+.memberClass3
+{
+    background-color: #ABD473;
+    border-color: #ABD473;
+}
+
+.memberClass4
+{
+    background-color: #FFF569;
+    border-color: #FFF569;
+}
+
+.memberClass5
+{
+    background-color: #FFFFFF;
+    border-color: #FFFFFF;
+}
+
+.memberClass6
+{
+    background-color: #C41F3B;
+    border-color: #C41F3B;
+}
+
+.memberClass7
+{
+    background-color: #0070DE;
+    border-color: #0070DE;
+}
+
+.memberClass8
+{
+    background-color: #69CCF0;
+    border-color: #69CCF0;
+}
+
+.memberClass9
+{
+    background-color: #9482C9;
+    border-color: #9482C9;
+}
+
+.memberClass10
+{
+    background-color: #FF7D0A;
+    border-color: #FF7D0A;
+}
+
+.memberClass11
+{
+    background-color: #00FF96;
+    border-color: #00FF96;
+}
+
+.memberDataContainer
+{
+    background:rgba(0,0,0,0.5);
+}
+
+.memberDataContainerFirst
+{
+    border-top:2px solid rgba(0,0,0,0.5);
+}
+.memberDataContainer .memberDataWidthContainer
+{
+    height:32px;
+    position: relative;
+    border-bottom:2px solid rgba(0,0,0,0.5);
+}
+
+.memberName
+{
+    color:#fff;
+    position: absolute;
+    left:10px;
+}
+
+.memberData
+{
+    color:#fff;
+    position: absolute;
+    right:10px;
+}
+
+.memberDataWidth
+{
+    height:30px;
+    position: absolute;
+}
+
+.memberData, .memberName
+{
+    line-height: 30px;
+    font-size:15px;
+    font-weight:bold;
+    text-shadow: 1px 0px 5px #000, 0px 1px 1px #000;
+    z-index: 5;
+}

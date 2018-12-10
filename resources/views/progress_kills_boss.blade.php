@@ -31,7 +31,7 @@
                             <td class="faction-{{ $kill->faction  }}">
                                 <img src="{{ URL::asset("img/factions/small/" . ($kill->faction == 1 ? 1 : 2) . ".png") }}" alt=""/>
                             </td>
-                            <td class="guildClearTime">{{ $kill->fight_time/1000  }}</td>
+                            <td><a class="guildClearTime" href="{{ URL::to("/progress/kill/") . "/" . $kill->id }}">{{ $kill->fight_time/1000  }}</a></td>
                         </tr>
                     @endforeach
                 </table>

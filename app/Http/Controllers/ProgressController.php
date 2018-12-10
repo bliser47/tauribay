@@ -53,6 +53,67 @@ class ProgressController extends Controller
         return view("progress", compact("data", 'shortRealms'));
     }
 
+    public function killFrom(Request $_request)
+    {
+        if ($_request->has("log_id") && $_request->has("type") ) {
+
+            $kill = Encounter::where("id", "=", $_request->get("log_id"))->first();
+
+            $type = $_request->get("type");
+            switch($type)
+            {
+                case 0:
+
+                    return view("progress_kill_data", compact("kill"));
+                    break;
+
+                case 1:
+                case 2:
+
+                    $api = new Tauri\ApiClient();
+
+                    $raidLog = $api->getRaidLog(self::REALM_NAMES[$kill->realm_id], $kill->log_id);
+                    $members = $raidLog["response"]["members"];
+                    usort($members,function($m1,$m2){
+                        return $m1["dmg_done"] < $m2["dmg_done"];
+                    });
+
+                    $totalDmg = 0;
+                    foreach ( $members as $key => $member )
+                    {
+                        $dmg = $member["dmg_done"];
+                        $totalDmg += $dmg;
+
+                        $dps = $dmg/($kill->fight_time/1000);
+                        if ( $dps > 999 )
+                        {
+                            $x = round($dps);
+                            $x_number_format = number_format($x);
+                            $x_array = explode(',', $x_number_format);
+                            $x_parts = array('k', 'm', 'b', 't');
+                            $x_count_parts = count($x_array) - 1;
+                            $x_display = $x;
+                            $x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
+                            $x_display .= $x_parts[$x_count_parts - 1];
+                            $members[$key]["dps"] = $x_display;
+                        }
+                        else
+                        {
+                            $members[$key]["dps"] = $dps;
+                        }
+                    }
+                    return view("progress_kill_data_" . $type , compact("kill", "members", "totalDmg"));
+
+
+                break;
+
+                default:
+                    return "";
+                    break;
+            }
+        }
+    }
+
     public function killsFrom(Request $_request)
     {
         if ( $_request->has("map_id")) {
@@ -66,12 +127,14 @@ class ProgressController extends Controller
                     $encounter = Encounter::where("encounter_id", "=", $encountersId2)
                         ->whereIn("difficulty_id", array(5, 6))
                         ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
+                        ->select(array("encounters.id as id","encounters.encounter_id as encounter_id","encounters.realm_id as realm","guilds.faction as faction","encounters.fight_time as fight_time","guilds.name as name"))
                         ->orderBy("fight_time")->first();
 
                     if ($encounter && $encounter->realm !== null) {
                         $encounters[] = array(
+                            "actualId" => $encounter->id,
                             "id" => $encounter->encounter_id,
-                            "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
+                            "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
                             "faction" => $encounter->faction,
                             "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"] . ( $encountersId2 == 1581 ? " (25)" : ""),
                             "guild" => $encounter->name,
@@ -84,8 +147,9 @@ class ProgressController extends Controller
                         if ($encounter && $encounter->realm_id !== null) {
                             // Find the fastest pug?
                             $encounters[] = array(
+                                "actualId" => $encounter->id,
                                 "id" => $encounter->encounter_id,
-                                "realm" => self::SHORT_REALM_NAMES[$encounter->realm_id],
+                                "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
                                 "faction" => -1,
                                 "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
                                 "guild" => "Random",
@@ -100,13 +164,30 @@ class ProgressController extends Controller
         return "";
     }
 
+
+    public function kill(Request $_request, $logid)
+    {
+        $datas = array(
+            "DPS" => array(
+                "id" => 1
+            ),
+            "Fight" => array(
+                "id" => 0
+            ),
+        );
+
+        return view("progress_kill", compact("datas","logid"));
+    }
+
     public function kills2encounter(Request $_request, $_encounter_id)
     {
         $bossName = Encounter::ENCOUNTER_IDS[$_encounter_id]["name"];
         $boss_kills = Encounter::where("encounter_id", "=", $_encounter_id)
                     ->whereIn("difficulty_id", array(5,6))
                     ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                    ->orderBy("fight_time","asc")->paginate(16);
+                     ->select(array("encounters.id as id","guilds.realm as realm_id","guilds.name as name","encounters.fight_time as fight_time","guilds.faction as faction"))
+                    ->orderBy("fight_time","asc")
+                    ->paginate(16);
 
         $shortRealms = self::SHORT_REALM_NAMES;
         $longRealms = self::REALM_NAMES;

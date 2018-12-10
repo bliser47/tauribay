@@ -16,7 +16,7 @@
                 @endif
             </td>
             <td>{{ $encounter["guild"] }}</td>
-            <td class="guildClearTime">{{ $encounter["time"]/1000 }}</td>
+            <td><a class="guildClearTime" href="{{ URL::to("/progress/kill/") . "/" . $encounter["actualId"] }}">{{ $encounter["time"]/1000 }}</a></td>
         </tr>
     @endforeach
 </table>
