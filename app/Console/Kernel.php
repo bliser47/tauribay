@@ -4,7 +4,6 @@ namespace TauriBay\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use TauriBay\TopItemLevels;
 
 class Kernel extends ConsoleKernel
 {

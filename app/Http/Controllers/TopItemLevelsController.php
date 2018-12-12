@@ -71,7 +71,7 @@ class TopItemLevelsController extends Controller
                 $characterSheetResponse = $characterSheet["response"];
                 $characterItemLevel = $characterSheetResponse["avgitemlevel"];
                 if ($character === null) {
-                    $character = new TopItemLevels;
+                    $character = new Characters;
                     $character->name = ucfirst(strtolower($_name));
                     $character->ilvl = $characterItemLevel;
                     $character->created_at = Carbon::now();
