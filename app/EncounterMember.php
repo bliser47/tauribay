@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: thoma
- * Date: 12/13/2018
- * Time: 12:06 AM
- */
+
+namespace TauriBay;
 
 use Illuminate\Database\Eloquent\Model;
 

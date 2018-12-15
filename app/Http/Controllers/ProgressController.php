@@ -2,14 +2,15 @@
 
 namespace TauriBay\Http\Controllers;
 
+use TauriBay\Characters;
 use TauriBay\Encounter;
+use TauriBay\EncounterMember;
 use TauriBay\GuildProgress;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
 use TauriBay\Tauri;
 use DB;
 use Carbon\Carbon;
-use EncounterMember;
 
 class ProgressController extends Controller
 {
@@ -31,6 +32,10 @@ class ProgressController extends Controller
         $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
         $realmName = self::REALM_NAMES[$realmId];
 
+        $raidLog = $api->getRaidLog(self::REALM_NAMES[0], 1135);
+
+
+        /*
         $latestRaids = $api->getRaidLast($realmName);
 
         $start = "\"response\":{\"logs\":[{";
@@ -43,11 +48,14 @@ class ProgressController extends Controller
         $logs = explode($delimiter,$logs);
 
         return "{".$logs[0]."}";
+        */
+
+        return json_encode($raidLog);
     }
 
     public function index(Request $_request)
     {
-        $data = DB::table('encounters')->where('created_at','>',Carbon::now()->subDays(14))->paginate(16);
+        $data = DB::table('encounters')->orderBy("created_at","desc")->paginate(16);
         $shortRealms = self::SHORT_REALM_NAMES;
         return view("progress", compact("data", 'shortRealms'));
     }
@@ -289,12 +297,35 @@ class ProgressController extends Controller
 
                 $raidLog = $api->getRaidLog(self::REALM_NAMES[$encounter->realm_id], $encounter->log_id);
                 $members = $raidLog["response"]["members"];
-                foreach ( $members as $member )
+                foreach ( $members as $memberData )
                 {
+                    $member = new EncounterMember;
+                    $member->encounter_id = $encounter->id;
 
+                    $memberName = $memberData["name"];
+                    $character = Characters::where("realm", "=", $encounter->realm_id)->where("name", "=", $memberName)->first();
+                    if ( $character == null )
+                    {
+                        $character = TopItemLevelsController::AddCharacter($api, $memberName, $encounter->realm_id, 0);
+                    }
+                    if ( $character ) {
+                        $member->character_id = $character->id;
+                        $member->spec = $memberData["spec"];
+                        $member->damage_done = $memberData["dmg_done"];
+                        $member->damage_taken = $memberData["dmg_taken"];
+                        $member->damage_absorb = $memberData["dmg_absorb"];
+                        $member->heal_done = $memberData["heal_done"];
+                        $member->absorb_done = $memberData["absorb_done"];
+                        $member->overheal = $memberData["overheal"];
+                        $member->heal_taken = $memberData["heal_taken"];
+                        $member->interrupts = $memberData["interrupts"];
+                        $member->dispells = $memberData["dispells"];
+                        $member->ilvl = $memberData["ilvl"];
+
+                        $member->save();
+                    }
                 }
             }
-
         }
     }
 
