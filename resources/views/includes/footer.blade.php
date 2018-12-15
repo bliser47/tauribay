@@ -3,7 +3,7 @@
 <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=170') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=171') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script>
@@ -48,6 +48,14 @@
             $(".wrapper").fadeTo(500,1);
         });
     });
+</script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30988835-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-30988835-1');
 </script>
 <script>
     window['_fs_debug'] = false;

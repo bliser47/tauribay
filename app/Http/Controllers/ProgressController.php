@@ -4,13 +4,12 @@ namespace TauriBay\Http\Controllers;
 
 use TauriBay\Encounter;
 use TauriBay\GuildProgress;
-use Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
 use TauriBay\Tauri;
 use DB;
 use Carbon\Carbon;
+use EncounterMember;
 
 class ProgressController extends Controller
 {
@@ -277,6 +276,27 @@ class ProgressController extends Controller
         GuildProgress::reCalculateProgressionForAll();
     }
 
+    public function updateRaidMembers(Request $_request)
+    {
+        $api = new Tauri\ApiClient();
+
+        $encounters = Encounter::all();
+        foreach ( $encounters as $encounter )
+        {
+            $anyMember = EncounterMember::where("encounter_id", "=", $encounter->id)->first();
+            if ( $anyMember == null )
+            {
+
+                $raidLog = $api->getRaidLog(self::REALM_NAMES[$encounter->realm_id], $encounter->log_id);
+                $members = $raidLog["response"]["members"];
+                foreach ( $members as $member )
+                {
+
+                }
+            }
+
+        }
+    }
 
     public function updateRaids(Request $_request)
     {
