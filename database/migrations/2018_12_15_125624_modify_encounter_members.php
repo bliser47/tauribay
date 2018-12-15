@@ -15,7 +15,6 @@ class ModifyEncounterMembers extends Migration
     {
         Schema::table('encounter_members', function($table) {
             $table->dropForeign('character_id');
-            $table->dropColumn('character_id');
             $table->integer('realm_id');
             $table->integer('class');
             $table->string('name');
