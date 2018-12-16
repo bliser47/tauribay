@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ModifyEncounterMembers extends Migration
+class AddUniqueToEncounterMembers extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,7 @@ class ModifyEncounterMembers extends Migration
     public function up()
     {
         Schema::table('encounter_members', function($table) {
-            $table->dropColumn('character_id');
-            $table->integer('realm_id');
-            $table->integer('class');
-            $table->string('name');
+            $table->unique(['encounter_id','name']);
         });
     }
 
@@ -29,10 +26,7 @@ class ModifyEncounterMembers extends Migration
     public function down()
     {
         Schema::table('encounter_members', function($table) {
-            $table->integer('character_id')->references('id')->on('characters');
-            $table->dropColumn('realm_id');
-            $table->dropColumn('class');
-            $table->dropColumn('name');
+            $table->dropUnique(['encounter_id','name']);
         });
     }
 }

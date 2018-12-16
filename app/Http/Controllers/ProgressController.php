@@ -9,6 +9,7 @@ use TauriBay\GuildProgress;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
 use TauriBay\Tauri;
+use TauriBay\Tauri\CharacterClasses;
 use DB;
 use Carbon\Carbon;
 
@@ -60,68 +61,8 @@ class ProgressController extends Controller
         return view("progress", compact("data", 'shortRealms'));
     }
 
+
     public function killFrom(Request $_request)
-    {
-        if ($_request->has("log_id") && $_request->has("type") ) {
-
-            $kill = Encounter::where("id", "=", $_request->get("log_id"))->first();
-
-            $type = $_request->get("type");
-            switch($type)
-            {
-                case 0:
-
-                    return view("progress_kill_data", compact("kill"));
-                    break;
-
-                case 1:
-                case 2:
-
-                    $api = new Tauri\ApiClient();
-
-                    $raidLog = $api->getRaidLog(self::REALM_NAMES[$kill->realm_id], $kill->log_id);
-                    $members = $raidLog["response"]["members"];
-                    usort($members,function($m1,$m2){
-                        return $m1["dmg_done"] < $m2["dmg_done"];
-                    });
-
-                    $totalDmg = 0;
-                    foreach ( $members as $key => $member )
-                    {
-                        $dmg = $member["dmg_done"];
-                        $totalDmg += $dmg;
-
-                        $dps = $dmg/($kill->fight_time/1000);
-                        if ( $dps > 999 )
-                        {
-                            $x = round($dps);
-                            $x_number_format = number_format($x);
-                            $x_array = explode(',', $x_number_format);
-                            $x_parts = array('k', 'm', 'b', 't');
-                            $x_count_parts = count($x_array) - 1;
-                            $x_display = $x;
-                            $x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
-                            $x_display .= $x_parts[$x_count_parts - 1];
-                            $members[$key]["dps"] = $x_display;
-                        }
-                        else
-                        {
-                            $members[$key]["dps"] = $dps;
-                        }
-                    }
-                    return view("progress_kill_data_" . $type , compact("kill", "members", "totalDmg"));
-
-
-                    break;
-
-                default:
-                    return "";
-                    break;
-            }
-        }
-    }
-
-    public function killFromNew(Request $_request)
     {
         if ($_request->has("log_id") && $_request->has("type") ) {
 
@@ -141,7 +82,6 @@ class ProgressController extends Controller
 
                     $members = EncounterMember::where("encounter_id", "=", $kill->id)
                         ->orderBy("damage_done","desc")
-                        ->leftJoin('characters', 'characters.id', '=', 'encounter_members.character_id')
                         ->get();
 
                     $totalDmg = 0;
@@ -168,7 +108,13 @@ class ProgressController extends Controller
                             $member->dps = $dps;
                         }
                     }
-                    return view("progress_kill_data_" . $type , compact("kill", "members", "totalDmg"));
+
+
+                $realms = self::REALM_NAMES;
+                $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+                $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+
+                return view("progress_kill_data_" . $type , compact("kill", "members", "totalDmg","characterClasses","classSpecs","realms"));
 
 
                 break;
@@ -345,38 +291,44 @@ class ProgressController extends Controller
 
     public function updateRaidMembers(Request $_request)
     {
+        set_time_limit(0);
+
         $api = new Tauri\ApiClient();
 
         $lastMember = EncounterMember::orderBy('created_at', 'desc')->first();
-        $encounters = $lastMember == null ? Encounter::all() : Encounter::where("id", ">=", $lastMember->encounter_id)->get();
+        $encounters = $lastMember == null ? Encounter::all() : Encounter::where("members_processed", "=", false)->get();
         foreach ( $encounters as $encounter )
         {
-            $anyMember = EncounterMember::where("encounter_id", "=", $encounter->id)->first();
-            if ( $anyMember == null )
+            EncounterMember::where("encounter_id", "=", $encounter->id)->delete();
+            $raidLog = $api->getRaidLog(self::REALM_NAMES[$encounter->realm_id], $encounter->log_id);
+            $members = $raidLog["response"]["members"];
+            $i = 0;
+            foreach ( $members as $memberData )
             {
+                $member = new EncounterMember;
+                $member->encounter_id = $encounter->id;
+                $member->realm_id = $encounter->realm_id;
+                $member->name = $memberData["name"];
+                $member->class = $memberData["race"];
+                $member->spec = $memberData["spec"];
+                $member->damage_done = $memberData["dmg_done"];
+                $member->damage_taken = $memberData["dmg_taken"];
+                $member->damage_absorb = $memberData["dmg_absorb"];
+                $member->heal_done = $memberData["heal_done"];
+                $member->absorb_done = $memberData["absorb_done"];
+                $member->overheal = $memberData["overheal"];
+                $member->heal_taken = $memberData["heal_taken"];
+                $member->interrupts = $memberData["interrupts"];
+                $member->dispells = $memberData["dispells"];
+                $member->ilvl = $memberData["ilvl"];
+                $member->save();
 
-                $raidLog = $api->getRaidLog(self::REALM_NAMES[$encounter->realm_id], $encounter->log_id);
-                $members = $raidLog["response"]["members"];
-                foreach ( $members as $memberData )
-                {
-                    $member = new EncounterMember;
-                    $member->encounter_id = $encounter->id;
-                    $member->realm_id = $encounter->realm_id;
-                    $member->name = $memberData["name"];
-                    $member->class = $memberData["race"];
-                    $member->spec = $memberData["spec"];
-                    $member->damage_done = $memberData["dmg_done"];
-                    $member->damage_taken = $memberData["dmg_taken"];
-                    $member->damage_absorb = $memberData["dmg_absorb"];
-                    $member->heal_done = $memberData["heal_done"];
-                    $member->absorb_done = $memberData["absorb_done"];
-                    $member->overheal = $memberData["overheal"];
-                    $member->heal_taken = $memberData["heal_taken"];
-                    $member->interrupts = $memberData["interrupts"];
-                    $member->dispells = $memberData["dispells"];
-                    $member->ilvl = $memberData["ilvl"];
-                    $member->save();
-                }
+                ++$i;
+            }
+            if ( $encounter->member_count == $i )
+            {
+                $encounter->members_processed = true;
+                $encounter->save();
             }
         }
     }

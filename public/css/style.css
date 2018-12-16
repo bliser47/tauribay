@@ -888,7 +888,7 @@ a.changelog:hover
 
 .memberDataContainer
 {
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.65);
 }
 
 .memberDataContainerFirst
@@ -897,16 +897,25 @@ a.changelog:hover
 }
 .memberDataContainer .memberDataWidthContainer
 {
-    height:32px;
+    height:30px;
     position: relative;
     border-bottom:2px solid rgba(0,0,0,0.5);
 }
 
-.memberName
+.memberName, .memberPosition
 {
     color:#fff;
     position: absolute;
-    left:10px;
+}
+
+.memberPosition
+{
+    left:35px;
+}
+
+.memberName
+{
+    left:70px;
 }
 
 .memberData
@@ -918,15 +927,37 @@ a.changelog:hover
 
 .memberDataWidth
 {
-    height:30px;
+    height:28px;
     position: absolute;
 }
 
-.memberData, .memberName
+.memberData, .memberName, .memberPosition
 {
-    line-height: 30px;
+    line-height: 28px;
     font-size:15px;
     font-weight:bold;
-    text-shadow: 1px 0px 5px #000, 0px 1px 1px #000;
+    text-shadow: 0px 0px 3px #000, 0px 0px 3px #000;
     z-index: 5;
+}
+
+.memberSpec
+{
+    position: absolute;
+    width:28px;
+    height:28px;
+    background-position: -2px -2px;
+    border-right:2px solid rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+.memberSpec img
+{
+    position: relative;
+    left: -2px;
+    top: -2px;
+}
+
+.memberName a, .memberName:hover
+{
+    color:#fff;
 }

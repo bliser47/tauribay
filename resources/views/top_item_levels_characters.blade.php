@@ -5,7 +5,7 @@
         <td> {{ $realmsShort[$character->realm]  }}</td>
         <td> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$character->realm] }}&n={{ $character->name }}"> {{ $character->name }} </a></td>
         <td class="faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
-        <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
+        <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png?v=2") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
         <td class="topItemLevel {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnActive'  : 'columnInactive'}}"> {{ $character->ilvl }}  </td>
         <td class="topAchievementPoints {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnInactive'  : 'columnActive'}}"> {{ $character->achievement_points }}  </td>
         <td>
@@ -21,7 +21,7 @@
     <tr id="character{{$character->id}}" class="rowMobile charRow factionRow faction-{{ $character->faction  }}-row">
         <td><b>{{ (($characters->currentPage()-1)*16)+$nr+1  }}</b></td>
         <td> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$character->realm] }}&n={{ $character->name }}"> {{ $character->name }} </a></td>
-        <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
+        <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png?v=2") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
         <td class="topItemLevel {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnActive'  : 'columnInactive'}}"> {{ $character->ilvl }}  </td>
         <td class="topAchievementPoints {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnInactive'  : 'columnActive'}}"> {{ $character->achievement_points }}  </td>
     </tr>
