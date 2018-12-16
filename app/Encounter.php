@@ -115,7 +115,7 @@ class Encounter extends Model
         return "";
     }
 
-    public static function store($_data, $_realmId)
+    public static function store($api, $_data, $_realmId)
     {
         $result = array(
             "result" => false
@@ -146,6 +146,8 @@ class Encounter extends Model
                 $encounter->item_count = $_data["item_count"];
                 $encounter->save();
 
+                self::updateEncounterMembers($api, $encounter);
+
                 $result["result"] = true;
             }
             else
@@ -158,5 +160,40 @@ class Encounter extends Model
             $result["error"] = "Log_id missing: " . $logId;
         }
         return $result;
+    }
+
+    public static function updateEncounterMembers($api, $encounter)
+    {
+        EncounterMember::where("encounter_id", "=", $encounter->id)->delete();
+        $raidLog = $api->getRaidLog(self::REALM_NAMES[$encounter->realm_id], $encounter->log_id);
+        $members = $raidLog["response"]["members"];
+        $i = 0;
+        foreach ( $members as $memberData )
+        {
+            $member = new EncounterMember;
+            $member->encounter_id = $encounter->id;
+            $member->realm_id = $encounter->realm_id;
+            $member->name = $memberData["name"];
+            $member->class = $memberData["race"];
+            $member->spec = $memberData["spec"];
+            $member->damage_done = $memberData["dmg_done"];
+            $member->damage_taken = $memberData["dmg_taken"];
+            $member->damage_absorb = $memberData["dmg_absorb"];
+            $member->heal_done = $memberData["heal_done"];
+            $member->absorb_done = $memberData["absorb_done"];
+            $member->overheal = $memberData["overheal"];
+            $member->heal_taken = $memberData["heal_taken"];
+            $member->interrupts = $memberData["interrupts"];
+            $member->dispells = $memberData["dispells"];
+            $member->ilvl = $memberData["ilvl"];
+            $member->save();
+
+            ++$i;
+        }
+        if ( $encounter->member_count == $i )
+        {
+            $encounter->members_processed = true;
+            $encounter->save();
+        }
     }
 }

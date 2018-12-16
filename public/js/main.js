@@ -487,32 +487,5 @@ $(function()
                 });
             }
         });
-    })
-
-    $(".encounter_loading").each(function()
-    {
-        var loader = $(this);
-        $.ajax({
-            type: "POST",
-            url: URL_WEBSITE + "/progress/killFrom",
-            data: {
-                "log_id" : $(this).data("logid"),
-                "type" : $(this).data("type")
-            },
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response)
-            {
-                $(loader).html(response);
-
-                var first = $(loader).find(".memberDataContainerFirst .memberDataWidth").data("current");
-
-                $(loader).find(".memberDataWidth").each(function(){
-                    $(this).css("width",($(this).data("current")/first*100)+"%");
-                })
-            }
-        });
-    })
-
+    });
 });

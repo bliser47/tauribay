@@ -117,5 +117,10 @@
   "Örömmel jelentem be, hogy a progress oldal első rész kész van!" : "I am pleased to announce that the first part of the progress page is complete!",
   "A szerver összes guildjének ToT (HC) progressje:" : "The ToT (HC) progress of all guilds on the server:",
   "A content legjobb boss kill idői:" : "The best kill times from the current content:",
-  "Hamarosan a progress oldal sokkal több statisztikával bővűl!" : "Even more statistics to come!"
+  "Hamarosan a progress oldal sokkal több statisztikával bővűl!" : "Even more statistics to come!",
+
+  "Időtartam" : "Time",
+  "Összes halál" : "Total deaths",
+  "Halálok" : "Deaths",
+  "Wipe-ok" : "Wipes"
 }

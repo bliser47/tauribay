@@ -922,7 +922,18 @@ a.changelog:hover
 {
     color:#fff;
     position: absolute;
+}
+
+.memberData2
+{
     right:10px;
+}
+
+.memberData1
+{
+    font-weight:normal !important;
+    text-shadow: 0px 0px 2px #000, 0px 0px 2px #000 !important;
+    right:90px;
 }
 
 .memberDataWidth
@@ -960,4 +971,9 @@ a.changelog:hover
 .memberName a, .memberName:hover
 {
     color:#fff;
+}
+
+.table-encounter
+{
+    border-bottom:1px solid #ddd !Important;
 }
