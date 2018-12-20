@@ -154,7 +154,7 @@ class ProgressController extends Controller
                 (
                     "encounters.id as id",
                     "encounters.encounter_id as encounter_id",
-                    "guilds.realm as realm_id",
+                    "encounters.realm_id as realm_id",
                     "guilds.name as name",
                     "encounters.fight_time as fight_time",
                     "guilds.faction as faction",
@@ -205,7 +205,7 @@ class ProgressController extends Controller
         $boss_kills = Encounter::where("encounter_id", "=", $_encounter_id)
                     ->whereIn("difficulty_id", array(5,6))
                     ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                     ->select(array("encounters.id as id","guilds.realm as realm_id","guilds.name as name","encounters.fight_time as fight_time","guilds.faction as faction"))
+                     ->select(array("encounters.id as id","encounters.realm_id as realm_id","guilds.name as name","encounters.fight_time as fight_time","guilds.faction as faction"))
                     ->orderBy("fight_time","asc")
                     ->paginate(16);
 
