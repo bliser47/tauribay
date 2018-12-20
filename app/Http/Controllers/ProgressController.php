@@ -157,7 +157,7 @@ class ProgressController extends Controller
                 (
                     "encounters.id as id",
                     "encounters.encounter_id as encounter_id",
-                    "encounters.realm_idgit  as realm_id",
+                    "encounters.realm_id as realm_id",
                     "guilds.name as name",
                     "encounters.fight_time as fight_time",
                     "guilds.faction as faction",
