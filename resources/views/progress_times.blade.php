@@ -15,7 +15,13 @@
                     <img src="{{ URL::asset("img/factions/small/" . ($encounter["faction"] == 1 ? 1 : 2) . ".png") }}" alt=""/>
                 @endif
             </td>
-            <td>{{ $encounter["guild"] }}</td>
+            <td>
+                @if ( strlen($encounter["guild"]) )
+                    <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $encounter["realmLong"] }}&gn={{ $encounter["guild"]}}">{{ $encounter["guild"] }}</a>
+                @else
+                    Random
+                @endif
+            </td>
             <td><a class="guildClearTime" href="{{ URL::to("/progress/kill/") . "/" . $encounter["actualId"] }}">{{ $encounter["time"]/1000 }}</a></td>
         </tr>
     @endforeach

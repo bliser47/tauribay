@@ -86,6 +86,7 @@ class ProgressController extends Controller
                             "actualId" => $encounter->id,
                             "id" => $encounter->encounter_id,
                             "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
+                            "realmLong" => self::REALM_NAMES[$encounter->realm],
                             "faction" => $encounter->faction,
                             "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"] . ($encountersId2 == 1581 ? " (25)" : ""),
                             "guild" => $encounter->name,
@@ -101,6 +102,7 @@ class ProgressController extends Controller
                                 "actualId" => $encounter->id,
                                 "id" => $encounter->encounter_id,
                                 "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
+                                "realmLong" => self::REALM_NAMES[$encounter->realm],
                                 "faction" => -1,
                                 "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
                                 "guild" => "Random",
@@ -110,6 +112,7 @@ class ProgressController extends Controller
                     }
                 }
             }
+
             return view("progress_times", compact("encounters"));
         }
         return "";
@@ -154,7 +157,7 @@ class ProgressController extends Controller
                 (
                     "encounters.id as id",
                     "encounters.encounter_id as encounter_id",
-                    "encounters.realm_id as realm_id",
+                    "encounters.realm_idgit  as realm_id",
                     "guilds.name as name",
                     "encounters.fight_time as fight_time",
                     "guilds.faction as faction",
