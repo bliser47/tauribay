@@ -35,6 +35,7 @@
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
                 <li class="{{ Request::path() == 'progress/guild' ? 'active' : '' }}"><a href="/progress/guild">{{ __("Guild progress") }}</a></li>
                 <li class="{{ Request::path() == 'progress/kills' ? 'active' : '' }}"><a href="/progress/kills">{{ __("PVE Ladder") }}</a></li>
+                <li class="{{ Request::path() == 'progress/damage' ? 'active' : '' }}"><a href="/progress/damage">{{ __("Damage Ladder") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())

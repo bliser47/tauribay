@@ -27,6 +27,8 @@ class ProgressController extends Controller
         2 => "Evermoon"
     );
 
+    const INVALID_RAIDS = array(43718);
+
     public function debug(Request $_request)
     {
         $api = new Tauri\ApiClient();
@@ -74,6 +76,7 @@ class ProgressController extends Controller
                 foreach ($encountersIds as $encountersId2) {
                     $encounter = Encounter::where("encounter_id", "=", $encountersId2)
                         ->whereIn("difficulty_id", array(5, 6))
+                        ->whereNotIn("encounters.id", self::INVALID_RAIDS)
                         ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
                         ->select(array("encounters.id as id", "encounters.encounter_id as encounter_id", "encounters.realm_id as realm", "guilds.faction as faction", "encounters.fight_time as fight_time", "guilds.name as name"))
                         ->orderBy("fight_time")->first();
@@ -210,6 +213,11 @@ class ProgressController extends Controller
         $longRealms = self::REALM_NAMES;
 
         return view("progress_kills_boss", compact("boss_kills", "shortRealms", "longRealms", "bossName"));
+    }
+
+    public function damage(Request $request)
+    {
+        return view("progress_damage");
     }
 
     public function kills2(Request $_request)

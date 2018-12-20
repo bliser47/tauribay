@@ -59,6 +59,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/bg', 'BattlegroundController@index');
     Route::get('/top', 'TopItemLevelsController@index');
     Route::get('/progress', 'ProgressController@index');
+    Route::get('/progress/damage', 'ProgressController@damage');
     Route::get('/progress/guild', 'ProgressController@guild');
     Route::get('/progress/kills', 'ProgressController@kills2');
     Route::get('/progress/kills/{encounter_id}', 'ProgressController@kills2encounter');

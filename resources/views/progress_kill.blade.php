@@ -34,7 +34,7 @@
             <div class="panel panel-default nomargin">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="home-main-tab active" role="presentation"><a href="#fightDataDamage" aria-controls="fightDataDamage" role="tab" data-toggle="tab">Damage</a></li>
-                    <li class="home-main-tab disabled" role="presentation"><a>Healing</a></li>
+                    <li class="home-main-tab" role="presentation"><a href="#fightDataHealing" aria-controls="fightDataHealingg" role="tab" data-toggle="tab">Healing</a></li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="fightDataDamage">
@@ -55,7 +55,6 @@
                             </div>
                         @endforeach
                     </div>
-                    {{--
                     <div role="tabpanel" class="tab-pane" id="fightDataHealing">
                         @foreach ( $membersHealing as $member )
                             <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
@@ -75,7 +74,6 @@
                         @endforeach
                         </div>
                     </div>
-                    --}}
                 </div>
             </div>
         </div>
