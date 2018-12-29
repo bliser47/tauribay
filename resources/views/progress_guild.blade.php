@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="input-group col-md-12">
+                            <div class="form-group col-md-12">
                                 <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
                                     {{ __("Szűrés") }}
                                 </button>

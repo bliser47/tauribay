@@ -1,5 +1,5 @@
 .backLoaded {
-    background: url('../img/back.jpg') no-repeat center center fixed;
+    background: url('../img/back.jpg?v=1') no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -271,7 +271,6 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 .container {
     max-width:1024px;
     border-radius:4px;
-    padding:15px;
 }
 
 .well {
@@ -787,17 +786,17 @@ a.changelog:hover
 
 }
 
-.faction-1-row a[href]
+.faction-1 a[href]
 {
     color: #a82e1c;
 }
 
-.faction-2-row a[href]
+.faction-2 a[href]
 {
     color: #323cb2;
 }
 
-.tab-content .table
+.panel .table
 {
     margin-bottom:0px;
 }

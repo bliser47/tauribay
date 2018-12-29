@@ -14,22 +14,18 @@
                         <th>{{ __("Nr.") }}</th>
                         <th>{{ __("Realm") }}</th>
                         <th>{{ __("Guild") }}</th>
-                        <th>{{ __("Frakció") }}</th>
                         <th>{{ __("Idő") }}</th>
                     </tr>
                     @foreach ( $boss_kills as $kill )
-                        <tr class="progressRow">
+                        <tr class="progressRow" >
                             <td> {{ (($boss_kills->currentPage()-1)*16)+$loop->index+1}} </td>
                             <td> {{ $shortRealms[$kill->realm_id] }} </td>
-                            <td>
+                            <td class="faction-{{ $kill->faction  }}>
                                 @if ( strlen($kill->name) )
                                     <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $longRealms[$kill->realm_id] }}&gn={{ $kill->name }}">{{ $kill->name }}</a>
                                 @else
                                     Random
                                 @endif
-                            </td>
-                            <td class="faction-{{ $kill->faction  }}">
-                                <img src="{{ URL::asset("img/factions/small/" . ($kill->faction == 1 ? 1 : 2) . ".png") }}" alt=""/>
                             </td>
                             <td><a class="guildClearTime" href="{{ URL::to("/progress/kill/") . "/" . $kill->id }}">{{ $kill->fight_time/1000  }}</a></td>
                         </tr>

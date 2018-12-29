@@ -61,7 +61,12 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/progress', 'ProgressController@index');
     Route::get('/progress/damage', 'ProgressController@damage');
     Route::get('/progress/guild', 'ProgressController@guild');
-    Route::get('/progress/kills', 'ProgressController@kills2');
+
+    Route::get('/progress/kills', 'ProgressController@pveLadder');
+    Route::get('/progress/pve', 'ProgressController@pveLadder');
+    Route::get('/progress/expansionRaids/{expansion_id}', 'ProgressController@getExpansionRaids');
+
+
     Route::get('/progress/kills/{encounter_id}', 'ProgressController@kills2encounter');
     Route::get('/progress/kill/{log_id}', 'ProgressController@kill');
     Route::post('/progress/killsFrom', 'ProgressController@killsFrom');

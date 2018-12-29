@@ -17,7 +17,7 @@
                             {!! Form::open(array("method" => "get","id"=>"characters-form")) !!}
 
 
-                            <div class="form-group col-md-6 nopadding-left">
+                            <div class="form-group col-md-6">
                                 <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-6 nopadding-right">
+                            <div class="form-group col-md-6">
                                 <legend> {{ __("Hirdető szándéka") }}</legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-intent">
@@ -63,7 +63,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group class-checkboxes">
+                            <div class="form-group col-md-12 class-checkboxes">
                                 <legend> {{ __("Kaszt") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-warrior checkbox-white-tick checkbox-class">
@@ -116,16 +116,16 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="input-group col-md-12">
-                                <input type="text" class="form-control" name="search" value="{!! Input::get('search') !!}" placeholder="{{ __("Keresés a hirdetésben...") }}">
-                                  <span class="input-group-btn">
-                                    <button class="btn btn-success" name="filter" value="1" type="submit">
-                                        {{ __("Szűrés") }}
-                                    </button>
-                                  </span>
+                            <div class="form-group  col-md-12">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="search" value="{!! Input::get('search') !!}" placeholder="{{ __("Keresés a hirdetésben...") }}">
+                                      <span class="input-group-btn">
+                                        <button class="btn btn-success" name="filter" value="1" type="submit">
+                                            {{ __("Szűrés") }}
+                                        </button>
+                                      </span>
+                                </div>
                             </div>
-
                             {!! Form::close() !!}
                         </div>
                     </div>

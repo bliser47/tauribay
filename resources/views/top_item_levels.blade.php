@@ -30,7 +30,7 @@
                         <div class="panel-body">
                             <div class="loader"></div>
                             {!! Form::open(array("method" => "post","id"=>"newcharacter-form")) !!}
-                            <div class="form-group">
+                            <div class="form-group col-md-12">
                                 <h4> {{ __("1. Válaszd ki a realmet!") }} </h4>
                                 <div class="input-group col-md-12">
                                     {!! Form::select('realm', $realms, null, ['required', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz realmet")]); !!}
@@ -42,8 +42,8 @@
                                     <input type="text" class="form-control" name="name" value="{!! Input::get('name') !!}" placeholder="{{ __("Karakter neve") }}">
                                 </div>
                             </div>
-                             <input name="fromAdd" type="hidden" value="1"/>
-                            <div class="input-group col-md-12">
+                            <input name="fromAdd" type="hidden" value="1"/>
+                            <div class="form-group col-md-12">
                                 <button class="btn btn-block btn-success" name="add" value="1" type="submit">
                                     {{ __("Hozzáadás") }}
                                 </button>
@@ -161,13 +161,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="input-group col-md-12">
-                                <input type="text" class="form-control" name="search" value="{!! Input::get('search') !!}" placeholder="{{ __("Karakter neve...") }}">
-                                <span class="input-group-btn">
-                                    <button id="top-filter-submit" class="btn btn-success" name="filter" value="1" type="submit">
-                                        {{ __("Szűrés") }}
-                                    </button>
-                                  </span>
+                            <div class="form-group  col-md-12">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="search" value="{!! Input::get('search') !!}" placeholder="{{ __("Karakter neve...") }}">
+                                    <span class="input-group-btn">
+                                        <button id="top-filter-submit" class="btn btn-success" name="filter" value="1" type="submit">
+                                            {{ __("Szűrés") }}
+                                        </button>
+                                      </span>
+                                </div>
                             </div>
                             {!! Form::close() !!}
                         </div>

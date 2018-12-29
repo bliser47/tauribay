@@ -464,22 +464,56 @@ $(function()
     }
     bs_input_file();
 
-    $(".encounters_loading").each(function()
+    var currentExpansion = $("#expansion").val();
+    $("#expansions-container .selectpicker").change(function()
     {
-        var loader = $(this);
+        var set = $(this).val();
+        if ( set != currentExpansion )
+        {
+            currentExpansion = set;
+            var mapsContainer = $("#maps-container");
+            var selectPicker = mapsContainer.find(".selectpicker");
+            selectPicker.attr('disabled', true);
+            selectPicker.val(0);
+            selectPicker.selectpicker('refresh');
+            $.ajax({
+                type: "GET",
+                url: URL_WEBSITE + "/progress/expansionRaids/" + set,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(raidsSelectHTML)
+                {
+                    mapsContainer.html(raidsSelectHTML);
+                    selectPicker = mapsContainer.find(".selectpicker");
+                    selectPicker.selectpicker('refresh');
+                }
+            });
+        }
+    });
+
+    $(".encounters_loading").hide();
+    $("#pve-ladder-form").submit(function(e){
+        e.preventDefault();
+        var container = $("#map-loading-container");
+        container.html("");
+        var loader = $(".encounters_loading");
+        loader.show();
+        $("#pve-ladder-filter").attr("disabled",true);
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/progress/killsFrom",
-            data: {
-                "map_id" : $(this).data("mapid")
-            },
+            data: $(this).serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function(response)
             {
-                $(loader).html(response);
-                $(loader).find(".guildClearTime").each(function () {
+                $("#pve-ladder-filter").attr("disabled",false);
+
+                $(loader).hide();
+                $(container).html(response);
+                $(container).find(".guildClearTime").each(function () {
                     var time = $(this).html();
                     if ( time.length > 0 ) {
                         $(this).html((parseInt(time)).toString().toHHMMSS());
@@ -488,4 +522,8 @@ $(function()
             }
         });
     });
+    if ( $("#pve-ladder-form") )
+    {
+        $("#pve-ladder-form").submit();
+    }
 });
