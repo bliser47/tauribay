@@ -20,7 +20,7 @@
                         <tr class="progressRow" >
                             <td> {{ (($boss_kills->currentPage()-1)*16)+$loop->index+1}} </td>
                             <td> {{ $shortRealms[$kill->realm_id] }} </td>
-                            <td class="faction-{{ $kill->faction  }}>
+                            <td class="faction-{{ $kill->faction  }}">
                                 @if ( strlen($kill->name) )
                                     <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $longRealms[$kill->realm_id] }}&gn={{ $kill->name }}">{{ $kill->name }}</a>
                                 @else
