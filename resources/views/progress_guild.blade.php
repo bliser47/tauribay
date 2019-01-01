@@ -102,7 +102,8 @@
                         <tr class="progressRow rowDesktop">
                             <td> {{ $loop->index+1 }} </td>
                             <td> {{ $shortRealms[$guild->realm] }} </td>
-                            <td> <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $longRealms[$guild->realm] }}&gn={{ $guild->name }}">{{ $guild->name }}</a> </td>
+                            <td>  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ $guild->name }} </a>
+                            </td>
                             <td class="faction-{{ $guild->faction  }}">
                                 <img src="{{ URL::asset("img/factions/small/" . ($guild->faction == 1 ? 1 : 2) . ".png") }}" alt=""/>
                             </td>
@@ -122,7 +123,7 @@
                         <tr class="progressRow rowMobile factionRow faction-{{ $guild->faction  }}-row">
                             <td> {{ $loop->index+1 }} </td>
                             <td> {{ $shortRealms[$guild->realm] }} </td>
-                            <td> <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $longRealms[$guild->realm] }}&gn={{ $guild->name }}">{{ $guild->name }}</a> </td>
+                            <td>  </td>
                             <td class="guildProgress"> {{ $guild->progress }}/13 </td>
                             <td class="guildClearTime">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
                         </tr>

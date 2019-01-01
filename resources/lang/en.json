@@ -125,5 +125,9 @@
   "Wipe-ok" : "Wipes",
   "Keresés" : "Search",
   "Kieg" : "Expansion",
-  "Válassz kieget" : "Select expansion"
+  "Válassz kieget" : "Select expansion",
+  "Válassz raidet" : "Select raid",
+  "Dátum" : "Date",
+  "Nehézség" : "Difficulty",
+  "Válassz nehézséget" : "Select difficulty"
 }

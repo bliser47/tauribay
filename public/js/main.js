@@ -2,14 +2,6 @@ $(function()
 {
     $(".pagination").rPage();
 
-    $(window).scroll(function(){
-        var sticky = $('.sticky'),
-            scroll = $(window).scrollTop();
-
-        if (scroll >= 51) sticky.addClass('fixed');
-        else if(scroll === 0) sticky.removeClass('fixed');
-    });
-
     $(".checkbox-all-classes input").change(function(){
         $(".checkbox-class input").prop('checked', $(this).prop("checked"));
     });
@@ -464,18 +456,52 @@ $(function()
     }
     bs_input_file();
 
+    var listenForMapChange = function()
+    {
+        $("#maps-container .selectpicker").change(function()
+        {
+            var set = $(this).val();
+            if ( set !== currentMap )
+            {
+                currentMap = set;
+                var difficultyContainer = $("#difficulty-container");
+                var selectPicker = difficultyContainer.find(".selectpicker");
+                selectPicker.attr('disabled', true);
+                selectPicker.val(0);
+                selectPicker.selectpicker('refresh');
+                $.ajax({
+                    type: "GET",
+                    url: URL_WEBSITE + "/progress/mapDifficulties/" + currentExpansion + "/" + set,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(difficultySelectHTML)
+                    {
+                        difficultyContainer.html(difficultySelectHTML);
+                        selectPicker = difficultyContainer.find(".selectpicker");
+                        selectPicker.selectpicker('refresh');
+                    }
+                });
+            }
+        });
+    };
+    listenForMapChange();
+
     var currentExpansion = $("#expansion").val();
+    var currentMap = $("#map").val();
     $("#expansions-container .selectpicker").change(function()
     {
         var set = $(this).val();
-        if ( set != currentExpansion )
+        if ( set !== currentExpansion )
         {
             currentExpansion = set;
-            var mapsContainer = $("#maps-container");
-            var selectPicker = mapsContainer.find(".selectpicker");
-            selectPicker.attr('disabled', true);
-            selectPicker.val(0);
-            selectPicker.selectpicker('refresh');
+            currentMap = null;
+            $("#maps-container, #difficulty-container").each(function(){
+                var selectPicker = $(this).find(".selectpicker");
+                selectPicker.attr('disabled', true);
+                selectPicker.val(0);
+                selectPicker.selectpicker('refresh');
+            });
             $.ajax({
                 type: "GET",
                 url: URL_WEBSITE + "/progress/expansionRaids/" + set,
@@ -484,9 +510,10 @@ $(function()
                 },
                 success: function(raidsSelectHTML)
                 {
+                    var mapsContainer = $("#maps-container");
                     mapsContainer.html(raidsSelectHTML);
-                    selectPicker = mapsContainer.find(".selectpicker");
-                    selectPicker.selectpicker('refresh');
+                    mapsContainer.find(".selectpicker").selectpicker('refresh');
+                    listenForMapChange();
                 }
             });
         }

@@ -9,6 +9,7 @@
                         <th>Realm</th>
                         <th>Boss</th>
                         <th>Guild</th>
+                        <th>{{ __("Dátum") }}</th>
                         <th>{{ __("Időtartam") }}</th>
                         <th>{{ __("Wipe-ok") }}</th>
                         <th>{{ __("Összes halál") }}</th>
@@ -19,11 +20,12 @@
                         <td style="white-space:nowrap;"><a href="{{ URL::to("progress/kills/" . $encounter->encounter_id) }}">{{ $encounteData["name"]  }}</a></td>
                         <td>
                             @if ( strlen($encounter->name) )
-                                <a target="_blank" href="https://tauriwow.com/armory#guild-info.xml?r={{ $realms[$encounter->realm_id] }}&gn={{ $encounter->name }}">{{ $encounter->name }}</a>
+                                <a href="{{ URL::to("progress/guild/" . $encounter->realm_id . "/" . $encounter->guild_id) }}"> {{ $encounter->name }} </a>
                             @else
                                 Random
                             @endif
                         </td>
+                        <td>{{ date('M d, Y', $encounter->killtime) }}</td>
                         <td class="guildClearTime">{{ $encounter->fight_time/1000 }}</td>
                         <td>{{ $encounter->wipes }}</td>
                         <td>{{ $encounter->deaths_total }}</td>
@@ -65,7 +67,8 @@
                                     </div>
                                     <span class="memberPosition">{{ $loop->index+1 }}.</span>
                                     <span class="memberName">
-                                        <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a>
+                                        {{-- <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a> --}}
+                                        <a href="{{ URL::to("progress/guild/" . $member->realm_id . "/" . $member->name) }}"> {{ $member->name }} </a>
                                     </span>
                                     <span class="memberData memberData1">{{ number_format($member->total_heal) }}</span>
                                     <span class="memberData memberData2">({{ $member->hps }})</span>

@@ -5,6 +5,7 @@ namespace TauriBay\Http\Controllers;
 use Collective\Html\FormFacade;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
+use TauriBay\Guild;
 use TauriBay\GuildProgress;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
@@ -29,6 +30,7 @@ class ProgressController extends Controller
 
     const DEFAULT_EXPANSION_ID = 4;
     const DEFAULT_MAP_ID  = 1098;
+    const DEFAULT_DIFFICULTY_ID  = 5; // 10 Heroic
 
     const INVALID_RAIDS = array(43718);
 
@@ -38,10 +40,9 @@ class ProgressController extends Controller
         $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
         $realmName = self::REALM_NAMES[$realmId];
 
-        $raidLog = $api->getRaidMaps($realmName);
+        //$raidLog = $api->getRaidMaps($realmName);
 
 
-        /*
         $latestRaids = $api->getRaidLast($realmName);
 
         $start = "\"response\":{\"logs\":[{";
@@ -53,10 +54,13 @@ class ProgressController extends Controller
         $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
         $logs = explode($delimiter,$logs);
 
+        return count($logs);
+
+        /*
         return "{".$logs[0]."}";
-        */
 
         return json_encode($raidLog,true);
+        */
     }
 
     public function index(Request $_request)
@@ -67,10 +71,11 @@ class ProgressController extends Controller
     }
 
 
-    public function killsFrom(Request $_request, $_expansion_id = self::DEFAULT_EXPANSION_ID, $_map_id = self::DEFAULT_MAP_ID)
+    public function killsFrom(Request $_request, $_expansion_id = self::DEFAULT_EXPANSION_ID, $_map_id = self::DEFAULT_MAP_ID, $_difficulty_id = self::DEFAULT_DIFFICULTY_ID)
     {
         $expansionId = $_request->get("expansion_id", $_expansion_id);
         $mapId = $_request->get("map_id", $_map_id);
+        $difficultyId = $_request->get("difficulty_id", $_difficulty_id);
 
         $raidEncounters = array();
         $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
@@ -86,45 +91,87 @@ class ProgressController extends Controller
         foreach ($raidEncounters as $encounter) {
             $encounterId = $encounter["encounter_id"];
             $encounter = Encounter::where("encounter_id", "=", $encounterId)
-                ->whereIn("difficulty_id", array(5, 6))
+                ->where("difficulty_id", "=", $difficultyId)
                 ->whereNotIn("encounters.id", self::INVALID_RAIDS)
                 ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                ->select(array("encounters.id as id", "encounters.encounter_id as encounter_id", "encounters.realm_id as realm", "guilds.faction as faction", "encounters.fight_time as fight_time", "guilds.name as name"))
+                ->select(array(
+                    "encounters.id as id",
+                    "encounters.encounter_id as encounter_id",
+                    "encounters.realm_id as realm",
+                    "guilds.faction as faction",
+                    "encounters.fight_time as fight_time",
+                    "encounters.killtime as killtime",
+                    "guilds.name as name",
+                    "guilds.id as guild_id")
+                )
                 ->orderBy("fight_time")->first();
 
-            if ($encounter && $encounter->realm !== null) {
+            if ($encounter && $encounter->realm !== null && array_key_exists($encounter->realm,self::REALM_NAMES)) {
                 $encounters[] = array(
                     "actualId" => $encounter->id,
                     "id" => $encounter->encounter_id,
                     "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
+                    "realm_id" => $encounter->realm,
                     "realmLong" => self::REALM_NAMES[$encounter->realm],
                     "faction" => $encounter->faction,
                     "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"] . ($encounterId == 1581 ? " (25)" : ""),
                     "guild" => $encounter->name,
-                    "time" => $encounter->fight_time
+                    "guild_id" => $encounter->guild_id,
+                    "time" => $encounter->fight_time,
+                    "date" => $encounter->killtime,
                 );
             } else {
                 $encounter = Encounter::where("encounter_id", "=", $encounterId)
-                    ->whereIn("difficulty_id", array(5, 6))
+                    ->where("difficulty_id", "=", $difficultyId)
                     ->orderBy("fight_time")->first();
 
-                if ($encounter && $encounter->realm_id !== null) {
+                if ($encounter && $encounter->realm_id !== null && array_key_exists($encounter->realm_id,self::REALM_NAMES)) {
                     // Find the fastest pug?
                     $encounters[] = array(
                         "actualId" => $encounter->id,
                         "id" => $encounter->encounter_id,
                         "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
+                        "realm_id" => $encounter->realm,
                         "realmLong" => self::REALM_NAMES[$encounter->realm],
                         "faction" => -1,
                         "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
                         "guild" => "Random",
-                        "time" => $encounter->fight_time
+                        "guild_id" => 0,
+                        "time" => $encounter->fight_time,
+                        "date" => $encounter->killtime
                     );
                 }
             }
         }
 
         return view("progress_times", compact("encounters"));
+    }
+
+    public function guildRaids(Request $_request, $_realm_id, $_guild_id)
+    {
+
+        $guild = Guild::where("id", "=", $_guild_id)->first();
+        $realm = self::SHORT_REALM_NAMES[$guild->realm];
+
+        $encounterIDs = Encounter::ENCOUNTER_IDS;
+
+        $guildEncounters =$encounter = Encounter::where("realm_id", "=", $_realm_id)
+            ->where("guild_id", "=", $_guild_id)
+            ->whereNotIn("encounters.id", self::INVALID_RAIDS)
+            ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
+            ->select(array(
+                    "encounters.id as id",
+                    "encounters.encounter_id as encounter_id",
+                    "encounters.realm_id as realm",
+                    "encounters.difficulty_id as difficulty_id",
+                    "guilds.faction as faction",
+                    "encounters.fight_time as fight_time",
+                    "encounters.killtime as killtime",
+                    "guilds.id as guild_id")
+            )
+            ->orderBy("killtime", "desc")->paginate(16);
+
+        return view("progress_kills_guild", compact("guildEncounters", "guild", "realm","encounterIDs"));
     }
 
 
@@ -168,8 +215,10 @@ class ProgressController extends Controller
                     "encounters.encounter_id as encounter_id",
                     "encounters.realm_id as realm_id",
                     "guilds.name as name",
+                    "encounters.killtime as killtime",
                     "encounters.fight_time as fight_time",
                     "guilds.faction as faction",
+                    "guilds.id as guild_id",
                     "encounters.wipes as wipes",
                     "encounters.deaths_total as deaths_total",
                     "encounters.deaths_fight as deaths_fight",
@@ -217,7 +266,13 @@ class ProgressController extends Controller
         $boss_kills = Encounter::where("encounter_id", "=", $_encounter_id)
                     ->whereIn("difficulty_id", array(5,6))
                     ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                     ->select(array("encounters.id as id","encounters.realm_id as realm_id","guilds.name as name","encounters.fight_time as fight_time","guilds.faction as faction"))
+                     ->select(array("encounters.id as id",
+                         "encounters.realm_id as realm_id",
+                         "guilds.id as guild_id",
+                         "guilds.name as name",
+                         "encounters.fight_time as fight_time",
+                         "encounters.killtime as killtime",
+                         "guilds.faction as faction"))
                     ->orderBy("fight_time","asc")
                     ->paginate(16);
 
@@ -236,13 +291,13 @@ class ProgressController extends Controller
     {
         $expansionId = $_request->get("expansion_id", self::DEFAULT_EXPANSION_ID);
         $mapId = $_request->get("map_id", self::DEFAULT_MAP_ID);
+        $difficultyId = $_request->get("difficulty_id", self::DEFAULT_DIFFICULTY_ID);
 
         $expansions = Encounter::EXPANSIONS;
         $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+        $difficulties = Encounter::SIZE_AND_DIFFICULTY;
 
-        //$defaultKillsFrom = $this->killsFrom($_request, $expansionId, $mapId);
-
-        return view("pve_ladder", compact("expansions","maps", "mapId", "expansionId"));
+        return view("pve_ladder", compact("expansions","maps", "mapId", "expansionId", "difficulties", "difficultyId"));
     }
 
     public function getExpansionRaids(Request $_request, $_expansion_id)
@@ -258,6 +313,30 @@ class ProgressController extends Controller
             return FormFacade::select('map_id', $maps, 0, ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz raidet")]);
         }
         return "";
+    }
+
+    public function getMapDifficulties(Request $_request, $_expansion_id, $_raid_id)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                if ( $raid["id"] == $_raid_id )
+                {
+                    $difficulties = array();
+                    foreach ( $raid["available_difficulties"] as $difficulty )
+                    {
+                        if ( array_key_exists($difficulty["id"], Encounter::SIZE_AND_DIFFICULTY))
+                        {
+                            $difficulties[$difficulty["id"]] = $difficulty["name"];
+                        }
+                    }
+                    return FormFacade::select('difficulty_id', $difficulties, 0, ['required', 'id' => 'difficulties', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz nehézséget")]);
+                }
+            }
+        }
+        return "Invalid expansion";
     }
 
     public function guild(Request $_request)

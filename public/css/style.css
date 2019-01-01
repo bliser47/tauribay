@@ -212,7 +212,9 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 }
 
 .navbar-brand{
-    font-size:2em;
+    font-size:1.5em;
+    font-weight:bold;
+
 }
 
 .navbar-default .navbar-brand
@@ -801,22 +803,11 @@ a.changelog:hover
     margin-bottom:0px;
 }
 
-.bossKillContainer
+.bossName
 {
-    position: relative;;
-}
-
-.bossKillContainer h1
-{
-    color:#fff;
     text-align: center;
-    text-shadow: 2px 2px #669933;
-}
-
-.bossKillContainer a
-{
-    position: absolute;
-    top: 22px;
+    font-weight:bold;
+    font-size:1.7em;
 }
 
 
