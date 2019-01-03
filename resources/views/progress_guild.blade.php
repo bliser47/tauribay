@@ -81,30 +81,24 @@
             </div>
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
-                    <tr class="rowDesktop">
-                        <th>{{ __("Nr.") }}</th>
-                        <th>{{ __("Realm") }}</th>
+                    <tr>
+                        <th class="headDesktop">{{ __("Nr.") }}</th>
+                        <th class="headDesktop">{{ __("Realm") }}</th>
                         <th>{{ __("Guild") }}</th>
-                        <th>{{ __("Frakció") }}</th>
+                        <th class="headDesktop">{{ __("Frakció") }}</th>
                         <th>{{ __("Progress") }}</th>
                         <th>{{ __("Méret") }}</th>
                         <th>{{ __("Legjobb idő") }}</th>
                         <th></th>
                     </tr>
-                    <tr class="rowMobile">
-                        <th>{{ __("Nr.") }}</th>
-                        <th>{{ __("Realm") }}</th>
-                        <th>{{ __("Guild") }}</th>
-                        <th>{{ __("Progress") }}</th>
-                        <th>{{ __("Legjobb idő") }}</th>
-                    </tr>
                     @foreach ( $guilds as $nr => $guild )
-                        <tr class="progressRow rowDesktop">
-                            <td> {{ $loop->index+1 }} </td>
-                            <td> {{ $shortRealms[$guild->realm] }} </td>
-                            <td>  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ $guild->name }} </a>
+                        <tr class="progressRow">
+                            <td class="cellDesktop"> {{ $loop->index+1 }} </td>
+                            <td class="cellDesktop"> {{ $shortRealms[$guild->realm] }} </td>
+                            <td class="cellDesktop">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{  $guild->name  }} </a>
+                            <td class="cellMobile">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ strlen($guild->name) > 15 ? substr($guild->name,0,15) . "..." : $guild->name  }} </a>
                             </td>
-                            <td class="faction-{{ $guild->faction  }}">
+                            <td class="cellDesktop faction-{{ $guild->faction  }}">
                                 <img src="{{ URL::asset("img/factions/small/" . ($guild->faction == 1 ? 1 : 2) . ".png") }}" alt=""/>
                             </td>
                             <td class="guildProgress"> {{ $guild->progress }}/13 </td>
@@ -119,13 +113,6 @@
                                 <button class="refreshProgress" name="updateProgress" value="1" type="submit"></button>
                                 {!! Form::close() !!}
                             </td>
-                        </tr>
-                        <tr class="progressRow rowMobile factionRow faction-{{ $guild->faction  }}-row">
-                            <td> {{ $loop->index+1 }} </td>
-                            <td> {{ $shortRealms[$guild->realm] }} </td>
-                            <td>  </td>
-                            <td class="guildProgress"> {{ $guild->progress }}/13 </td>
-                            <td class="guildClearTime">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
                         </tr>
                     @endforeach
                 </table>

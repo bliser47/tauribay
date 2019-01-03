@@ -772,6 +772,26 @@ a.changelog:hover
     display:none;
 }
 
+.headDesktop
+{
+    display: table-cell;
+}
+
+.headMobile
+{
+    display:none;
+}
+
+.cellDesktop
+{
+    display: table-cell;
+}
+
+.cellMobile
+{
+    display:none;
+}
+
 @media (max-width: 640px) {
     .rowDesktop
     {
@@ -780,6 +800,22 @@ a.changelog:hover
     .rowMobile
     {
         display:table-row;
+    }
+    .headDesktop
+    {
+        display:none;
+    }
+    .headMobile
+    {
+        display:table-cell;
+    }
+    .cellDesktop
+    {
+        display:none;
+    }
+    .cellMobile
+    {
+        display:table-cell;
     }
 }
 
