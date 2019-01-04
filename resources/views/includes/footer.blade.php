@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
 <link rel="stylesheet" href="{{ URL::asset('css/style.css?v=184') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/responsive.css') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=1') }}"/>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script>
     var URL_WEBSITE = "{{ URL::to('/') }}";
