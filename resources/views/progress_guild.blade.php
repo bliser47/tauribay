@@ -86,11 +86,11 @@
                         <th class="headDesktop">{{ __("Realm") }}</th>
                         <th>{{ __("Guild") }}</th>
                         <th class="headDesktop">{{ __("Frakció") }}</th>
-                        <th class="cellDesktop">{{ __("Progress") }}</th>
-                        <th class="cellMobile">{{ __("Prog.") }}</th>
-                        <th>{{ __("Méret") }}</th>
-                        <th class="cellDesktop">{{ __("Legjobb idő") }}</th>
-                        <th class="cellMobile">{{ __("Idő") }}</th>
+                        <th class="cellDesktop text-center">{{ __("Progress") }}</th>
+                        <th class="cellMobile text-center">{{ __("Prog.") }}</th>
+                        <th class="text-center">{{ __("Méret") }}</th>
+                        <th class="cellDesktop text-center">{{ __("Legjobb idő") }}</th>
+                        <th class="cellMobile text-center">{{ __("Idő") }}</th>
                         <th></th>
                     </tr>
                     @foreach ( $guilds as $nr => $guild )
@@ -100,12 +100,12 @@
                             <td class="cellDesktop">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{  $guild->name  }} </a>
                             <td class="cellMobile">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ strlen($guild->name) > 15 ? substr($guild->name,0,15) . "..." : $guild->name  }} </a>
                             </td>
-                            <td class="cellDesktop faction-{{ $guild->faction  }}">
+                            <td class="cellDesktop text-center faction-{{ $guild->faction  }}">
                                 <img src="{{ URL::asset("img/factions/small/" . ($guild->faction == 1 ? 1 : 2) . ".png") }}" alt=""/>
                             </td>
-                            <td class="guildProgress"> {{ $guild->progress }}/13 </td>
-                            <td> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>
-                            <td class="guildClearTime">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
+                            <td class="guildProgress text-center"> {{ $guild->progress }}/13 </td>
+                            <td class="text-center"> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>
+                            <td class="guildClearTime text-center">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
                             <td>
                                 <div class="update-loader" id="updated-loader{{$guild->id}}"></div>
                                 {!! Form::open(array("method" => "post","class"=>"progressupdate-form")) !!}

@@ -1003,3 +1003,8 @@ a.changelog:hover
 {
     border-bottom:1px solid #ddd !Important;
 }
+
+footer
+{
+    background:#fff;
+}
