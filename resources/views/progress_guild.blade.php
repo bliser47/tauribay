@@ -86,9 +86,11 @@
                         <th class="headDesktop">{{ __("Realm") }}</th>
                         <th>{{ __("Guild") }}</th>
                         <th class="headDesktop">{{ __("Frakció") }}</th>
-                        <th>{{ __("Progress") }}</th>
+                        <th class="cellDesktop">{{ __("Progress") }}</th>
+                        <th class="cellMobile">{{ __("Prog.") }}</th>
                         <th>{{ __("Méret") }}</th>
-                        <th>{{ __("Legjobb idő") }}</th>
+                        <th class="cellDesktop">{{ __("Legjobb idő") }}</th>
+                        <th class="cellMobile">{{ __("Idő") }}</th>
                         <th></th>
                     </tr>
                     @foreach ( $guilds as $nr => $guild )
