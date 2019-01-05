@@ -3,8 +3,8 @@
 <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=185') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=3') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=186') }}"/>
+<link rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=4') }}"/>
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script>
     var URL_WEBSITE = "{{ URL::to('/') }}";
@@ -37,7 +37,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=184') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js?v=185') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>
 @yield('pagespecificscripts')
 <script>
