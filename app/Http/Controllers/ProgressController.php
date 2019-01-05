@@ -28,6 +28,21 @@ class ProgressController extends Controller
         2 => "Evermoon"
     );
 
+    const OVERRIDE_GUILD_FIRST_KILL_TIME = array(
+        5 => array(
+            88 => 1534968000, // Kawaii Pandas,
+            19 => 1535400000, // Insane
+            28 => 1540929600, // Cradle
+            66 => 1537473600, // Mythic
+            17 => 1541966400, // Conclusion
+            6 => 1538078400, // Bad Choice
+            15 => 1541188800, // Dark Synergy
+            84 => 1537214400, // Muzykanci z Gruzji
+            59 => 1540843200, // Crøwd Cøntrøll
+        ),
+        6 => array()
+    );
+
     const DEFAULT_EXPANSION_ID = 4;
     const DEFAULT_MAP_ID  = 1098;
     const DEFAULT_DIFFICULTY_ID  = 5; // 10 Heroic
@@ -403,8 +418,19 @@ class ProgressController extends Controller
         }
 
         $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
-            ->orderBy("guild_progresses.progress", "desc")
-            ->orderBy("guild_progresses." . $orderBy)->get();
+            ->orderBy("guild_progresses.progress", "desc")->get();
+
+        foreach ( $guilds as $guild )
+        {
+            if ( array_key_exists($guild->id, self::OVERRIDE_GUILD_FIRST_KILL_TIME[$guild->difficulty_id]) )
+            {
+                $guild->first_kill_unix = self::OVERRIDE_GUILD_FIRST_KILL_TIME[$guild->difficulty_id][$guild->id];
+            }
+        }
+        $guilds = $guilds->sortBy(function($guild){
+            return $guild->first_kill_unix != "" ? $guild->first_kill_unix : 10000000000;
+        });
+
 
 
         $shortRealms = self::SHORT_REALM_NAMES;
