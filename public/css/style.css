@@ -445,12 +445,12 @@ input.disabled:-webkit-autofill {
 .update-loader:after {
     display:none;
     border-radius: 50%;
-    width: 4em;
-    height: 4em;
+    width:16px;
+    height:16px;
 }
 .update-loader {
-    margin: 5px auto;
-    font-size: 10px;
+    margin: 9px auto;
+    font-size: 5px;
     position: relative;
     text-indent: -9999em;
     border-top: 0.5em solid rgba(255, 255, 255, 0.2);
@@ -495,16 +495,17 @@ a.changelog:hover
     font: inherit;
     cursor: pointer;
     outline: inherit;
-    width:32px;
-    height:32px;
+    width:16px;
+    height:16px;
     margin:9px auto;
     content:"";
     background:url("../img/refresh2.png");
+    background-size:cover;
 }
 
 .refreshIlvl:hover, .refreshProgress:hover
 {
-    background-position:0px 32px;
+    background-position:0px 16px;
     cursor:pointer;
 }
 
@@ -815,6 +816,7 @@ a.changelog:hover
     }
     .cellMobile
     {
+        -
         display:table-cell;
     }
 }
@@ -1007,4 +1009,18 @@ a.changelog:hover
 footer
 {
     background:#fff;
+}
+
+.table tbody td {
+    padding:0px 5px 0px 5px !important;
+}
+
+tbody tr:nth-child(odd){
+    background-color: rgba(24,150,45,0.075);
+}
+
+.tHead
+{
+    background:#5cb85c !Important;
+    color:#fff;
 }

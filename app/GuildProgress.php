@@ -108,8 +108,10 @@ class GuildProgress extends Model
             ->distinct("encounter_id")->count("encounter_id");
         $shortestClear = self::calculateClearTime($_guild->id, $_difficultyId, $_mapId);
         $progress->clear_time = $shortestClear["time"];
-        $progress->first_kill_log_id = $shortestClear["first"];
-        $progress->last_kill_log_id = $shortestClear["last"];
+
+        //$progress->first_kill_log_id = $shortestClear["first"];
+        //$progress->last_kill_log_id = $shortestClear["last"];
+
         $progress->save();
     }
 }

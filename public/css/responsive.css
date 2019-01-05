@@ -30,18 +30,6 @@
     .nopadding-left, .nopadding-right {
         padding:0px;
     }
-
-    .table>tbody>tr>td
-    {
-        padding:4px;
-    }
-
-    .refreshIlvl, .refreshProgress
-    {
-        width:16px;
-        height:16px;
-        background-size:cover;
-    }
 }
 
 
