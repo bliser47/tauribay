@@ -32,10 +32,6 @@
                      {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
                      <label for="realm-evermoon"> Evermoon </label>
                  </div>
-                 <div class="checkbox checkbox-inline checkbox-all-realms">
-                     {!! Form::checkbox('realmall',3,Input::get('realmall'),array("id"=>"realm-all","class"=>"realm")) !!}
-                     <label for="realm-all"> {{ __("Mind") }} </label>
-                 </div>
              </div>
          </div>
     </div>

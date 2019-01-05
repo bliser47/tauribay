@@ -1065,3 +1065,7 @@ tbody tr:nth-child(odd){
     float:right;
     margin-right:10px;
 }
+
+.text-left {
+    text-align: left !Important;
+}

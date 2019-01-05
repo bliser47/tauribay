@@ -85,10 +85,6 @@
                                         {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
                                         <label for="realm-evermoon"> Evermoon </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-realms divDesktop">
-                                        {!! Form::checkbox('realmall',3,Input::get('realmall'),array("id"=>"realm-all","class"=>"realm")) !!}
-                                        <label for="realm-all"> {{ __("Mind") }} </label>
-                                    </div>
                                 </div>
                             </div>
                             <div class="form-group col-md-5">
@@ -101,10 +97,6 @@
                                     <div class="checkbox checkbox-inline checkbox-horde checkbox-white-tick checkbox-faction">
                                         {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                                         <label for="faction-horde"> Horde </label>
-                                    </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-factions divDesktop">
-                                        {!! Form::checkbox('factionall',3,Input::get('factionall'),array("id"=>"faction-all","class"=>"faction")) !!}
-                                        <label for="faction-all"> {{ __("Mind") }} </label>
                                     </div>
                                 </div>
                             </div>
@@ -154,10 +146,6 @@
                                     <div class="checkbox checkbox-inline checkbox-monk checkbox-white-tick checkbox-class">
                                         {!! Form::checkbox('monk',1,Input::get('monk'),array("id"=>"class-monk","class"=>"class")) !!}
                                         <label for="class-monk"> Monk </label>
-                                    </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-classes">
-                                        {!! Form::checkbox('classall',1,Input::get('classall'),array("id"=>"class-all","class"=>"class")) !!}
-                                        <label for="class-all"> {{ __("Mind") }} </label>
                                     </div>
                                 </div>
                             </div>

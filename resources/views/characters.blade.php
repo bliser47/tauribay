@@ -28,16 +28,6 @@
                                         {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                                         <label for="faction-horde"> Horde </label>
                                     </div>
-                                    {{--
-                                    <div class="checkbox checkbox-inline checkbox-unknown checkbox-white-tick checkbox-faction">
-                                        {!! Form::checkbox('ismeretlen',3,Input::get('ismeretlen'),array("id"=>"faction-ismeretlen","class"=>"faction")) !!}
-                                        <label for="faction-ismeretlen"> Ismeretlen </label>
-                                    </div>
-                                    --}}
-                                    <div class="checkbox checkbox-inline checkbox-all-factions">
-                                        {!! Form::checkbox('factionall',3,Input::get('factionall'),array("id"=>"faction-all","class"=>"faction")) !!}
-                                        <label for="faction-all"> {{ __("Mind") }} </label>
-                                    </div>
                                 </div>
                             </div>
 
@@ -55,10 +45,6 @@
                                     <div class="checkbox checkbox-inline checkbox-intent">
                                         {!! Form::checkbox('csere',3,Input::get('csere'),array("id"=>"intent-trade","class"=>"intent")) !!}
                                         <label for="intent-trade">  {{ __("Csere") }} </label>
-                                    </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-intents">
-                                        {!! Form::checkbox('intentall',4,Input::get('intentall'),array("id"=>"intent-all","class"=>"intent")) !!}
-                                        <label for="intent-all">  {{ __("Mind") }} </label>
                                     </div>
                                 </div>
                             </div>
@@ -110,10 +96,6 @@
                                         {!! Form::checkbox('monk',1,Input::get('monk'),array("id"=>"class-monk","class"=>"class")) !!}
                                         <label for="class-monk"> Monk </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-classes">
-                                        {!! Form::checkbox('classall',1,Input::get('classall'),array("id"=>"class-all","class"=>"class")) !!}
-                                        <label for="class-all"> {{ __("Mind") }} </label>
-                                    </div>
                                 </div>
                             </div>
                             <div class="form-group  col-md-12">
@@ -133,7 +115,7 @@
             </div>
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
-                    <tr>
+                    <tr class="tHead">
                         <th>{{ __("Idő") }}</th>
                         <th>{{ __("Név") }}</th>
                         <th>{{ __("Frakció") }}</th>
@@ -148,7 +130,7 @@
                             <td class="faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
                             <td> {{ __($characterIntents[$character->intent]) }}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                            <td> {{ $character->text }} </td>
+                            <td class="text-left"> {{ $character->text }} </td>
                         </tr>
                     @endforeach
                 </table>
