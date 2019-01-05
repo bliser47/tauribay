@@ -417,8 +417,7 @@ class ProgressController extends Controller
             $orderBy = $_request->get('sort');
         }
 
-        $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
-            ->orderBy("guild_progresses.progress", "desc")->get();
+        $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')->get();
 
         foreach ( $guilds as $guild )
         {
@@ -426,10 +425,13 @@ class ProgressController extends Controller
             {
                 $guild->first_kill_unix = self::OVERRIDE_GUILD_FIRST_KILL_TIME[$guild->difficulty_id][$guild->id];
             }
+            else if ( $guild->first_kill_unix == "" )
+            {
+                $guild->first_kill_unix = 100000000000 / $guild->progress;
+            }
         }
-        $guilds = $guilds->sortBy(function($guild){
-            return $guild->first_kill_unix != "" ? $guild->first_kill_unix : 10000000000;
-        });
+
+        $guilds = $guilds->sortBy("first_kill_unix");
 
 
 
