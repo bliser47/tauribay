@@ -1,6 +1,11 @@
 @media screen and (max-width: 1024px)
 {
 
+    #navbar
+    {
+        text-align: center;
+    }
+
     .navbar-nav > li > a {
         padding-left: 5px;
         padding-right: 5px;

@@ -85,7 +85,7 @@
                                         {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
                                         <label for="realm-evermoon"> Evermoon </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-realms">
+                                    <div class="checkbox checkbox-inline checkbox-all-realms divDesktop">
                                         {!! Form::checkbox('realmall',3,Input::get('realmall'),array("id"=>"realm-all","class"=>"realm")) !!}
                                         <label for="realm-all"> {{ __("Mind") }} </label>
                                     </div>
@@ -102,7 +102,7 @@
                                         {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                                         <label for="faction-horde"> Horde </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-factions">
+                                    <div class="checkbox checkbox-inline checkbox-all-factions divDesktop">
                                         {!! Form::checkbox('factionall',3,Input::get('factionall'),array("id"=>"faction-all","class"=>"faction")) !!}
                                         <label for="faction-all"> {{ __("Mind") }} </label>
                                     </div>

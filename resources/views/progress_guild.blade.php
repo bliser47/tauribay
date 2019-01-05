@@ -29,7 +29,7 @@
                                         {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
                                         <label for="realm-evermoon"> Evermoon </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-realms">
+                                    <div class="checkbox checkbox-inline checkbox-all-realms divDesktop">
                                         {!! Form::checkbox('realmall',3,Input::get('realmall'),array("id"=>"realm-all","class"=>"realm")) !!}
                                         <label for="realm-all"> {{ __("Mind") }} </label>
                                     </div>
@@ -46,7 +46,7 @@
                                         {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                                         <label for="faction-horde"> Horde </label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-factions">
+                                    <div class="checkbox checkbox-inline checkbox-all-factions divDesktop">
                                         {!! Form::checkbox('factionall',3,Input::get('factionall'),array("id"=>"faction-all","class"=>"faction")) !!}
                                         <label for="faction-all"> {{ __("Mind") }} </label>
                                     </div>
@@ -63,7 +63,7 @@
                                         {!! Form::checkbox('difficulty25',1,Input::get('difficulty25'),array("id"=>"difficulty-25","class"=>"difficulty")) !!}
                                         <label for="difficulty-25">25 man</label>
                                     </div>
-                                    <div class="checkbox checkbox-inline checkbox-all-difficulties">
+                                    <div class="checkbox checkbox-inline checkbox-all-difficulties divDesktop">
                                         {!! Form::checkbox('difficultyAll',3,Input::get('difficultyAll'),array("id"=>"difficulty-all","class"=>"difficulty")) !!}
                                         <label for="difficulty-all"> {{ __("Mind") }} </label>
                                     </div>

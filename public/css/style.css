@@ -469,7 +469,7 @@ a.changelog
     display:block;
     width:32px;
     height:32px;
-    margin:9px;
+    margin:9px auto;
     content:"";
     background:url("../img/github.png");
 }
@@ -793,6 +793,19 @@ a.changelog:hover
     display:none;
 }
 
+.divMobile {
+    display: none;
+}
+
+.divDesktop {
+    display: block;
+}
+
+.listDesktop
+{
+    display:list-item;
+}
+
 @media (max-width: 640px) {
     .rowDesktop
     {
@@ -817,6 +830,18 @@ a.changelog:hover
     .cellMobile
     {
         display:table-cell;
+    }
+    .divMobile
+    {
+        display:block;
+    }
+    .divDesktop
+    {
+        display:none;
+    }
+    .listDesktop
+    {
+        display: none !important;
     }
 }
 
@@ -1027,4 +1052,16 @@ tbody tr:nth-child(odd){
 {
     background:#5cb85c !Important;
     color:#fff;
+}
+
+#mobileLanguage
+{
+    float:left;
+    margin:14px;
+}
+
+#mobileChangelog
+{
+    float:right;
+    margin-right:10px;
 }
