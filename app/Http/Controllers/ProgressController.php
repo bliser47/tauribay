@@ -295,7 +295,7 @@ class ProgressController extends Controller
 
         $expansions = Encounter::EXPANSIONS;
         $maps = Encounter::EXPANSION_RAIDS[$expansionId];
-        $difficulties = Encounter::SIZE_AND_DIFFICULTY;
+        $difficulties = Encounter::SIZE_AND_DIFFICULTY_DEFAULT;
 
         return view("pve_ladder", compact("expansions","maps", "mapId", "expansionId", "difficulties", "difficultyId"));
     }
@@ -390,9 +390,21 @@ class ProgressController extends Controller
             }
         }
 
+        $sortBy = array(
+            "clear" => "clear_time",
+            "first_kill" => "first_kill_unix"
+        );
+
+
+        $orderBy = 'first_kill_unix';
+        if ( $_request->has('sort') )
+        {
+            $orderBy = $_request->get('sort');
+        }
+
         $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')
             ->orderBy("guild_progresses.progress", "desc")
-            ->orderBy("guild_progresses.clear_time")->get();
+            ->orderBy("guild_progresses." . $orderBy)->get();
 
 
         $shortRealms = self::SHORT_REALM_NAMES;

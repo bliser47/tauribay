@@ -19,7 +19,7 @@
         <div class="col-md-12">
             <div class="panel panel-default nomargin">
                 <table class="table table-bordered table-classes">
-                    <tr>
+                    <tr class="tHead">
                         <th>{{ __("Boss") }}</th>
                         <th>{{ __("Nehézség") }}</th>
                         <th>{{ __("Dátum") }}</th>

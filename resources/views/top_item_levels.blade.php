@@ -178,23 +178,16 @@
             </div>
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
-                    <tr class="rowDesktop">
+                    <tr class="tHead">
                         <th>{{ __("Nr") }}</th>
-                        <th>{{ __("Idő") }}</th>
-                        <th>{{ __("Realm") }}</th>
-                        <th>{{ __("Név") }}</th>
-                        <th>{{ __("Frakció") }}</th>
-                        <th>{{ __("Kaszt") }}</th>
-                        <th><a id="sortByLevel" data-sort="ilvl" class="sortByTop {{ (!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'sortActive'  : 'sortInactive' }}">{{ __("iLvL") }}</a></th>
-                        <th><a id="sortByAchi" data-sort="achievement_points" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'achievement_points') ? 'sortActive'  : 'sortInactive' }}">{{ __("Achi") }}</a></th>
-                        <th width=32></th>
-                    </tr>
-                    <tr class="rowMobile">
-                        <th>{{ __("Nr") }}</th>
+                        <th class="cellDesktop">{{ __("Realm") }}</th>
                         <th>{{ __("Név") }}</th>
                         <th>{{ __("Kaszt") }}</th>
                         <th><a id="sortByLevel" data-sort="ilvl" class="sortByTop {{ (!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'sortActive'  : 'sortInactive' }}">{{ __("iLvL") }}</a></th>
                         <th><a id="sortByAchi" data-sort="achievement_points" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'achievement_points') ? 'sortActive'  : 'sortInactive' }}">{{ __("Achi") }}</a></th>
+                        <th class="cellDesktop" width=32>{{ __("Frissítés") }}</th>
+                        <th class="cellMobile" width=32></th>
+                        <th class="cellDesktop">{{ __("Idő") }}</th>
                     </tr>
                     @include('top_item_levels_characters')
                 </table>

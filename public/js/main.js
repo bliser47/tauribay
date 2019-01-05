@@ -338,6 +338,11 @@ $(function()
                         if ( clearTime > 0 ) {
                             $(row).find(".guildClearTime").html(clearTime.toString().toHHMMSS());
                         }
+
+                        var firtKillTime = progress["first_kill"];
+                        $(row).find(".firstKillTime").html(firtKillTime);
+
+
                         var form = $(row).find(".progressupdate-form");
                         form.submit(function (e) {
                             sendProgressAjaxUpdate($(this), $(this).serialize(), $(this).closest(".progressRow"));

@@ -18,7 +18,7 @@
         <div class="col-md-12">
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
-                    <tr>
+                    <tr clas="tHead">
                         <th>{{ __("Nr.") }}</th>
                         <th>{{ __("Realm") }}</th>
                         <th>{{ __("Guild") }}</th>

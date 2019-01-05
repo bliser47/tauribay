@@ -80,28 +80,28 @@
             <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
-                        <th class="text-center headDesktop">{{ __("Nr.") }}</th>
-                        <th class="text-center headDesktop">{{ __("Realm") }}</th>
-                        <th class="text-center">{{ __("Guild") }}</th>
-                        <th class="cellDesktop text-center">{{ __("Progress") }}</th>
-                        <th class="cellMobile text-center">{{ __("Prog.") }}</th>
-                        <th class="text-center">{{ __("Méret") }}</th>
-                        <th class="cellDesktop text-center">{{ __("Legjobb idő") }}</th>
-                        <th class="cellDesktop text-center">{{ __("Első kill") }}</th>
-                        <th class="cellMobile text-center">{{ __("Idő") }}</th>
+                        <th class="headDesktop">{{ __("Nr.") }}</th>
+                        <th class="headDesktop">{{ __("Realm") }}</th>
+                        <th>{{ __("Guild") }}</th>
+                        <th class="cellDesktop">{{ __("Progress") }}</th>
+                        <th class="cellMobile">{{ __("Prog.") }}</th>
+                        <th>{{ __("Méret") }}</th>
+                        <th class="cellDesktop">{{ __("Legjobb idő") }}</th>
+                        <th class="cellDesktop">{{ __("Első kill") }}</th>
+                        <th class="cellMobile">{{ __("Idő") }}</th>
                         <th></th>
                     </tr>
                     @foreach ( $guilds as $nr => $guild )
                         <tr class="progressRow">
-                            <td class="cellDesktop text-center"> {{ $loop->index+1 }} </td>
-                            <td class="cellDesktop text-center"> {{ $shortRealms[$guild->realm] }} </td>
-                            <td class="cellDesktop text-center faction-{{ $guild->faction  }}">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{  $guild->name  }} </a>
-                            <td class="cellMobile text-center faction-{{ $guild->faction  }}">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ strlen($guild->name) > 15 ? substr($guild->name,0,15) . "..." : $guild->name  }} </a>
+                            <td class="cellDesktop"> {{ $loop->index+1 }} </td>
+                            <td class="cellDesktop"> {{ $shortRealms[$guild->realm] }} </td>
+                            <td class="cellDesktop faction-{{ $guild->faction  }}">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{  $guild->name  }} </a>
+                            <td class="cellMobile faction-{{ $guild->faction  }}">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ strlen($guild->name) > 15 ? mb_substr($guild->name,0,15) . "..." : $guild->name  }} </a>
                             </td>
-                            <td class="guildProgress text-center"> {{ $guild->progress }}/13 </td>
-                            <td class="text-center"> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>
-                            <td class="guildClearTime text-center">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
-                            <td></td>
+                            <td class="guildProgress"> {{ $guild->progress }}/13 </td>
+                            <td> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>
+                            <td class="guildClearTime">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
+                            <td class="firstKillTime">{{ $guild->first_kill_unix > 0 ? date('M d, Y', $guild->first_kill_unix) : "" }}</td>
                             <td class="updateLoaderContainer">
                                 <div class="update-loader" id="updated-loader{{$guild->id}}"></div>
                                 {!! Form::open(array("method" => "post","class"=>"progressupdate-form")) !!}

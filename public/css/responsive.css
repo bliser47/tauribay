@@ -38,6 +38,13 @@
     .class-checkboxes .checkbox {
         width:30%;
     }
+
+    .class-0 img, .class-1 img, .class-2 img, .class-3 img, .class-4 img, .class-5 img, .class-6 img, .class-7 img,
+    .class-8 img, .class-9 img, .class-10 img, .class-11 img, .class-12 img, .class-13 img {
+        width:28px;
+        height:28px;
+        padding:2px;
+    }
 }
 
 @media screen and (min-width: 1024px)

@@ -816,7 +816,6 @@ a.changelog:hover
     }
     .cellMobile
     {
-        -
         display:table-cell;
     }
 }
@@ -1013,6 +1012,11 @@ footer
 
 .table tbody td {
     padding:0px 5px 0px 5px !important;
+    height:35px;
+}
+
+.table tr, .table th, .table td{
+    text-align: center;
 }
 
 tbody tr:nth-child(odd){

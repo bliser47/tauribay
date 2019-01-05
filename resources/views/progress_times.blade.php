@@ -1,5 +1,5 @@
 <table class="table table-bordered table-classes">
-    <tr>
+    <tr class="tHead">
         <th>{{ __("Boss") }}</th>
         <th>{{ __("Realm") }}</th>
         <th>{{ __("Guild") }}</th>
