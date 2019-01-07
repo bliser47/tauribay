@@ -37,6 +37,13 @@
     }
 }
 
+@media (max-width:768px){
+    .col-sm-nopadding
+    {
+        padding:0px;
+    }
+}
+
 
 @media screen and (max-width: 480px)
 {

@@ -1,9 +1,5 @@
 .backLoaded {
     background: url('../img/back.jpg?v=1') no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
 }
 
 * {
@@ -481,8 +477,12 @@ a.changelog:hover
 
 @media (max-width: 640px) {
     .well img {
-        width:90px;
-        height:90px;
+        width:75px;
+        height:75px;
+    }
+    .media-content
+    {
+        padding:10px 0px 0px 0px !Important;
     }
 }
 
@@ -1068,4 +1068,9 @@ tbody tr:nth-child(odd){
 
 .text-left {
     text-align: left !Important;
+}
+
+.media-content
+{
+    padding:0px 0px 0px 200px;
 }
