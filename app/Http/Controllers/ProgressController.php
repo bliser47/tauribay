@@ -122,6 +122,8 @@ class ProgressController extends Controller
                 ->orderBy("fight_time")->first();
 
             if ($encounter && $encounter->realm !== null && array_key_exists($encounter->realm,self::REALM_NAMES)) {
+                $encounterName = Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"];
+                $encounterNameShort  = array_key_exists($encounterName, Encounter::ENCOUNTER_NAME_SHORTS) ? Encounter::ENCOUNTER_NAME_SHORTS[$encounterName] : $encounterName;
                 $encounters[] = array(
                     "actualId" => $encounter->id,
                     "id" => $encounter->encounter_id,
@@ -129,7 +131,8 @@ class ProgressController extends Controller
                     "realm_id" => $encounter->realm,
                     "realmLong" => self::REALM_NAMES[$encounter->realm],
                     "faction" => $encounter->faction,
-                    "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"] . ($encounterId == 1581 ? " (25)" : ""),
+                    "name" => $encounterName . ($encounterId == 1581 ? " (25)" : ""),
+                    "nameShort" => $encounterNameShort,
                     "guild" => $encounter->name,
                     "guild_id" => $encounter->guild_id,
                     "time" => $encounter->fight_time,
@@ -141,7 +144,9 @@ class ProgressController extends Controller
                     ->orderBy("fight_time")->first();
 
                 if ($encounter && $encounter->realm_id !== null && array_key_exists($encounter->realm_id,self::REALM_NAMES)) {
-                    // Find the fastest pug?
+                    // Find the fastest pug?\
+                    $encounterName = Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"];
+                    $encounterNameShort  = array_key_exists($encounterName, Encounter::ENCOUNTER_NAME_SHORTS) ? Encounter::ENCOUNTER_NAME_SHORTS[$encounterName] : $encounterName;
                     $encounters[] = array(
                         "actualId" => $encounter->id,
                         "id" => $encounter->encounter_id,
@@ -149,7 +154,8 @@ class ProgressController extends Controller
                         "realm_id" => $encounter->realm,
                         "realmLong" => self::REALM_NAMES[$encounter->realm],
                         "faction" => -1,
-                        "name" => Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"],
+                        "name" => $encounterName,
+                        "nameShort" => $encounterNameShort ,
                         "guild" => "Random",
                         "guild_id" => 0,
                         "time" => $encounter->fight_time,
