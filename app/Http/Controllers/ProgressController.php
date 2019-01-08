@@ -176,6 +176,15 @@ class ProgressController extends Controller
 
         $encounterIDs = Encounter::ENCOUNTER_IDS;
 
+
+        $expansionId = $_request->get("expansion_id", self::DEFAULT_EXPANSION_ID);
+        $mapId = $_request->get("map_id", self::DEFAULT_MAP_ID);
+        $difficultyId = $_request->get("difficulty_id", self::DEFAULT_DIFFICULTY_ID);
+
+        $expansions = Encounter::EXPANSIONS;
+        $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+        $difficulties = Encounter::SIZE_AND_DIFFICULTY_DEFAULT;
+
         $guildEncounters =$encounter = Encounter::where("realm_id", "=", $_realm_id)
             ->where("guild_id", "=", $_guild_id)
             ->whereNotIn("encounters.id", self::INVALID_RAIDS)
@@ -192,7 +201,15 @@ class ProgressController extends Controller
             )
             ->orderBy("killtime", "desc")->paginate(16);
 
-        return view("progress_kills_guild", compact("guildEncounters", "guild", "realm","encounterIDs"));
+        return view("progress_kills_guild", compact
+        (
+            "guildEncounters",
+            "guild",
+            "realm"
+            ,"encounterIDs",
+            "expansionId", "mapId","difficultyId",
+            "expansions", "maps", "difficulties"
+        ));
     }
 
 
