@@ -480,6 +480,10 @@ $(function()
                     {
                         difficultyContainer.html(difficultySelectHTML);
                         selectPicker = difficultyContainer.find(".selectpicker");
+                        if ( $(selectPicker).find("option").length === 1 )
+                        {
+                            selectPicker.selectpicker("val", $(selectPicker).find("option").val())
+                        }
                         selectPicker.selectpicker('refresh');
                     }
                 });
@@ -530,7 +534,7 @@ $(function()
         $("#pve-ladder-filter").attr("disabled",true);
         $.ajax({
             type: "POST",
-            url: URL_WEBSITE + "/progress/killsFrom",
+            url: URL_WEBSITE + "/ladder/pve/",
             data: $(this).serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

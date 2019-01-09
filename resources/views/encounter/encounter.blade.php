@@ -17,10 +17,10 @@
                     </tr>
                     <tr>
                         <td>{{ $shortRealms[$encounter->realm_id]  }}</td>
-                        <td style="white-space:nowrap;"><a href="{{ URL::to("progress/kills/" . $encounter->encounter_id) }}">{{ $encounteData["name"]  }}</a></td>
+                        <td style="white-space:nowrap;"><a href="{{ URL::to("encounter/" . TauriBay\Encounter::getUrlName($encounterData["name"]))  }}">{{ $encounterData["name"]  }}</a></td>
                         <td>
                             @if ( strlen($encounter->name) )
-                                <a href="{{ URL::to("progress/guild/" . $encounter->realm_id . "/" . $encounter->guild_id) }}"> {{ $encounter->name }} </a>
+                                <a href="{{ URL::to("/guild/" . $encounter->guild_id) }}"> {{ $encounter->name }} </a>
                             @else
                                 Random
                             @endif

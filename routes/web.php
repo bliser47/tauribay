@@ -58,20 +58,24 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/bg', 'BattlegroundController@index');
     Route::get('/top', 'TopItemLevelsController@index');
-    Route::get('/progress', 'ProgressController@index');
     Route::get('/progress/damage', 'ProgressController@damage');
-    Route::get('/progress/guild', 'ProgressController@guild');
-    Route::get('/progress/guild/{realm_id}/{guild_id}', 'ProgressController@guildRaids');
 
-    Route::get('/progress/kills', 'ProgressController@pveLadder');
-    Route::get('/progress/pve', 'ProgressController@pveLadder');
+
+    Route::get('/progress', 'ProgressController@index');
+    Route::get('/guild/{guild_id}', 'GuildController@index');
+
+    Route::get('/encounter/{encounter_name_url}', 'EncounterController@index');
+    Route::get('/encounter/{encounter_id}/{log_id}', 'EncounterController@log');
+
+    Route::get('/ladder/pve', 'PveLadderController@index');
+    Route::get('/ladder/pve/encounter/{encounter_name_short}', 'PveLadderController@encounter');
+    Route::post('/ladder/pve/map/{$expansion_id}/{$map_id}/{$difficulty_id}', 'PveLadderController@map');
+
     Route::get('/progress/expansionRaids/{expansion_id}', 'ProgressController@getExpansionRaids');
     Route::get('/progress/mapDifficulties/{expansion_id}/{raid_id}', 'ProgressController@getMapDifficulties');
 
 
-    Route::get('/progress/kills/{encounter_id}', 'ProgressController@kills2encounter');
     Route::get('/progress/kill/{log_id}', 'ProgressController@kill');
-    Route::post('/progress/killsFrom', 'ProgressController@killsFrom');
     Route::post('/progress/killFrom', 'ProgressController@killFrom');
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
 

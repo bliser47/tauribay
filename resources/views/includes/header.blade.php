@@ -24,8 +24,8 @@
             <ul class="nav navbar-nav">
                 <li class="{{ Request::segment(1) == 'trade' ? 'active' : '' }}"><a href="/trade/char">{{ __("Hirdetések") }}</a></li>
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
-                <li class="{{ Request::path() == 'progress/guild' ? 'active' : '' }}"><a href="/progress/guild">{{ __("Guild progress") }}</a></li>
-                <li class="{{ Request::path() == 'progress/kills' ? 'active' : '' }}"><a href="/progress/kills">{{ __("PVE Ladder") }}</a></li>
+                <li class="{{ Request::path() == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Guild progress") }}</a></li>
+                <li class="{{ Request::path() == 'ladder/pve' ? 'active' : '' }}"><a href="/ladder/pve">{{ __("PVE Ladder") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())

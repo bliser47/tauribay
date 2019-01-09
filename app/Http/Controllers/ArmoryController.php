@@ -7,6 +7,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
 use TauriBay\Tauri;
+use TauriBay\Realm;
 
 class ArmoryController extends Controller
 {
@@ -29,7 +30,7 @@ class ArmoryController extends Controller
          if ( !$validator->fails() )
          {
              $api = new Tauri\ApiClient();
-             $characterSheet = $api->getCharacterSheet(self::REALMS[$_request->get('realm')], $_request->get('characterName'));
+             $characterSheet = $api->getCharacterSheet(Realm::REALMS[$_request->get('realm')], $_request->get('characterName'));
 
              return view('home.adverts.character-gear', array("armoryData" => $characterSheet));
          }

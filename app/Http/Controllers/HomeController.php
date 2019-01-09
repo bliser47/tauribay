@@ -6,24 +6,11 @@ use TauriBay\Http\Requests;
 use Illuminate\Http\Request;
 use Auth;
 use Image;
+use TauriBay\Realm;
 use Validator;
 
 class HomeController extends Controller
 {
-
-
-    const REALMS = array(
-        0 => "[HU] Tauri WoW Server",
-        1 => "[HU] Warriors of Darkness",
-        2 => "[EN] Evermoon"
-    );
-
-    const REALMS_SHORT = array(
-        0 => "Tauri",
-        1 => "WoD",
-        2 => "Evermoon"
-    );
-
     /**
      * Create a new controller instance.
      *
@@ -48,7 +35,7 @@ class HomeController extends Controller
             4 => __("Vétel")
         );
 
-        return view('home', array('user' => Auth::user(), 'realms' => self::REALMS, 'realmsShort' => self::REALMS_SHORT, 'adIntents' => $adIntents));
+        return view('home', array('user' => Auth::user(), 'realms' => Realm::REALMS, 'realmsShort' => Realm::REALMS_SHORT, 'adIntents' => $adIntents));
     }
 
 

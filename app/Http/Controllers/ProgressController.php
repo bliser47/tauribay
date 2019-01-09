@@ -12,21 +12,14 @@ use TauriBay\Http\Requests;
 use TauriBay\Tauri;
 use TauriBay\Tauri\CharacterClasses;
 use DB;
+use TauriBay\Realm;
 use Carbon\Carbon;
 
 class ProgressController extends Controller
 {
-    const REALM_NAMES = array(
-        0 => "[HU] Tauri WoW Server",
-        1 => "[HU] Warriors of Darkness",
-        2 => "[EN] Evermoon"
-    );
-
-    const SHORT_REALM_NAMES = array(
-        0 => "Tauri",
-        1 => "WoD",
-        2 => "Evermoon"
-    );
+    const DEFAULT_EXPANSION_ID = 4; // MoP
+    const DEFAULT_MAP_ID  = 1098; // Throne of Thunder
+    const DEFAULT_DIFFICULTY_ID  = 5; // 10 Heroic
 
     const OVERRIDE_GUILD_FIRST_KILL_TIME = array(
         5 => array(
@@ -43,17 +36,12 @@ class ProgressController extends Controller
         6 => array()
     );
 
-    const DEFAULT_EXPANSION_ID = 4;
-    const DEFAULT_MAP_ID  = 1098;
-    const DEFAULT_DIFFICULTY_ID  = 5; // 10 Heroic
-
-    const INVALID_RAIDS = array(43718);
 
     public function debug(Request $_request)
     {
         $api = new Tauri\ApiClient();
         $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
-        $realmName = self::REALM_NAMES[$realmId];
+        $realmName = Realm::REALMS[$realmId];
 
         //$raidLog = $api->getRaidMaps($realmName);
 
@@ -78,226 +66,6 @@ class ProgressController extends Controller
         */
     }
 
-    public function index(Request $_request)
-    {
-        $data = DB::table('encounters')->orderBy("fight_time", "desc")->paginate(16);
-        $shortRealms = self::SHORT_REALM_NAMES;
-        return view("progress", compact("data", 'shortRealms'));
-    }
-
-
-    public function killsFrom(Request $_request, $_expansion_id = self::DEFAULT_EXPANSION_ID, $_map_id = self::DEFAULT_MAP_ID, $_difficulty_id = self::DEFAULT_DIFFICULTY_ID)
-    {
-        $expansionId = $_request->get("expansion_id", $_expansion_id);
-        $mapId = $_request->get("map_id", $_map_id);
-        $difficultyId = $_request->get("difficulty_id", $_difficulty_id);
-
-        $raidEncounters = array();
-        $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
-        foreach ( $raids as $raid )
-        {
-            if ( $raid["id"] == $mapId )
-            {
-                $raidEncounters = $raid["encounters"];
-                break;
-            }
-        }
-        $encounters = array();
-        foreach ($raidEncounters as $encounter) {
-            $encounterId = $encounter["encounter_id"];
-            $encounter = Encounter::where("encounter_id", "=", $encounterId)
-                ->where("difficulty_id", "=", $difficultyId)
-                ->whereNotIn("encounters.id", self::INVALID_RAIDS)
-                ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                ->select(array(
-                    "encounters.id as id",
-                    "encounters.encounter_id as encounter_id",
-                    "encounters.realm_id as realm",
-                    "guilds.faction as faction",
-                    "encounters.fight_time as fight_time",
-                    "encounters.killtime as killtime",
-                    "guilds.name as name",
-                    "guilds.id as guild_id")
-                )
-                ->orderBy("fight_time")->first();
-
-            if ($encounter && $encounter->realm !== null && array_key_exists($encounter->realm,self::REALM_NAMES)) {
-                $encounterName = Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"];
-                $encounterNameShort  = array_key_exists($encounterName, Encounter::ENCOUNTER_NAME_SHORTS) ? Encounter::ENCOUNTER_NAME_SHORTS[$encounterName] : $encounterName;
-                $encounters[] = array(
-                    "actualId" => $encounter->id,
-                    "id" => $encounter->encounter_id,
-                    "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
-                    "realm_id" => $encounter->realm,
-                    "realmLong" => self::REALM_NAMES[$encounter->realm],
-                    "faction" => $encounter->faction,
-                    "name" => $encounterName . ($encounterId == 1581 ? " (25)" : ""),
-                    "nameShort" => $encounterNameShort,
-                    "guild" => $encounter->name,
-                    "guild_id" => $encounter->guild_id,
-                    "time" => $encounter->fight_time,
-                    "date" => $encounter->killtime,
-                );
-            } else {
-                $encounter = Encounter::where("encounter_id", "=", $encounterId)
-                    ->where("difficulty_id", "=", $difficultyId)
-                    ->orderBy("fight_time")->first();
-
-                if ($encounter && $encounter->realm_id !== null && array_key_exists($encounter->realm_id,self::REALM_NAMES)) {
-                    // Find the fastest pug?\
-                    $encounterName = Encounter::ENCOUNTER_IDS[$encounter->encounter_id]["name"];
-                    $encounterNameShort  = array_key_exists($encounterName, Encounter::ENCOUNTER_NAME_SHORTS) ? Encounter::ENCOUNTER_NAME_SHORTS[$encounterName] : $encounterName;
-                    $encounters[] = array(
-                        "actualId" => $encounter->id,
-                        "id" => $encounter->encounter_id,
-                        "realm" => self::SHORT_REALM_NAMES[$encounter->realm],
-                        "realm_id" => $encounter->realm,
-                        "realmLong" => self::REALM_NAMES[$encounter->realm],
-                        "faction" => -1,
-                        "name" => $encounterName,
-                        "nameShort" => $encounterNameShort ,
-                        "guild" => "Random",
-                        "guild_id" => 0,
-                        "time" => $encounter->fight_time,
-                        "date" => $encounter->killtime
-                    );
-                }
-            }
-        }
-
-        return view("progress_times", compact("encounters"));
-    }
-
-    public function guildRaids(Request $_request, $_realm_id, $_guild_id)
-    {
-
-        $guild = Guild::where("id", "=", $_guild_id)->first();
-        $realm = self::SHORT_REALM_NAMES[$guild->realm];
-
-        $encounterIDs = Encounter::ENCOUNTER_IDS;
-
-
-        $expansionId = $_request->get("expansion_id", self::DEFAULT_EXPANSION_ID);
-        $mapId = $_request->get("map_id", self::DEFAULT_MAP_ID);
-        $difficultyId = $_request->get("difficulty_id", self::DEFAULT_DIFFICULTY_ID);
-
-        $expansions = Encounter::EXPANSIONS;
-        $maps = Encounter::EXPANSION_RAIDS[$expansionId];
-        $difficulties = Encounter::SIZE_AND_DIFFICULTY_DEFAULT;
-
-        $guildEncounters =$encounter = Encounter::where("realm_id", "=", $_realm_id)
-            ->where("guild_id", "=", $_guild_id)
-            ->whereNotIn("encounters.id", self::INVALID_RAIDS)
-            ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-            ->select(array(
-                    "encounters.id as id",
-                    "encounters.encounter_id as encounter_id",
-                    "encounters.realm_id as realm",
-                    "encounters.difficulty_id as difficulty_id",
-                    "guilds.faction as faction",
-                    "encounters.fight_time as fight_time",
-                    "encounters.killtime as killtime",
-                    "guilds.id as guild_id")
-            )
-            ->orderBy("killtime", "desc")->paginate(16);
-
-        return view("progress_kills_guild", compact
-        (
-            "guildEncounters",
-            "guild",
-            "realm"
-            ,"encounterIDs",
-            "expansionId", "mapId","difficultyId",
-            "expansions", "maps", "difficulties"
-        ));
-    }
-
-
-    public static function calculatePS($encounter, $member, $key, $noFormat = false)
-    {
-        $ps = $member[$key]/($encounter->fight_time/1000);
-        if ( $noFormat )
-        {
-            return $ps;
-        }
-        if ( $ps > 999 )
-        {
-            $x = round($ps);
-            $x_number_format = number_format($x);
-            $x_array = explode(',', $x_number_format);
-            $x_parts = array('k', 'm', 'b', 't');
-            $x_count_parts = count($x_array) - 1;
-            $x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
-            $x_display .= $x_parts[$x_count_parts - 1];
-            return $x_display;
-        }
-        else
-        {
-            return number_format($ps);
-        }
-    }
-
-    public static function calculatePercentage($member,$firstMember, $key)
-    {
-        return $member->$key * 100 / max(array($firstMember->$key, 1));
-    }
-
-
-    public function kill(Request $_request, $logid)
-    {
-        $encounter = Encounter::where("encounters.id", "=", $logid)
-            ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-            ->select(array
-                (
-                    "encounters.id as id",
-                    "encounters.encounter_id as encounter_id",
-                    "encounters.realm_id as realm_id",
-                    "guilds.name as name",
-                    "encounters.killtime as killtime",
-                    "encounters.fight_time as fight_time",
-                    "guilds.faction as faction",
-                    "guilds.id as guild_id",
-                    "encounters.wipes as wipes",
-                    "encounters.deaths_total as deaths_total",
-                    "encounters.deaths_fight as deaths_fight",
-                )
-            )
-            ->first();
-
-        $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
-
-        $membersDamage = $members->sortByDesc("damage_done");
-
-
-
-        foreach ( $members as $member )
-        {
-            $member->total_heal = $member->heal_done + $member->damage_absorb;
-        }
-
-        $membersHealing = $members->sortByDesc("total_heal");
-
-        foreach ( $membersDamage as $member ) {
-            $member->dps = self::calculatePS($encounter, $member, "damage_done");
-            $member->dpsNonFormatted = self::calculatePS($encounter, $member, "damage_done", true);
-            $member->percentageDamage = self::calculatePercentage($member, $membersDamage->first(), "damage_done");
-        }
-
-        foreach ( $membersHealing as $member ) {
-            $member->hps = self::calculatePS($encounter, $member, "total_heal");
-            $member->hpsNonFormatted = self::calculatePS($encounter, $member, "total_heal", true);
-            $member->percentageHealing = self::calculatePercentage($member, $membersHealing->first(), "total_heal");
-        }
-
-        $encounteData = Encounter::ENCOUNTER_IDS[$encounter->encounter_id];
-        $realms = self::REALM_NAMES;
-        $shortRealms = self::SHORT_REALM_NAMES;
-        $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
-        $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
-
-        return view("progress_kill" , compact("encounter","encounteData", "membersDamage", "membersDps", "membersHealing", "membersHps","totalDmg","characterClasses","classSpecs","realms","shortRealms"));
-    }
-
     public function kills2encounter(Request $_request, $_encounter_id)
     {
         $bossName = Encounter::ENCOUNTER_IDS[$_encounter_id]["name"];
@@ -314,8 +82,8 @@ class ProgressController extends Controller
                     ->orderBy("fight_time","asc")
                     ->paginate(16);
 
-        $shortRealms = self::SHORT_REALM_NAMES;
-        $longRealms = self::REALM_NAMES;
+        $shortRealms = Realm::REALMS;
+        $longRealms = Realm::REALMS_SHORT;
 
         return view("progress_kills_boss", compact("boss_kills", "shortRealms", "longRealms", "bossName"));
     }
@@ -323,19 +91,6 @@ class ProgressController extends Controller
     public function damage(Request $request)
     {
         return view("progress_damage");
-    }
-
-    public function pveLadder(Request $_request)
-    {
-        $expansionId = $_request->get("expansion_id", self::DEFAULT_EXPANSION_ID);
-        $mapId = $_request->get("map_id", self::DEFAULT_MAP_ID);
-        $difficultyId = $_request->get("difficulty_id", self::DEFAULT_DIFFICULTY_ID);
-
-        $expansions = Encounter::EXPANSIONS;
-        $maps = Encounter::EXPANSION_RAIDS[$expansionId];
-        $difficulties = Encounter::SIZE_AND_DIFFICULTY_DEFAULT;
-
-        return view("pve_ladder", compact("expansions","maps", "mapId", "expansionId", "difficulties", "difficultyId"));
     }
 
     public function getExpansionRaids(Request $_request, $_expansion_id)
@@ -377,11 +132,9 @@ class ProgressController extends Controller
         return "Invalid expansion";
     }
 
-    public function guild(Request $_request)
+    public function index(Request $_request)
     {
-        $guilds = DB::table('guild_progresses')
-            ->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))
-            ->where("guild_progresses.progress", ">", 0);
+        $guilds = DB::table('guild_progresses')->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))->where("guild_progresses.progress", ">", 0);
 
         if ( $_request->has("filter") ) {
 
@@ -433,7 +186,6 @@ class ProgressController extends Controller
             "first_kill" => "first_kill_unix"
         );
 
-
         $orderBy = 'first_kill_unix';
         if ( $_request->has('sort') )
         {
@@ -457,10 +209,10 @@ class ProgressController extends Controller
         $guilds = $guilds->sortBy("first_kill_unix");
 
 
+        $shortRealms = Realm::REALMS;
+        $longRealms = Realm::REALMS_SHORT;
 
-        $shortRealms = self::SHORT_REALM_NAMES;
-        $longRealms = self::REALM_NAMES;
-        return view("progress_guild", compact("guilds", 'shortRealms', 'longRealms'));
+        return view("progress/index", compact("guilds", 'shortRealms', 'longRealms'));
     }
 
 
@@ -495,7 +247,7 @@ class ProgressController extends Controller
     {
         $api = new Tauri\ApiClient();
         $realmId = $_request->has("data") ? $_request->get("data") : rand(0,2);
-        $realmName = self::REALM_NAMES[$realmId];
+        $realmName = Realm::REALMS[$realmId];
 
         $latestRaids = $api->getRaidLast($realmName);
 

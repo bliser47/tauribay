@@ -5,6 +5,7 @@ namespace TauriBay\Http\Controllers;
 
 use TauriBay\Characters;
 use Illuminate\Http\Request;
+use TauriBay\Realm;
 use TauriBay\Trader;
 use TauriBay\Tauri;
 use TauriBay\Tauri\CharacterClasses;
@@ -14,17 +15,6 @@ use Carbon\Carbon;
 class TopItemLevelsController extends Controller
 {
 
-    const REALMS = array(
-        0 => "[HU] Tauri WoW Server",
-        1 => "[HU] Warriors of Darkness",
-        2 => "[EN] Evermoon"
-    );
-
-    const REALMS_SHORT = array(
-        0 => "Tauri",
-        1 => "WoD",
-        2 => "Evermoon"
-    );
 
 
     /**
@@ -35,8 +25,8 @@ class TopItemLevelsController extends Controller
     public function index(Request $_request)
     {
         $characters = Characters::GetTopItemLevels($_request)->paginate(16);
-        $realms = self::REALMS;
-        $realmsShort = self::REALMS_SHORT;
+        $realms = Realm::REALMS;
+        $realmsShort = Realm::REALMS_SHORT;
 
         $characterFactions = array("Ismeretlen", "Horde", "Alliance");
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
@@ -66,7 +56,7 @@ class TopItemLevelsController extends Controller
         $character = Characters::where("name",'=',$_name)->where('realm','=',$_realmId)->first();
         if ( $character === null || Carbon::parse($character->updated_at) < Carbon::now()->subMinutes($_subMinutes) )
         {
-            $characterSheet = $_api->getCharacterSheet(self::REALMS[$_realmId], $_name);
+            $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$_realmId], $_name);
             if ($characterSheet && array_key_exists("response", $characterSheet)) {
                 $characterSheetResponse = $characterSheet["response"];
                 $characterItemLevel = $characterSheetResponse["avgitemlevel"];
@@ -118,7 +108,7 @@ class TopItemLevelsController extends Controller
         $realmId = $_request->get('realm');
         $characters = array();
         if ( !is_null($realmId) ) {
-            $realms = self::REALMS;
+            $realms = Realm::REALMS;
             if (array_key_exists($realmId, $realms)) {
                 $characterName = ucfirst(strtolower($_request->get('name')));
                 $guildName = $_request->get('guildName');
@@ -156,8 +146,8 @@ class TopItemLevelsController extends Controller
         {
             return "Realm is null";
         }
-        $realmsShort = self::REALMS_SHORT;
-        $realms = self::REALMS;
+        $realmsShort = Realm::REALMS_SHORT;
+        $realms = Realm::REALMS;
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
         if ( $_request->has('fromAdd') )
         {
@@ -244,7 +234,7 @@ class TopItemLevelsController extends Controller
                 $api = new Tauri\ApiClient();
                 foreach ( $characters as $character )
                 {
-                    TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(self::REALMS[$character->realm], $character->name), $character);
+                    TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(Realm::REALMS[$character->realm], $character->name), $character);
                 }
                 print("Updating item levels above " . $limit . " that are older than " . $refreshTime . " hours.");
                 $refreshed = true;

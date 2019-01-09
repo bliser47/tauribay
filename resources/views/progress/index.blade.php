@@ -82,8 +82,8 @@
                         <tr class="progressRow">
                             <td class="cellDesktop"> {{ $loop->index+1 }} </td>
                             <td class="cellDesktop"> {{ $shortRealms[$guild->realm] }} </td>
-                            <td class="cellDesktop faction-{{ $guild->faction  }}">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{  $guild->name  }} </a>
-                            <td class="cellMobile faction-{{ $guild->faction  }}">  <a href="{{ URL::to("progress/guild/" . $guild->realm . "/" . $guild->id) }}"> {{ strlen($guild->name) > 9 ? mb_substr($guild->name,0,9) . ".." : $guild->name  }} </a>
+                            <td class="cellDesktop faction-{{ $guild->faction  }}">  <a href="{{ URL::to("guild/" . $guild->id) }}"> {{  $guild->name  }} </a>
+                            <td class="cellMobile faction-{{ $guild->faction  }}">  <a href="{{ URL::to("guild/" . $guild->id) }}"> {{ strlen($guild->name) > 9 ? mb_substr($guild->name,0,9) . ".." : $guild->name  }} </a>
                             </td>
                             <td class="guildProgress"> {{ $guild->progress }}/13 </td>
                             <td class="cellDesktop"> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>

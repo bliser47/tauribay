@@ -65,7 +65,7 @@
                                 <td class="cellMobile">{{ TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$encounter->difficulty_id] }}</td>
                                 <td class="cellDesktop">{{ date('M d, Y', $encounter->killtime) }}</td>
                                 <td class="cellMobile">{{ date('M d', $encounter->killtime) }}</td>
-                                <td><a class="guildClearTime" href="{{ URL::to("/progress/kill/") . "/" . $encounter->id }}">{{ $encounter->fight_time/1000  }}</a></td>
+                                <td><a class="guildClearTime" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounterIDs[$encounter->encounter_id]["name"]) . "/" . $encounter->id }}">{{ $encounter->fight_time/1000  }}</a></td>
                             </tr>
                         @endif
                     @endforeach
