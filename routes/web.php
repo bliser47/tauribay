@@ -65,7 +65,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/guild/{guild_id}', 'GuildController@index');
 
     Route::get('/encounter/{encounter_name_url}', 'EncounterController@index');
-    Route::get('/encounter/{encounter_id}/{log_id}', 'EncounterController@log');
+    Route::get('/encounter/{encounter_name_url}/{log_id}', 'EncounterController@log');
 
     Route::get('/ladder/pve', 'PveLadderController@index');
     Route::get('/ladder/pve/encounter/{encounter_name_short}', 'PveLadderController@encounter');

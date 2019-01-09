@@ -480,10 +480,6 @@ $(function()
                     {
                         difficultyContainer.html(difficultySelectHTML);
                         selectPicker = difficultyContainer.find(".selectpicker");
-                        if ( $(selectPicker).find("option").length === 1 )
-                        {
-                            selectPicker.selectpicker("val", $(selectPicker).find("option").val())
-                        }
                         selectPicker.selectpicker('refresh');
                     }
                 });
@@ -532,6 +528,7 @@ $(function()
         var loader = $(".encounters_loading");
         loader.show();
         $("#pve-ladder-filter").attr("disabled",true);
+        /*
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve/",
@@ -553,6 +550,7 @@ $(function()
                 });
             }
         });
+        */
     });
     if ( $("#pve-ladder-form") )
     {
