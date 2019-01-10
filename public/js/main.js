@@ -528,10 +528,9 @@ $(function()
         var loader = $(".encounters_loading");
         loader.show();
         $("#pve-ladder-filter").attr("disabled",true);
-        /*
         $.ajax({
             type: "POST",
-            url: URL_WEBSITE + "/ladder/pve/",
+            url: URL_WEBSITE + "/ladder/pve",
             data: $(this).serialize(),
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -550,7 +549,6 @@ $(function()
                 });
             }
         });
-        */
     });
     if ( $("#pve-ladder-form") )
     {

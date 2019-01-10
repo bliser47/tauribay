@@ -48,8 +48,6 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/home', 'HomeController@index');
     Route::get('armory', 'ArmoryController@Request');
 
-
-    // Here your routes
     Route::get('/trade', 'TradesController@ShowAll');
     Route::get('/trade/char', 'TradesController@ShowCharacters');
     Route::get('/trade/raid', 'TradesController@ShowGdkps');
@@ -69,7 +67,7 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/ladder/pve', 'PveLadderController@index');
     Route::get('/ladder/pve/encounter/{encounter_name_short}', 'PveLadderController@encounter');
-    Route::post('/ladder/pve/map/{$expansion_id}/{$map_id}/{$difficulty_id}', 'PveLadderController@map');
+    Route::post('/ladder/pve', 'PveLadderController@filter');
 
     Route::get('/progress/expansionRaids/{expansion_id}', 'ProgressController@getExpansionRaids');
     Route::get('/progress/mapDifficulties/{expansion_id}/{raid_id}', 'ProgressController@getMapDifficulties');

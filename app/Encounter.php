@@ -278,4 +278,12 @@ class Encounter extends Model
             $encounter->save();
         }
     }
+
+    public static function getFastest($encounterId, $difficultyId)
+    {
+        return Encounter::where("encounter_id", "=", $encounterId)
+            ->where("difficulty_id", "=", $difficultyId)
+            ->whereNotIn("id", Encounter::INVALID_RAIDS)
+            ->orderBy("fight_time")->first();
+    }
 }
