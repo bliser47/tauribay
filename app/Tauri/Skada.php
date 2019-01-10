@@ -12,14 +12,8 @@ namespace TauriBay\Tauri;
 class Skada
 {
 
-
-    public static function calculatePS($encounter, $member, $key, $noFormat = false)
+    public static function format($ps)
     {
-        $ps = $member[$key]/($encounter->fight_time/1000);
-        if ( $noFormat )
-        {
-            return $ps;
-        }
         if ( $ps > 999 )
         {
             $x = round($ps);
@@ -35,6 +29,16 @@ class Skada
         {
             return number_format($ps);
         }
+    }
+
+    public static function calculatePS($encounter, $member, $key, $noFormat = false)
+    {
+        $ps = $member[$key]/($encounter->fight_time/1000);
+        if ( $noFormat )
+        {
+            return $ps;
+        }
+        return self::format($ps);
     }
 
     public static function calculatePercentage($member,$firstMember, $key)

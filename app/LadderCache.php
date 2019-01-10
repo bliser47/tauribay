@@ -23,7 +23,7 @@ class LadderCache extends Model
         if ( !$cache->top_dps_encounter_member ) {
             $topDps = EncounterMember::where("encounter", "=", $encounterId)
             ->where("difficulty_id", "=", $difficultyId)
-                ->orderBy("dps")->first();
+                ->orderBy("dps","desc")->first();
             if ( $topDps !== null ) {
                 $cache->top_dps_encounter_member = $topDps->id;
                 $cache->save();
