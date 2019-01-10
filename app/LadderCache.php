@@ -21,13 +21,13 @@ class LadderCache extends Model
     {
         $cache = self::getCache($encounterId,$difficultyId);
         if ( !$cache->top_dps_encounter_member ) {
-            $topDps = EncounterMember::leftJoin("encounters", "encounters.id", "=", "encounter_members.encounter_id")
-                ->where("encounters.encounter_id", "=", $encounterId)
-                ->where("difficulty_id", "=", $difficultyId)
-                ->selectRaw('*, encounter_members.damage_done / encounters.fight_time as dps')
+            $topDps = EncounterMember::where("encounter", "=", $encounterId)
+            ->where("difficulty_id", "=", $difficultyId)
                 ->orderBy("dps")->first();
-            $cache->top_dps_encounter_member = $topDps->id;
-            $cache->save();
+            if ( $topDps !== null ) {
+                $cache->top_dps_encounter_member = $topDps->id;
+                $cache->save();
+            }
         }
         return $cache->top_dps_encounter_member;
     }

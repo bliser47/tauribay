@@ -78,4 +78,29 @@ class EncounterController extends Controller
 
         return view("encounter/encounter" , compact("encounter","encounterData", "membersDamage", "membersDps", "membersHealing", "membersHps","totalDmg","characterClasses","classSpecs","realms","shortRealms"));
     }
+
+    public function fixMissing1()
+    {
+        $missing = EncounterMember::where("encounter", "=" ,"")->limit(1000)->get();
+        $added = 0;
+        foreach ( $missing as $encounterMember )
+        {
+            $enc = Encounter::where("id","=",$encounterMember->encounter_id)->first();
+            $encounterMember->encounter = $enc->encounter_id;
+            $encounterMember->difficulty_id = $enc->difficulty_id;
+            $encounterMember->fight_time = $enc->fight_time;
+            $encounterMember->dps = $encounterMember->damage_done / ( $enc->fight_time / 1000 );
+            $encounterMember->hps = ($encounterMember->heal_done + $encounterMember->absorb_done - $encounterMember->overheal) / ( $enc->fight_time / 1000 );
+            $encounterMember->save();
+
+            $added++;
+        }
+        $this->fixMissing1();
+    }
+
+    public function fixMissing(Request $_request)
+    {
+        ini_set('max_execution_time', 0);
+        $this->fixMissing1();
+    }
 }

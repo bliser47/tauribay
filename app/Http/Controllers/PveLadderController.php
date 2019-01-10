@@ -53,8 +53,7 @@ class PveLadderController extends Controller
                     $encounter->guild_name = $guild->name;
                     $encounter->faction = $guild->faction;
                 }
-                $topDpsMemberId = LadderCache::getTopDpsId($encounterId,$difficultyId);
-                $encounter->top_dps = EncounterMember::where("id","=",$topDpsMemberId)->first();
+                $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
                 $encounters[] = $encounter;
             }
         }

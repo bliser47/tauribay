@@ -5,6 +5,7 @@
         <th>{{ __("Guild") }}</th>
         <th>{{ __("Legjobb idő") }}
         <th class="cellDesktop">{{ __("Dátum") }}</th>
+        <th>{{ __("Player") }}</th>
         <th>{{ __("Top DPS") }}</th>
     </tr>
     @foreach( $encounters as $encounter )
@@ -21,7 +22,8 @@
             </td>
             <td><a class="guildClearTime" href="{{ URL::to("/encounter/") . "/" . $encounter["log_id"] }}">{{ $encounter["fight_time"]/1000 }}</a></td>
             <td class="cellDesktop">{{ date('M d, Y', $encounter["killtime"]) }}</td>
-            <td>{{ $encounter["top_dps"]->name }}</td>
+            <td>{{ $encounter["top_dps"]["name"] }}</td>
+            <td>{{ $encounter["top_dps"]["dps"]}}</td>
         </tr>
     @endforeach
 </table>
