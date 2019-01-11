@@ -25,11 +25,10 @@ class PveLadderController extends Controller
     }
 
 
-    public function filter(Request $_request, $_expansion_id = Defaults::EXPANSION_ID, $_map_id = Defaults::MAP_ID, $_difficulty_id = Defaults::DIFFICULTY_ID)
+    public function filter(Request $_request, $_expansion_id = Defaults::EXPANSION_ID, $_map_id = Defaults::MAP_ID)
     {
         $expansionId = $_request->get("expansion_id", $_expansion_id);
         $mapId = $_request->get("map_id", $_map_id);
-        $difficultyId = $_request->get("difficulty_id", $_difficulty_id);
 
         $raidEncounters = array();
         $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
@@ -41,24 +40,28 @@ class PveLadderController extends Controller
                 break;
             }
         }
+
+        $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
         $encounters = array();
-        foreach ( $raidEncounters as $raidEncounter )
-        {
-            $encounterId = $raidEncounter["encounter_id"];
-            $fastestEncounterId = LadderCache::getFastestEncounterId($encounterId, $difficultyId);
-            $encounter = Encounter::where("id", "=", $fastestEncounterId)->first();
-            if ( $encounter !== null ) {
-                if ($encounter->guild_id !== 0) {
-                    $guild = Guild::where("id","=",$encounter->guild_id)->first();
-                    $encounter->guild_name = $guild->name;
-                    $encounter->faction = $guild->faction;
+        foreach ( $difficulties as $index => $difficulty ) {
+            $difficultyId = $difficulty["id"];
+            $encounters[$difficultyId] = array();
+            foreach ($raidEncounters as $raidEncounter) {
+                $encounterId = $raidEncounter["encounter_id"];
+                $fastestEncounterId = LadderCache::getFastestEncounterId($encounterId, $difficultyId);
+                $encounter = Encounter::where("id", "=", $fastestEncounterId)->first();
+                if ($encounter !== null) {
+                    if ($encounter->guild_id !== 0) {
+                        $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                        $encounter->guild_name = $guild->name;
+                        $encounter->faction = $guild->faction;
+                    }
+                    $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
+                    $encounters[$difficultyId][] = $encounter;
                 }
-                $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
-                $encounters[] = $encounter;
             }
         }
 
-        $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
 
         return view("ladder/pve/raid", compact("encounters", "difficulties"));
     }
