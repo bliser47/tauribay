@@ -43,6 +43,7 @@ class RaidController extends Controller
                     {
                         $encounters[$encounter["encounter_id"]] = $encounter["encounter_name"];
                     }
+                    $encounters[0] = __("Minden boss");
                     return FormFacade::select('encounter_id', $encounters, 0, ['required', 'id' => 'encounter', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz bosst")]);
                 }
             }

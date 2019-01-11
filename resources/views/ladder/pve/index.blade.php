@@ -32,7 +32,7 @@
                                 {!! Form::select('encounter_id', $encounters,  Input::get('encounter_id', $encounterId), ['required', 'id' => 'encounter', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz bosst")]); !!}
                             </div>
                         </div>
-                        <div class="form-group col-md-12 nopadding nomargin">
+                        <div class="form-group col-md-12 nomargin col-sm-nopadding">
                             <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
                                 {{ __("Keresés") }}
                             </button>

@@ -498,6 +498,8 @@ $(function()
                             encountersContainer.html(encounterSelectHTML);
                             selectPicker = encountersContainer.find(".selectpicker");
                             selectPicker.selectpicker('refresh');
+                            selectPicker.val(0);
+                            selectPicker.selectpicker('refresh');
                         }
                     });
                 }
