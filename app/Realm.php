@@ -24,4 +24,10 @@ class Realm extends Model
         1 => "WoD",
         2 => "Evermoon"
     );
+
+    const REALMS_URL = array(
+        0 => "tauri",
+        1 => "wod",
+        2 => "evermoon"
+    );
 }

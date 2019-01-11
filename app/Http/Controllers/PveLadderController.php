@@ -58,7 +58,9 @@ class PveLadderController extends Controller
             }
         }
 
-        return view("ladder/pve/raid", compact("encounters"));
+        $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+
+        return view("ladder/pve/raid", compact("encounters", "difficulties"));
     }
 
     public function index(Request $_request)

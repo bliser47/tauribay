@@ -175,8 +175,9 @@ class Encounter extends Model
         )
     );
 
-    public static function getNameShort($name)
+    public static function getNameShort($id)
     {
+        $name = self::getName($id);
         return array_key_exists($name, self::ENCOUNTER_NAME_SHORTS) ? self::ENCOUNTER_NAME_SHORTS[$name] : $name;
     }
 
@@ -300,5 +301,29 @@ class Encounter extends Model
             return EncounterMember::where("id", "=", $topDpsMemberId)->first();
         }
         return null;
+    }
+
+    public static function getMapDifficulties($_expansion_id, $_map_id)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                if ( $raid["id"] == $_map_id )
+                {
+                    $difficulties = array();
+                    foreach ( $raid["available_difficulties"] as $difficulty )
+                    {
+                        if ( array_key_exists($difficulty["id"], Encounter::SIZE_AND_DIFFICULTY))
+                        {
+                            $difficulties[] = $difficulty;
+                        }
+                    }
+                    return $difficulties;
+                }
+            }
+        }
+        return array();
     }
 }

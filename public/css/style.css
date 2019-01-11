@@ -1085,3 +1085,20 @@ tbody tr:nth-child(odd){
 {
     height:180px;
 }
+
+.topDpsSpecContainer
+{
+    width: 35px;
+    height: 35px !important;
+    overflow: hidden;
+    position: relative;
+}
+
+.topDpsSpec
+{
+    width: 39px;
+    height: 39px;
+    position: absolute;
+    left: -2px;
+    top: -2px;
+}

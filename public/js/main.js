@@ -415,9 +415,20 @@ $(function()
         if (hours   < 10) {hours   = "0"+hours;}
         if (minutes < 10) {minutes = "0"+minutes;}
         if (seconds < 10) {seconds = "0"+seconds;}
-        var time    = hours+':'+minutes+':'+seconds;
-        return time;
-    }
+        return hours+':'+minutes+':'+seconds;
+    };
+
+    String.prototype.toMMSS = function () {
+        /* extend the String by using prototypical inheritance */
+        var seconds = parseInt(this, 10); // don't forget the second param
+        var hours   = Math.floor(seconds / 3600);
+        var minutes = Math.floor((seconds - (hours * 3600)) / 60);
+        seconds = seconds - (hours * 3600) - (minutes * 60);
+
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        return minutes+':'+seconds;
+    };
 
     function UpdateTimes() {
         $(".time").each(function () {
@@ -427,6 +438,12 @@ $(function()
             var time = $(this).html();
             if ( time.length > 0 ) {
                 $(this).html((parseInt(time)).toString().toHHMMSS());
+            }
+        });
+        $(".encounterKillTime").each(function () {
+            var time = $(this).html();
+            if ( time.length > 0 ) {
+                $(this).html((parseInt(time)).toString().toMMSS());
             }
         });
     }
@@ -541,12 +558,7 @@ $(function()
 
                 $(loader).hide();
                 $(container).html(response);
-                $(container).find(".guildClearTime").each(function () {
-                    var time = $(this).html();
-                    if ( time.length > 0 ) {
-                        $(this).html((parseInt(time)).toString().toHHMMSS());
-                    }
-                });
+                UpdateTimes();
             }
         });
     });
