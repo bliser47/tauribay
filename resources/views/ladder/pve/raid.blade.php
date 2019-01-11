@@ -35,11 +35,17 @@
                         </td>
                         <td><a class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . $encounter["log_id"] }}">{{ $encounter["fight_time"]/1000 }}</a></td>
                         <td class="cellDesktop">{{ date('M d, Y', $encounter["killtime"]) }}</td>
-                        <td class="topDpsSpecContainer">
-                            <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $encounter["top_dps"]["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter["top_dps"]["spec"]] }}"/>
-                        </td>
-                        <td class="cellDesktop"><a href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$encounter["top_dps"]["realm_id"]] ."/" . $encounter["top_dps"]["name"] }}">{{ $encounter["top_dps"]["name"] }}</a></td>
-                        <td><a href="{{ URL::to("/encounter/") . "/" . $encounter["top_dps"]["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($encounter["top_dps"]["dps"]) }}</a></td>
+                        @if ( $encounter["top_dps"] )
+                            <td class="topDpsSpecContainer">
+                                <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $encounter["top_dps"]["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter["top_dps"]["spec"]] }}"/>
+                            </td>
+                            <td class="cellDesktop"><a href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$encounter["top_dps"]["realm_id"]] ."/" . $encounter["top_dps"]["name"] }}">{{ $encounter["top_dps"]["name"] }}</a></td>
+                            <td><a href="{{ URL::to("/encounter/") . "/" . $encounter["top_dps"]["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($encounter["top_dps"]["dps"]) }}</a></td>
+                        @else
+                            <td></td>
+                            <td class="cellDesktop"></td>
+                            <td></td>
+                        @endif
                     </tr>
                 @endforeach
             </table>
