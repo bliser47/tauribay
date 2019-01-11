@@ -2,7 +2,6 @@
 
 namespace TauriBay\Http\Controllers;
 
-use Collective\Html\FormFacade;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
 use TauriBay\Guild;
@@ -91,45 +90,6 @@ class ProgressController extends Controller
     public function damage(Request $request)
     {
         return view("progress_damage");
-    }
-
-    public function getExpansionRaids(Request $_request, $_expansion_id)
-    {
-        $expansionKey = "map_exp_".$_expansion_id;
-        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
-            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
-            $maps = array();
-            foreach ( $expansionRaids as $raid )
-            {
-                $maps[$raid["id"]] = $raid["name"];
-            }
-            return FormFacade::select('map_id', $maps, 0, ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz raidet")]);
-        }
-        return "";
-    }
-
-    public function getMapDifficulties(Request $_request, $_expansion_id, $_raid_id)
-    {
-        $expansionKey = "map_exp_".$_expansion_id;
-        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
-            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
-            foreach ( $expansionRaids as $raid )
-            {
-                if ( $raid["id"] == $_raid_id )
-                {
-                    $difficulties = array();
-                    foreach ( $raid["available_difficulties"] as $difficulty )
-                    {
-                        if ( array_key_exists($difficulty["id"], Encounter::SIZE_AND_DIFFICULTY))
-                        {
-                            $difficulties[$difficulty["id"]] = $difficulty["name"];
-                        }
-                    }
-                    return FormFacade::select('difficulty_id', $difficulties, 0, ['required', 'id' => 'difficulties', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz nehézséget")]);
-                }
-            }
-        }
-        return "Invalid expansion";
     }
 
     public function index(Request $_request)

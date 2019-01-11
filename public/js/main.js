@@ -482,24 +482,25 @@ $(function()
             if ( set !== currentMap )
             {
                 currentMap = set;
-                var difficultyContainer = $("#difficulty-container");
-                var selectPicker = difficultyContainer.find(".selectpicker");
+                var encountersContainer = $("#encounter-container");
+                var selectPicker = encountersContainer.find(".selectpicker");
                 selectPicker.attr('disabled', true);
                 selectPicker.val(0);
                 selectPicker.selectpicker('refresh');
-                $.ajax({
-                    type: "GET",
-                    url: URL_WEBSITE + "/progress/mapDifficulties/" + currentExpansion + "/" + set,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(difficultySelectHTML)
-                    {
-                        difficultyContainer.html(difficultySelectHTML);
-                        selectPicker = difficultyContainer.find(".selectpicker");
-                        selectPicker.selectpicker('refresh');
-                    }
-                });
+                if ( currentMap > 0 ) {
+                    $.ajax({
+                        type: "GET",
+                        url: URL_WEBSITE + "/raid/" + currentExpansion + "/" + set,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (encounterSelectHTML) {
+                            encountersContainer.html(encounterSelectHTML);
+                            selectPicker = encountersContainer.find(".selectpicker");
+                            selectPicker.selectpicker('refresh');
+                        }
+                    });
+                }
             }
         });
     };
@@ -522,7 +523,7 @@ $(function()
             });
             $.ajax({
                 type: "GET",
-                url: URL_WEBSITE + "/progress/expansionRaids/" + set,
+                url: URL_WEBSITE + "/raid/" + set,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
