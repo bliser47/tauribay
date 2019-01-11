@@ -798,11 +798,11 @@ a.changelog:hover
 }
 
 .divMobile {
-    display: none;
+    display: none !important;
 }
 
 .divDesktop {
-    display: block;
+    display: block !important;
 }
 
 .listDesktop
@@ -837,11 +837,11 @@ a.changelog:hover
     }
     .divMobile
     {
-        display:block;
+        display:block !important;;
     }
     .divDesktop
     {
-        display:none;
+        display:none !important;
     }
     .listDesktop
     {
