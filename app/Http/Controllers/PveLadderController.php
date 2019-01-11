@@ -24,6 +24,25 @@ class PveLadderController extends Controller
 
     }
 
+    public function expansion(Request $_request, $_expansion_name_short)
+    {
+        $expansionId = Encounter::convertExpansionShortNameToId($_expansion_name_short);
+        $_request->request->add(array(
+            "expansion_id" => $expansionId
+        ));
+        return $this->index($_request);
+    }
+
+    public function expansionAndMap(Request $_request, $_expansion_name_short, $_map_name_short)
+    {
+        $this->expansion($_request, $_expansion_name_short);
+        $mapId = Encounter::convertMapShortNameToId($_map_name_short);
+        $_request->request->add(array(
+            "map_id" => $mapId
+        ));
+        return $this->index($_request);
+    }
+
 
     public function filter(Request $_request, $_expansion_id = Defaults::EXPANSION_ID, $_map_id = Defaults::MAP_ID)
     {

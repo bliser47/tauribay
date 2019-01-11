@@ -65,6 +65,21 @@ class Encounter extends Model
         1580 => "Ra-den"
     );
 
+    const RAID_SHORTS = array(
+        1008 => "msv",
+        1009 => "hof",
+        996 => "toes",
+        1098 => "tot"
+    );
+
+    const EXPANSION_SHORTS = array(
+        0 => "classic",
+        1 => "tbc",
+        2 => "wotlk",
+        3 => "cata",
+        4 => "mop"
+    );
+
     const SIZE_AND_DIFFICULTY = array(
         3 => "10 Player",
         4 => "25 Player",
@@ -325,5 +340,29 @@ class Encounter extends Model
             }
         }
         return array();
+    }
+
+    public static function convertExpansionShortNameToId($_expansion_short_name)
+    {
+        foreach ( self::EXPANSION_RAIDS_COMPLEX as $id => $short )
+        {
+            if  ( $short == $_expansion_short_name )
+            {
+                return $id;
+            }
+        }
+        return Defaults::EXPANSION_ID;
+    }
+
+    public static function convertMapShortNameToId($_map_short_name)
+    {
+        foreach ( self::RAID_SHORTS as $id => $short )
+        {
+            if  ( $short == $_map_short_name )
+            {
+                return $id;
+            }
+        }
+        return Defaults::MAP_ID;
     }
 }
