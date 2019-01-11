@@ -51,19 +51,21 @@ class PveLadderController extends Controller
 
         $raidEncounters = array();
         $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
-        foreach ( $raids as $raid )
-        {
-            if ( $raid["id"] == $mapId )
-            {
+        foreach ( $raids as $raid ) {
+            if ($raid["id"] == $mapId) {
                 $raidEncounters = $raid["encounters"];
                 break;
             }
         }
-
+        $defaultDifficultyIndex = 0;
         $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
         $encounters = array();
         foreach ( $difficulties as $index => $difficulty ) {
             $difficultyId = $difficulty["id"];
+            if ( $difficultyId == 5 )
+            {
+                $defaultDifficultyIndex = $index;
+            }
             $encounters[$difficultyId] = array();
             foreach ($raidEncounters as $raidEncounter) {
                 $encounterId = $raidEncounter["encounter_id"];
@@ -82,7 +84,7 @@ class PveLadderController extends Controller
         }
 
 
-        return view("ladder/pve/raid", compact("encounters", "difficulties"));
+        return view("ladder/pve/raid", compact("encounters", "difficulties", "defaultDifficultyIndex"));
     }
 
     public function index(Request $_request)

@@ -1102,3 +1102,8 @@ tbody tr:nth-child(odd){
     left: -2px;
     top: -2px;
 }
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #5cb85c;
+}
