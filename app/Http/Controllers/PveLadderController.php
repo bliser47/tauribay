@@ -64,7 +64,23 @@ class PveLadderController extends Controller
 
         if ( $encounterId > 0 )
         {
-            return view("ladder/pve/ajax/encounter");
+            $encounters = array();
+            $defaultDifficultyIndex = 0;
+            $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+            foreach ($difficulties as $index => $difficulty) {
+                $difficultyId = $difficulty["id"];
+                if ($difficultyId == 5) {
+                    $defaultDifficultyIndex = $index;
+                }
+                $encounters[$difficultyId] = EncounterMember::where("encounter", "=", $encounterId)
+                    ->where("difficulty_id", "=", $difficultyId)
+                    ->orderBy("dps")->paginate(10);
+            }
+            return view("ladder/pve/ajax/encounter", compact(
+                "encounters",
+                "difficulties",
+                "defaultDifficultyIndex"
+            ));
         }
         else {
             $expansionId = $_request->get("expansion_id", $_expansion_id);
