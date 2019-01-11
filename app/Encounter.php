@@ -365,4 +365,24 @@ class Encounter extends Model
         }
         return Defaults::MAP_ID;
     }
+
+    public static function convertEncounterShortNameToId($_expansion_id, $_map_id, $_encounter_name_short)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionMaps = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ($expansionMaps as $map) {
+                if ($map["id"] == $_map_id) {
+                    foreach ($map["encounters"] as $encounter) {
+                        $name = Encounter::getUrlName($encounter["encounter_id"]);
+                        if ( $name == $_encounter_name_short )
+                        {
+                            return intval($encounter["encounter_id"]);
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 }

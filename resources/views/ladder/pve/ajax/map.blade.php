@@ -17,8 +17,8 @@
                 </tr>
                 @foreach( $encounters[$difficulty["id"]] as $encounter )
                     <tr>
-                        <td class="cellDesktop" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') ."/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) }}">{{ \TauriBay\Encounter::getName($encounter["encounter_id"]) }}</a></td>
-                        <td class="cellMobile" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') ."/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) }}">{{ \TauriBay\Encounter::getNameShort($encounter["encounter_id"]) }}</a></td>
+                        <td class="cellDesktop" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::RAID_SHORTS[$mapId] . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) }}">{{ \TauriBay\Encounter::getName($encounter["encounter_id"]) }}</a></td>
+                        <td class="cellMobile" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::RAID_SHORTS[$mapId] . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"])}}">{{ \TauriBay\Encounter::getNameShort($encounter["encounter_id"]) }}</a></td>
                         <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[intval($encounter["realm_id"])] }}</td>
                         <td class="cellDesktop faction-{{ $encounter["faction"] }}">
                             @if ( strlen($encounter["guild_name"]) )
