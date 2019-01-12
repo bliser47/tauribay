@@ -591,7 +591,8 @@ $(function()
             },
             success: function(response)
             {
-                $("#difficulty-" + difficultyId).html(response);
+                var container = $("#difficulty-" + difficultyId);
+                $(container).html(response);
                 UpdateTimes();
             }
         });
