@@ -80,8 +80,40 @@ class PveLadderController extends Controller
                 }
 
                 $members = EncounterMember::where("encounter", "=", $encounterId)
-                    ->where("difficulty_id", "=", $difficultyId)
-                    ->orderBy("dps","desc")->paginate(16);
+                    ->where("difficulty_id", "=", $difficultyId);
+
+                //  Realm filter
+                if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                    $realms = array();
+                    if ($_request->has('tauri')) {
+                        array_push($realms, 0);
+                    }
+                    if ($_request->has('wod')) {
+                        array_push($realms, 1);
+                    }
+                    if ($_request->has('evermoon')) {
+                        array_push($realms, 2);
+                    }
+                    $members = $members->whereIn('realm_id', $realms);
+                }
+
+                // Faction filter
+                if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
+                    $factions = array();
+                    if ($_request->has('alliance')) {
+                        array_push($factions, 0);
+                    }
+                    if ($_request->has('horde')) {
+                        array_push($factions, 1);
+                    }
+                    if ($_request->has('ismeretlen')) {
+                        array_push($factions, 3);
+                    }
+                    $members = $members->whereIn('faction_id', $factions);
+                }
+
+
+                $members = $members->orderBy("dps","desc")->paginate(16);
 
                 foreach ( $members as $member )
                 {

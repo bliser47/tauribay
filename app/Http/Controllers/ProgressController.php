@@ -45,7 +45,9 @@ class ProgressController extends Controller
         //$raidLog = $api->getRaidMaps($realmName);
 
 
-        $latestRaids = $api->getRaidLast($realmName);
+        $latestRaids = $api->getRaidLog(Realm::REALMS[0], 2000);
+
+        return json_encode($latestRaids);
 
         $start = "\"response\":{\"logs\":[{";
         $startPos = strpos ($latestRaids,$start);
@@ -56,10 +58,12 @@ class ProgressController extends Controller
         $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
         $logs = explode($delimiter,$logs);
 
-        return count($logs);
+        return "{".$logs[0]."}";
+
+
+        //return count($logs);
 
         /*
-        return "{".$logs[0]."}";
 
         return json_encode($raidLog,true);
         */

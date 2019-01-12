@@ -14,7 +14,7 @@ use TauriBay\Realm;
 use TauriBay\Encounter;
 use TauriBay\Tauri\Skada;
 use TauriBay\Tauri\CharacterClasses;
-use Carbon\Carbon;
+use TauriBay\Guild;
 
 
 class EncounterController extends Controller
@@ -81,18 +81,27 @@ class EncounterController extends Controller
 
     public function fixMissing1()
     {
-        $missing = EncounterMember::where("hps", "=" ,-1)->limit(1000)->get();
+        $missing = EncounterMember::where("faction_id", "=" ,-1)->limit(1000)->get();
         $added = 0;
         foreach ( $missing as $encounterMember )
         {
             $enc = Encounter::where("id","=",$encounterMember->encounter_id)->first();
-            /*
             $encounterMember->encounter = $enc->encounter_id;
             $encounterMember->difficulty_id = $enc->difficulty_id;
             $encounterMember->fight_time = $enc->fight_time;
             $encounterMember->dps = $encounterMember->damage_done / ( $enc->fight_time / 1000 );
-            */
             $encounterMember->hps = ($encounterMember->heal_done + $encounterMember->absorb_done) / ( $enc->fight_time / 1000 );
+
+            if ( $enc->guild_id > 0 )
+            {
+                $guild = Guild::where("id", "=", $enc->guild_id)->first();
+                $encounterMember->faction_id = $guild->faction;
+            }
+            else
+            {
+                $encounterMember->faction_id = 1;
+            }
+
             $encounterMember->save();
 
             $added++;

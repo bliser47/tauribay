@@ -203,7 +203,7 @@ class Encounter extends Model
                 $encounter->item_count = $_data["item_count"];
                 $encounter->save();
 
-                self::updateEncounterMembers($api, $encounter);
+                self::updateEncounterMembers($api, $encounter, $guild);
 
                 $result["result"] = true;
             }
@@ -219,7 +219,7 @@ class Encounter extends Model
         return $result;
     }
 
-    public static function updateEncounterMembers($api, $encounter)
+    public static function updateEncounterMembers($api, $encounter, $guild)
     {
         EncounterMember::where("encounter_id", "=", $encounter->id)->delete();
         $raidLog = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
@@ -248,6 +248,14 @@ class Encounter extends Model
             $member->interrupts = $memberData["interrupts"];
             $member->dispells = $memberData["dispells"];
             $member->ilvl = $memberData["ilvl"];
+            if ( $guild !== null )
+            {
+                $member->faction_id = $guild->faction;
+            }
+            else
+            {
+                $member->faction_id = -1;
+            }
             $member->save();
 
             ++$i;

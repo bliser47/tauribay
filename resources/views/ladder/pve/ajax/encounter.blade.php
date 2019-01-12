@@ -19,6 +19,36 @@
     <div id="encounterFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
         <div class="panel-body">
             {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
+            <div class="form-group col-md-6">
+                <legend> {{ __("Realm") }} </legend>
+                <div class="input-group">
+                    <div class="checkbox checkbox-inline checkbox-realm">
+                        {!! Form::checkbox('tauri',2,Input::get('tauri'),array("id"=>"realm-tauri","class"=>"realm")) !!}
+                        <label for="realm-tauri"> Tauri </label>
+                    </div>
+                    <div class="checkbox checkbox-inline checkbox-realm">
+                        {!! Form::checkbox('wod',1,Input::get('wod'),array("id"=>"realm-wod","class"=>"realm")) !!}
+                        <label for="realm-wod"> WoD </label>
+                    </div>
+                    <div class="checkbox checkbox-inline checkbox-realm">
+                        {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
+                        <label for="realm-evermoon"> Evermoon </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <legend> {{ __("Frakció") }} </legend>
+                <div class="input-group">
+                    <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
+                        {!! Form::checkbox('alliance',2,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
+                        <label for="faction-alliance"> Alliance </label>
+                    </div>
+                    <div class="checkbox checkbox-inline checkbox-horde checkbox-white-tick checkbox-faction">
+                        {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
+                        <label for="faction-horde"> Horde </label>
+                    </div>
+                </div>
+            </div>
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
                 <legend> {{ __("Nehézség") }} </legend>
                 <div id="expansions-container" class="input-group col-md-12">
