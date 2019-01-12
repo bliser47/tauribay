@@ -326,7 +326,7 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
     background:transparent;
 }
 
-.nav, .table, .encounters_loading, .panel-body
+.nav, .table, .encounters_loading, .panel-body, .encounter-body
 {
     background:white;
 }

@@ -133,5 +133,10 @@
   "Első kill" : "First kill",
   "Frissítés" : "Refresh",
   "Minden boss" : "All encounters",
-  "Válassz bosst" : "Select encounter"
+  "Válassz bosst" : "Select encounter",
+  "Legutóbbi" : "Rescent",
+  "Minden kaszt" : "All casses",
+  "Minden spec" : "All specs",
+  "Válassz kasztot" : "Select class",
+  "Válassz spec-et" : "Select spec"
 }

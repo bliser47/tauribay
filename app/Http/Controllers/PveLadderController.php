@@ -101,18 +101,35 @@ class PveLadderController extends Controller
             }
             else
             {
-                $defaultDifficultyIndex = 0;
+
+                $sorting = array(
+                    "rescent" => __("Legutóbbi"),
+                    "speed" => __("Legjobb idő"),
+                    "dps" => "DPS",
+                    "hps" => "HPS"
+                );
+                $sortingId = "dps";
+                $difficultyId = 5;
                 $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
-                foreach ($difficulties as $index => $difficulty) {
-                    if ($difficulty["id"] == 5) {
-                        $defaultDifficultyIndex = $index;
-                    }
-                }
+
+                $classes = array();
+                $classes[0] = __("Minden kaszt");
+                $classId = 0;
+                $specs = array();
+                $specs[0] = __("Minden spec");
+                $specId = 0;
+
                 return view("ladder/pve/ajax/encounter", compact(
+                    "sorting",
+                    "sortingId",
                     "encounterId",
                     "mapId",
                     "difficulties",
-                    "defaultDifficultyIndex"
+                    "difficultyId",
+                    "classes",
+                    "specs",
+                    "classId",
+                    "specId"
                 ));
             }
         }

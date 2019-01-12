@@ -511,6 +511,30 @@ $(function()
     };
     listenForMapChange();
 
+
+    var encounterOnSubmit = function(encounterId)
+    {
+        $("#encounter-form").submit(function(e){
+            var data = $(this).serialize();
+            data += "&encounter_id=" + encounterId;
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: URL_WEBSITE + "/ladder/pve",
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response)
+                {
+                    $("#encounter-form-response").html(response);
+                    UpdateTimes();
+                }
+            });
+        });
+        $("#encounter-form").submit();
+    };
+
     var currentExpansion = $("#expansion").val();
     var currentMap = $("#map").val();
     $("#expansions-container .selectpicker").change(function()
@@ -561,17 +585,13 @@ $(function()
             success: function(response)
             {
                 $("#pve-ladder-filter").attr("disabled",false);
-
                 $(loader).hide();
                 $(container).html(response);
-                UpdateTimes();
 
-                loadEncounterDifficulty($(".encounter-difficulty-loading-container.active").data("difficulty"), 1);
-                $(".difficultyPanel").click(function(){
-                    if ( !$(this).hasClass(".loadingDifficulty")) {
-                        loadEncounterDifficulty($(this).data("difficulty"), 1)
-                    }
-                })
+                var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
+                if (  selectedEncounterId > 0 ) {
+                    encounterOnSubmit(selectedEncounterId);
+                }
             }
         });
     });
@@ -581,32 +601,5 @@ $(function()
     }
 
 
-    var loadEncounterDifficulty = function(difficultyId, page)
-    {
-        $("#difficultyPanel" + difficultyId).addClass(".loadingDifficulty");
-        var data = $("#pve-ladder-form").serialize();
-        data += ("&difficulty_id=" + difficultyId);
-        data += ("&page=" + page);
-        $.ajax({
-            type: "POST",
-            url: URL_WEBSITE + "/ladder/pve",
-            data: data,
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response)
-            {
-                var container = $("#difficulty-" + difficultyId);
-                $(container).html(response);
-                $(container).find(".pagination a").click(function(e)
-                {
-                    e.preventDefault();
-                    var url = new URL($(this).attr("href"));
-                    var page = url.searchParams.get("page");
-                    loadEncounterDifficulty(difficultyId, page)
-                });
-                UpdateTimes();
-            }
-        });
-    };
+
 });
