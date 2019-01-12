@@ -148,48 +148,6 @@ class Encounter extends Model
         )
     );
 
-    const MAP_ENCOUNTERS_MERGED = array(
-        1098 => array(
-            1577,
-            1575,
-            1570,
-            1565,
-            1578,
-            1573,
-            1572,
-            1574,
-            1576,
-            1559,
-            1560,
-            1579,
-            array(
-                1580, 1581
-            )
-        ),
-        996 => array(
-            1409,
-            1505,
-            1506,
-            1431
-        ),
-        1009 => array(
-            1507,
-            1504,
-            1463,
-            1498,
-            1499,
-            1501
-        ),
-        1008 => array(
-            1395,
-            1390,
-            1434,
-            1436,
-            1500,
-            1407
-        )
-    );
-
     public static function getNameShort($id)
     {
         $name = self::getName($id);
@@ -318,7 +276,13 @@ class Encounter extends Model
         return null;
     }
 
-    public static function getMapDifficulties($_expansion_id, $_map_id)
+    // Ra-den and Sinestra
+    public static function isHeroicEncounter($_encounter_id)
+    {
+        return $_encounter_id == 1580 || $_encounter_id == 1581 || $_encounter_id == 1082 || $_encounter_id == 1083;
+    }
+
+    public static function getMapDifficulties($_expansion_id, $_map_id, $_encounter_id = 0)
     {
         $expansionKey = "map_exp_".$_expansion_id;
         if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
@@ -328,12 +292,24 @@ class Encounter extends Model
                 if ( $raid["id"] == $_map_id )
                 {
                     $difficulties = array();
-                    foreach ( $raid["available_difficulties"] as $difficulty )
-                    {
-                        if ( array_key_exists($difficulty["id"], Encounter::SIZE_AND_DIFFICULTY))
-                        {
-                            $difficulties[] = $difficulty;
+                    if ( $_encounter_id == 0 || !self::isHeroicEncounter($_encounter_id) ) {
+                        foreach ($raid["available_difficulties"] as $difficulty) {
+                            if (array_key_exists($difficulty["id"], Encounter::SIZE_AND_DIFFICULTY)) {
+                                $difficulties[] = $difficulty;
+                            }
                         }
+                    }
+                    else
+                    {
+                        // Heroic encounters
+                        $difficulties[] = array(
+                            "id" => 5,
+                            "name" => Encounter::SIZE_AND_DIFFICULTY[5]
+                        );
+                        $difficulties[] = array(
+                            "id" => 6,
+                            "name" => Encounter::SIZE_AND_DIFFICULTY[6]
+                        );
                     }
                     return $difficulties;
                 }
@@ -354,6 +330,11 @@ class Encounter extends Model
                     $encounters = array();
                     foreach ( $raid["encounters"] as $encounter )
                     {
+                        // Ra-den 25 HC double entry
+                        if ( $encounter["encounter_id"] == 1581 || $encounter["encounter_id"] == 1083 )
+                        {
+                            continue;
+                        }
                         $encounters[$encounter["encounter_id"]] = $encounter["encounter_name"];
                     }
                     return $encounters;
@@ -388,14 +369,8 @@ class Encounter extends Model
         if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
             $expansionMaps = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
             foreach ($expansionMaps as $map) {
-                if ($map["name"] == $_map_id) {
-                    foreach ($map["encounters"] as $encounter) {
-                        $name = Encounter::getUrlName($encounter["encounter_id"]);
-                        if ( $name == $_encounter_name_short )
-                        {
-                            return intval($encounter["encounter_id"]);
-                        }
-                    }
+                if ( self::shorten($map["name"]) == $_map_short_name) {
+                    return $map["id"];
                 }
             }
         }
@@ -422,10 +397,15 @@ class Encounter extends Model
         return 0;
     }
 
+    public static function shorten($str)
+    {
+        return strtolower(preg_replace("/\PL/u", "", $str));
+    }
+
     public static function getMapNameShort($_expansion_id, $_map_id)
     {
         $name = self::getMapName($_expansion_id, $_map_id);
-        return strtolower(preg_replace("/\PL/u", "", $name));
+        return self::shortenMap($name);
     }
 
     public static function getMapName($_expansion_id, $_map_id)

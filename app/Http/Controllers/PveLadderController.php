@@ -67,6 +67,18 @@ class PveLadderController extends Controller
         {
             if ( $_request->has("difficulty_id")) {
                 $difficultyId = $_request->get("difficulty_id");
+
+
+                // Ra-den 25 HC hack
+                if ( $encounterId == 1580 && $difficultyId == 6 )
+                {
+                    $encounterId = 1581;
+                }
+                else if ( $encounterId == 1082 && $difficultyId == 6 )
+                {
+                    $encounterId = 1083;
+                }
+
                 $members = EncounterMember::where("encounter", "=", $encounterId)
                     ->where("difficulty_id", "=", $difficultyId)
                     ->orderBy("dps","desc")->paginate(16);
@@ -82,12 +94,15 @@ class PveLadderController extends Controller
                         $member->faction = $guild->faction;
                     }
                 }
-                return view("ladder/pve/ajax/members", compact("members"));
+                return view("ladder/pve/ajax/members", compact(
+                    "members",
+                    "mapId"
+                ));
             }
             else
             {
                 $defaultDifficultyIndex = 0;
-                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
                 foreach ($difficulties as $index => $difficulty) {
                     if ($difficulty["id"] == 5) {
                         $defaultDifficultyIndex = $index;
@@ -95,6 +110,7 @@ class PveLadderController extends Controller
                 }
                 return view("ladder/pve/ajax/encounter", compact(
                     "encounterId",
+                    "mapId",
                     "difficulties",
                     "defaultDifficultyIndex"
                 ));

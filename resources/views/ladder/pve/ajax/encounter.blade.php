@@ -1,6 +1,13 @@
-<div class="bossName">
-    {{ \TauriBay\Encounter::getName($encounterId)  }}
-</div>
+@if ( $mapId == 1098 )
+    <div class="bossNameImg" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
+        <img src="{{ URL::asset("img/encounters/" . $encounterId . ".png") }}" alt=""/>
+        {{ \TauriBay\Encounter::getName($encounterId)  }}
+    </div>
+@else
+    <div class="bossName">
+        {{ \TauriBay\Encounter::getName($encounterId)  }}
+    </div>
+@endif
 <ul class="nav nav-tabs" role="tablist">
     @foreach ( $difficulties as $index => $difficulty )
         <li id="difficultyPanel{{$difficulty["id"]  }}" data-difficulty="{{ $difficulty["id"] }}" class="difficultyPanel divDesktop home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "" }}" role="presentation"><a href="#difficulty-{{ $difficulty["id"] }}" aria-controls="difficulty-{{ $difficulty["id"] }}"  role="tab" data-toggle="tab">{{ $difficulty["name"] }}</a></li>

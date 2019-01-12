@@ -888,6 +888,16 @@ a.changelog:hover
     padding:10px;
 }
 
+.bossNameImg
+{
+    text-align: center;
+    font-weight:bold;
+    font-size:1.7em;
+    color:#fff;
+    padding-top:6px;
+    border:2px solid white;
+}
+
 
 .memberClass1
 {

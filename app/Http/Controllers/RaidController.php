@@ -41,6 +41,11 @@ class RaidController extends Controller
                     $encounters = array();
                     foreach ( $map["encounters"] as $encounter )
                     {
+                        // Ra-den 25 HC double entry
+                        if ( $encounter["encounter_id"] == 1581 || $encounter["encounter_id"] == 1083 )
+                        {
+                            continue;
+                        }
                         $encounters[$encounter["encounter_id"]] = $encounter["encounter_name"];
                     }
                     $encounters[0] = __("Minden boss");
