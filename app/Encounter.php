@@ -65,7 +65,7 @@ class Encounter extends Model
         1580 => "Ra-den"
     );
 
-    const RAID_SHORTS = array(
+    const MAP_SHORTS = array(
         1008 => "msv",
         1009 => "hof",
         996 => "toes",
@@ -375,13 +375,28 @@ class Encounter extends Model
         return Defaults::EXPANSION_ID;
     }
 
-    public static function convertMapShortNameToId($_map_short_name)
+    public static function convertMapShortNameToId($_map_short_name, $_expansion_id)
     {
-        foreach ( self::RAID_SHORTS as $id => $short )
+        foreach ( self::MAP_SHORTS as $id => $short )
         {
             if  ( $short == $_map_short_name )
             {
                 return $id;
+            }
+        }
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionMaps = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ($expansionMaps as $map) {
+                if ($map["name"] == $_map_id) {
+                    foreach ($map["encounters"] as $encounter) {
+                        $name = Encounter::getUrlName($encounter["encounter_id"]);
+                        if ( $name == $_encounter_name_short )
+                        {
+                            return intval($encounter["encounter_id"]);
+                        }
+                    }
+                }
             }
         }
         return Defaults::MAP_ID;
@@ -407,6 +422,12 @@ class Encounter extends Model
         return 0;
     }
 
+    public static function getMapNameShort($_expansion_id, $_map_id)
+    {
+        $name = self::getMapName($_expansion_id, $_map_id);
+        return strtolower(preg_replace("/\PL/u", "", $name));
+    }
+
     public static function getMapName($_expansion_id, $_map_id)
     {
         $expansionKey = "map_exp_".$_expansion_id;
@@ -418,5 +439,10 @@ class Encounter extends Model
                 }
             }
         }
+    }
+
+    public static function getMapUrl($expansionId, $mapId)
+    {
+        return array_key_exists($mapId, self::MAP_SHORTS) ? self::MAP_SHORTS[$mapId] : self::getMapNameShort($expansionId, $mapId);
     }
 }

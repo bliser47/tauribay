@@ -32,7 +32,7 @@ class PveLadderController extends Controller
     public function map(Request $_request, $_expansion_name_short, $_map_name_short, $_noReturn = false)
     {
         $this->expansion($_request, $_expansion_name_short, true);
-        $mapId = Encounter::convertMapShortNameToId($_map_name_short);
+        $mapId = Encounter::convertMapShortNameToId($_map_name_short, $_request->get("expansion_id"));
         $_request->request->add(array(
             "map_id" => $mapId
         ));
