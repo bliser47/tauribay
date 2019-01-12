@@ -432,15 +432,18 @@ $(function()
 
     function UpdateTimes() {
         $(".time").each(function () {
+            $(this).removeClass("time");
             parseTime($(this));
         });
         $(".guildClearTime").each(function () {
+            $(this).removeClass("guildClearTime");
             var time = $(this).html();
             if ( time.length > 0 ) {
                 $(this).html((parseInt(time)).toString().toHHMMSS());
             }
         });
         $(".encounterKillTime").each(function () {
+            $(this).removeClass("encounterKillTime");
             var time = $(this).html();
             if ( time.length > 0 ) {
                 $(this).html((parseInt(time)).toString().toMMSS());
