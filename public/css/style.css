@@ -886,6 +886,7 @@ a.changelog:hover
     font-size:1.7em;
     color:#fff;
     padding:10px;
+    border:2px solid white;
 }
 
 .bossNameImg
@@ -1130,6 +1131,6 @@ tbody tr:nth-child(odd){
 
 #map-loading-container .bossName
 {
-    background: #5cb85c !Important;
+    background: #5cb85c;
     color: #fff;
 }

@@ -81,7 +81,7 @@ class PveLadderController extends Controller
 
                 $members = EncounterMember::where("encounter", "=", $encounterId)
                     ->where("difficulty_id", "=", $difficultyId)
-                    ->orderBy("dps","desc")->paginate(16);
+                    ->orderBy("dps","desc")->paginate(10);
 
                 foreach ( $members as $member )
                 {
