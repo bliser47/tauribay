@@ -562,6 +562,13 @@ $(function()
                 $(loader).hide();
                 $(container).html(response);
                 UpdateTimes();
+
+                loadEncounterDifficulty($(".encounter-difficulty-loading-container.active").data("difficulty"));
+                $(".difficultyPanel").click(function(){
+                    if ( !$(this).hasClass(".loadingDifficulty")) {
+                        loadEncounterDifficulty($(this).data("difficulty"))
+                    }
+                })
             }
         });
     });
@@ -569,4 +576,24 @@ $(function()
     {
         $("#pve-ladder-form").submit();
     }
+
+    var loadEncounterDifficulty = function(difficultyId)
+    {
+        $("#difficultyPanel" + difficultyId).addClass(".loadingDifficulty");
+        var data = $("#pve-ladder-form").serialize();
+        data += ("&difficulty_id=" + difficultyId);
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/ladder/pve",
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                $("#difficulty-" + difficultyId).html(response);
+                UpdateTimes();
+            }
+        });
+    };
 });

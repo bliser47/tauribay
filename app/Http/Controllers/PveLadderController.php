@@ -56,6 +56,7 @@ class PveLadderController extends Controller
         return $this->index($_request);
     }
 
+
     public function ajax(Request $_request, $_expansion_id = Defaults::EXPANSION_ID, $_map_id = Defaults::MAP_ID)
     {
         $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
@@ -64,23 +65,40 @@ class PveLadderController extends Controller
 
         if ( $encounterId > 0 )
         {
-            $encounters = array();
-            $defaultDifficultyIndex = 0;
-            $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
-            foreach ($difficulties as $index => $difficulty) {
-                $difficultyId = $difficulty["id"];
-                if ($difficultyId == 5) {
-                    $defaultDifficultyIndex = $index;
-                }
-                $encounters[$difficultyId] = EncounterMember::where("encounter", "=", $encounterId)
+            if ( $_request->has("difficulty_id")) {
+                $difficultyId = $_request->get("difficulty_id");
+                $members = EncounterMember::where("encounter", "=", $encounterId)
                     ->where("difficulty_id", "=", $difficultyId)
-                    ->orderBy("dps")->paginate(10);
+                    ->orderBy("dps","desc")->paginate(16);
+
+                foreach ( $members as $member )
+                {
+                    $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
+                    if ( $encounter->guild_id !== 0 )
+                    {
+                        $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                        $member->guild_id = $encounter->guild_id;
+                        $member->guild_name = $guild->name;
+                        $member->faction = $guild->faction;
+                    }
+                }
+                return view("ladder/pve/ajax/members", compact("members"));
             }
-            return view("ladder/pve/ajax/encounter", compact(
-                "encounters",
-                "difficulties",
-                "defaultDifficultyIndex"
-            ));
+            else
+            {
+                $defaultDifficultyIndex = 0;
+                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+                foreach ($difficulties as $index => $difficulty) {
+                    if ($difficulty["id"] == 5) {
+                        $defaultDifficultyIndex = $index;
+                    }
+                }
+                return view("ladder/pve/ajax/encounter", compact(
+                    "encounterId",
+                    "difficulties",
+                    "defaultDifficultyIndex"
+                ));
+            }
         }
         else {
             $expansionId = $_request->get("expansion_id", $_expansion_id);

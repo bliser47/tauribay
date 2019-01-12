@@ -285,7 +285,7 @@ class Encounter extends Model
             $member->heal_done = $memberData["heal_done"];
             $member->absorb_done = $memberData["absorb_done"];
             $member->overheal = $memberData["overheal"];
-            $member->hps = ($memberData["heal_done"] + $memberData["absorb_done"] - $memberData["overheal"]) / ( $memberData["fight_time"] / 1000 );
+            $member->hps = ($memberData["heal_done"] + $memberData["absorb_done"]) / ( $memberData["fight_time"] / 1000 );
             $member->heal_taken = $memberData["heal_taken"];
             $member->interrupts = $memberData["interrupts"];
             $member->dispells = $memberData["dispells"];
