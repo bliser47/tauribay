@@ -563,10 +563,10 @@ $(function()
                 $(container).html(response);
                 UpdateTimes();
 
-                loadEncounterDifficulty($(".encounter-difficulty-loading-container.active").data("difficulty"));
+                loadEncounterDifficulty($(".encounter-difficulty-loading-container.active").data("difficulty"), 1);
                 $(".difficultyPanel").click(function(){
                     if ( !$(this).hasClass(".loadingDifficulty")) {
-                        loadEncounterDifficulty($(this).data("difficulty"))
+                        loadEncounterDifficulty($(this).data("difficulty"), 1)
                     }
                 })
             }
@@ -577,11 +577,13 @@ $(function()
         $("#pve-ladder-form").submit();
     }
 
-    var loadEncounterDifficulty = function(difficultyId)
+
+    var loadEncounterDifficulty = function(difficultyId, page)
     {
         $("#difficultyPanel" + difficultyId).addClass(".loadingDifficulty");
         var data = $("#pve-ladder-form").serialize();
         data += ("&difficulty_id=" + difficultyId);
+        data += ("&page=" + page);
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -593,6 +595,13 @@ $(function()
             {
                 var container = $("#difficulty-" + difficultyId);
                 $(container).html(response);
+                $(container).find(".pagination a").click(function(e)
+                {
+                    e.preventDefault();
+                    var url = new URL($(this).attr("href"));
+                    var page = url.searchParams.get("page");
+                    loadEncounterDifficulty(difficultyId, page)
+                });
                 UpdateTimes();
             }
         });
