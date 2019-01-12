@@ -13,7 +13,7 @@
             <td class="topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $member["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$member["spec"]] }}"/>
             </td>
-            <td class="cellDesktop"><a href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member["realm_id"]] ."/" . $member["name"] }}">{{ $member["name"] }}</a></td>
+            <td><a href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member["realm_id"]] ."/" . $member["name"] }}">{{ $member["name"] }}</a></td>
             <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[intval($member["realm_id"])] }}</td>
             <td class="cellDesktop faction-{{ $member["faction"] }}">
                 @if ( strlen($member["guild_name"]) )
@@ -23,8 +23,8 @@
                 @endif
             </td>
             <td><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member["dps"]) }}</a></td>
-            <td>{{ $member["ilvl"] }}</td>
-            <td class="encounterKillTime">{{ $member["fight_time"]/1000 }}</td>
+            <td class="cellDesktop">{{ $member["ilvl"] }}</td>
+            <td class="cellDesktop encounterKillTime">{{ $member["fight_time"]/1000 }}</td>
         </tr>
     @endforeach
 </table>

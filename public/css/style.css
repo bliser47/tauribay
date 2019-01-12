@@ -875,7 +875,7 @@ a.changelog:hover
     font-weight:bold;
     font-size:1.7em;
     color:#fff;
-    padding-bottom:10px;
+    padding:10px;
 }
 
 
@@ -1106,4 +1106,10 @@ tbody tr:nth-child(odd){
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
     color: #fff;
     background-color: #5cb85c;
+}
+
+#map-loading-container .bossName
+{
+    background: #5cb85c !Important;
+    color: #fff;
 }
