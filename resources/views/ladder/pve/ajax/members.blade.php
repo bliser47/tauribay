@@ -3,7 +3,7 @@
         <th>{{ __("Nr") }}</th>
         <th class="cellMobile" colspan="2">{{ __("Player") }}</th>
         <th class="cellDesktop" colspan="4">{{ __("Player") }}</th>
-        <th>{{ __("DPS") }}</th>
+        <th>{{ strtoupper($sortingId) }}</th>
         <th class="cellDesktop">{{ __("iLvL") }}</th>
         <th class="cellDesktop">{{ __("Idő") }}</th>
     </tr>
@@ -22,8 +22,8 @@
                     Random
                 @endif
             </td>
-            <td class="cellDesktop"><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member["dps"], true) }}</a></td>
-            <td class="cellMobile"><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member["dps"]) }}</a></td>
+            <td class="cellDesktop"><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId], true) }}</a></td>
+            <td class="cellMobile"><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId]) }}</a></td>
             <td class="cellDesktop">{{ $member["ilvl"] }}</td>
             <td class="cellDesktop encounterKillTime">{{ $member["fight_time"]/1000 }}</td>
         </tr>

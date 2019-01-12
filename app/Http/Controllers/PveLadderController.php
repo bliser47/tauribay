@@ -65,6 +65,7 @@ class PveLadderController extends Controller
 
         if ( $encounterId > 0 )
         {
+            $sortingId = $_request->get("sorting_id", Defaults::ENCOUNTER_SORT);
             if ( $_request->has("difficulty_id")) {
                 $difficultyId = $_request->get("difficulty_id");
 
@@ -79,56 +80,67 @@ class PveLadderController extends Controller
                     $encounterId = 1083;
                 }
 
-                $members = EncounterMember::where("encounter", "=", $encounterId)
-                    ->where("difficulty_id", "=", $difficultyId);
 
-                //  Realm filter
-                if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                    $realms = array();
-                    if ($_request->has('tauri')) {
-                        array_push($realms, 0);
+                if ( $sortingId == "dps" || $sortingId == "hps" ) {
+
+
+                    $members = EncounterMember::where("encounter", "=", $encounterId)
+                        ->where("difficulty_id", "=", $difficultyId);
+
+                    //  Realm filter
+                    if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                        $realms = array();
+                        if ($_request->has('tauri')) {
+                            array_push($realms, 0);
+                        }
+                        if ($_request->has('wod')) {
+                            array_push($realms, 1);
+                        }
+                        if ($_request->has('evermoon')) {
+                            array_push($realms, 2);
+                        }
+                        $members = $members->whereIn('realm_id', $realms);
                     }
-                    if ($_request->has('wod')) {
-                        array_push($realms, 1);
+
+                    // Faction filter
+                    if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
+                        $factions = array();
+                        if ($_request->has('alliance')) {
+                            array_push($factions, 0);
+                        }
+                        if ($_request->has('horde')) {
+                            array_push($factions, 1);
+                        }
+                        if ($_request->has('ismeretlen')) {
+                            array_push($factions, 3);
+                        }
+                        $members = $members->whereIn('faction_id', $factions);
                     }
-                    if ($_request->has('evermoon')) {
-                        array_push($realms, 2);
+
+
+                    $members = $members->orderBy($sortingId,"desc")->paginate(16);
+
+                    foreach ( $members as $member )
+                    {
+                        $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
+                        if ( $encounter->guild_id !== 0 ) {
+                            $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                            $member->guild_id = $encounter->guild_id;
+                            $member->guild_name = $guild->name;
+                            $member->faction = $guild->faction;
+                        }
                     }
-                    $members = $members->whereIn('realm_id', $realms);
+
+                    return view("ladder/pve/ajax/members", compact(
+                        "members",
+                        "sortingId",
+                        "mapId"
+                    ));
                 }
-
-                // Faction filter
-                if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                    $factions = array();
-                    if ($_request->has('alliance')) {
-                        array_push($factions, 0);
-                    }
-                    if ($_request->has('horde')) {
-                        array_push($factions, 1);
-                    }
-                    if ($_request->has('ismeretlen')) {
-                        array_push($factions, 3);
-                    }
-                    $members = $members->whereIn('faction_id', $factions);
-                }
-
-
-                $members = $members->orderBy("dps","desc")->paginate(16);
-
-                foreach ( $members as $member )
+                else
                 {
-                    $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                    if ( $encounter->guild_id !== 0 ) {
-                        $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                        $member->guild_id = $encounter->guild_id;
-                        $member->guild_name = $guild->name;
-                        $member->faction = $guild->faction;
-                    }
+                    return view("ladder/pve/ajax/encounters");
                 }
-                return view("ladder/pve/ajax/members", compact(
-                    "members",
-                    "mapId"
-                ));
             }
             else
             {
@@ -136,11 +148,11 @@ class PveLadderController extends Controller
                 $sorting = array(
                     "rescent" => __("Legutóbbi"),
                     "speed" => __("Legjobb idő"),
-                    "dps" => "DPS",
-                    "hps" => "HPS"
+                    "dps" => "Top DPS",
+                    "hps" => "Top HPS"
                 );
-                $sortingId = "dps";
-                $difficultyId = 5;
+                $sortingId = Defaults::ENCOUNTER_SORT;
+                $difficultyId = Defaults::DIFFICULTY_ID;
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
                 $classes = array();

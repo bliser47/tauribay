@@ -15,7 +15,7 @@ class Defaults extends Model
     const EXPANSION_ID = 4; // MoP
     const MAP_ID  = 1098; // Throne of Thunder
     const DIFFICULTY_ID  = 5; // 10 Heroic
-
+    const ENCOUNTER_SORT = "dps";
 
     const SIZE_AND_DIFFICULTY = array(
         3 => "10 Player",

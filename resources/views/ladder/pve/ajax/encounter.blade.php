@@ -56,9 +56,9 @@
                 </div>
             </div>
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-                <legend> {{ __("Rendezés") }} </legend>
+                <legend> {{ __("Category") }} </legend>
                 <div id="maps-container" class="input-group col-md-12">
-                    {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz rendezést")]); !!}
+                    {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kategóriát")]); !!}
                 </div>
             </div>
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">

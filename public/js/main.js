@@ -600,7 +600,7 @@ $(function()
                 $("#pve-ladder-filter").attr("disabled",false);
                 $(loader).hide();
                 $(container).html(response);
-
+                $(".selectpicker").selectpicker();
                 var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
                 if (  selectedEncounterId > 0 ) {
                     listenForEncounterFormSubmit(selectedEncounterId);
