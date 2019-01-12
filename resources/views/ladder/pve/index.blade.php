@@ -7,7 +7,7 @@
                 <div class="panel-heading nopadding" role="tab" id="headingOne">
                     <h4 class="panel-title">
                         <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            {{ __("Szűrés") }}
+                            {{ __("Válassz instát vagy boss-t!") }}
                         </a>
                     </h4>
                 </div>

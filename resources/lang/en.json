@@ -138,5 +138,6 @@
   "Minden kaszt" : "All classes",
   "Minden spec" : "All specs",
   "Válassz kasztot" : "Select class",
-  "Válassz spec-et" : "Select spec"
+  "Válassz spec-et" : "Select spec",
+  "Válassz instát vagy boss-t!" : "Select raid or encounter!"
 }

@@ -8,33 +8,49 @@
         {{ \TauriBay\Encounter::getName($encounterId)  }}
     </div>
 @endif
-<div class="panel-body">
-    {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
-    <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-        <legend> {{ __("Nehézség") }} </legend>
-        <div id="expansions-container" class="input-group col-md-12">
-            {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz nehézséget")]); !!}
+<div class="encounter-body">
+    <div class="panel-heading nopadding" role="tab" id="headingOne">
+        <h4 class="panel-title">
+            <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#encounterFilter" aria-expanded="false" aria-controls="encounterFilter">
+                {{ __("Szűrés") }}
+            </a>
+        </h4>
+    </div>
+    <div id="encounterFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+            {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
+            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
+                <legend> {{ __("Nehézség") }} </legend>
+                <div id="expansions-container" class="input-group col-md-12">
+                    {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz nehézséget")]); !!}
+                </div>
+            </div>
+            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
+                <legend> {{ __("Rendezés") }} </legend>
+                <div id="maps-container" class="input-group col-md-12">
+                    {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz rendezést")]); !!}
+                </div>
+            </div>
+            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
+                <legend> {{ __("Kaszt") }} </legend>
+                <div id="maps-container" class="input-group col-md-12">
+                    {!! Form::select('class_id', $classes,  Input::get('class_id', $classId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kasztot")]); !!}
+                </div>
+            </div>
+            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
+                <legend> {{ __("Spec") }} </legend>
+                <div id="maps-container" class="input-group col-md-12">
+                    {!! Form::select('spec_id', $specs,  Input::get('spec_id', $specId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz spec-et")]); !!}
+                </div>
+            </div>
+            <div class="form-group col-md-12 nomargin col-sm-nopadding">
+                <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
+                    {{ __("Szűrés") }}
+                </button>
+            </div>
+            {!! Form::close() !!}
         </div>
     </div>
-    <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-        <legend> {{ __("Rendezés") }} </legend>
-        <div id="maps-container" class="input-group col-md-12">
-            {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz rendezést")]); !!}
-        </div>
-    </div>
-    <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-        <legend> {{ __("Kaszt") }} </legend>
-        <div id="maps-container" class="input-group col-md-12">
-            {!! Form::select('class_id', $classes,  Input::get('class_id', $classId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kasztot")]); !!}
-        </div>
-    </div>
-    <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-        <legend> {{ __("Spec") }} </legend>
-        <div id="maps-container" class="input-group col-md-12">
-            {!! Form::select('spec_id', $specs,  Input::get('spec_id', $specId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz spec-et")]); !!}
-        </div>
-    </div>
-    {!! Form::close() !!}
 </div>
 <div id="encounter-form-response">
     <div class="encounters_loading"><div class="loader" style="display:block"></div></div>

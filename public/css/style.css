@@ -326,9 +326,14 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
     background:transparent;
 }
 
-.nav, .table, .encounters_loading, .panel-body, .encounter-body
+.nav, .table, .encounters_loading, .panel-body
 {
     background:white;
+}
+
+.encounter-body
+{
+    background:#f5f5f5;
 }
 
 .panel-heading .accordion-toggle:after {
@@ -344,7 +349,7 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 }
 
 
-.trade-filter h4 {
+h4.panel-title {
     color:#5cb85c;
 }
 
@@ -1077,9 +1082,16 @@ tbody tr:nth-child(odd){
 
 .tHead
 {
-    background:#5cb85c !Important;
+    background:#336633 !Important;
     color:#fff;
 }
+
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+    color: #fff;
+    background-color: #336633;
+}
+
 
 #mobileLanguage
 {
@@ -1122,11 +1134,6 @@ tbody tr:nth-child(odd){
     position: absolute;
     left: -2px;
     top: -2px;
-}
-
-.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
-    color: #fff;
-    background-color: #5cb85c;
 }
 
 #map-loading-container .bossName
