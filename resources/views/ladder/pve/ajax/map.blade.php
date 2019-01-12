@@ -1,3 +1,6 @@
+<div class="bossName">
+    {{ \TauriBay\Encounter::getMapName($expansionId, $mapId) }}
+</div>
 <ul class="nav nav-tabs" role="tablist">
     @foreach ( $difficulties as $index => $difficulty )
         <li class="divDesktop home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "" }}" role="presentation"><a href="#difficulty-{{ $index }}" aria-controls="difficulty-{{ $index}}" role="tab" data-toggle="tab">{{ $difficulty["name"] }}</a></li>

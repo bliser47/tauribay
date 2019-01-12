@@ -342,6 +342,27 @@ class Encounter extends Model
         return array();
     }
 
+    public static function getMapEncounters($_expansion_id, $_map_id)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                if ( $raid["id"] == $_map_id )
+                {
+                    $encounters = array();
+                    foreach ( $raid["encounters"] as $encounter )
+                    {
+                        $encounters[$encounter["encounter_id"]] = $encounter["encounter_name"];
+                    }
+                    return $encounters;
+                }
+            }
+        }
+        return array();
+    }
+
     public static function convertExpansionShortNameToId($_expansion_short_name)
     {
         foreach ( self::EXPANSION_RAIDS_COMPLEX as $id => $short )
@@ -384,5 +405,18 @@ class Encounter extends Model
             }
         }
         return 0;
+    }
+
+    public static function getMapName($_expansion_id, $_map_id)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionMaps = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ($expansionMaps as $map) {
+                if ($map["id"] == $_map_id) {
+                    return $map["name"];
+                }
+            }
+        }
     }
 }

@@ -154,8 +154,10 @@ class PveLadderController extends Controller
 
         $expansions = Encounter::EXPANSIONS;
         $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+
         $difficulties = Defaults::SIZE_AND_DIFFICULTY;
-        $encounters = Encounter::ENCOUNTERS_DEFAULT;
+
+        $encounters = Encounter::getMapEncounters($expansionId, $mapId);
         $encounters[0] = __("Minden boss");
 
         return view("ladder/pve/index", compact(
