@@ -110,7 +110,7 @@ class PveLadderController extends Controller
                 );
                 $sortingId = "dps";
                 $difficultyId = 5;
-                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
+                $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
                 $classes = array();
                 $classes[0] = __("Minden kaszt");

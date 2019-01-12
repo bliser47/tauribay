@@ -318,6 +318,36 @@ class Encounter extends Model
         return array();
     }
 
+    public static function getMapDifficultiesForSelect($_expansion_id, $_map_id, $_encounter_id = 0)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                if ( $raid["id"] == $_map_id )
+                {
+                    $difficulties = array();
+                    if ( $_encounter_id == 0 || !self::isHeroicEncounter($_encounter_id) ) {
+                        foreach ($raid["available_difficulties"] as $difficulty) {
+                            if (array_key_exists($difficulty["id"], Encounter::SIZE_AND_DIFFICULTY)) {
+                                $difficulties[$difficulty["id"]] = $difficulty["name"];
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Heroic encounters
+                        $difficulties[5] = Encounter::SIZE_AND_DIFFICULTY[5];
+                        $difficulties[6] = Encounter::SIZE_AND_DIFFICULTY[6];
+                    }
+                    return $difficulties;
+                }
+            }
+        }
+        return array();
+    }
+
     public static function getMapEncounters($_expansion_id, $_map_id)
     {
         $expansionKey = "map_exp_".$_expansion_id;

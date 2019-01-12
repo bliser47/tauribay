@@ -511,28 +511,40 @@ $(function()
     };
     listenForMapChange();
 
+    var loadEncounter = function(encounterId, page)
+    {
+        var data = $("#encounter-form").serialize();
+        data += "&encounter_id=" + encounterId;
+        data += "&page=" + page;
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/ladder/pve",
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                var container = $("#encounter-form-response");
+                $(container).html(response);
+                $(container).find(".pagination a").click(function(e)
+                {
+                    e.preventDefault();
+                    var url = new URL($(this).attr("href"));
+                    var page = url.searchParams.get("page");
+                    loadEncounter(encounterId, page)
+                });
+                UpdateTimes();
+            }
+        });
+    };
 
-    var encounterOnSubmit = function(encounterId)
+    var listenForEncounterFormSubmit = function(encounterId)
     {
         $("#encounter-form").submit(function(e){
-            var data = $(this).serialize();
-            data += "&encounter_id=" + encounterId;
             e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: URL_WEBSITE + "/ladder/pve",
-                data: data,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response)
-                {
-                    $("#encounter-form-response").html(response);
-                    UpdateTimes();
-                }
-            });
+            loadEncounter(encounterId,1);
         });
-        $("#encounter-form").submit();
     };
 
     var currentExpansion = $("#expansion").val();
@@ -590,7 +602,8 @@ $(function()
 
                 var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
                 if (  selectedEncounterId > 0 ) {
-                    encounterOnSubmit(selectedEncounterId);
+                    listenForEncounterFormSubmit(selectedEncounterId);
+                    loadEncounter(selectedEncounterId,1);
                 }
             }
         });
