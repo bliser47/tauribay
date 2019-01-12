@@ -12,18 +12,21 @@ namespace TauriBay\Tauri;
 class Skada
 {
 
-    public static function format($ps)
+    public static function format($ps, $precise = false)
     {
         if ( $ps > 999 )
         {
             $x = round($ps);
             $x_number_format = number_format($x);
-            $x_array = explode(',', $x_number_format);
-            $x_parts = array('k', 'm', 'b', 't');
-            $x_count_parts = count($x_array) - 1;
-            $x_display = $x_array[0] . ((int) $x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
-            $x_display .= $x_parts[$x_count_parts - 1];
-            return $x_display;
+            if ( !$precise ) {
+                $x_array = explode(',', $x_number_format);
+                $x_parts = array('k', 'm', 'b', 't');
+                $x_count_parts = count($x_array) - 1;
+                $x_display = $x_array[0] . ((int)$x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '');
+                $x_display .= $x_parts[$x_count_parts - 1];
+                return $x_display;
+            }
+            return $x_number_format;
         }
         else
         {

@@ -9,14 +9,14 @@
     </div>
 @endif
 <div class="encounter-body">
-    <div class="panel-heading nopadding" role="tab" id="headingOne">
+    <div class="panel-heading nopadding" role="tab" id="headingTwo">
         <h4 class="panel-title">
-            <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#encounterFilter" aria-expanded="false" aria-controls="encounterFilter">
+            <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion2" href="#encounterFilter" aria-expanded="false" aria-controls="encounterFilter">
                 {{ __("Szűrés") }}
             </a>
         </h4>
     </div>
-    <div id="encounterFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+    <div id="encounterFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
         <div class="panel-body">
             {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">

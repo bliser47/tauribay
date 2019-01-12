@@ -1082,14 +1082,14 @@ tbody tr:nth-child(odd){
 
 .tHead
 {
-    background:#336633 !Important;
+    background:#5cb85c !Important;
     color:#fff;
 }
 
 
 .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
     color: #fff;
-    background-color: #336633;
+    background-color:#5cb85c;
 }
 
 

@@ -81,13 +81,12 @@ class PveLadderController extends Controller
 
                 $members = EncounterMember::where("encounter", "=", $encounterId)
                     ->where("difficulty_id", "=", $difficultyId)
-                    ->orderBy("dps","desc")->paginate(10);
+                    ->orderBy("dps","desc")->paginate(16);
 
                 foreach ( $members as $member )
                 {
                     $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                    if ( $encounter->guild_id !== 0 )
-                    {
+                    if ( $encounter->guild_id !== 0 ) {
                         $guild = Guild::where("id", "=", $encounter->guild_id)->first();
                         $member->guild_id = $encounter->guild_id;
                         $member->guild_name = $guild->name;

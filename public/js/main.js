@@ -513,6 +513,8 @@ $(function()
 
     var loadEncounter = function(encounterId, page)
     {
+        var container = $("#encounter-form-response");
+        $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
         var data = $("#encounter-form").serialize();
         data += "&encounter_id=" + encounterId;
         data += "&page=" + page;
@@ -525,7 +527,6 @@ $(function()
             },
             success: function(response)
             {
-                var container = $("#encounter-form-response");
                 $(container).html(response);
                 $(container).find(".pagination a").click(function(e)
                 {

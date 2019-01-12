@@ -11,7 +11,7 @@
                         </a>
                     </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
                         {!! Form::open(array("method" => "get","id"=>"pve-ladder-form")) !!}
                         <div class="form-group col-sm-4 col-md-4 col-sm-nopadding">
