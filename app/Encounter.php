@@ -450,8 +450,8 @@ class Encounter extends Model
 
     public static function getMapNameShort($_expansion_id, $_map_id)
     {
-        $name = self::getMapName($_expansion_id, $_map_id);
-        return self::shortenMap($name);
+        $name = Encounter::getMapName($_expansion_id, $_map_id);
+        return Encounter::shortenMap($name);
     }
 
     public static function getMapName($_expansion_id, $_map_id)
@@ -482,5 +482,21 @@ class Encounter extends Model
             }
         }
         return Defaults::DIFFICULTY_ID;
+    }
+
+    public static function getMapExpansion($_map_id)
+    {
+        $index = 0;
+        foreach ( self::EXPANSION_RAIDS_COMPLEX as $expansionMaps )
+        {
+            foreach ( $expansionMaps as $map )
+            {
+                if ( $map["id"] == $_map_id )
+                {
+                    return $index;
+                }
+            }
+            ++$index;
+        }
     }
 }

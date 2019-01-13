@@ -17,7 +17,7 @@
                     </tr>
                     <tr>
                         <td>{{ $shortRealms[$encounter->realm_id]  }}</td>
-                        <td style="white-space:nowrap;"><a href="{{ URL::to("encounter/" . TauriBay\Encounter::getUrlName($encounterData["name"]))  }}">{{ $encounterData["name"]  }}</a></td>
+                        <td style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$encounter->difficulty_id] }}">{{ $encounterData["name"]  }}</a></td>
                         <td>
                             @if ( strlen($encounter->name) )
                                 <a href="{{ URL::to("/guild/" . $encounter->guild_id) }}"> {{ $encounter->name }} </a>

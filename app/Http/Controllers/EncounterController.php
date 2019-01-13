@@ -33,6 +33,7 @@ class EncounterController extends Controller
                     "encounters.id as id",
                     "encounters.encounter_id as encounter_id",
                     "encounters.realm_id as realm_id",
+                    "encounters.difficulty_id as difficulty_id",
                     "guilds.name as name",
                     "encounters.killtime as killtime",
                     "encounters.fight_time as fight_time",
@@ -48,8 +49,6 @@ class EncounterController extends Controller
         $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
 
         $membersDamage = $members->sortByDesc("damage_done");
-
-
 
         foreach ( $members as $member )
         {
@@ -76,7 +75,22 @@ class EncounterController extends Controller
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
         $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
-        return view("encounter/encounter" , compact("encounter","encounterData", "membersDamage", "membersDps", "membersHealing", "membersHps","totalDmg","characterClasses","classSpecs","realms","shortRealms"));
+        $mapId = $encounterData["map_id"];
+        $expansionId = Encounter::getMapExpansion($mapId);
+
+        return view("encounter/encounter" , compact("encounter",
+            "encounterData",
+            "membersDamage",
+            "membersDps",
+            "membersHealing",
+            "membersHps",
+            "totalDmg",
+            "characterClasses",
+            "classSpecs",
+            "realms",
+            "shortRealms",
+            "expansionId",
+            "mapId"));
     }
 
     public function fixMissing1()
