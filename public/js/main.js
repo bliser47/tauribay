@@ -516,6 +516,7 @@ $(function()
         var container = $("#encounter-form-response");
         $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
         var data = $("#encounter-form").serialize();
+        data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         data += "&encounter_id=" + encounterId;
         data += "&page=" + page;
         $.ajax({

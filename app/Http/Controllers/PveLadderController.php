@@ -42,16 +42,18 @@ class PveLadderController extends Controller
     }
 
 
-    public function encounter(Request $_request, $_expansion_name_short, $_map_name_short, $encounter_name_short)
+    public function encounter(Request $_request, $_expansion_name_short, $_map_name_short, $_encounter_name_short, $_difficulty_name_short)
     {
         $this->map($_request, $_expansion_name_short, $_map_name_short, true);
         $encounterId = Encounter::convertEncounterShortNameToId(
             $_request->get("expansion_id"),
             $_request->get("map_id"),
-            $encounter_name_short
+            $_encounter_name_short
         );
+        $difficultyId = Encounter::convertDifficultyShortNameToId($_difficulty_name_short);
         $_request->request->add(array(
-            "encounter_id" => $encounterId
+            "encounter_id" => $encounterId,
+            "difficulty_id" => $difficultyId
         ));
         return $this->index($_request);
     }
@@ -85,7 +87,8 @@ class PveLadderController extends Controller
 
 
                     $members = EncounterMember::where("encounter", "=", $encounterId)
-                        ->where("difficulty_id", "=", $difficultyId);
+                        ->where("difficulty_id", "=", $difficultyId)
+                        ->limit(200);
 
                     //  Realm filter
                     if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
@@ -152,7 +155,7 @@ class PveLadderController extends Controller
                     "hps" => "Top HPS"
                 );
                 $sortingId = Defaults::ENCOUNTER_SORT;
-                $difficultyId = Defaults::DIFFICULTY_ID;
+                $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
                 $classes = array();
@@ -227,6 +230,7 @@ class PveLadderController extends Controller
         $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
         $mapId = $_request->get("map_id", Defaults::MAP_ID);
         $encounterId = $_request->get("encounter_id", 0);
+        $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
 
         $expansions = Encounter::EXPANSIONS;
         $maps = Encounter::EXPANSION_RAIDS[$expansionId];
@@ -243,7 +247,8 @@ class PveLadderController extends Controller
             "expansionId",
             "difficulties",
             "encounters",
-            "encounterId"
+            "encounterId",
+            "difficultyId"
         ));
     }
 }
