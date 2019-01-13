@@ -607,6 +607,7 @@ $(function()
                     listenForEncounterFormSubmit(selectedEncounterId);
                     loadEncounter(selectedEncounterId,1);
                 }
+                UpdateTimes();
             }
         });
     });
