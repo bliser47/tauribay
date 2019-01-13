@@ -57,20 +57,20 @@
             </div>
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
                 <legend> {{ __("Category") }} </legend>
-                <div id="maps-container" class="input-group col-md-12">
-                    {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kategóriát")]); !!}
+                <div id="category-container" class="input-group col-md-12">
+                    {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'category', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kategóriát")]); !!}
                 </div>
             </div>
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
                 <legend> {{ __("Kaszt") }} </legend>
-                <div id="maps-container" class="input-group col-md-12">
-                    {!! Form::select('class_id', $classes,  Input::get('class_id', $classId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kasztot")]); !!}
+                <div id="class-container" class="input-group col-md-12">
+                    {!! Form::select('class_id', $classes,  Input::get('class_id', $classId), ['required', 'id' => 'class', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kasztot")]); !!}
                 </div>
             </div>
             <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
                 <legend> {{ __("Spec") }} </legend>
-                <div id="maps-container" class="input-group col-md-12">
-                    {!! Form::select('spec_id', $specs,  Input::get('spec_id', $specId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz spec-et")]); !!}
+                <div id="spec-container" class="input-group col-md-12">
+                    {!! Form::select('spec_id', $specs,  Input::get('spec_id', $specId), ['required', 'id' => 'spec', 'class' => "disabled control selectpicker input-large", 'placeholder' =>  __("Válassz spec-et")]); !!}
                 </div>
             </div>
             <div class="form-group col-md-12 nomargin col-sm-nopadding">

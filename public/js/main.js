@@ -536,6 +536,12 @@ $(function()
                     var page = url.searchParams.get("page");
                     loadEncounter(encounterId, page)
                 });
+
+                var selectPicker = $(container).find(".selectpicker");
+                selectPicker.attr('disabled', true);
+                selectPicker.val(0);
+                selectPicker.selectpicker('refresh');
+
                 UpdateTimes();
             }
         });
@@ -549,6 +555,38 @@ $(function()
         });
     };
 
+    var listenForClassChange = function()
+    {
+        var currentClass = $("#class").val();
+        $("#class-container .selectpicker").change(function()
+        {
+            var set = $(this).val();
+            if ( set !== currentClass )
+            {
+                $("#spec-container").each(function(){
+                    var selectPicker = $(this).find(".selectpicker");
+                    selectPicker.attr('disabled', true);
+                    selectPicker.val(0);
+                    selectPicker.selectpicker('refresh');
+                });
+                $.ajax({
+                    type: "GET",
+                    url: URL_WEBSITE + "/class/" + set,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(classSpecsSelectHTML)
+                    {
+                        var selectContainer = $("#spec-container");
+                        selectContainer.html(classSpecsSelectHTML);
+                        selectContainer.find(".selectpicker").selectpicker('refresh');
+                        selectContainer.attr('disabled', false);
+                    }
+                });
+            }
+        });
+    };
+
     var currentExpansion = $("#expansion").val();
     var currentMap = $("#map").val();
     $("#expansions-container .selectpicker").change(function()
@@ -558,7 +596,7 @@ $(function()
         {
             currentExpansion = set;
             currentMap = null;
-            $("#maps-container, #difficulty-container").each(function(){
+            $("#maps-container, #encounter-container").each(function(){
                 var selectPicker = $(this).find(".selectpicker");
                 selectPicker.attr('disabled', true);
                 selectPicker.val(0);
@@ -607,6 +645,14 @@ $(function()
                     listenForEncounterFormSubmit(selectedEncounterId);
                     loadEncounter(selectedEncounterId,1);
                 }
+
+                var specPicker = $("#spec-container").find(".selectpicker");
+                specPicker.attr('disabled', true);
+                specPicker.val(0);
+                specPicker.selectpicker('refresh');
+
+                listenForClassChange();
+
                 UpdateTimes();
             }
         });
@@ -615,7 +661,4 @@ $(function()
     {
         $("#pve-ladder-form").submit();
     }
-
-
-
 });

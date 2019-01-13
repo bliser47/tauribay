@@ -11,6 +11,7 @@ namespace TauriBay\Http\Controllers;
 use Collective\Html\FormFacade;
 use Illuminate\Http\Request;
 use TauriBay\Encounter;
+use TauriBay\EncounterMember;
 
 class RaidController extends Controller
 {
@@ -54,5 +55,10 @@ class RaidController extends Controller
             }
         }
         return "";
+    }
+
+    public function getClassSpecs(Request $_request, $_class_id)
+    {
+        return FormFacade::select('spec_id', EncounterMember::getSpecs($_class_id), 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz spec-et")]);
     }
 }

@@ -1141,3 +1141,8 @@ tbody tr:nth-child(odd){
     background: #5cb85c;
     color: #fff;
 }
+
+.table-responsive
+{
+    overflow:inherit;
+}

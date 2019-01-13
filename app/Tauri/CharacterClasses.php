@@ -55,7 +55,7 @@ class CharacterClasses
         265 => "Affliction",
         266 => "Demonology",
         267 => "Destruction",
-        268 => "Destruction",
+        268 => "Brewmaster",
         269 => "Windwalker",
         270 => "Mistweaver"
     );

@@ -87,8 +87,18 @@ class PveLadderController extends Controller
 
 
                     $members = EncounterMember::where("encounter", "=", $encounterId)
-                        ->where("difficulty_id", "=", $difficultyId)
-                        ->limit(200);
+                        ->where("difficulty_id", "=", $difficultyId);
+
+                    if ( $_request->has("class_id") && $_request->get("class_id") > 0 )
+                    {
+                        $members = $members->where("class", "=", $_request->get("class_id"));
+                    }
+
+                    if ( $_request->has("spec_id") && $_request->get("spec_id") > 0 )
+                    {
+                        $members = $members->where("spec", "=", $_request->get("spec_id"));
+                    }
+
 
                     //  Realm filter
                     if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
@@ -162,7 +172,7 @@ class PveLadderController extends Controller
                 $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
-                $classes = array();
+                $classes = EncounterMember::getClasses();
                 $classes[0] = __("Minden kaszt");
                 $classId = 0;
                 $specs = array();
