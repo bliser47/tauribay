@@ -240,6 +240,7 @@ class Encounter extends Model
             $member->encounter = $encounter->encounter_id;
             $member->difficulty_id = $encounter->difficulty_id;
             $member->fight_time = $encounter->fight_time;
+            $member->killtime = $encounter->killtime;
             $member->realm_id = $encounter->realm_id;
             $member->name = $memberData["name"];
             $member->class = $memberData["race"];

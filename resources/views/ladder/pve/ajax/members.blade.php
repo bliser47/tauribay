@@ -23,11 +23,11 @@
                     Random
                 @endif
             </td>
-            <td class="cellDesktop"><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId], true) }}</a></td>
-            <td class="cellMobile"><a href="{{ URL::to("/encounter/") . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId]) }}</a></td>
-            <td class="cellDesktop">{{ date('M d, Y', strtotime($member["created_at"]))}}</td>
+            <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId], true) }}</a></td>
+            <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId]) }}</a></td>
+            <td class="cellDesktop">{{ date('M d, Y', $member["killtime"])}}</td>
             <td class="cellDesktop">{{ $member["ilvl"] }}</td>
-            <td class="cellDesktop encounterKillTime">{{ $member["fight_time"]/1000 }}</td>
+            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"]/1000 }}</a></td>
         </tr>
     @endforeach
 </table>

@@ -120,7 +120,11 @@ class PveLadderController extends Controller
                         $members = $members->whereIn('faction_id', $factions);
                     }
 
-
+                    // Hack for fixing HPS and Durumu DPS
+                    if ( $sortingId == "hps" || ($sortingId == "dps" && $encounterId == 1572) )
+                    {
+                        $members = $members->where("killtime",">",0)->where("killtime", "<", 1546950226);
+                    }
                     $members = $members->orderBy($sortingId,"desc")->paginate(16);
 
                     foreach ( $members as $member )

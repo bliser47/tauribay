@@ -95,7 +95,7 @@ class EncounterController extends Controller
 
     public function fixMissing1()
     {
-        $missing = EncounterMember::where("faction_id", "=" ,-1)->limit(1000)->get();
+        $missing = EncounterMember::where("killtime", "=" ,0)->limit(1000)->get();
         $added = 0;
         foreach ( $missing as $encounterMember )
         {
@@ -115,6 +115,8 @@ class EncounterController extends Controller
             {
                 $encounterMember->faction_id = 1;
             }
+
+            $encounterMember->killtime = $enc->killtime;
 
             $encounterMember->save();
 
