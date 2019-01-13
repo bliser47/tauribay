@@ -7,6 +7,8 @@ use TauriBay\Tauri\Skada;
 
 class Encounter extends Model
 {
+    const HPS_INVALID_BEFORE_TIMESTAMP = 1546950226;
+    const DURUMU_DMG_INVALID_BEFORE_TIMESTAMP = 1546950226;
     const INVALID_RAIDS = array(43718);
 
     const ENCOUNTER_NAME_SHORTS = array(

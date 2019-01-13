@@ -48,25 +48,31 @@ class EncounterController extends Controller
 
         $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
 
-        $membersDamage = $members->sortByDesc("damage_done");
 
         foreach ( $members as $member )
         {
             $member->total_heal = $member->heal_done + $member->damage_absorb;
         }
 
-        $membersHealing = $members->sortByDesc("total_heal");
 
-        foreach ( $membersDamage as $member ) {
-            $member->dps = Skada::calculatePS($encounter, $member, "damage_done");
-            $member->dpsNonFormatted = Skada::calculatePS($encounter, $member, "damage_done", true);
-            $member->percentageDamage = Skada::calculatePercentage($member, $membersDamage->first(), "damage_done");
+        $membersDamage = array();
+        if ($encounter->encounter_id !== 1572 || $encounter->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP ) {
+            $membersDamage = $members->sortByDesc("damage_done");
+            foreach ($membersDamage as $member) {
+                $member->dps = Skada::calculatePS($encounter, $member, "damage_done");
+                $member->dpsNonFormatted = Skada::calculatePS($encounter, $member, "damage_done", true);
+                $member->percentageDamage = Skada::calculatePercentage($member, $membersDamage->first(), "damage_done");
+            }
         }
 
-        foreach ( $membersHealing as $member ) {
-            $member->hps = Skada::calculatePS($encounter, $member, "total_heal");
-            $member->hpsNonFormatted = Skada::calculatePS($encounter, $member, "total_heal", true);
-            $member->percentageHealing = Skada::calculatePercentage($member, $membersHealing->first(), "total_heal");
+        $membersHealing = array();
+        if ( $encounter->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
+            $membersHealing = $members->sortByDesc("total_heal");
+            foreach ($membersHealing as $member) {
+                $member->hps = Skada::calculatePS($encounter, $member, "total_heal");
+                $member->hpsNonFormatted = Skada::calculatePS($encounter, $member, "total_heal", true);
+                $member->percentageHealing = Skada::calculatePercentage($member, $membersHealing->first(), "total_heal");
+            }
         }
 
         $encounterData = Encounter::ENCOUNTER_IDS[$encounter->encounter_id];

@@ -123,7 +123,7 @@ class PveLadderController extends Controller
                     // Hack for fixing HPS and Durumu DPS
                     if ( $sortingId == "hps" || ($sortingId == "dps" && $encounterId == 1572) )
                     {
-                        $members = $members->where("killtime",">",0)->where("killtime", "<", 1546950226);
+                        $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                     }
                     $members = $members->orderBy($sortingId,"desc")->paginate(16);
 

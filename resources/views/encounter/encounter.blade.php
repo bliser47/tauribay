@@ -40,41 +40,53 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="fightDataDamage">
-                        @foreach ( $membersDamage as $member )
-                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
-                                <div class="memberDataWidthContainer">
-                                    <div style="width:{{ $member->percentageDamage }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
-                                    <div class="memberSpec">
-                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
+                        @if ( count($membersDamage) )
+                            @foreach ( $membersDamage as $member )
+                                <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
+                                    <div class="memberDataWidthContainer">
+                                        <div style="width:{{ $member->percentageDamage }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
+                                        <div class="memberSpec">
+                                            <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
+                                        </div>
+                                        <span class="memberPosition">{{ $loop->index+1 }}.</span>
+                                        <span class="memberName">
+                                            <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a>
+                                        </span>
+                                        <span class="memberData memberData1">{{ number_format($member->damage_done) }}</span>
+                                        <span class="memberData memberData2">({{ $member->dps }})</span>
                                     </div>
-                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
-                                    <span class="memberName">
-                                        <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a>
-                                    </span>
-                                    <span class="memberData memberData1">{{ number_format($member->damage_done) }}</span>
-                                    <span class="memberData memberData2">({{ $member->dps }})</span>
                                 </div>
+                            @endforeach
+                        @else
+                            <div class="alert alert-danger nomargin">
+                                {{ __("Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!") }}
                             </div>
-                        @endforeach
+                        @endif
                     </div>
                     <div role="tabpanel" class="tab-pane" id="fightDataHealing">
-                        @foreach ( $membersHealing as $member )
-                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
-                                <div class="memberDataWidthContainer">
-                                    <div style="width:{{ $member->percentageHealing }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
-                                    <div class="memberSpec">
-                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
+                        @if ( count($membersHealing) )
+                            @foreach ( $membersHealing as $member )
+                                <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
+                                    <div class="memberDataWidthContainer">
+                                        <div style="width:{{ $member->percentageHealing }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
+                                        <div class="memberSpec">
+                                            <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
+                                        </div>
+                                        <span class="memberPosition">{{ $loop->index+1 }}.</span>
+                                        <span class="memberName">
+                                            {{-- <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a> --}}
+                                            <a href="{{ URL::to("progress/guild/" . $member->realm_id . "/" . $member->name) }}"> {{ $member->name }} </a>
+                                        </span>
+                                        <span class="memberData memberData1">{{ number_format($member->total_heal) }}</span>
+                                        <span class="memberData memberData2">({{ $member->hps }})</span>
                                     </div>
-                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
-                                    <span class="memberName">
-                                        {{-- <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a> --}}
-                                        <a href="{{ URL::to("progress/guild/" . $member->realm_id . "/" . $member->name) }}"> {{ $member->name }} </a>
-                                    </span>
-                                    <span class="memberData memberData1">{{ number_format($member->total_heal) }}</span>
-                                    <span class="memberData memberData2">({{ $member->hps }})</span>
                                 </div>
+                            @endforeach
+                        @else
+                            <div class="alert alert-danger nomargin">
+                                {{ __("Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!") }}
                             </div>
-                        @endforeach
+                        @endif
                         </div>
                     </div>
                 </div>
