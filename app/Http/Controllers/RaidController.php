@@ -59,6 +59,8 @@ class RaidController extends Controller
 
     public function getClassSpecs(Request $_request, $_class_id)
     {
-        return FormFacade::select('spec_id', EncounterMember::getSpecs($_class_id), 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz spec-et")]);
+        $specs = EncounterMember::getSpecs($_class_id);
+        $specs[0] = __("Minden spec");
+        return FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz spec-et")]);
     }
 }
