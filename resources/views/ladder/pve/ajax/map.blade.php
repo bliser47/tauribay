@@ -43,7 +43,7 @@
                                 Random
                             @endif
                         </td>
-                        <td><a class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . $encounter["log_id"] }}">{{ $encounter["fight_time"]/1000 }}</a></td>
+                        <td><a class="encounterKillTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . $encounter["id"] }}">{{ $encounter["fight_time"]/1000 }}</a></td>
                         <td class="cellDesktop">{{ date('M d, Y', $encounter["killtime"]) }}</td>
                         @if ( $encounter["top_dps"] )
                             <td class="topDpsSpecContainer">
