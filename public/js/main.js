@@ -563,6 +563,7 @@ $(function()
             var set = $(this).val();
             if ( set !== currentClass )
             {
+                currentClass = set;
                 $("#spec-container").each(function(){
                     var selectPicker = $(this).find(".selectpicker");
                     selectPicker.attr('disabled', true);
