@@ -162,6 +162,10 @@ class EncounterMember extends Model
 
     public static function getRoleClasses($_role_id)
     {
+        if ( $_role_id == 0 )
+        {
+            return self::getClasses();
+        }
         $classIds = self::ROLES[$_role_id]["classes"];
         $classes = array();
         foreach ( $classIds as $id )
