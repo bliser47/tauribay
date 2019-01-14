@@ -67,10 +67,10 @@ class PveLadderController extends Controller
 
         if ( $encounterId > 0 )
         {
-            $sortingId = $_request->get("sorting_id", Defaults::ENCOUNTER_SORT);
-            if ( $_request->has("difficulty_id")) {
+            if ( $_request->get("mode_id") )
+            {
+                $modeId = $_request->get("mode_id");
                 $difficultyId = $_request->get("difficulty_id");
-
 
                 // Ra-den 25 HC hack
                 if ( $encounterId == 1580 && $difficultyId == 6 )
@@ -82,77 +82,107 @@ class PveLadderController extends Controller
                     $encounterId = 1083;
                 }
 
+                if ( $modeId == "dps" || $modeId == "hps" ) {
 
-                if ( $sortingId == "dps" || $sortingId == "hps" ) {
-
-
-                    $members = EncounterMember::where("encounter", "=", $encounterId)
-                        ->where("difficulty_id", "=", $difficultyId);
-
-                    if ( $_request->has("class_id") && $_request->get("class_id") > 0 )
+                    if ( $_request->has("mode_filter"))
                     {
-                        $members = $members->where("class", "=", $_request->get("class_id"));
-                    }
+                        $members = EncounterMember::where("encounter", "=", $encounterId)
+                            ->where("difficulty_id", "=", $difficultyId);
 
-                    if ( $_request->has("spec_id") && $_request->get("spec_id") > 0 )
+                        if ( $_request->has("spec_id") && $_request->get("spec_id") > 0 )
+                        {
+                            $members = $members->where("spec", "=", $_request->get("spec_id"));
+                        }
+                        else if ( $_request->has("class_id") && $_request->get("class_id") > 0 )
+                        {
+                            $members = $members->where("class", "=", $_request->get("class_id"));
+                        }
+                        else if ( $_request->has("role_id") && $_request->get("role_id") > 0 )
+                        {
+                            $members = $members->whereIn("spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
+                        }
+
+                        //  Realm filter
+                        if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                            $realms = array();
+                            if ($_request->has('tauri')) {
+                                array_push($realms, 0);
+                            }
+                            if ($_request->has('wod')) {
+                                array_push($realms, 1);
+                            }
+                            if ($_request->has('evermoon')) {
+                                array_push($realms, 2);
+                            }
+                            $members = $members->whereIn('realm_id', $realms);
+                        }
+
+                        // Faction filter
+                        if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
+                            $factions = array();
+                            if ($_request->has('alliance')) {
+                                array_push($factions, 0);
+                            }
+                            if ($_request->has('horde')) {
+                                array_push($factions, 1);
+                            }
+                            if ($_request->has('ismeretlen')) {
+                                array_push($factions, 3);
+                            }
+                            $members = $members->whereIn('faction_id', $factions);
+                        }
+
+                        // Hack for fixing HPS and Durumu DPS
+                        if ( $modeId == "hps" || ($modeId == "dps" && $encounterId == 1572) )
+                        {
+                            //$members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
+                        }
+                        $members = $members->orderBy($modeId,"desc")->paginate(16);
+
+                        foreach ( $members as $member )
+                        {
+                            $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
+                            if ( $encounter->guild_id !== 0 ) {
+                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                $member->guild_id = $encounter->guild_id;
+                                $member->guild_name = $guild->name;
+                                $member->faction = $guild->faction;
+                            }
+                        }
+
+                        return view("ladder/pve/ajax/members", compact(
+                            "modeId",
+                            "members"
+                        ));
+                    }
+                    else
                     {
-                        $members = $members->where("spec", "=", $_request->get("spec_id"));
+
+                        $classes = EncounterMember::getClasses();
+                        $classes[0] = __("Minden kaszt");
+                        $classId = 0;
+                        $specs = array();
+                        $specs[0] = __("Minden spec");
+                        $specId = 0;
+
+                        $roles = EncounterMember::getRoles();
+                        $roles[0] = __("Minden role");
+                        $roleId = 0;
+
+                        return view("ladder/pve/ajax/hps_dps", compact(
+                            "classes",
+                            "modeId",
+                            "specs",
+                            "classId",
+                            "specId",
+                            "roleId",
+                            "roles"
+                        ));
                     }
+                }
+                else if ( $modeId == "rescent" || $modeId == "speed")
+                {
 
-
-                    //  Realm filter
-                    if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                        $realms = array();
-                        if ($_request->has('tauri')) {
-                            array_push($realms, 0);
-                        }
-                        if ($_request->has('wod')) {
-                            array_push($realms, 1);
-                        }
-                        if ($_request->has('evermoon')) {
-                            array_push($realms, 2);
-                        }
-                        $members = $members->whereIn('realm_id', $realms);
-                    }
-
-                    // Faction filter
-                    if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                        $factions = array();
-                        if ($_request->has('alliance')) {
-                            array_push($factions, 0);
-                        }
-                        if ($_request->has('horde')) {
-                            array_push($factions, 1);
-                        }
-                        if ($_request->has('ismeretlen')) {
-                            array_push($factions, 3);
-                        }
-                        $members = $members->whereIn('faction_id', $factions);
-                    }
-
-                    // Hack for fixing HPS and Durumu DPS
-                    if ( $sortingId == "hps" || ($sortingId == "dps" && $encounterId == 1572) )
-                    {
-                        $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
-                    }
-                    $members = $members->orderBy($sortingId,"desc")->paginate(16);
-
-                    foreach ( $members as $member )
-                    {
-                        $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                        if ( $encounter->guild_id !== 0 ) {
-                            $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                            $member->guild_id = $encounter->guild_id;
-                            $member->guild_name = $guild->name;
-                            $member->faction = $guild->faction;
-                        }
-                    }
-
-                    return view("ladder/pve/ajax/members", compact(
-                        "members",
-                        "sortingId",
-                        "mapId"
-                    ));
                 }
                 else
                 {
@@ -161,35 +191,23 @@ class PveLadderController extends Controller
             }
             else
             {
-
-                $sorting = array(
+                $modes = array(
                     "rescent" => __("Legutóbbi"),
                     "speed" => __("Legjobb idő"),
                     "dps" => "Top DPS",
                     "hps" => "Top HPS"
                 );
-                $sortingId = Defaults::ENCOUNTER_SORT;
+                $modeId = Defaults::ENCOUNTER_SORT;
                 $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
-                $classes = EncounterMember::getClasses();
-                $classes[0] = __("Minden kaszt");
-                $classId = 0;
-                $specs = array();
-                $specs[0] = __("Minden spec");
-                $specId = 0;
-
                 return view("ladder/pve/ajax/encounter", compact(
-                    "sorting",
-                    "sortingId",
+                    "modes",
+                    "modeId",
                     "encounterId",
                     "mapId",
                     "difficulties",
-                    "difficultyId",
-                    "classes",
-                    "specs",
-                    "classId",
-                    "specId"
+                    "difficultyId"
                 ));
             }
         }

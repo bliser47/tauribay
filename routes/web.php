@@ -73,6 +73,8 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/ladder/pve/encounter/{encounter_name_short}', 'PveLadderController@encounter');
     Route::post('/ladder/pve/', 'PveLadderController@ajax');
 
+    Route::get('/role/{role_id}', 'RaidController@getRoleClasses');
+    Route::get('/classAndRole/{role_id}/{class_id}', 'RaidController@getRoleClassSpecs');
     Route::get('/class/{class_id}', 'RaidController@getClassSpecs');
     Route::get('/raid/{expansion_id}', 'RaidController@getExpansionMaps');
     Route::get('/raid/{expansion_id}/{map_id}', 'RaidController@getMapEncounters');

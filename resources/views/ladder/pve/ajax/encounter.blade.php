@@ -19,7 +19,13 @@
     <div id="encounterFilter" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
         <div class="panel-body">
             {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
+                <legend> {{ __("Nehézség") }} </legend>
+                <div id="expansions-container" class="input-group col-md-12">
+                    {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz nehézséget")]); !!}
+                </div>
+            </div>
+            <div class="form-group col-md-4">
                 <legend> {{ __("Realm") }} </legend>
                 <div class="input-group">
                     <div class="checkbox checkbox-inline checkbox-realm">
@@ -36,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
                 <legend> {{ __("Frakció") }} </legend>
                 <div class="input-group">
                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
@@ -49,30 +55,6 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-                <legend> {{ __("Nehézség") }} </legend>
-                <div id="expansions-container" class="input-group col-md-12">
-                    {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz nehézséget")]); !!}
-                </div>
-            </div>
-            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-                <legend> {{ __("Category") }} </legend>
-                <div id="category-container" class="input-group col-md-12">
-                    {!! Form::select('sorting_id', $sorting,  Input::get('sorting_id', $sortingId), ['required', 'id' => 'category', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kategóriát")]); !!}
-                </div>
-            </div>
-            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-                <legend> {{ __("Kaszt") }} </legend>
-                <div id="class-container" class="input-group col-md-12">
-                    {!! Form::select('class_id', $classes,  Input::get('class_id', $classId), ['required', 'id' => 'class', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kasztot")]); !!}
-                </div>
-            </div>
-            <div class="form-group col-sm-4 col-md-3 col-sm-nopadding">
-                <legend> {{ __("Spec") }} </legend>
-                <div id="spec-container" class="input-group col-md-12">
-                    {!! Form::select('spec_id', $specs,  Input::get('spec_id', $specId), ['required', 'id' => 'spec', 'class' => "disabled control selectpicker input-large", 'placeholder' =>  __("Válassz spec-et")]); !!}
-                </div>
-            </div>
             <div class="form-group col-md-12 nomargin col-sm-nopadding">
                 <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
                     {{ __("Szűrés") }}
@@ -82,35 +64,16 @@
         </div>
     </div>
 </div>
-<div id="encounter-form-response">
-    <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
-    <div class="encounter-loading-container"></div>
-</div>
-
-{{--
 <ul class="nav nav-tabs" role="tablist">
-    @foreach ( $modes as $modeKey => $mode )
-        <li id="modePanel{{ $modeKey  }}" data-mode="{{ $modeKey }}" class="modePanel home-main-tab {{ $modeKey == "dps" ? "active" : "" }}" role="presentation"><a href="#mode-{{ $modeKey }}" aria-controls="mode-{{ $modeKey }}"  role="tab" data-toggle="tab">{{ $mode }}</a></li>
+    @foreach ( $modes as $modeKey => $modeName )
+        <li id="modePanel{{ $modeKey  }}" data-mode="{{ $modeKey }}" class="modePanel home-main-tab {{ $modeKey == $modeId ? "active" : "" }}" role="presentation"><a href="#mode-{{ $modeKey }}" aria-controls="mode-{{ $modeKey }}"  role="tab" data-toggle="tab">{{ $modeName }}</a></li>
     @endforeach
 </ul>
 <div class="tab-content">
-    @foreach ( $modes as $modeKey => $mode )
-        <div role="tabpanel" class="tab-pane {{ $modeKey == "dps" ? "active" : "" }}" id="mode-{{ $modeKey }}">
-            <ul class="nav nav-tabs" role="tablist">
-                @foreach ( $difficulties as $index => $difficulty )
-                    <li id="difficultyPanel{{$difficulty["id"]  }}" data-difficulty="{{ $difficulty["id"] }}" data-mode="{{ $modeKey }}" class="difficultyPanel divDesktop home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "" }}" role="presentation"><a href="#difficulty-{{ $difficulty["id"] }}" aria-controls="difficulty-{{ $difficulty["id"] }}"  role="tab" data-toggle="tab">{{ $difficulty["name"] }}</a></li>
-                    <li id="difficultyPanel{{$difficulty["id"]  }}" data-difficulty="{{ $difficulty["id"] }}" data-mode="{{ $modeKey }}" class="difficultyPanel divMobile home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "" }}" role="presentation"><a href="#difficulty-{{ $difficulty["id"] }}" aria-controls="difficulty-{{ $difficulty["id"] }}"  role="tab" data-toggle="tab">{{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$difficulty["id"]] }}</a></li>
-                @endforeach
-            </ul>
-            <div class="tab-content">
-                @foreach ( $difficulties as $index => $difficulty )
-                    <div role="tabpanel" class="tab-pane {{  $index == $defaultDifficultyIndex ? "active" : "" }}" id="{{ $modeKey }}-difficulty-{{ $difficulty["id"] }}">
-                        <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
-                        <div data-mode="{{ $modeKey }}" data-difficulty="{{ $difficulty["id"] }}" class="encounter-difficulty-loading-container {{ $index == $defaultDifficultyIndex ? "active" : ""}}"></div>
-                    </div>
-                @endforeach
-            </div>
+    @foreach ( $modes as $modeKey => $modeName )
+        <div role="tabpanel" class="tab-pane {{  $modeKey == $modeId ? "active" : "" }}" id="mode-{{ $modeKey}}">
+            <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
+            <div data-mode="{{ $modeKey }}" class="encounter-mode-loading-container"></div>
         </div>
     @endforeach
 </div>
---}}

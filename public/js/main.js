@@ -511,14 +511,19 @@ $(function()
     };
     listenForMapChange();
 
-    var loadEncounter = function(encounterId, page)
+    var loadEncounter = function(encounterId, page, mode, subForm)
     {
-        var container = $("#encounter-form-response");
+        var container = $("#encounter-form-response-" + mode);
         $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
         var data = $("#encounter-form").serialize();
-        data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         data += "&encounter_id=" + encounterId;
         data += "&page=" + page;
+        data += "&mode_id=" + mode;
+        data += "&mode_filter=1";
+        if ( subForm && subForm.length )
+        {
+            data += "&" + subForm;
+        }
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -534,7 +539,7 @@ $(function()
                     e.preventDefault();
                     var url = new URL($(this).attr("href"));
                     var page = url.searchParams.get("page");
-                    loadEncounter(encounterId, page)
+                    loadEncounter(encounterId, page, mode)
                 });
 
                 var selectPicker = $(container).find(".selectpicker");
@@ -547,24 +552,58 @@ $(function()
         });
     };
 
-    var listenForEncounterFormSubmit = function(encounterId)
+    var listenForEncounterFormSubmit = function(encounterId, mode)
     {
-        $("#encounter-form").submit(function(e){
+        $("#mode-" + mode + " .encounter-subform-form").submit(function(e){
             e.preventDefault();
-            loadEncounter(encounterId,1);
+            loadEncounter(encounterId,1, mode, $(this).serialize());
         });
     };
 
-    var listenForClassChange = function()
+    var listenForClassChange = function(mode, role)
     {
         var currentClass = $("#class").val();
-        $("#class-container .selectpicker").change(function()
+        $("#mode-"+ mode +" #class-container .selectpicker").change(function()
         {
             var set = $(this).val();
             if ( set !== currentClass )
             {
                 currentClass = set;
-                $("#spec-container").each(function(){
+                $("#mode-" + mode + "#spec-container").each(function(){
+                    var selectPicker = $(this).find(".selectpicker");
+                    selectPicker.attr('disabled', true);
+                    selectPicker.val(0);
+                    selectPicker.selectpicker('refresh');
+                });
+                var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
+                $.ajax({
+                    type: "GET",
+                    url: url,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(classSpecsSelectHTML)
+                    {
+                        var selectContainer = $("#mode-" + mode + " #spec-container");
+                        selectContainer.html(classSpecsSelectHTML);
+                        selectContainer.find(".selectpicker").selectpicker('refresh');
+                        selectContainer.attr('disabled', false);
+                    }
+                });
+            }
+        });
+    };
+
+    var listenForRoleChange = function(mode)
+    {
+        var currentRole = $("#role").val();
+        $("#mode-"+ mode + " #role-container .selectpicker").change(function()
+        {
+            var set = $(this).val();
+            if ( set !== currentRole )
+            {
+                currentRole = set;
+                $("#mode-" + mode + " #class-container, #mode-" + mode + " #spec-container").each(function(){
                     var selectPicker = $(this).find(".selectpicker");
                     selectPicker.attr('disabled', true);
                     selectPicker.val(0);
@@ -572,16 +611,18 @@ $(function()
                 });
                 $.ajax({
                     type: "GET",
-                    url: URL_WEBSITE + "/class/" + set,
+                    url: URL_WEBSITE + "/role/" + set,
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(classSpecsSelectHTML)
+                    success: function(roleClassesSelectHTML)
                     {
-                        var selectContainer = $("#spec-container");
-                        selectContainer.html(classSpecsSelectHTML);
+                        var selectContainer = $("#mode-" + mode + " #class-container");
+                        selectContainer.html(roleClassesSelectHTML);
                         selectContainer.find(".selectpicker").selectpicker('refresh');
                         selectContainer.attr('disabled', false);
+
+                        listenForClassChange(mode, currentRole);
                     }
                 });
             }
@@ -628,10 +669,13 @@ $(function()
         var loader = $(".encounters_loading");
         loader.show();
         $("#pve-ladder-filter").attr("disabled",true);
+
+        var data = $(this).serialize();
+        data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
-            data: $(this).serialize(),
+            data: data,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -640,21 +684,38 @@ $(function()
                 $("#pve-ladder-filter").attr("disabled",false);
                 $(loader).hide();
                 $(container).html(response);
-                $(".selectpicker").selectpicker();
-                var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
-                if (  selectedEncounterId > 0 ) {
-                    listenForEncounterFormSubmit(selectedEncounterId);
-                    loadEncounter(selectedEncounterId,1);
-                }
 
-                var specPicker = $("#spec-container").find(".selectpicker");
-                specPicker.attr('disabled', true);
-                specPicker.val(0);
-                specPicker.selectpicker('refresh');
+                $(container).find(".encounter-mode-loading-container").each(function(){
+                    var tab = $(this).parent();
+                    var mode = $(this).data("mode");
+                    data += "&mode_id=" + mode;
+                    $.ajax({
+                        type: "POST",
+                        url: URL_WEBSITE + "/ladder/pve",
+                        data: data,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (response) {
+                            $(tab).html(response);
+                            $(".selectpicker").selectpicker();
 
-                listenForClassChange();
+                            var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
+                            if (  selectedEncounterId > 0 ) {
+                                listenForEncounterFormSubmit(selectedEncounterId, mode);
+                                loadEncounter(selectedEncounterId,1, mode);
+                            }
 
-                UpdateTimes();
+                            var specPicker = $("#spec-container").find(".selectpicker");
+                            specPicker.attr('disabled', true);
+                            specPicker.val(0);
+                            specPicker.selectpicker('refresh');
+
+                            listenForRoleChange(mode);
+                            listenForClassChange(mode);
+                        }
+                    });
+                });
             }
         });
     });

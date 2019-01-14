@@ -6,6 +6,36 @@ use Illuminate\Database\Eloquent\Model;
 
 class EncounterMember extends Model
 {
+    const ROLES = array(
+        1 => array(
+            "name" => "Tank",
+            "classes" => array(
+                1, 2, 6, 10, 11
+            ),
+            "specs" => array(
+                73, 66, 250, 268, 104
+            )
+        ),
+        2 => array(
+            "name" => "DPS",
+            "classes" => array(
+                1,2,3,4,5,6,7,8,9,10,11
+            ),
+            "specs" => array(
+                71,72, 70, 253, 254, 255, 259, 260, 261, 258, 251, 252, 262, 263, 62, 63, 64, 265, 266, 267, 269, 102, 103
+            )
+        ),
+        3 => array(
+            "name" => "Healer",
+            "classes" => array(
+                2, 5, 7, 10, 11
+            ),
+            "specs" => array(
+                65, 256, 257, 264, 270, 105
+            )
+        )
+    );
+
     const CLASSES = array(
         1 => array(
             "name" => "Warrior",
@@ -119,8 +149,50 @@ class EncounterMember extends Model
         return $specs;
     }
 
+    public static function getRoles()
+    {
+        $roles = array();
+        foreach ( self::ROLES as $roleId => $role )
+        {
+            $roles[$roleId] = $role["name"];
+        }
+        return $roles;
+    }
+
+
+    public static function getRoleClasses($_role_id)
+    {
+        $classIds = self::ROLES[$_role_id]["classes"];
+        $classes = array();
+        foreach ( $classIds as $id )
+        {
+            $classes[$id] = self::CLASSES[$id]["name"];
+        }
+        return $classes;
+    }
+
+    public static function getRoleSpecs($_role_id)
+    {
+        return self::ROLES[$_role_id]["specs"];
+    }
+
+
     public static function getShortName($name)
     {
         return strlen($name) > 9 ? mb_substr($name,0,6) . ".." : $name;
+    }
+
+    public static function getRoleClassSpecs($_role_id, $_class_id)
+    {
+        $classSpecs = array();
+        $class = self::CLASSES[$_class_id];
+        foreach ( self::ROLES[$_role_id]["specs"] as $spec )
+        {
+            if ( array_key_exists($spec, $class["specs"]) )
+            {
+                $classSpecs[$spec] = $class["specs"][$spec];
+            }
+        }
+        return $classSpecs;
     }
 }

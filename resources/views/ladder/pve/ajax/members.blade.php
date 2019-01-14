@@ -3,7 +3,7 @@
         <th>{{ __("Nr") }}</th>
         <th class="cellMobile" colspan="2">{{ __("Player") }}</th>
         <th class="cellDesktop" colspan="4">{{ __("Player") }}</th>
-        <th>{{ strtoupper($sortingId) }}</th>
+        <th>{{ strtoupper($modeId) }}</th>
         <th class="cellDesktop">{{ __("Dátum") }}</th>
         <th class="cellDesktop">{{ __("iLvL") }}</th>
         <th class="cellDesktop">{{ __("Idő") }}</th>
@@ -23,8 +23,8 @@
                     Random
                 @endif
             </td>
-            <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId], true) }}</a></td>
-            <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$sortingId]) }}</a></td>
+            <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId], true) }}</a></td>
+            <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
             <td class="cellDesktop">{{ date('M d, Y', $member["killtime"])}}</td>
             <td class="cellDesktop">{{ $member["ilvl"] }}</td>
             <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"]/1000 }}</a></td>

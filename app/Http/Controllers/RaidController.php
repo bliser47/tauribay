@@ -63,4 +63,18 @@ class RaidController extends Controller
         $specs[0] = __("Minden spec");
         return FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz spec-et")]);
     }
+
+    public function getRoleClasses(Request $_request, $_role_id)
+    {
+        $classes = EncounterMember::getRoleClasses($_role_id);
+        $classes[0] = __("Minden kaszt");
+        return FormFacade::select('class_id', $classes, 0, ['required', 'id' => 'class', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz kasztot")]);
+    }
+
+    public function getRoleClassSpecs(Request $_request , $_role_id, $_class_id)
+    {
+        $specs = EncounterMember::getRoleClassSpecs($_role_id, $_class_id);
+        return FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz role kasztot")]);
+
+    }
 }

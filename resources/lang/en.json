@@ -142,5 +142,7 @@
   "Válassz instát vagy boss-t!" : "Select raid or encounter!",
   "Mutasd" : "Show",
   "Kategória" : "Category",
-  "Válassz kategóriát" : "Select category"
+  "Válassz kategóriát" : "Select category",
+  "Minden role" : "All roles",
+  "Válassz role-t" : "Select role"
 }
