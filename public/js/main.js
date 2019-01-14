@@ -554,12 +554,12 @@ $(function()
             success: function(response)
             {
                 $(container).html(response);
-                handleEncounterModes(container);
+                handleEncounterModes(container, data);
             }
         });
     };
 
-    var handleEncounterModes = function (container) {
+    var handleEncounterModes = function (container, data)
     {
         $(container).find(".encounter-mode-loading-container").each(function(){
             var tab = $(this).parent();
@@ -592,7 +592,7 @@ $(function()
                 }
             });
         });
-    }
+    };
 
     var listenForEncounterFormSubmit = function(encounterId, mode)
     {
@@ -731,7 +731,7 @@ $(function()
                 $(loader).hide();
                 $(container).html(response);
 
-                handleEncounterModes(container);
+                handleEncounterModes(container, data);
 
                 UpdateTimes();
             }
