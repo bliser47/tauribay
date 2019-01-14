@@ -137,7 +137,7 @@ class PveLadderController extends Controller
                         {
                             $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
-                        $members = $members->orderBy($modeId,"desc")->paginate(16);
+                        $members = $members->groupBy('realm_id', 'name')->orderBy($modeId,"desc")->paginate(50);
 
                         foreach ( $members as $member )
                         {
