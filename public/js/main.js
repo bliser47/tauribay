@@ -511,7 +511,27 @@ $(function()
     };
     listenForMapChange();
 
-    var loadEncounter = function(encounterId, page, mode, subForm)
+    var loadEncounter = function(encounterId)
+    {
+        var container = $("#encounter-form-response");
+        $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
+        var data = $("#encounter-form").serialize();
+        data += "&encounter_id=" + encounterId;
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/ladder/pve",
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                $(container).html(response);
+            }
+        });
+    };
+
+    var loadEncounterMode = function(encounterId, page, mode, subForm)
     {
         var container = $("#encounter-form-response-" + mode);
         $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
@@ -539,7 +559,7 @@ $(function()
                     e.preventDefault();
                     var url = new URL($(this).attr("href"));
                     var page = url.searchParams.get("page");
-                    loadEncounter(encounterId, page, mode)
+                    loadEncounterMode(encounterId, page, mode)
                 });
 
                 var selectPicker = $(container).find(".selectpicker");
@@ -554,9 +574,13 @@ $(function()
 
     var listenForEncounterFormSubmit = function(encounterId, mode)
     {
+        $("#encounter-form").submit(function(e){
+            e.preventDefault();
+            loadEncounter(encounterId,1);
+        });
         $("#mode-" + mode + " .encounter-subform-form").submit(function(e){
             e.preventDefault();
-            loadEncounter(encounterId,1, mode, $(this).serialize());
+            loadEncounterMode(encounterId,1, mode, $(this).serialize());
         });
     };
 
@@ -703,7 +727,7 @@ $(function()
                             var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
                             if (  selectedEncounterId > 0 ) {
                                 listenForEncounterFormSubmit(selectedEncounterId, mode);
-                                loadEncounter(selectedEncounterId,1, mode);
+                                loadEncounterMode(selectedEncounterId,1, mode);
                             }
 
                             var specPicker = $("#spec-container").find(".selectpicker");
