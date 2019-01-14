@@ -207,8 +207,8 @@ class PveLadderController extends Controller
                 $modes = array(
                     "rescent" => __("Legutóbbi"),
                     "speed" => __("Legjobb idő"),
-                    "dps" => "Top DPS",
-                    "hps" => "Top HPS"
+                    "dps" => "DPS",
+                    "hps" => "HPS"
                 );
                 $modeId = Defaults::ENCOUNTER_SORT;
                 $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);

@@ -33,7 +33,50 @@
     @endforeach
 </table>
 <div class="text-center paginator">
-    <div>
+    <div class="divDesktop">
         {{ $members->appends(Illuminate\Support\Facades\Input::except('page')) }}
+    </div>
+    <div class="divMobile">
+        <ul class="pagination pagination-sm">
+            {{-- Previous Page Link --}}
+            @if ($members->onFirstPage())
+                <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            @else
+                <li class="page-item"><a class="page-link" href="{{ $members->previousPageUrl() }}" rel="prev">&laquo;</a></li>
+            @endif
+
+            @if($members->currentPage() > 3)
+                <li class="page-item hidden-xs"><a class="page-link" href="{{ $members->url(1) }}">1</a></li>
+            @endif
+
+            @if($members->currentPage() > 4)
+                <li class="page-item disabled hidden-xs"><span class="page-link">...</span></li>
+            @endif
+
+            @foreach(range(1, $members->lastPage()) as $i)
+                @if($i >= $members->currentPage() - 2 && $i <= $members->currentPage() + 2)
+                    @if ($i == $members->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+                    @else
+                        <li class="page-item" ><a class="page-link" href="{{ $members->url($i) }}">{{ $i }}</a></li>
+                    @endif
+                @endif
+            @endforeach
+
+            @if($members->currentPage() < $members->lastPage() - 3)
+                <li class="page-item disabled hidden-xs"><span class="page-link">...</span></li>
+            @endif
+
+            @if($members->currentPage() < $members->lastPage() - 2)
+                <li class="page-item hidden-xs"><a class="page-link" href="{{ $members->url($members->lastPage()) }}">{{ $members->lastPage() }}</a></li>
+            @endif
+
+            {{-- Next Page Link --}}
+            @if ($members->hasMorePages())
+                <li class="page-item"><a class="page-link" href="{{ $members->nextPageUrl() }}" rel="next">&raquo;</a></li>
+            @else
+                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            @endif
+        </ul>
     </div>
 </div>

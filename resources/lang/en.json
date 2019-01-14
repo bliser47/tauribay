@@ -42,7 +42,7 @@
   "A közeljövőben a fentiek illetve a set itemek is helyesen lesznek feltüntetve." : "We will look to support set items and the ones above in the near future.",
   "Elnézést kérünk," : "Apologies,",
   "Méret" : "Size",
-  "Legjobb idő" : "Best time",
+  "Legjobb idő" : "Speed",
   "Guild neve..." : "Guild's name...",
   "Vissza" : "Back",
 
@@ -146,5 +146,6 @@
   "Minden role" : "All roles",
   "Válassz role-t" : "Select role",
   "Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!" : "The data for this encounter is corrupt and will not be displayed!",
-  "Válassz role spec-et" : "Select role spec"
+  "Válassz role spec-et" : "Select role spec",
+  "Karakter szűrés" : "Character filter"
 }
