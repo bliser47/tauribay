@@ -177,6 +177,14 @@ class EncounterMember extends Model
 
     public static function getRoleSpecs($_role_id)
     {
+        if ( $_role_id == 0 )
+        {
+            return array_merge(
+                self::ROLES[1]["specs"],
+                self::ROLES[2]["specs"],
+                self::ROLES[3]["specs"]
+            );
+        }
         return self::ROLES[$_role_id]["specs"];
     }
 
@@ -190,12 +198,16 @@ class EncounterMember extends Model
     {
         $classSpecs = array();
         $class = self::CLASSES[$_class_id];
-        foreach ( self::ROLES[$_role_id]["specs"] as $spec )
-        {
-            if ( array_key_exists($spec, $class["specs"]) )
-            {
-                $classSpecs[$spec] = $class["specs"][$spec];
+        if ( $_role_id != 0 ) {
+            foreach (self::ROLES[$_role_id]["specs"] as $spec) {
+                if (array_key_exists($spec, $class["specs"])) {
+                    $classSpecs[$spec] = $class["specs"][$spec];
+                }
             }
+        }
+        else
+        {
+            $classSpecs = $class["specs"];
         }
         return $classSpecs;
     }
