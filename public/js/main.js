@@ -713,11 +713,11 @@ $(function()
 
                             listenForRoleChange(mode);
                             listenForClassChange(mode);
-
-                            UpdateTimes();
                         }
                     });
                 });
+
+                UpdateTimes();
             }
         });
     });
