@@ -11,29 +11,38 @@
                         <th>Guild</th>
                         <th>{{ __("Dátum") }}</th>
                         <th>{{ __("Időtartam") }}</th>
-                        <th>{{ __("Wipe-ok") }}</th>
-                        <th>{{ __("Összes halál") }}</th>
-                        <th>{{ __("Halálok") }}</th>
+                        <th class="cellDesktop">{{ __("Wipe-ok") }}</th>
+                        <th class="cellDesktop">{{ __("Összes halál") }}</th>
+                        <th class="cellDesktop">{{ __("Halálok") }}</th>
                     </tr>
                     <tr>
                         <td>{{ $shortRealms[$encounter->realm_id]  }}</td>
-                        <td style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$encounter->difficulty_id] }}">{{ $encounterData["name"]  }}</a></td>
-                        <td>
+                        <td class="cellDesktop" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$encounter->difficulty_id] }}">{{ $encounterData["name"]  }}</a></td>
+                        <td class="cellMobile" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$encounter->difficulty_id] }}">{{ \TauriBay\Encounter::getNameShort($encounter->encounter_id)  }}</a></td>
+                        <td class="cellDesktop faction-{{ $encounter->faction }}">
                             @if ( strlen($encounter->name) )
                                 <a href="{{ URL::to("/guild/" . $encounter->guild_id) }}"> {{ $encounter->name }} </a>
                             @else
                                 Random
                             @endif
                         </td>
-                        <td>{{ date('M d, Y', $encounter->killtime) }}</td>
+                        <td class="cellMobile faction-{{ $encounter->faction }}">
+                            @if ( strlen($encounter->name) )
+                                <a href="{{ URL::to("/guild/" . $encounter->guild_id) }}"> {{ \TauriBay\Guild::getShortName($encounter->name) }} </a>
+                            @else
+                                Random
+                            @endif
+                        </td>
+                        <td class="cellDesktop">{{ date('M d, Y', $encounter->killtime) }}</td>
+                        <td class="cellMobile">{{ date('M d', $encounter->killtime) }}</td>
                         <td class="guildClearTime">{{ $encounter->fight_time/1000 }}</td>
-                        <td>{{ $encounter->wipes }}</td>
-                        <td>{{ $encounter->deaths_total }}</td>
-                        <td>{{ $encounter->deaths_fight }}</td>
+                        <td class="cellDesktop">{{ $encounter->wipes }}</td>
+                        <td class="cellDesktop">{{ $encounter->deaths_total }}</td>
+                        <td class="cellDesktop">{{ $encounter->deaths_fight }}</td>
                     </tr>
                 </table>
             </div>
-            <div class="panel panel-default nomargin">
+            <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="home-main-tab active" role="presentation"><a href="#fightDataDamage" aria-controls="fightDataDamage" role="tab" data-toggle="tab">Damage</a></li>
                     <li class="home-main-tab" role="presentation"><a href="#fightDataHealing" aria-controls="fightDataHealingg" role="tab" data-toggle="tab">Healing</a></li>

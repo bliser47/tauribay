@@ -137,7 +137,7 @@ class PveLadderController extends Controller
                         {
                             $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
-                        $members = $members->orderBy($modeId,"desc")->paginate(16);
+                        $members = $members->groupBy('realm_id', 'name')->orderBy($modeId,"desc")->paginate(50);
 
                         foreach ( $members as $member )
                         {
@@ -205,10 +205,10 @@ class PveLadderController extends Controller
             else
             {
                 $modes = array(
-                    "rescent" => __("Legutóbbi"),
-                    "speed" => __("Legjobb idő"),
-                    "dps" => "Top DPS",
-                    "hps" => "Top HPS"
+                    "rescent" => __("Új"),
+                    "speed" => __("Speedkill"),
+                    "dps" => "DPS",
+                    "hps" => "HPS"
                 );
                 $modeId = Defaults::ENCOUNTER_SORT;
                 $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);

@@ -331,7 +331,7 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
     background:white;
 }
 
-.encounter-body
+.encounter-body,  .encounter-character-form
 {
     background:#f5f5f5;
 }
@@ -900,10 +900,31 @@ a.changelog:hover
     font-weight:bold;
     font-size:1.7em;
     color:#fff;
-    padding-top:6px;
+    padding-top:15px;
     border:2px solid white;
+    position: relative;
+    height:70px;
 }
 
+.bossNameImgMobile
+{
+    text-align: right;
+    font-weight:bold;
+    font-size:1.7em;
+    color:#fff;
+    padding-top:15px;
+    padding-right:20px;
+    border:2px solid white;
+    position: relative;
+    height:70px;
+}
+
+.bossNameImg img, .bossNameImgMobile img
+{
+    position: absolute;
+    left:5px;
+    bottom:2px;
+}
 
 .memberClass1
 {

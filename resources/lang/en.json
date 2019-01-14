@@ -42,7 +42,7 @@
   "A közeljövőben a fentiek illetve a set itemek is helyesen lesznek feltüntetve." : "We will look to support set items and the ones above in the near future.",
   "Elnézést kérünk," : "Apologies,",
   "Méret" : "Size",
-  "Legjobb idő" : "Best time",
+  "Legjobb idő" : "Speed",
   "Guild neve..." : "Guild's name...",
   "Vissza" : "Back",
 
@@ -146,5 +146,12 @@
   "Minden role" : "All roles",
   "Válassz role-t" : "Select role",
   "Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!" : "The data for this encounter is corrupt and will not be displayed!",
-  "Válassz role spec-et" : "Select role spec"
+  "Válassz role spec-et" : "Select role spec",
+  "Karakter szűrés" : "Character filter",
+  "Fight adatok" : "Fight data",
+  "Sikeresen újraírtam a rendszer bizonyos részeit, így most már több adatra lehet rákeresni fightonként!" : "I have successfully rewritten parts of the system, thus you can now search for more data regarding encounters.",
+  "Az új PVE ladder oldal:" : "The new PVE ladder page",
+  "A legjobb DPS-ek pld Durumu-n" : "i.e. Top DPSs on Durumu:",
+  "Legközelebb még több feature várható!" : "More features to come next time!",
+  "Új" : "New"
 }

@@ -1,8 +1,12 @@
 <div class="encounter-form-body">
     @if ( $mapId == 1098 )
-        <div class="bossNameImg" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
-            <img src="{{ URL::asset("img/encounters/" . $encounterId . ".png") }}" alt=""/>
+        <div class="bossNameImg divDesktop" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
+            <img src="{{ URL::asset("img/encounters/" . $encounterId . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounterId)  }}"/>
             {{ \TauriBay\Encounter::getName($encounterId)  }}
+        </div>
+        <div class="bossNameImgMobile divMobile" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
+            <img src="{{ URL::asset("img/encounters/" . $encounterId . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounterId)  }}"/>
+            {{ \TauriBay\Encounter::getNameShort($encounterId)  }}
         </div>
     @else
         <div class="bossName">

@@ -16,7 +16,18 @@ class Encounter extends Model
         "Council of Elders" => "Council",
         "Durumu the Forgotten" => "Durumu",
         "Dark Animus" => "Animus",
-        "Twin Consorts" => "Twins"
+        "Twin Consorts" => "Twins",
+        "The Stone Guard" => "Stone Guard",
+        "Feng the Accursed" => "Feng",
+        "Gara'jal the Spiritbinder" => "Gara'jal",
+        "The Spirit Kings" => "Spirit Kings",
+        "Will of the Emperor" => "Emperor",
+        "Imperial Vizier Zor'lok" => "Zor'lok",
+        "Blade Lord Ta'yak" => "Ta'yak",
+        "Wind Lord Mel'jarak" => "Mel'jarak",
+        "Amber-Shaper Un'sok" => "Un'sok",
+        "Grand Empress Shek'zeer" => "Shek'zeer",
+        "Protectors of the Endless" => "Protectors"
     );
 
 
@@ -454,7 +465,7 @@ class Encounter extends Model
     public static function getMapNameShort($_expansion_id, $_map_id)
     {
         $name = Encounter::getMapName($_expansion_id, $_map_id);
-        return Encounter::shortenMap($name);
+        return Encounter::shorten($name);
     }
 
     public static function getMapName($_expansion_id, $_map_id)
@@ -468,6 +479,7 @@ class Encounter extends Model
                 }
             }
         }
+        return "";
     }
 
     public static function getMapUrl($expansionId, $mapId)

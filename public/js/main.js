@@ -556,7 +556,13 @@ $(function()
             success: function(response)
             {
                 $(container).html(response);
-
+                $(container).find(".pagination a").click(function(e)
+                {
+                    e.preventDefault();
+                    var url = new URL($(this).attr("href"));
+                    var page = url.searchParams.get("page");
+                    loadEncounterMode(encounterId, page, mode, subForm)
+                });
             }
         });
     };
@@ -566,12 +572,15 @@ $(function()
         $(container).find(".encounter-mode-loading-container").each(function(){
             var tab = $(this).parent();
             var mode = $(this).data("mode");
-            data += "&mode_id=" + mode;
+
+            var storeData = data;
+
+            storeData += "&mode_id=" + mode;
 
             $.ajax({
                 type: "POST",
                 url: URL_WEBSITE + "/ladder/pve",
-                data: data,
+                data: storeData,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -584,6 +593,7 @@ $(function()
 
                     $(tab).find(".encounter-subform-form").submit(function(e){
                         e.preventDefault();
+                        $("#encounterMemberFilter"+mode).collapse("hide");
                         loadEncounterMode(encounterId,1, mode, $(this).serialize());
                     });
 
@@ -598,6 +608,8 @@ $(function()
 
                     listenForRoleChange(mode);
                     listenForClassChange(mode);
+
+                    UpdateTimes();
                 }
             });
         });
@@ -620,27 +632,28 @@ $(function()
             if ( set !== currentClass )
             {
                 currentClass = set;
-                $("#mode-" + mode + "#spec-container").each(function(){
+                $("#mode-" + mode + " #spec-container").each(function(){
                     var selectPicker = $(this).find(".selectpicker");
                     selectPicker.attr('disabled', true);
                     selectPicker.val(0);
                     selectPicker.selectpicker('refresh');
                 });
-                var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
-                $.ajax({
-                    type: "GET",
-                    url: url,
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(classSpecsSelectHTML)
-                    {
-                        var selectContainer = $("#mode-" + mode + " #spec-container");
-                        selectContainer.html(classSpecsSelectHTML);
-                        selectContainer.find(".selectpicker").selectpicker('refresh');
-                        selectContainer.attr('disabled', false);
-                    }
-                });
+                if ( currentClass > 0 ) {
+                    var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
+                    $.ajax({
+                        type: "GET",
+                        url: url,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function (classSpecsSelectHTML) {
+                            var selectContainer = $("#mode-" + mode + " #spec-container");
+                            selectContainer.html(classSpecsSelectHTML);
+                            selectContainer.find(".selectpicker").selectpicker('refresh');
+                            selectContainer.attr('disabled', false);
+                        }
+                    });
+                }
             }
         });
     };
