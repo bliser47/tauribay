@@ -30,7 +30,7 @@ class LadderCache extends Model
                 $topDps = $topDps->where("killtime",">",0)->where("killtime", "<", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
             }
 
-            $topDps->orderBy("dps","desc")->first();
+            $topDps = $topDps->orderBy("dps","desc")->first();
             if ( $topDps !== null ) {
                 $cache->top_dps_encounter_member = $topDps->id;
                 $cache->save();
