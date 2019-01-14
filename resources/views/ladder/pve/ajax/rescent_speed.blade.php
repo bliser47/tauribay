@@ -7,7 +7,7 @@
     </tr>
     @foreach( $encounters as $nr => $encounter )
         <tr>
-            <td><b>{{ (($encounters->currentPage()-1)*16)+$nr+1  }}</b></td>
+            <td><b>{{ $nr+1 }}</b></td>
             <td class="cellDesktop faction-{{ $encounter["faction"] }}">
                 @if ( strlen($encounter["guild_name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["guild_name"] }} </a>

@@ -185,7 +185,7 @@ class PveLadderController extends Controller
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
                     $encounters = Encounter::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId)
-                        ->orderBy($order, $order2)->paginate(16);
+                        ->orderBy($order, $order2)->take(16)->get();
 
                     foreach ($encounters as $encounter) {
                         if ($encounter->guild_id !== 0) {
