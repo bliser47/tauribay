@@ -1136,7 +1136,7 @@ tbody tr:nth-child(odd){
     top: -2px;
 }
 
-#map-loading-container .bossName
+.bossName
 {
     background: #5cb85c;
     color: #fff;
