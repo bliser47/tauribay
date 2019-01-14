@@ -205,8 +205,8 @@ class PveLadderController extends Controller
             else
             {
                 $modes = array(
-                    "rescent" => __("Legutóbbi"),
-                    "speed" => __("Legjobb idő"),
+                    "rescent" => __("Új"),
+                    "speed" => __("Speedkill"),
                     "dps" => "DPS",
                     "hps" => "HPS"
                 );
