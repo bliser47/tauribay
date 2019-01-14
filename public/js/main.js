@@ -554,23 +554,45 @@ $(function()
             success: function(response)
             {
                 $(container).html(response);
-                $(container).find(".pagination a").click(function(e)
-                {
-                    e.preventDefault();
-                    var url = new URL($(this).attr("href"));
-                    var page = url.searchParams.get("page");
-                    loadEncounterMode(encounterId, page, mode)
-                });
-
-                var selectPicker = $(container).find(".selectpicker");
-                selectPicker.attr('disabled', true);
-                selectPicker.val(0);
-                selectPicker.selectpicker('refresh');
-
-                UpdateTimes();
+                handleEncounterModes(container);
             }
         });
     };
+
+    var handleEncounterModes = function (container) {
+    {
+        $(container).find(".encounter-mode-loading-container").each(function(){
+            var tab = $(this).parent();
+            var mode = $(this).data("mode");
+            data += "&mode_id=" + mode;
+            $.ajax({
+                type: "POST",
+                url: URL_WEBSITE + "/ladder/pve",
+                data: data,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    $(tab).html(response);
+                    $(".selectpicker").selectpicker();
+
+                    var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
+                    if (  selectedEncounterId > 0 ) {
+                        listenForEncounterFormSubmit(selectedEncounterId, mode);
+                        loadEncounterMode(selectedEncounterId,1, mode);
+                    }
+
+                    var specPicker = $("#spec-container").find(".selectpicker");
+                    specPicker.attr('disabled', true);
+                    specPicker.val(0);
+                    specPicker.selectpicker('refresh');
+
+                    listenForRoleChange(mode);
+                    listenForClassChange(mode);
+                }
+            });
+        });
+    }
 
     var listenForEncounterFormSubmit = function(encounterId, mode)
     {
@@ -709,37 +731,7 @@ $(function()
                 $(loader).hide();
                 $(container).html(response);
 
-                $(container).find(".encounter-mode-loading-container").each(function(){
-                    var tab = $(this).parent();
-                    var mode = $(this).data("mode");
-                    data += "&mode_id=" + mode;
-                    $.ajax({
-                        type: "POST",
-                        url: URL_WEBSITE + "/ladder/pve",
-                        data: data,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function (response) {
-                            $(tab).html(response);
-                            $(".selectpicker").selectpicker();
-
-                            var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
-                            if (  selectedEncounterId > 0 ) {
-                                listenForEncounterFormSubmit(selectedEncounterId, mode);
-                                loadEncounterMode(selectedEncounterId,1, mode);
-                            }
-
-                            var specPicker = $("#spec-container").find(".selectpicker");
-                            specPicker.attr('disabled', true);
-                            specPicker.val(0);
-                            specPicker.selectpicker('refresh');
-
-                            listenForRoleChange(mode);
-                            listenForClassChange(mode);
-                        }
-                    });
-                });
+                handleEncounterModes(container);
 
                 UpdateTimes();
             }
