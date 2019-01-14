@@ -465,7 +465,7 @@ class Encounter extends Model
     public static function getMapNameShort($_expansion_id, $_map_id)
     {
         $name = Encounter::getMapName($_expansion_id, $_map_id);
-        return Encounter::shortenMap($name);
+        return Encounter::shorten($name);
     }
 
     public static function getMapName($_expansion_id, $_map_id)
@@ -479,6 +479,7 @@ class Encounter extends Model
                 }
             }
         }
+        return "";
     }
 
     public static function getMapUrl($expansionId, $mapId)
