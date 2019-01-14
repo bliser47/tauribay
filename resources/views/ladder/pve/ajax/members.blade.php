@@ -10,7 +10,7 @@
     </tr>
     @foreach( $members as $nr => $member )
         <tr>
-            <td><b>{{ (($members->currentPage()-1)*16)+$nr+1  }}</b></td>
+            <td><b>{{ (($members->currentPage()-1)*50)+$nr+1  }}</b></td>
             <td class="topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $member["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$member["spec"]] }}"/>
             </td>
