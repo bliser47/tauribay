@@ -527,6 +527,7 @@ $(function()
             success: function(response)
             {
                 $(container).html(response);
+                handleEncounterModes(container, data);
             }
         });
     };
@@ -599,10 +600,6 @@ $(function()
         $("#encounter-form").submit(function(e){
             e.preventDefault();
             loadEncounter(encounterId,1);
-        });
-        $("#mode-" + mode + " .encounter-subform-form").submit(function(e){
-            e.preventDefault();
-            loadEncounterMode(encounterId,1, mode, $(this).serialize());
         });
     };
 
