@@ -135,7 +135,7 @@ class PveLadderController extends Controller
                         // Hack for fixing HPS and Durumu DPS
                         if ( $modeId == "hps" || ($modeId == "dps" && $encounterId == 1572) )
                         {
-                            //$members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
+                            $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
                         $members = $members->orderBy($modeId,"desc")->paginate(16);
 
@@ -182,7 +182,20 @@ class PveLadderController extends Controller
                 }
                 else if ( $modeId == "rescent" || $modeId == "speed")
                 {
+                    $order = $modeId == "rescent" ? "killtime" : "fight_time";
+                    $order2 = $modeId == "rescent" ? "desc" : "asc";
+                    $encounters = Encounter::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId)
+                        ->orderBy($order, $order2)->paginate(16);
 
+                    foreach ($encounters as $encounter) {
+                        if ($encounter->guild_id !== 0) {
+                            $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                            $encounter->guild_name = $guild->name;
+                            $encounter->faction = $guild->faction;
+                        }
+                    }
+
+                    return view("ladder/pve/ajax/rescent_speed", compact("encounters", "encounterIDs"));
                 }
                 else
                 {

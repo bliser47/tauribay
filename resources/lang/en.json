@@ -144,5 +144,6 @@
   "Kategória" : "Category",
   "Válassz kategóriát" : "Select category",
   "Minden role" : "All roles",
-  "Válassz role-t" : "Select role"
+  "Válassz role-t" : "Select role",
+  "Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!" : "The data for this encounter is corrupt and will not be displayed!"
 }
