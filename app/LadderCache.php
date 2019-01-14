@@ -27,7 +27,7 @@ class LadderCache extends Model
             // Hack for fixing HPS and Durumu DPS
             if ( $encounterId == 1572 )
             {
-                $topDps = $topDps->where("killtime",">",0)->where("killtime", "<", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
+                $topDps = $topDps->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
             }
 
             $topDps = $topDps->orderBy("dps","desc")->first();
