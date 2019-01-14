@@ -511,12 +511,12 @@ $(function()
     };
     listenForMapChange();
 
-    var loadEncounter = function(encounterId)
+    var loadEncounter = function()
     {
         var container = $("#encounter-form-response");
         $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
         var data = $("#encounter-form").serialize();
-        data += "&encounter_id=" + encounterId;
+        data += "&encounter_id=" + $("select[name='encounter_id'] option:selected").val();
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -527,6 +527,7 @@ $(function()
             success: function(response)
             {
                 $(container).html(response);
+                $(container).find(".encounter-form-body").remove();
                 handleEncounterModes(container, data);
             }
         });
@@ -555,7 +556,7 @@ $(function()
             success: function(response)
             {
                 $(container).html(response);
-                handleEncounterModes(container, data);
+
             }
         });
     };
@@ -566,6 +567,7 @@ $(function()
             var tab = $(this).parent();
             var mode = $(this).data("mode");
             data += "&mode_id=" + mode;
+
             $.ajax({
                 type: "POST",
                 url: URL_WEBSITE + "/ladder/pve",
@@ -574,14 +576,20 @@ $(function()
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (response) {
+
                     $(tab).html(response);
+
+                    var encounterId = $("select[name='encounter_id'] option:selected").val();
+
+
+                    $(tab).find(".encounter-subform-form").submit(function(e){
+                        e.preventDefault();
+                        loadEncounterMode(encounterId,1, mode, $(this).serialize());
+                    });
+
                     $(".selectpicker").selectpicker();
 
-                    var selectedEncounterId = $("select[name='encounter_id'] option:selected").val();
-                    if (  selectedEncounterId > 0 ) {
-                        listenForEncounterFormSubmit(selectedEncounterId, mode);
-                        loadEncounterMode(selectedEncounterId,1, mode);
-                    }
+                    loadEncounterMode(encounterId,1, mode);
 
                     var specPicker = $("#spec-container").find(".selectpicker");
                     specPicker.attr('disabled', true);
@@ -595,11 +603,11 @@ $(function()
         });
     };
 
-    var listenForEncounterFormSubmit = function(encounterId, mode)
+    var listenForEncounterFormSubmit = function()
     {
         $("#encounter-form").submit(function(e){
             e.preventDefault();
-            loadEncounter(encounterId,1);
+            loadEncounter();
         });
     };
 
@@ -728,6 +736,7 @@ $(function()
                 $(loader).hide();
                 $(container).html(response);
 
+                listenForEncounterFormSubmit();
                 handleEncounterModes(container, data);
 
                 UpdateTimes();
