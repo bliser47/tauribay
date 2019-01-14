@@ -5,6 +5,37 @@
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
+                        <img class="media-object" src="img/cms/news/dps_rankings.jpg" alt="Új encounter adatok">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-header">
+                            <h3 class="media-heading"> {{ __("Fight adatok") }} </h3>
+                            <p class="text-left text-italic">
+                                {{ __("írta") }} <span class="warlock">Bliser</span> 2019.01.14
+                            </p>
+                        </div>
+                    </div>
+                    <div class="media-content">
+                        <p>
+                            {{ __("Sikeresen újraírtam a rendszer bizonyos részeit, így most már több adatra lehet rákeresni fightonként!") }}
+                        </p>
+                        <ul>
+                            <li> {{ __("Az új PVE ladder oldal:") }}  <a href="{{ URL::to("/ladder/pve/tot/mop/") }}">{{ __("ITT") }}</a> </li>
+                            <li> {{ __("A legjobb DPS-ek pld Durumu-n") }} <a href="{{ URL::to("/ladder/pve/mop/tot/durumu/10hc") }}">{{ __("ITT") }}</a> </li>
+                        </ul>
+                        <p class="nomargin">
+                            {{ __("Legközelebb még több feature várható!") }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 blog-main">
+            <div class="well nomargin">
+                <div class="media">
+                    <a class="pull-left" href="#">
                         <img class="media-object" src="img/cms/news/progress_adatok.jpg" alt="Új progress adatok">
                     </a>
                     <div class="media-body">
