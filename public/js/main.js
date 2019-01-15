@@ -619,6 +619,7 @@ $(function()
     {
         $("#encounter-form").submit(function(e){
             e.preventDefault();
+            $("#encounterFilter").collapse("hide");
             loadEncounter();
         });
     };
@@ -726,6 +727,7 @@ $(function()
     });
 
     $(".encounters_loading").hide();
+    var firstSubmit = true;
     $("#pve-ladder-form").submit(function(e){
         e.preventDefault();
         var container = $("#map-loading-container");
@@ -733,7 +735,10 @@ $(function()
         var loader = $(".encounters_loading");
         loader.show();
         $("#pve-ladder-filter").attr("disabled",true);
-
+        if ( !firstSubmit ) {
+            $("#collapseOne").collapse("hide");
+        }
+        firstSubmit = false;
         var data = $(this).serialize();
         data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         $.ajax({
