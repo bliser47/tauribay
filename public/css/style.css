@@ -1167,3 +1167,17 @@ tbody tr:nth-child(odd){
 {
     overflow:inherit;
 }
+
+.bossName .btn
+{
+    background:transparent;
+    color:white;
+    border:none;
+    font-size:1em;
+}
+
+.bossName .btn-group
+{
+    width:100% !Important;
+    color:white;
+}

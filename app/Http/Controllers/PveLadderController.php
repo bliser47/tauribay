@@ -305,10 +305,15 @@ class PveLadderController extends Controller
                     }
                 }
             }
+
+            $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+
+
             return view("ladder/pve/ajax/map", compact("encounters",
                 "difficulties",
                 "defaultDifficultyIndex",
                 "mapId",
+                "maps",
                 "expansionId",
                 "encounterId"
             ));

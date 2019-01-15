@@ -757,6 +757,17 @@ $(function()
                 listenForEncounterFormSubmit();
                 handleEncounterModes(container, data);
 
+                $(".selectpicker").selectpicker();
+
+                $(".bossName select[name='map_id']").on("change",function(){
+                    var val = $(this).val();
+                    if ( val && val > 0 ) {
+                        firstSubmit = true;
+                        $("#pve-ladder-form select[name='map_id']").val(val);
+                        $("#pve-ladder-form").submit();
+                    }
+                });
+
                 UpdateTimes();
             }
         });

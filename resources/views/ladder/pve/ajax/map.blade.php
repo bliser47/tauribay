@@ -1,10 +1,10 @@
 @if ( $mapId == 1098 )
     <div class="bossName" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
-        {{ \TauriBay\Encounter::getMapName($expansionId, $mapId) }}
+        {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz raidet")]); !!}
     </div>
 @else
     <div class="bossName">
-        {{ \TauriBay\Encounter::getMapName($expansionId, $mapId) }}
+        {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz raidet")]); !!}
     </div>
 @endif
 <ul class="nav nav-tabs" role="tablist">
