@@ -181,7 +181,7 @@ class Encounter extends Model
         {
             $name = self::getNameShort($name);
         }
-        return strtolower(preg_replace("/\PL/u", "", $name));
+        return self::shorten($name);
     }
 
     public static function getName($id)
@@ -406,7 +406,7 @@ class Encounter extends Model
 
     public static function convertExpansionShortNameToId($_expansion_short_name)
     {
-        foreach ( self::EXPANSION_RAIDS_COMPLEX as $id => $short )
+        foreach ( self::EXPANSION_SHORTS as $id => $short )
         {
             if  ( $short == $_expansion_short_name )
             {

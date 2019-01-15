@@ -182,18 +182,63 @@ class PveLadderController extends Controller
                 }
                 else if ( $modeId == "rescent" || $modeId == "speed")
                 {
+                    $encounters = Encounter::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId);
+
+                    //  Realm filter
+                    if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                        $realms = array();
+                        if ($_request->has('tauri')) {
+                            array_push($realms, 0);
+                        }
+                        if ($_request->has('wod')) {
+                            array_push($realms, 1);
+                        }
+                        if ($_request->has('evermoon')) {
+                            array_push($realms, 2);
+                        }
+                        $encounters = $encounters->whereIn('realm_id', $realms);
+                    }
+
+
+                    if ( $modeId == "speed" )
+                    {
+                        $encounters = $encounters->groupBy("guild_id")->having("guild_id",">","0");
+                    }
+
+
+                    // Faction filter
+                    $factions = array();
+                    if ($_request->has('alliance') || $_request->has('horde')) {
+                        if ($_request->has('alliance')) {
+                            array_push($factions, 0);
+                        }
+                        if ($_request->has('horde')) {
+                            array_push($factions, 1);
+                        }
+                        if ($_request->has('ismeretlen')) {
+                            array_push($factions, 3);
+                        }
+                    }
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
-                    $encounters = Encounter::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId)
-                        ->orderBy($order, $order2)->take(16)->get();
+                    $encounters = $encounters->orderBy($order, $order2)->get();
 
-                    foreach ($encounters as $encounter) {
+
+                    foreach ($encounters as $key => $encounter) {
                         if ($encounter->guild_id !== 0) {
                             $guild = Guild::where("id", "=", $encounter->guild_id)->first();
                             $encounter->guild_name = $guild->name;
                             $encounter->faction = $guild->faction;
+                            if (count($factions) && !in_array($encounter->faction, $factions)) {
+                                $encounters->forget($key);
+                            }
+                        } else if (count($factions)) {
+                            $encounters->forget($key);
                         }
                     }
+
+
+                    $encounters = $encounters->take(20);
 
                     return view("ladder/pve/ajax/rescent_speed", compact("encounters", "encounterIDs"));
                 }

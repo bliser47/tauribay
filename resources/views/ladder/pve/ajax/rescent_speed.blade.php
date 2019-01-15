@@ -5,9 +5,10 @@
         <th>{{ __("Dátum") }}</th>
         <th>{{ __("Idő") }}</th>
     </tr>
-    @foreach( $encounters as $nr => $encounter )
+    @php $nr = 1 @endphp
+    @foreach( $encounters as $encounter )
         <tr>
-            <td><b>{{ $nr+1 }}</b></td>
+            <td><b>{{ $nr }}</b></td>
             <td class="cellDesktop faction-{{ $encounter["faction"] }}">
                 @if ( strlen($encounter["guild_name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["guild_name"] }} </a>
@@ -26,5 +27,6 @@
             <td class="cellMobile">{{ date('M d', $encounter->killtime) }}</td>
             <td><a class="guildClearTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . $encounter->id }}">{{ $encounter->fight_time/1000  }}</a></td>
         </tr>
+        @php ++$nr @endphp
     @endforeach
 </table>
