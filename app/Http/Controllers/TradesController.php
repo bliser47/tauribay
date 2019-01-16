@@ -37,7 +37,7 @@ class TradesController extends Controller
 
     public function ShowGdkps(Request $_request)
     {
-        $gdkpTrades = GdkpTrade::GetTrades($_request)->where('created_at','>',Carbon::now()->subDays(222))->paginate(16);
+        $gdkpTrades = GdkpTrade::GetTrades($_request)->where('created_at','>',Carbon::now()->subDays(5))->paginate(16);
         $gdkpIntents = GdkpIntent::GDKP_INTENT_NAMES;
         $gdkpInstances = WowInstance::WOW_INSTANCE_NAMES;
         $gdkpInstanceSizes = WowInstanceSize::WOW_INSTANCE_SIZE_NAMES;

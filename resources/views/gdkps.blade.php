@@ -125,9 +125,9 @@
             <div class="table-responsive">
                 <table class="panel table table-bordered table-classes">
                     <tr>
-                        <th>Idő</th>
+                        <th class="cellDesktop">Idő</th>
                         <th>Hirdető</th>
-                        <th>Frakció</th>
+                        <th class="cellDesktop">Frakció</th>
                         <th>Szándék</th>
                         <th>Insta</th>
                         <th>Méret</th>
@@ -136,9 +136,10 @@
                     </tr>
                     @foreach ( $gdkpTrades as $gdkp )
                         <tr>
-                            <td class="time" data-time="{{$gdkp->updated_at}}"> {{ $gdkp->updated_at }}</td>
-                            <td> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
-                            <td class="gdkp-faction faction-{{ $gdkp->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $gdkp->faction . ".png") }}" alt=""/> </td>
+                            <td class="cellDesktop time" data-time="{{$gdkp->updated_at}}"> {{ $gdkp->updated_at }}</td>
+                            <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
+                            <td class="cellMobile faction-{{ $gdkp->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
+                            <td class="cellDesktop gdkp-faction faction-{{ $gdkp->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $gdkp->faction . ".png") }}" alt=""/> </td>
                             <td> {{ $gdkpIntents[$gdkp->intent] }}</td>
                             <td class="instance-{{ $gdkp->instance  }}"> <img src="{{ URL::asset("img/instances/small/" . $gdkp->instance . ".png") }}" alt="{{ $gdkpInstances[$gdkp->instance] }}"/> </td>
                             <td> {{ $gdkpInstanceSizes[$gdkp->size] }} </td>
