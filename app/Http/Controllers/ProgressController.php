@@ -69,33 +69,6 @@ class ProgressController extends Controller
         */
     }
 
-    public function kills2encounter(Request $_request, $_encounter_id)
-    {
-        $bossName = Encounter::ENCOUNTER_IDS[$_encounter_id]["name"];
-        $boss_kills = Encounter::where("encounter_id", "=", $_encounter_id)
-                    ->whereIn("difficulty_id", array(5,6))
-                    ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
-                     ->select(array("encounters.id as id",
-                         "encounters.realm_id as realm_id",
-                         "guilds.id as guild_id",
-                         "guilds.name as name",
-                         "encounters.fight_time as fight_time",
-                         "encounters.killtime as killtime",
-                         "guilds.faction as faction"))
-                    ->orderBy("fight_time","asc")
-                    ->paginate(16);
-
-        $shortRealms = Realm::REALMS;
-        $longRealms = Realm::REALMS_SHORT;
-
-        return view("progress_kills_boss", compact("boss_kills", "shortRealms", "longRealms", "bossName"));
-    }
-
-    public function damage(Request $request)
-    {
-        return view("progress_damage");
-    }
-
     public function index(Request $_request)
     {
         $guilds = DB::table('guild_progresses')->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))->where("guild_progresses.progress", ">", 0);

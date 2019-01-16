@@ -51,8 +51,8 @@
                             {{ __("Örömmel jelentem be, hogy a progress oldal első rész kész van!") }}
                         </p>
                         <ul>
-                            <li> {{ __("A szerver összes guildjének ToT (HC) progressje:") }}  <a href="{{ URL::to("/progress/guild") }}">{{ __("ITT") }}</a> </li>
-                            <li> {{ __("A content legjobb boss kill idői:") }} <a href="{{ URL::to("/progress/kills") }}">{{ __("ITT") }}</a> </li>
+                            <li> {{ __("A szerver összes guildjének ToT (HC) progressje:") }}  <a href="{{ URL::to("/progress") }}">{{ __("ITT") }}</a> </li>
+                            <li> {{ __("A content legjobb boss kill idői:") }} <a href="{{ URL::to("/ladder/pve/tot") }}">{{ __("ITT") }}</a> </li>
                         </ul>
                         <p class="nomargin">
                             {{ __("Hamarosan a progress oldal sokkal több statisztikával bővűl!") }}

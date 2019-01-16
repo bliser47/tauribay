@@ -80,8 +80,6 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/raid/{expansion_id}/{map_id}', 'RaidController@getMapEncounters');
 
 
-    Route::get('/progress/kill/{log_id}', 'ProgressController@kill');
-    Route::post('/progress/killFrom', 'ProgressController@killFrom');
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
 
     Route::auth();
