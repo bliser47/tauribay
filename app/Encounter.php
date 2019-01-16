@@ -270,7 +270,7 @@ class Encounter extends Model
             $member->interrupts = $memberData["interrupts"];
             $member->dispells = $memberData["dispells"];
             $member->ilvl = $memberData["ilvl"];
-            if ( $guild !== null )
+            if ( $guild != null && $guild->faction != null )
             {
                 $member->faction_id = $guild->faction;
             }

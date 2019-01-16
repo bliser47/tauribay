@@ -200,10 +200,6 @@ class PveLadderController extends Controller
                     }
 
 
-                    if ( $modeId == "speed" )
-                    {
-                        $encounters = $encounters->groupBy("guild_id")->having("guild_id",">","0");
-                    }
 
 
                     // Faction filter
@@ -222,7 +218,6 @@ class PveLadderController extends Controller
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
                     $encounters = $encounters->orderBy($order, $order2)->get();
-
 
                     foreach ($encounters as $key => $encounter) {
                         if ($encounter->guild_id !== 0) {

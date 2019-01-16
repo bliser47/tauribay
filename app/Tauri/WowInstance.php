@@ -83,6 +83,10 @@ class WowInstance
             " mogu'shan vaults "
     );
 
+    const WOW_INSTANCE_BLACKWING_DESCENT = array(
+        ' bwd '
+    );
+
     const WOW_INSTANCE_BASTION_OF_TWILIGHT = array(
 
         ' bot ',

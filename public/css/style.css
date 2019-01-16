@@ -1178,6 +1178,8 @@ tbody tr:nth-child(odd){
 
 .bossName .btn-group
 {
-    width:100% !Important;
+    display: table !important;
+    margin:0px auto;
+    margin-left:auto !important;;
     color:white;
 }
