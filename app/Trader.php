@@ -15,9 +15,9 @@ class Trader extends Model
         return $api->getCharacterTooltipData($_realm,$_name);
     }
 
-    public static function GetData($_name)
+    public static function GetData($_name, $_realm_id)
     {
-        $traderData = Trader::where("name",$_name)->first();
+        $traderData = Trader::where("realm_id","=",$_realm_id)->where("name","=",$_name)->first();
         if ( $traderData )
         {
             return array(
@@ -33,6 +33,7 @@ class Trader extends Model
                 $traderData["faction"] =  CharacterClasses::ConvertRaceToFaction($traderData["race"]);
                 Trader::insert(array(
                     "name" => $_name,
+                    "realm_id" => $_realm_id,
                     "faction" => $traderData["faction"],
                     "race" => $traderData["race"],
                     "class" => $traderData["class"],
@@ -45,6 +46,7 @@ class Trader extends Model
             {
                 Trader::insert(array(
                     "name" => $_name,
+                    "realm_id" => $_realm_id,
                     "updated_at" => Carbon::now()
                 ));
             }
