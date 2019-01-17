@@ -563,6 +563,7 @@ $(function()
                     var page = url.searchParams.get("page");
                     loadEncounterMode(encounterId, page, mode, subForm)
                 });
+                UpdateTimes();
             }
         });
     };
@@ -576,6 +577,7 @@ $(function()
             var storeData = data;
 
             storeData += "&mode_id=" + mode;
+            storeData += "&difficulty_id=" + $("select[name='difficulty_id'] option:selected").val();
 
             $.ajax({
                 type: "POST",
@@ -789,7 +791,6 @@ $(function()
                 $(container).html(response);
 
                 $(".selectpicker").selectpicker();
-
                 $(".bossName select[name='map_id']").on("change",function(){
                     var val = $(this).val();
                     if ( val && val > 0 ) {
@@ -798,13 +799,18 @@ $(function()
                         $("#pve-ladder-form").submit();
                     }
                 });
-
-
                 $("#pve-ladder-filter").attr("disabled",false);
 
-                listenForEncounterFormSubmit();
-                handleEncounterModes(container, data);
-                listenForMapDifficultyLoad(data);
+
+                if ( $(container).find("#encounter-form").length )
+                {
+                    listenForEncounterFormSubmit();
+                    handleEncounterModes(container, data);
+                }
+                else
+                {
+                    listenForMapDifficultyLoad(data);
+                }
                 UpdateTimes();
             }
         });
