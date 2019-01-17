@@ -159,16 +159,27 @@ class PveLadderController extends Controller
                             $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
 
-                        $members = $members->orderBy($modeId,"desc")->take(50)->get();
 
-                        foreach ( $members as $member )
+
+                        $members = $members->orderBy($modeId,"desc")->get();
+
+                        $membersAdded = array();
+                        foreach ( $members as $key => $member )
                         {
-                            $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                            if ( $encounter->guild_id !== 0 ) {
-                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                $member->guild_id = $encounter->guild_id;
-                                $member->guild_name = $guild->name;
-                                $member->faction = $guild->faction;
+                            $memberKey = $member->realm_id . "-"  . $member->name;
+                            if ( count($membersAdded) < 100 && !in_array($memberKey, $membersAdded) ) {
+                                $membersAdded[] = $memberKey;
+                                $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
+                                if ($encounter->guild_id !== 0) {
+                                    $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                    $member->guild_id = $encounter->guild_id;
+                                    $member->guild_name = $guild->name;
+                                    $member->faction = $guild->faction;
+                                }
+                            }
+                            else
+                            {
+                                $members->forget($key);
                             }
                         }
 
