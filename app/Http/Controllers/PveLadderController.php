@@ -106,7 +106,7 @@ class PveLadderController extends Controller
 
                 if ( $modeId == "dps" || $modeId == "hps" ) {
 
-                    if ( $_request->has("difficulty_id"))
+                    if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
                         $members = EncounterMember::where("encounter", "=", $encounterId)
                             ->where("difficulty_id", "=", $difficultyId);
@@ -159,7 +159,8 @@ class PveLadderController extends Controller
                         {
                             $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
-                        $members = $members->groupBy('realm_id', 'name')->orderBy($modeId,"desc")->take(50)->get();
+
+                        $members = $members->orderBy($modeId,"desc")->take(50)->get();
 
                         foreach ( $members as $member )
                         {
