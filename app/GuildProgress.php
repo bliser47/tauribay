@@ -27,6 +27,18 @@ class GuildProgress extends Model
         }
     }
 
+    public static function reCalculateProgressionForNewGuilds()
+    {
+        $guilds = Guild::all();
+        foreach ( $guilds as $guild )
+        {
+            if ( !GuildProgress::where("guild_id","=",$guild->id)->first() ) {
+                self::reCalculateProgression($guild, 5); // 10 man
+                self::reCalculateProgression($guild, 6); // 25 man
+            }
+        }
+    }
+
     public static function getProgression($_guildId, $_mapId = 1098)
     {
         $size10 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
@@ -111,7 +123,6 @@ class GuildProgress extends Model
         {
             $progress = new GuildProgress;
             $progress->guild_id = $_guild->id;
-            $progress->realm_id = $_guild->realm;
             $progress->map_id = $_mapId;
             $progress->difficulty_id = $_difficultyId;
         }
@@ -122,7 +133,8 @@ class GuildProgress extends Model
         $shortestClear = self::calculateClearTime($_guild->id, $_difficultyId, $_mapId);
         $progress->clear_time = $shortestClear["time"];
 
-        $progress->first_kill_unix =  self::getFirstKill($_guild->id, $_difficultyId, $_mapId);
+        $firstKillUnix = self::getFirstKill($_guild->id, $_difficultyId, $_mapId);;
+        $progress->first_kill_unix = $firstKillUnix != null ? $firstKillUnix : 0;
 
         $progress->save();
     }

@@ -10,7 +10,7 @@
     </tr>
     @foreach( $members as $nr => $member )
         <tr>
-            <td><b>{{ (($members->currentPage()-1)*50)+$nr+1  }}</b></td>
+            <td><b>{{ $nr+1 }}</b></td>
             <td class="topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $member["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$member["spec"]] }}"/>
             </td>
@@ -32,13 +32,13 @@
         </tr>
     @endforeach
 </table>
+{{--
 <div class="text-center paginator">
     <div class="divDesktop">
         {{ $members->appends(Illuminate\Support\Facades\Input::except('page')) }}
     </div>
     <div class="divMobile">
         <ul class="pagination pagination-sm">
-            {{-- Previous Page Link --}}
             @if ($members->onFirstPage())
                 <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
             @else
@@ -71,7 +71,6 @@
                 <li class="page-item hidden-xs"><a class="page-link" href="{{ $members->url($members->lastPage()) }}">{{ $members->lastPage() }}</a></li>
             @endif
 
-            {{-- Next Page Link --}}
             @if ($members->hasMorePages())
                 <li class="page-item"><a class="page-link" href="{{ $members->nextPageUrl() }}" rel="next">&raquo;</a></li>
             @else
@@ -80,3 +79,4 @@
         </ul>
     </div>
 </div>
+--}}

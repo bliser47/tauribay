@@ -40,6 +40,7 @@ Route::get('/progressdebug', 'ProgressController@debug');
 
 
 Route::get('/guildprogress', 'ProgressController@updateGuildProgressAll');
+Route::get('/guildprogressn', 'ProgressController@updateGuildProgressForNewGuilds');
 Route::post('/guildprogress', 'ProgressController@updateGuildProgress');
 
 Route::group(['middleware' => 'language'], function () {

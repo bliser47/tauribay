@@ -588,27 +588,29 @@ $(function()
 
                     $(tab).html(response);
 
-                    var encounterId = $("select[name='encounter_id'] option:selected").val();
+                    if ( mode === "dps" || mode === "hps ")
+                    {
+                        $(".selectpicker").selectpicker();
+
+                        var specPicker = $("#spec-container").find(".selectpicker");
+                        specPicker.attr('disabled', true);
+                        specPicker.val(0);
+                        specPicker.selectpicker('refresh');
+
+                        var encounterId = $("select[name='encounter_id'] option:selected").val();
 
 
-                    $(tab).find(".encounter-subform-form").submit(function(e){
-                        e.preventDefault();
-                        $("#encounterMemberFilter"+mode).collapse("hide");
-                        loadEncounterMode(encounterId,1, mode, $(this).serialize());
-                    });
+                        $(tab).find(".encounter-subform-form").submit(function(e){
+                            e.preventDefault();
+                            $("#encounterMemberFilter"+mode).collapse("hide");
+                            loadEncounterMode(encounterId,1, mode, $(this).serialize());
+                        });
 
-                    $(".selectpicker").selectpicker();
+                        listenForRoleChange(mode);
+                        listenForClassChange(mode);
 
-                    loadEncounterMode(encounterId,1, mode);
-
-                    var specPicker = $("#spec-container").find(".selectpicker");
-                    specPicker.attr('disabled', true);
-                    specPicker.val(0);
-                    specPicker.selectpicker('refresh');
-
-                    listenForRoleChange(mode);
-                    listenForClassChange(mode);
-
+                        loadEncounterMode(encounterId,1, mode);
+                    }
                     UpdateTimes();
                 }
             });
@@ -726,6 +728,36 @@ $(function()
         }
     });
 
+    var loadMapDifficulty = function(container, data)
+    {
+        data += "&difficulty_id=" + $(container).data("difficulty");
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/ladder/pve",
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                $(container).find(".encounters_loading").hide();
+                $(container).parent().html(response);
+            }
+        });
+    };
+
+
+    var listenForMapDifficultyLoad = function(data)
+    {
+        var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
+        loadMapDifficulty(container, data);
+        $(".map-difficulty-tab.unLoaded").on("click",function(){
+            $(this).removeClass("unLoaded");
+            var id = $(this).find("a").attr("href");
+            loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
+        });
+    };
+
     $(".encounters_loading").hide();
     var firstSubmit = true;
     $("#pve-ladder-form").submit(function(e){
@@ -750,12 +782,8 @@ $(function()
             },
             success: function(response)
             {
-                $("#pve-ladder-filter").attr("disabled",false);
                 $(loader).hide();
                 $(container).html(response);
-
-                listenForEncounterFormSubmit();
-                handleEncounterModes(container, data);
 
                 $(".selectpicker").selectpicker();
 
@@ -768,7 +796,13 @@ $(function()
                     }
                 });
 
+
+                $("#pve-ladder-filter").attr("disabled",false);
+
+                listenForEncounterFormSubmit();
+                handleEncounterModes(container, data);
                 UpdateTimes();
+                listenForMapDifficultyLoad(data);
             }
         });
     });

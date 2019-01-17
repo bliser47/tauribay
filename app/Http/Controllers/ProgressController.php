@@ -167,6 +167,11 @@ class ProgressController extends Controller
         GuildProgress::reCalculateProgressionForAll();
     }
 
+    public function updateGuildProgressForNewGuilds(Request $_request)
+    {
+        GuildProgress::reCalculateProgressionForNewGuilds();
+    }
+
     public function updateRaidMembers(Request $_request)
     {
         set_time_limit(0);
@@ -176,7 +181,7 @@ class ProgressController extends Controller
         $lastMember = EncounterMember::orderBy('created_at', 'desc')->first();
         $encounters = $lastMember == null ? Encounter::all() : Encounter::where("members_processed", "=", false)->get();
         foreach ($encounters as $encounter) {
-            Encounter::updateEncounterMembers($api, $encounter);
+            Encounter::updateEncounterMembers($api, $encounter, Guild::where("id","=",$encounter->guild_id));
         }
     }
 

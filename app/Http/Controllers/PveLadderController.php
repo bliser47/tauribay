@@ -84,7 +84,7 @@ class PveLadderController extends Controller
 
                 if ( $modeId == "dps" || $modeId == "hps" ) {
 
-                    if ( $_request->has("mode_filter"))
+                    if ( $_request->has("difficulty_id"))
                     {
                         $members = EncounterMember::where("encounter", "=", $encounterId)
                             ->where("difficulty_id", "=", $difficultyId);
@@ -137,7 +137,7 @@ class PveLadderController extends Controller
                         {
                             $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
-                        $members = $members->groupBy('realm_id', 'name')->orderBy($modeId,"desc")->paginate(50);
+                        $members = $members->groupBy('realm_id', 'name')->orderBy($modeId,"desc")->take(50)->get();
 
                         foreach ( $members as $member )
                         {
@@ -199,9 +199,6 @@ class PveLadderController extends Controller
                         $encounters = $encounters->whereIn('realm_id', $realms);
                     }
 
-
-
-
                     // Faction filter
                     $factions = array();
                     if ($_request->has('alliance') || $_request->has('horde')) {
@@ -217,7 +214,9 @@ class PveLadderController extends Controller
                     }
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
+
                     $encounters = $encounters->orderBy($order, $order2)->get();
+
 
                     foreach ($encounters as $key => $encounter) {
                         if ($encounter->guild_id !== 0) {
@@ -232,10 +231,9 @@ class PveLadderController extends Controller
                         }
                     }
 
-
                     $encounters = $encounters->take(20);
 
-                    return view("ladder/pve/ajax/rescent_speed", compact("encounters", "encounterIDs"));
+                    return view("ladder/pve/ajax/rescent_speed", compact("encounters"));
                 }
                 else
                 {
@@ -265,26 +263,24 @@ class PveLadderController extends Controller
             }
         }
         else {
+
             $expansionId = $_request->get("expansion_id", $_expansion_id);
             $mapId = $_request->get("map_id", $_map_id);
+            if ( $_request->has("difficulty_id") )
+            {
 
-            $raidEncounters = array();
-            $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
-            foreach ($raids as $raid) {
-                if ($raid["id"] == $mapId) {
-                    $raidEncounters = $raid["encounters"];
-                    break;
+                $raidEncounters = array();
+                $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
+                foreach ($raids as $raid) {
+                    if ($raid["id"] == $mapId) {
+                        $raidEncounters = $raid["encounters"];
+                        break;
+                    }
                 }
-            }
-            $defaultDifficultyIndex = 0;
-            $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
-            $encounters = array();
-            foreach ($difficulties as $index => $difficulty) {
-                $difficultyId = $difficulty["id"];
-                if ($difficultyId == 5) {
-                    $defaultDifficultyIndex = $index;
-                }
-                $encounters[$difficultyId] = array();
+
+                $difficultyId = $_request->get("difficulty_id");
+
+                $encounters = array();
                 foreach ($raidEncounters as $raidEncounter) {
                     $encounterId = $raidEncounter["encounter_id"];
                     $fastestEncounterId = LadderCache::getFastestEncounterId($encounterId, $difficultyId);
@@ -296,22 +292,40 @@ class PveLadderController extends Controller
                             $encounter->faction = $guild->faction;
                         }
                         $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
-                        $encounters[$difficultyId][] = $encounter;
+                        $encounters[] = $encounter;
                     }
                 }
+
+                return view("ladder/pve/ajax/map_difficulty", compact(
+                    "encounters",
+                    "expansionId",
+                    "mapId",
+                    "difficultyId"));
             }
+            else
+            {
+                $defaultDifficultyIndex = 0;
+                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+                $encounters = array();
+                foreach ($difficulties as $index => $difficulty) {
+                    $difficultyId = $difficulty["id"];
+                    if ($difficultyId == 5) {
+                        $defaultDifficultyIndex = $index;
+                    }
+                }
 
-            $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+                $maps = Encounter::EXPANSION_RAIDS[$expansionId];
 
 
-            return view("ladder/pve/ajax/map", compact("encounters",
-                "difficulties",
-                "defaultDifficultyIndex",
-                "mapId",
-                "maps",
-                "expansionId",
-                "encounterId"
-            ));
+                return view("ladder/pve/ajax/map", compact("encounters",
+                    "difficulties",
+                    "defaultDifficultyIndex",
+                    "mapId",
+                    "maps",
+                    "expansionId",
+                    "encounterId"
+                ));
+            }
         }
     }
 
