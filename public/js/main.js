@@ -517,6 +517,7 @@ $(function()
         $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
         var data = $("#encounter-form").serialize();
         data += "&encounter_id=" + $("select[name='encounter_id'] option:selected").val();
+        data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -772,7 +773,6 @@ $(function()
         }
         firstSubmit = false;
         var data = $(this).serialize();
-        data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
