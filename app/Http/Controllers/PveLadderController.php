@@ -70,7 +70,29 @@ class PveLadderController extends Controller
             if ( $_request->get("mode_id") )
             {
                 $modeId = $_request->get("mode_id");
-                $difficultyId = $_request->get("difficulty_id");
+
+                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
+                $defaultDifficulty = Defaults::DIFFICULTY_ID;
+                $found = false;
+                $first = true;
+                foreach ( $difficulties as $difficulty )
+                {
+                    if ( $first )
+                    {
+                        $first = true;
+                        $defaultDifficulty = $difficulty["id"];
+                    }
+                    if ( $difficulty["id"] == $defaultDifficulty )
+                    {
+                        $found = true;
+                        break;
+                    }
+                }
+                if ( !$found )
+                {
+                    $defaultDifficulty = $first;
+                }
+                $difficultyId = $_request->get("difficulty_id", $defaultDifficulty);
 
                 // Ra-den 25 HC hack
                 if ( $encounterId == 1580 && $difficultyId == 6 )

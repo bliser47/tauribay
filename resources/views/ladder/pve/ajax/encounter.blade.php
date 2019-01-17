@@ -2,18 +2,18 @@
     @if ( $mapId == 1098 )
         <div class="bossNameImg divDesktop" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
             <img src="{{ URL::asset("img/encounters/" . $encounterId . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounterId)  }}"/>
-            {{ \TauriBay\Encounter::getName($encounterId) }} - {{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY[$difficultyId] }}
+            {{ \TauriBay\Encounter::getName($encounterId) }}
         </div>
         <div class="bossNameImgMobile divMobile" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
             <img src="{{ URL::asset("img/encounters/" . $encounterId . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounterId)  }}"/>
-            {{ \TauriBay\Encounter::getNameShort($encounterId)  }} - {{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$difficultyId] }}
+            {{ \TauriBay\Encounter::getNameShort($encounterId)  }}
         </div>
     @else
         <div class="bossName divDesktop">
-            {{ \TauriBay\Encounter::getName($encounterId) }}  - {{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY[$difficultyId] }}
+            {{ \TauriBay\Encounter::getName($encounterId) }}
         </div>
         <div class="bossName divMobile">
-            {{ \TauriBay\Encounter::getNameShort($encounterId) }}  - {{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$difficultyId] }}
+            {{ \TauriBay\Encounter::getNameShort($encounterId) }}
         </div>
     @endif
     <div class="encounter-body">
