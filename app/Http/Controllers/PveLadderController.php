@@ -250,21 +250,27 @@ class PveLadderController extends Controller
 
                     $encounters = $encounters->orderBy($order, $order2)->get();
 
-
+                    $guildAdded = array();
                     foreach ($encounters as $key => $encounter) {
                         if ($encounter->guild_id !== 0) {
-                            $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                            $encounter->guild_name = $guild->name;
-                            $encounter->faction = $guild->faction;
-                            if (count($factions) && !in_array($encounter->faction, $factions)) {
+                            if ( !in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent" )
+                            {
+                                $guildAdded[] = $encounter->guild_id;
+                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                $encounter->guild_name = $guild->name;
+                                $encounter->faction = $guild->faction;
+                                if (count($factions) && !in_array($encounter->faction, $factions)) {
+                                    $encounters->forget($key);
+                                }
+                            }
+                            else
+                            {
                                 $encounters->forget($key);
                             }
                         } else if (count($factions)) {
                             $encounters->forget($key);
                         }
                     }
-
-                    $encounters = $encounters->take(20);
 
                     return view("ladder/pve/ajax/rescent_speed", compact("encounters"));
                 }
