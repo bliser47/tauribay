@@ -517,7 +517,6 @@ $(function()
         $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
         var data = $("#encounter-form").serialize();
         data += "&encounter_id=" + $("select[name='encounter_id'] option:selected").val();
-        data += "&difficulty_id=" + $("input[name='difficulty_id_for_filter']").val();
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -589,7 +588,7 @@ $(function()
 
                     $(tab).html(response);
 
-                    if ( mode === "dps" || mode === "hps ")
+                    if ( mode === "dps" || mode === "hps" )
                     {
                         $(".selectpicker").selectpicker();
 
@@ -610,7 +609,7 @@ $(function()
                         listenForRoleChange(mode);
                         listenForClassChange(mode);
 
-                        loadEncounterMode(encounterId,1, mode);
+                        loadEncounterMode(encounterId,1,mode,$(tab).find(".encounter-subform-form").serialize());
                     }
                     UpdateTimes();
                 }
@@ -731,7 +730,8 @@ $(function()
 
     var loadMapDifficulty = function(container, data)
     {
-        data += "&difficulty_id=" + $(container).data("difficulty");
+        var difficulty = $(container).data("difficulty");
+        data += "&difficulty_id=" + difficulty;
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
