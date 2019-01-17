@@ -529,6 +529,7 @@ $(function()
                 $(container).html(response);
                 $(container).find(".encounter-form-body").remove();
                 handleEncounterModes(container, data);
+                UpdateTimes();
             }
         });
     };
@@ -541,7 +542,6 @@ $(function()
         data += "&encounter_id=" + encounterId;
         data += "&page=" + page;
         data += "&mode_id=" + mode;
-        data += "&mode_filter=1";
         if ( subForm && subForm.length )
         {
             data += "&" + subForm;
@@ -690,6 +690,7 @@ $(function()
                         selectContainer.attr('disabled', false);
 
                         listenForClassChange(mode, currentRole);
+                        UpdateTimes();
                     }
                 });
             }
@@ -723,6 +724,7 @@ $(function()
                     mapsContainer.html(raidsSelectHTML);
                     mapsContainer.find(".selectpicker").selectpicker('refresh');
                     listenForMapChange();
+                    UpdateTimes();
                 }
             });
         }
@@ -743,6 +745,7 @@ $(function()
             {
                 $(container).find(".encounters_loading").hide();
                 $(container).parent().html(response);
+                UpdateTimes();
             }
         });
     };
@@ -801,8 +804,8 @@ $(function()
 
                 listenForEncounterFormSubmit();
                 handleEncounterModes(container, data);
-                UpdateTimes();
                 listenForMapDifficultyLoad(data);
+                UpdateTimes();
             }
         });
     });
