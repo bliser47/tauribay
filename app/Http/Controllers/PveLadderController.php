@@ -71,26 +71,25 @@ class PveLadderController extends Controller
             {
                 $modeId = $_request->get("mode_id");
 
-                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
+
                 $defaultDifficulty = Defaults::DIFFICULTY_ID;
-                $found = false;
-                $first = true;
-                foreach ( $difficulties as $difficulty )
-                {
-                    if ( $first )
-                    {
-                        $first = true;
-                        $defaultDifficulty = $difficulty["id"];
+                if ( !$_request->has("difficulty_id") ) {
+                    $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
+                    $found = false;
+                    $first = true;
+                    foreach ($difficulties as $difficulty) {
+                        if ($first) {
+                            $first = true;
+                            $defaultDifficulty = $difficulty["id"];
+                        }
+                        if ($difficulty["id"] == $defaultDifficulty) {
+                            $found = true;
+                            break;
+                        }
                     }
-                    if ( $difficulty["id"] == $defaultDifficulty )
-                    {
-                        $found = true;
-                        break;
+                    if (!$found) {
+                        $defaultDifficulty = $first;
                     }
-                }
-                if ( !$found )
-                {
-                    $defaultDifficulty = $first;
                 }
                 $difficultyId = $_request->get("difficulty_id", $defaultDifficulty);
 
@@ -272,7 +271,7 @@ class PveLadderController extends Controller
                     "hps" => "HPS"
                 );
                 $modeId = Defaults::ENCOUNTER_SORT;
-                $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);
+                $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
                 return view("ladder/pve/ajax/encounter", compact(

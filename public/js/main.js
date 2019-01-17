@@ -526,9 +526,10 @@ $(function()
             },
             success: function(response)
             {
-                $(container).html(response);
-                $(container).find(".encounter-form-body").remove();
-                handleEncounterModes(container, data);
+                var newContainer = $("#map-loading-container");
+                $(newContainer).html(response);
+                listenForEncounterFormSubmit();
+                handleEncounterModes(newContainer, data);
                 UpdateTimes();
             }
         });
