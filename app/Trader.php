@@ -9,10 +9,10 @@ use Carbon\Carbon;
 class Trader extends Model
 {
 
-    public static function GetCharacterDataFromTauriAPI($_name, $_realm = '[HU] Tauri WoW Server')
+    public static function GetCharacterDataFromTauriAPI($_name, $_realmId)
     {
         $api = new Tauri\ApiClient();
-        return $api->getCharacterTooltipData($_realm,$_name);
+        return $api->getCharacterTooltipData(Realm::REALMS[$_realmId],$_name);
     }
 
     public static function GetData($_name, $_realm_id)
@@ -27,7 +27,7 @@ class Trader extends Model
         }
         else
         {
-            $apiResponse = self::GetCharacterDataFromTauriAPI($_name);
+            $apiResponse = self::GetCharacterDataFromTauriAPI($_name, $_realm_id);
             if ( $apiResponse["success"] ) {
                 $traderData = $apiResponse["response"];
                 $traderData["faction"] =  CharacterClasses::ConvertRaceToFaction($traderData["race"]);
