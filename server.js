@@ -25,9 +25,9 @@ function sendMessages()
         body: JSON.stringify(messages)
     }, function(error, response, body){
         if(error) {
-            console.log(error)
+            console.log(body)
         } else {
-            console.log(response.statusCode, body);
+            console.log(body);
         }
     });
     messages = [];
@@ -44,8 +44,8 @@ bot.addListener("message", function(from, to, text, message) {
         for ( var realmName in realms ) {
             if (message["args"][0] === realmName) {
                 messages.push({
-                    realm : realms[realmName],
-                    text : text
+                    "realm_id" : realms[realmName],
+                    "text" : text
                 });
                 if (messageTimeout) {
                     clearTimeout(messageTimeout);

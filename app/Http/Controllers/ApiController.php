@@ -20,13 +20,14 @@ class ApiController extends Controller
 {
     public function ReceiveData(Request $_request)
     {
-        $tradeDataJSON = json_decode($_request->all()[0]);
+        $tradeDataJSON = json_decode($_request->getContent());
         $insertArray = array();
         for ($t = 0; $t < count($tradeDataJSON); $t++) {
             $json = $tradeDataJSON[$t];
+
             array_push($insertArray, array(
-                "realm_id" => $json["realm_id"],
-                "data" => $json["text"],
+                "realm_id" => $json->realm_id,
+                "data" => $json->text,
                 "date" => Carbon::now()
             ));
         }
@@ -46,10 +47,10 @@ class ApiController extends Controller
 
     public function ParseSpecificData($_data,$no_smart)
     {
-        $realm_id = $_data["realm_id"];
-        $text = $_data["text"];
+        $realm_id = $_data->realm_id;
+        $data = $_data->text;
 
-        $textData1 = explode("[",$text);
+        $textData1 = explode("[",$data);
 
         if ( count($textData1) > 1 ) {
 

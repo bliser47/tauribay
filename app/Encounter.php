@@ -246,26 +246,28 @@ class Encounter extends Model
         $raidLog = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
         $members = $raidLog["response"]["members"];
         $i = 0;
+        $fightTime = $encounter->fight_time / 1000;
         foreach ( $members as $memberData )
         {
+
             $member = new EncounterMember;
             $member->encounter_id = $encounter->id;
             $member->encounter = $encounter->encounter_id;
             $member->difficulty_id = $encounter->difficulty_id;
-            $member->fight_time = $encounter->fight_time;
+            $member->fight_time = $fightTime;
             $member->killtime = $encounter->killtime;
             $member->realm_id = $encounter->realm_id;
             $member->name = $memberData["name"];
             $member->class = $memberData["race"];
             $member->spec = $memberData["spec"];
             $member->damage_done = $memberData["dmg_done"];
-            $member->dps = $memberData["dmg_done"] / ( $encounter->fight_time / 1000 );
+            $member->dps = $memberData["dmg_done"] / $fightTime;
             $member->damage_taken = $memberData["dmg_taken"];
             $member->damage_absorb = $memberData["dmg_absorb"];
             $member->heal_done = $memberData["heal_done"];
             $member->absorb_done = $memberData["absorb_done"];
             $member->overheal = $memberData["overheal"];
-            $member->hps = ($memberData["heal_done"] + $memberData["absorb_done"]) / ( $encounter->fight_time / 1000 );
+            $member->hps = ($memberData["heal_done"] + $memberData["absorb_done"]) / $fightTime;
             $member->heal_taken = $memberData["heal_taken"];
             $member->interrupts = $memberData["interrupts"];
             $member->dispells = $memberData["dispells"];
