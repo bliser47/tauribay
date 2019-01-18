@@ -127,6 +127,7 @@
                     <tr>
                         <th class="cellDesktop">Idő</th>
                         <th>Hirdető</th>
+                        <th>Realm</th>
                         <th class="cellDesktop">Frakció</th>
                         <th>Szándék</th>
                         <th>Insta</th>
@@ -138,6 +139,7 @@
                         <tr>
                             <td class="cellDesktop time" data-time="{{$gdkp->updated_at}}"> {{ $gdkp->updated_at }}</td>
                             <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
+                            <td>{{ \TauriBay\Realm::REALMS_SHORT[$gdkp->realm_id] }}</td>
                             <td class="cellMobile faction-{{ $gdkp->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
                             <td class="cellDesktop gdkp-faction faction-{{ $gdkp->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $gdkp->faction . ".png") }}" alt=""/> </td>
                             <td> {{ $gdkpIntents[$gdkp->intent] }}</td>

@@ -16,8 +16,25 @@
 
                             {!! Form::open(array("method" => "get","id"=>"characters-form")) !!}
 
+                            <div class="form-group col-md-4">
+                                <legend> {{ __("Realm") }} </legend>
+                                <div class="input-group">
+                                    <div class="checkbox checkbox-inline checkbox-realm">
+                                        {!! Form::checkbox('tauri',2,Input::get('tauri'),array("id"=>"realm-tauri","class"=>"realm")) !!}
+                                        <label for="realm-tauri"> Tauri </label>
+                                    </div>
+                                    <div class="checkbox checkbox-inline checkbox-realm">
+                                        {!! Form::checkbox('wod',1,Input::get('wod'),array("id"=>"realm-wod","class"=>"realm")) !!}
+                                        <label for="realm-wod"> WoD </label>
+                                    </div>
+                                    <div class="checkbox checkbox-inline checkbox-realm">
+                                        {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
+                                        <label for="realm-evermoon"> Evermoon </label>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
@@ -31,7 +48,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 <legend> {{ __("Hirdető szándéka") }}</legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-intent">
@@ -118,6 +135,7 @@
                     <tr class="tHead">
                         <th class="cellDesktop">{{ __("Idő") }}</th>
                         <th>{{ __("Név") }}</th>
+                        <th>{{ __("Realm") }}</th>
                         <th class="cellDesktop">{{ __("Frakció") }}</th>
                         <th>{{ __("Szándék") }}</th>
                         <th>{{ __("Kaszt") }}</th>
@@ -127,6 +145,7 @@
                         <tr>
                             <td class="cellDesktop time" data-time="{{$character->updated_at}}"> {{ $character->updated_at }}</td>
                             <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
+                            <td>{{ \TauriBay\Realm::REALMS_SHORT[$character->realm_id] }}</td>
                             <td class="cellMobile faction-{{ $character->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
                             <td class="cellDesktop faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
                             <td> {{ __($characterIntents[$character->intent]) }}</td>

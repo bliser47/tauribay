@@ -36,6 +36,23 @@ class CharacterTrade extends Model
         $characterTrades = DB::table('character_trades')->where('created_at','>',Carbon::now()->subDays(30))->orderBy('updated_at','desc');
 
         if ( $_request->has("filter") ) {
+
+            // 0. Realm filter
+            if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                $realms = array();
+                if ($_request->has('tauri')) {
+                    array_push($realms, 0);
+                }
+                if ($_request->has('wod')) {
+                    array_push($realms, 1);
+                }
+                if ($_request->has('evermoon')) {
+                    array_push($realms, 2);
+                }
+                $characterTrades = $characterTrades->whereIn('realm_id', $realms);
+            }
+
+
             // 1. Faction filter
             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
                 $factions = array();
