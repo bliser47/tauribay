@@ -21,8 +21,10 @@ function sendMessages()
     request({
         url: 'http://51.15.212.167/api/receiveData',
         method: 'POST',
-        json: true,
-        body: JSON.stringify(messages)
+        headers: {
+            "content-type": "application/json"
+        },
+        json: messages
     }, function(error, response, body){
         if(error) {
             console.log(body)
