@@ -71,26 +71,25 @@ class PveLadderController extends Controller
             {
                 $modeId = $_request->get("mode_id");
 
-                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
+
                 $defaultDifficulty = Defaults::DIFFICULTY_ID;
-                $found = false;
-                $first = true;
-                foreach ( $difficulties as $difficulty )
-                {
-                    if ( $first )
-                    {
-                        $first = true;
-                        $defaultDifficulty = $difficulty["id"];
+                if ( !$_request->has("difficulty_id") ) {
+                    $difficulties = Encounter::getMapDifficulties($expansionId, $mapId, $encounterId);
+                    $found = false;
+                    $first = true;
+                    foreach ($difficulties as $difficulty) {
+                        if ($first) {
+                            $first = true;
+                            $defaultDifficulty = $difficulty["id"];
+                        }
+                        if ($difficulty["id"] == $defaultDifficulty) {
+                            $found = true;
+                            break;
+                        }
                     }
-                    if ( $difficulty["id"] == $defaultDifficulty )
-                    {
-                        $found = true;
-                        break;
+                    if (!$found) {
+                        $defaultDifficulty = $first;
                     }
-                }
-                if ( !$found )
-                {
-                    $defaultDifficulty = $first;
                 }
                 $difficultyId = $_request->get("difficulty_id", $defaultDifficulty);
 
@@ -160,16 +159,27 @@ class PveLadderController extends Controller
                             $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                         }
 
-                        $members = $members->orderBy($modeId,"desc")->take(50)->get();
 
-                        foreach ( $members as $member )
+
+                        $members = $members->orderBy($modeId,"desc")->get();
+
+                        $membersAdded = array();
+                        foreach ( $members as $key => $member )
                         {
-                            $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                            if ( $encounter->guild_id !== 0 ) {
-                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                $member->guild_id = $encounter->guild_id;
-                                $member->guild_name = $guild->name;
-                                $member->faction = $guild->faction;
+                            $memberKey = $member->realm_id . "-"  . $member->name;
+                            if ( count($membersAdded) < 100 && !in_array($memberKey, $membersAdded) ) {
+                                $membersAdded[] = $memberKey;
+                                $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
+                                if ($encounter->guild_id !== 0) {
+                                    $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                    $member->guild_id = $encounter->guild_id;
+                                    $member->guild_name = $guild->name;
+                                    $member->faction = $guild->faction;
+                                }
+                            }
+                            else
+                            {
+                                $members->forget($key);
                             }
                         }
 
@@ -240,21 +250,27 @@ class PveLadderController extends Controller
 
                     $encounters = $encounters->orderBy($order, $order2)->get();
 
-
+                    $guildAdded = array();
                     foreach ($encounters as $key => $encounter) {
                         if ($encounter->guild_id !== 0) {
-                            $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                            $encounter->guild_name = $guild->name;
-                            $encounter->faction = $guild->faction;
-                            if (count($factions) && !in_array($encounter->faction, $factions)) {
+                            if ( !in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent" )
+                            {
+                                $guildAdded[] = $encounter->guild_id;
+                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                $encounter->guild_name = $guild->name;
+                                $encounter->faction = $guild->faction;
+                                if (count($factions) && !in_array($encounter->faction, $factions)) {
+                                    $encounters->forget($key);
+                                }
+                            }
+                            else
+                            {
                                 $encounters->forget($key);
                             }
                         } else if (count($factions)) {
                             $encounters->forget($key);
                         }
                     }
-
-                    $encounters = $encounters->take(20);
 
                     return view("ladder/pve/ajax/rescent_speed", compact("encounters"));
                 }
@@ -272,7 +288,7 @@ class PveLadderController extends Controller
                     "hps" => "HPS"
                 );
                 $modeId = Defaults::ENCOUNTER_SORT;
-                $difficultyId = $_request->get("difficulty_id_for_filter", Defaults::DIFFICULTY_ID);
+                $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
                 return view("ladder/pve/ajax/encounter", compact(

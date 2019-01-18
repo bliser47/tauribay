@@ -20,11 +20,14 @@ class ApiController extends Controller
 {
     public function ReceiveData(Request $_request)
     {
-        $tradeDataJSON = json_decode($_request->all()[0]);
+        $tradeDataJSON = json_decode($_request->getContent());
         $insertArray = array();
         for ($t = 0; $t < count($tradeDataJSON); $t++) {
+            $json = $tradeDataJSON[$t];
+
             array_push($insertArray, array(
-                "data" => $tradeDataJSON[$t],
+                "realm_id" => $json->realm_id,
+                "data" => $json->text,
                 "date" => Carbon::now()
             ));
         }
@@ -44,7 +47,10 @@ class ApiController extends Controller
 
     public function ParseSpecificData($_data,$no_smart)
     {
-        $textData1 = explode("[",$_data);
+        $realm_id = $_data->realm_id;
+        $data = $_data->text;
+
+        $textData1 = explode("[",$data);
 
         if ( count($textData1) > 1 ) {
 
@@ -56,22 +62,23 @@ class ApiController extends Controller
                 $name = $textData2[0];
                 $text = $textData2[1];
 
-                $this->ParseSpecificTrade($time, $name, $text,$no_smart);
+                $this->ParseSpecificTrade($time, $name, $text,$no_smart, $realm_id);
             }
         }
     }
     
-    public function ParseSpecificTrade($_time,$_name,$_text,$no_smart)
+    public function ParseSpecificTrade($_time,$_name,$_text,$no_smart, $_realm_id)
     {
         // 1. Do we know the person?
-        $traderData = Trader::GetData($_name);
+        $traderData = Trader::GetData($_name, $_realm_id);
         if ( $traderData )
         {
-            $parsedData = ParsedData::where(array("name" => $_name,"text" => $_text))->first();
+            $parsedData = ParsedData::where(array("realm_id" => $_realm_id, "name" => $_name,"text" => $_text))->first();
             if ( !$parsedData ) {
                 $parsedData = new ParsedData;
                 $parsedData->name = $_name;
                 $parsedData->text = $_text;
+                $parsedData->realm_id = $_realm_id;
             }
 
             $parsedData->faction = $traderData["faction"];
@@ -136,6 +143,7 @@ class ApiController extends Controller
                 $characterTrade->faction = $parseData->faction ? $parseData->faction : 3;
                 $characterTrade->intent = $smartResult['character_intent'];
                 $characterTrade->class = $smartResult['character_class'];
+                $characterTrade->realm_id = $parseData->realm_id;
                 if ( !$no_update )
                 {
                     $characterTrade->updated_at = Carbon::now();
@@ -167,6 +175,7 @@ class ApiController extends Controller
                 } else {
                     $gdkpTrade = $foundGdkp;
                 }
+                $gdkpTrade->realm_id = $parseData->realm_id;
                 $gdkpTrade->name = $parseData->name;
                 $gdkpTrade->text = $parseData->text;
                 $gdkpTrade->faction = $parseData->faction ? $parseData->faction : 3;

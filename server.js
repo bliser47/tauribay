@@ -1,7 +1,7 @@
 var config = {
-    channels: ["#trade-tauri"],
+    channels: ["#tauri_trade","#wod_trade","#evermoon_trade"],
     server: "irc.tauri.hu",
-    botName: "Bro"
+    botName: "TauriBayBot"
 };
 
 var irc = require("irc");
@@ -25,23 +25,34 @@ function sendMessages()
         body: JSON.stringify(messages)
     }, function(error, response, body){
         if(error) {
-            console.log(error)
+            console.log(body)
         } else {
-            console.log(response.statusCode, body);
+            console.log(body);
         }
     });
     messages = [];
 }
 
+var realms = {
+    "#tauri_trade" : 0,
+    "#wod_trade" : 1,
+    "#evermoon_trade" : 2
+};
+
 bot.addListener("message", function(from, to, text, message) {
-    console.log(text);
     if ( from === "T-etu" ) {
-        if (message["args"][0] === "#trade-tauri") {
-            messages.push(text);
-            if (messageTimeout) {
-                clearTimeout(messageTimeout);
+        for ( var realmName in realms ) {
+            if (message["args"][0] === realmName) {
+                messages.push({
+                    "realm_id" : realms[realmName],
+                    "text" : text
+                });
+                if (messageTimeout) {
+                    clearTimeout(messageTimeout);
+                }
+                messageTimeout = setTimeout(sendMessages, 2000);
+                break;
             }
-            messageTimeout = setTimeout(sendMessages, 1000);
         }
     }
 });

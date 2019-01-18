@@ -9,7 +9,7 @@
     <div id="encounterMemberFilter{{ $modeId }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree{{ $modeId }}">
         <div class="panel-body">
             {!! Form::open(array("method" => "get","class"=>"encounter-subform-form")) !!}
-            <input name="mode_filter" value="1"/>
+            <input type="hidden" name="mode_filter" value="1"/>
             <div class="form-group col-md-4 col-sm-nopadding">
                 <legend> {{ __("Role") }} </legend>
                 <div id="role-container" class="input-group col-md-12">
