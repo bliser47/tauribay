@@ -122,14 +122,14 @@
                     </div>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="panel table table-bordered table-classes">
+            <div class="panel">
+                <table class="table table-bordered table-classes">
                     <tr>
                         <th class="cellDesktop">Idő</th>
                         <th>Hirdető</th>
                         <th>Realm</th>
                         <th class="cellDesktop">Frakció</th>
-                        <th>Szándék</th>
+                        <th class="cellDesktop">Szándék</th>
                         <th>Insta</th>
                         <th>Méret</th>
                         <th>Nehézség</th>
@@ -142,7 +142,7 @@
                             <td>{{ \TauriBay\Realm::REALMS_SHORT[$gdkp->realm_id] }}</td>
                             <td class="cellMobile faction-{{ $gdkp->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
                             <td class="cellDesktop gdkp-faction faction-{{ $gdkp->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $gdkp->faction . ".png") }}" alt=""/> </td>
-                            <td> {{ $gdkpIntents[$gdkp->intent] }}</td>
+                            <td class="cellDesktop"> {{ $gdkpIntents[$gdkp->intent] }}</td>
                             <td class="instance-{{ $gdkp->instance  }}"> <img src="{{ URL::asset("img/instances/small/" . $gdkp->instance . ".png") }}" alt="{{ $gdkpInstances[$gdkp->instance] }}"/> </td>
                             <td> {{ $gdkpInstanceSizes[$gdkp->size] }} </td>
                             <td class="instance-difficulty"> <img src="{{ URL::asset("img/difficulties/small/" . $gdkp->difficulty . ".png") }}" alt=""/>
