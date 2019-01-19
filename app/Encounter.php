@@ -11,6 +11,12 @@ class Encounter extends Model
     const DURUMU_DMG_INVALID_BEFORE_TIMESTAMP = 1546950226;
     const INVALID_RAIDS = array(43718);
 
+    const DIFFICULTY_NAME = array(
+        0 => "N",
+        1 => "HC",
+        2 => "?"
+    );
+
     const ENCOUNTER_NAME_SHORTS = array(
         "Jin'rokh the Breaker" => "Jin'rokh",
         "Council of Elders" => "Council",
