@@ -40,15 +40,15 @@
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-intent">
                                         {!! Form::checkbox('szervezes',1,Input::get('szervez'),array("id"=>"intent-make","class"=>"intent")) !!}
-                                        <label for="intent-make"> Szervezés </label>
+                                        <label for="intent-make">{{ __("Szervezés") }}</label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-intent">
                                         {!! Form::checkbox('csatlakozas',2,Input::get('vetel'),array("id"=>"intent-join","class"=>"intent")) !!}
-                                        <label for="intent-join"> Csatlakozás </label>
+                                        <label for="intent-join">{{ __("Csatlakozás") }}</label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-all-intents">
                                         {!! Form::checkbox('intentall',3,Input::get('intentall'),array("id"=>"intent-all","class"=>"intent")) !!}
-                                        <label for="intent-all"> Mind </label>
+                                        <label for="intent-all">{{ __("Mind") }}</label>
                                     </div>
                                 </div>
                             </div>
