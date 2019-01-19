@@ -55,6 +55,7 @@ class PveLadderController extends Controller
             "encounter_id" => $encounterId,
             "difficulty_id" => $difficultyId
         ));
+
         return $this->index($_request);
     }
 
@@ -67,7 +68,7 @@ class PveLadderController extends Controller
 
         if ( $encounterId > 0 )
         {
-            if ( $_request->get("mode_id") )
+            if ( $_request->has("mode_id") )
             {
                 $modeId = $_request->get("mode_id");
 
@@ -289,6 +290,7 @@ class PveLadderController extends Controller
                 );
                 $modeId = Defaults::ENCOUNTER_SORT;
                 $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
+
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
                 return view("ladder/pve/ajax/encounter", compact(

@@ -14,6 +14,7 @@
                 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
                         {!! Form::open(array("method" => "get","id"=>"pve-ladder-form")) !!}
+                        <input type="hidden" name="difficulty_id" value="{{ $difficultyId }}"/>
                         <div class="form-group col-sm-4 col-md-4 col-sm-nopadding">
                             <legend> {{ __("Kieg") }} </legend>
                             <div id="expansions-container" class="input-group col-md-12">
