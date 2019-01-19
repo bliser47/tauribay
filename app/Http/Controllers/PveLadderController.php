@@ -375,7 +375,7 @@ class PveLadderController extends Controller
         $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
         $mapId = $_request->get("map_id", Defaults::MAP_ID);
         $encounterId = $_request->get("encounter_id", 0);
-        $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
+        $difficultyId = $_request->get("difficulty_id");
 
         $expansions = Encounter::EXPANSIONS;
         $maps = Encounter::EXPANSION_RAIDS[$expansionId];
