@@ -758,10 +758,13 @@ $(function()
     {
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
-        $(".map-difficulty-tab.unLoaded").on("click",function(){
-            $(this).removeClass("unLoaded");
-            var id = $(this).find("a").attr("href");
-            loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
+        $(".map-difficulty-tab").on("click",function(){
+            history.pushState(null, '', $(this).data("url"));
+            if ( $(this).hasClass("unLoaded") ) {
+                $(this).removeClass("unLoaded");
+                var id = $(this).find("a").attr("href");
+                loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
+            }
         });
     };
 

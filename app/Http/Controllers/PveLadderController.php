@@ -22,7 +22,8 @@ class PveLadderController extends Controller
     {
         $expansionId = Encounter::convertExpansionShortNameToId($_expansion_name_short);
         $_request->request->add(array(
-            "expansion_id" => $expansionId
+            "expansion_id" => $expansionId,
+            "expansion_name_short" => $_expansion_name_short,
         ));
         if ( !$_noReturn ) {
             return $this->index($_request);
@@ -34,7 +35,20 @@ class PveLadderController extends Controller
         $this->expansion($_request, $_expansion_name_short, true);
         $mapId = Encounter::convertMapShortNameToId($_map_name_short, $_request->get("expansion_id"));
         $_request->request->add(array(
-            "map_id" => $mapId
+            "map_id" => $mapId,
+            "map_name_short" => $_map_name_short
+        ));
+        if ( !$_noReturn ) {
+            return $this->index($_request);
+        }
+    }
+
+    public function map_with_difficulty(Request $_request, $_expansion_name_short, $_map_name_short, $_difficulty_name_short, $_noReturn = false)
+    {
+        $this->map($_request, $_expansion_name_short, $_map_name_short, true);
+        $difficultyId = Encounter::convertDifficultyShortNameToId($_difficulty_name_short);
+        $_request->request->add(array(
+            "difficulty_id_default" => $difficultyId,
         ));
         if ( !$_noReturn ) {
             return $this->index($_request);
@@ -44,16 +58,17 @@ class PveLadderController extends Controller
 
     public function encounter(Request $_request, $_expansion_name_short, $_map_name_short, $_encounter_name_short, $_difficulty_name_short)
     {
-        $this->map($_request, $_expansion_name_short, $_map_name_short, true);
+        $this->map_with_difficulty($_request, $_expansion_name_short, $_map_name_short, $_difficulty_name_short, true);
+
         $encounterId = Encounter::convertEncounterShortNameToId(
             $_request->get("expansion_id"),
             $_request->get("map_id"),
             $_encounter_name_short
         );
-        $difficultyId = Encounter::convertDifficultyShortNameToId($_difficulty_name_short);
+
         $_request->request->add(array(
             "encounter_id" => $encounterId,
-            "difficulty_id" => $difficultyId
+            "encounter_name_short" => $_encounter_name_short,
         ));
 
         return $this->index($_request);
@@ -345,12 +360,13 @@ class PveLadderController extends Controller
             }
             else
             {
+
                 $defaultDifficultyIndex = 0;
                 $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
                 $encounters = array();
                 foreach ($difficulties as $index => $difficulty) {
                     $difficultyId = $difficulty["id"];
-                    if ($difficultyId == 5) {
+                    if ($difficultyId == 5 && !$_request->has("default_difficulty_id") || $_request->get("default_difficulty_id") == $difficultyId ) {
                         $defaultDifficultyIndex = $index;
                     }
                 }
@@ -364,7 +380,8 @@ class PveLadderController extends Controller
                     "mapId",
                     "maps",
                     "expansionId",
-                    "encounterId"
+                    "encounterId",
+                    "_request"
                 ));
             }
         }
@@ -376,6 +393,7 @@ class PveLadderController extends Controller
         $mapId = $_request->get("map_id", Defaults::MAP_ID);
         $encounterId = $_request->get("encounter_id", 0);
         $difficultyId = $_request->get("difficulty_id");
+        $defaultDifficultyId = $_request->get("difficulty_id_default");
 
         $expansions = Encounter::EXPANSIONS;
         $maps = Encounter::EXPANSION_RAIDS[$expansionId];
@@ -393,7 +411,8 @@ class PveLadderController extends Controller
             "difficulties",
             "encounters",
             "encounterId",
-            "difficultyId"
+            "difficultyId",
+            "defaultDifficultyId"
         ));
     }
 }
