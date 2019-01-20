@@ -48,7 +48,7 @@ class PveLadderController extends Controller
         $this->map($_request, $_expansion_name_short, $_map_name_short, true);
         $difficultyId = Encounter::convertDifficultyShortNameToId($_difficulty_name_short);
         $_request->request->add(array(
-            "difficulty_id_default" => $difficultyId,
+            !$_noReturn ? "difficulty_id_default" : "difficulty_id" => $difficultyId,
         ));
         if ( !$_noReturn ) {
             return $this->index($_request);
