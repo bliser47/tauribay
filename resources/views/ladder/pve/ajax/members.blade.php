@@ -35,7 +35,7 @@
             <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
             <td class="cellDesktop">{{ date('M d, Y', $member["killtime"])}}</td>
             <td class="cellDesktop">{{ $member["ilvl"] }}</td>
-            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"]/1000 }}</a></td>
+            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"] }}</a></td>
         </tr>
         @php ++$nr @endphp
     @endforeach
