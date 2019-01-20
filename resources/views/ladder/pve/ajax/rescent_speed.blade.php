@@ -7,14 +7,10 @@
     </tr>
     @php $nr = 1 @endphp
     @foreach( $encounters as $encounter )
-        @if ( $nr < 4 )
-            <tr class="award-{{ $nr }}">
-        @else
-            <tr>
-        @endif
+        <tr>
             <td>
-                @if ( $nr < 4 )
-                    <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=2") }}"/>
+                @if ( $modeId == "speed" && $nr < 4 )
+                    <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=4") }}"/>
                 @else
                     <b>{{ $nr }}</b>
                 @endif

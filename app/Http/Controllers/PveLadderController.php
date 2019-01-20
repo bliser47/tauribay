@@ -273,7 +273,7 @@ class PveLadderController extends Controller
                         }
                     }
 
-                    return view("ladder/pve/ajax/rescent_speed", compact("encounters"));
+                    return view("ladder/pve/ajax/rescent_speed", compact("encounters", "modeId"));
                 }
                 else
                 {

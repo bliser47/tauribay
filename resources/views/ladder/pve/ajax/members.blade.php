@@ -11,7 +11,13 @@
     @php $nr = 1 @endphp
     @foreach( $members as $member )
         <tr>
-            <td><b>{{ $nr }}</b></td>
+            <td>
+                @if (  $nr < 4 )
+                    <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=4") }}"/>
+                @else
+                    <b>{{ $nr }}</b>
+                @endif
+            </td>
             <td class="topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $member["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$member["spec"]] }}"/>
             </td>
