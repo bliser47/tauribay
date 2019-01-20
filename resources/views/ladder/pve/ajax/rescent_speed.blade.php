@@ -7,8 +7,18 @@
     </tr>
     @php $nr = 1 @endphp
     @foreach( $encounters as $encounter )
-        <tr>
-            <td><b>{{ $nr }}</b></td>
+        @if ( $nr < 4 )
+            <tr class="award-{{ $nr }}">
+        @else
+            <tr>
+        @endif
+            <td>
+                @if ( $nr < 4 )
+                    <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=2") }}"/>
+                @else
+                    <b>{{ $nr }}</b>
+                @endif
+            </td>
             <td class="cellDesktop faction-{{ $encounter["faction"] }}">
                 @if ( strlen($encounter["guild_name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["guild_name"] }} </a>
