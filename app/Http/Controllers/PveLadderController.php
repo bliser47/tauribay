@@ -15,6 +15,7 @@ use TauriBay\EncounterMember;
 use TauriBay\Guild;
 use TauriBay\LadderCache;
 use TauriBay\Realm;
+use Illuminate\Support\Facades\URL;
 
 class PveLadderController extends Controller
 {
@@ -199,9 +200,14 @@ class PveLadderController extends Controller
                             }
                         }
 
-                        return view("ladder/pve/ajax/members", compact(
+                        $view = view("ladder/pve/ajax/members", compact(
                             "modeId",
                             "members"
+                        ));
+
+                        return json_encode(array(
+                            "view" => $view->render(),
+                            "url" => ""
                         ));
                     }
                     else
@@ -218,7 +224,7 @@ class PveLadderController extends Controller
                         $roles[0] = __("Minden role");
                         $roleId = 0;
 
-                        return view("ladder/pve/ajax/hps_dps", compact(
+                        $view = view("ladder/pve/ajax/hps_dps", compact(
                             "classes",
                             "modeId",
                             "specs",
@@ -226,6 +232,11 @@ class PveLadderController extends Controller
                             "specId",
                             "roleId",
                             "roles"
+                        ));
+
+                        return json_encode(array(
+                            "view" => $view->render(),
+                            "url" => ""
                         ));
                     }
                 }
@@ -288,11 +299,12 @@ class PveLadderController extends Controller
                         }
                     }
 
-                    return view("ladder/pve/ajax/rescent_speed", compact("encounters", "modeId"));
-                }
-                else
-                {
-                    return view("ladder/pve/ajax/encounters");
+                    $view = view("ladder/pve/ajax/rescent_speed", compact("encounters", "modeId"));
+
+                    return json_encode(array(
+                        "view" => $view->render(),
+                        "url" => ""
+                    ));
                 }
             }
             else
@@ -308,7 +320,7 @@ class PveLadderController extends Controller
 
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
 
-                return view("ladder/pve/ajax/encounter", compact(
+                $view = view("ladder/pve/ajax/encounter", compact(
                     "modes",
                     "modeId",
                     "encounterId",
@@ -316,13 +328,18 @@ class PveLadderController extends Controller
                     "difficulties",
                     "difficultyId"
                 ));
+
+                return json_encode(array(
+                    "view" => $view->render(),
+                    "url" => URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId])
+                ));
             }
         }
         else {
 
             $expansionId = $_request->get("expansion_id", $_expansion_id);
             $mapId = $_request->get("map_id", $_map_id);
-            if ( $_request->has("difficulty_id") )
+            if ( $_request->has("difficulty_id"))
             {
 
                 $raidEncounters = array();
@@ -352,11 +369,16 @@ class PveLadderController extends Controller
                     }
                 }
 
-                return view("ladder/pve/ajax/map_difficulty", compact(
+                $view = view("ladder/pve/ajax/map_difficulty", compact(
                     "encounters",
                     "expansionId",
                     "mapId",
                     "difficultyId"));
+
+                return json_encode(array(
+                    "view" => $view->render(),
+                    "url" => ""
+                ));
             }
             else
             {
@@ -364,24 +386,35 @@ class PveLadderController extends Controller
                 $defaultDifficultyIndex = 0;
                 $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
                 $encounters = array();
+                $defaultDifficultyId = null;
+                $backUpDifficultyId = null;
                 foreach ($difficulties as $index => $difficulty) {
                     $difficultyId = $difficulty["id"];
+                    $backUpDifficultyId = $difficultyId;
                     if ($difficultyId == 5 && !$_request->has("default_difficulty_id") || $_request->get("default_difficulty_id") == $difficultyId ) {
                         $defaultDifficultyIndex = $index;
+                        $defaultDifficultyId = $difficultyId;
                     }
+                }
+                if ( $defaultDifficultyId == null )
+                {
+                    $defaultDifficultyId = $backUpDifficultyId;
                 }
 
                 $maps = Encounter::EXPANSION_RAIDS[$expansionId];
 
 
-                return view("ladder/pve/ajax/map", compact("encounters",
+                $view = view("ladder/pve/ajax/map", compact("encounters",
                     "difficulties",
                     "defaultDifficultyIndex",
                     "mapId",
                     "maps",
-                    "expansionId",
-                    "encounterId",
-                    "_request"
+                    "expansionId"
+                ));
+
+                return json_encode(array(
+                    "view" => $view->render(),
+                    "url" => URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$defaultDifficultyId])
                 ));
             }
         }
@@ -396,7 +429,7 @@ class PveLadderController extends Controller
         $defaultDifficultyId = $_request->get("difficulty_id_default");
 
         $expansions = Encounter::EXPANSIONS;
-        $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+        $maps = Encounter::getExpansionMaps($expansionId);
 
         $difficulties = Defaults::SIZE_AND_DIFFICULTY;
 

@@ -522,4 +522,20 @@ class Encounter extends Model
             ++$index;
         }
     }
+
+    public static function getExpansionMaps($_expansion_id)
+    {
+        $maps = array();
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                $maps[$raid["id"]] = $raid["name"];
+            }
+            return $maps;
+        }
+        return array();
+    }
+
 }
