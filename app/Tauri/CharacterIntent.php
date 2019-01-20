@@ -31,7 +31,10 @@ class CharacterIntent
         ' eladnam ',
         ' eladnek ',
         ' megvalok ',
-        ' megvalnek '
+        ' megvalnek ',
+
+        ' wts ',
+        ' sell '
     );
 
     const CHARACTER_INTENT_TRADE = array
@@ -43,6 +46,9 @@ class CharacterIntent
         ' cserelem ',
         ' cserelnem ',
         ' cserelnek ',
+
+        ' wtt ',
+        ' trade '
     );
 
     const CHARACTER_INTENT_BUY = array
@@ -52,7 +58,10 @@ class CharacterIntent
         ' vennek ',
         ' veszek ',
         ' vasarolok ',
-        ' vasarolnek '
+        ' vasarolnek ',
+
+        ' wtb ',
+        ' buy '
     );
 
     const CHARACTER_INTENT_SELL_OR_TRADE = array
@@ -249,6 +258,9 @@ class CharacterIntent
         ' cserelem eladnam ',
         ' cserelnem eladnam ',
         ' cserelnek eladnam ',
+
+        ' wtb/wts ',
+        ' wts/wtb '
     );
 
     const CHARACTER_INTENTS = array(
