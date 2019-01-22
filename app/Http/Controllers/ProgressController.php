@@ -40,33 +40,12 @@ class ProgressController extends Controller
     {
         $api = new Tauri\ApiClient();
         $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
-        $realmName = Realm::REALMS[$realmId];
 
-        //$raidLog = $api->getRaidMaps($realmName);
+        $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
-
-        $latestRaids = $api->getRaidLog(Realm::REALMS[0], 2000);
-
-        return json_encode($latestRaids);
-
-        $start = "\"response\":{\"logs\":[{";
-        $startPos = strpos ($latestRaids,$start);
-        $end = "]}}";
-        $endPos = strrpos($latestRaids,$end);
-        $delimiter = "},{";
-
-        $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
-        $logs = explode($delimiter,$logs);
-
-        return "{".$logs[0]."}";
-
-
-        //return count($logs);
-
-        /*
-
-        return json_encode($raidLog,true);
-        */
+        $latestRaids = json_decode($api->getRaidLast(Realm::REALMS[$realmId], $lastLogOnRealm->log_id), true);
+        $logs = $latestRaids["response"]["logs"];
+        return $logs;
     }
 
     public function index(Request $_request)
@@ -187,27 +166,19 @@ class ProgressController extends Controller
 
     public function updateRaids(Request $_request)
     {
-        ini_set('memory_limit', '200M');
 
         $api = new Tauri\ApiClient();
         $realmId = $_request->has("data") ? $_request->get("data") : rand(0,2);
         $realmName = Realm::REALMS[$realmId];
 
-        $latestRaids = $api->getRaidLast($realmName);
+        $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->take(1);
 
-        $start = "\"response\":{\"logs\":[{";
-        $startPos = strpos ($latestRaids,$start);
-        $end = "]}}";
-        $endPos = strrpos($latestRaids,$end);
-        $delimiter = "},{";
+        $latestRaids =  json_decode($api->getRaidLast($realmName, $lastLogOnRealm), true);
+        $logs = $latestRaids["response"]["logs"];
 
-        $logs = substr($latestRaids,$startPos+strlen($start),$endPos);
-        $logs = explode($delimiter,$logs);
-
-        $result = array();
         for ( $i = 0 ; $i < count($logs) ; ++$i)
         {
-            $encounter = Encounter::store($api, json_decode( "{" . $logs[$i]."}" , true), $realmId);
+            $encounter = Encounter::store($api, $logs[$i], $realmId);
             $result[] = $encounter;
             if ( !$encounter["result"] )
             {

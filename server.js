@@ -1,5 +1,5 @@
 var config = {
-    channels: ["#tauri_trade","#wod_trade","#evermoon_trade"],
+    channels: ["#tauri_trade","#wod_trade","#evermoon_trade","#evermoon_global","#wod_world","#tauri_world"],
     server: "irc.tauri.hu",
     botName: "TauriBayBot"
 };
@@ -37,8 +37,11 @@ function sendMessages()
 
 var realms = {
     "#tauri_trade" : 0,
+    "#tauri_world" : 0,
     "#wod_trade" : 1,
-    "#evermoon_trade" : 2
+    "#wod_world" : 1,
+    "#evermoon_trade" : 2,
+    "#evermoon_global" : 2
 };
 
 bot.addListener("message", function(from, to, text, message) {

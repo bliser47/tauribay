@@ -395,12 +395,17 @@ class ApiClient {
         return $this->communicate();
     }
 
-    public function getRaidLast($realm)
+    public function getRaidLast($realm, $from = 0, $limit = null)
     {
         $this->request['url'] = 'raid-last';
         $this->request['params'] = array(
             'r'  => $realm,
+            'from' => $from
         );
+        if ( $limit !== null )
+        {
+            $this->request['params']['limit'] = $limit;
+        }
         return $this->communicate(true);
     }
 
