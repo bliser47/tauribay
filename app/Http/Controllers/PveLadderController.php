@@ -401,7 +401,7 @@ class PveLadderController extends Controller
                     $defaultDifficultyId = $backUpDifficultyId;
                 }
 
-                $maps = Encounter::EXPANSION_RAIDS[$expansionId];
+                $maps = Encounter::getExpansionMaps($expansionId);
 
 
                 $view = view("ladder/pve/ajax/map", compact("encounters",
