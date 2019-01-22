@@ -135,7 +135,7 @@ class PveLadderController extends Controller
                         {
                             $members = $members->where("class", "=", $_request->get("class_id"));
                         }
-                        else if ( $_request->has("role_id") && $_request->get("role_id") > 0 )
+                        if ( $_request->has("role_id") && $_request->get("role_id") > 0 )
                         {
                             $members = $members->whereIn("spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
                         }

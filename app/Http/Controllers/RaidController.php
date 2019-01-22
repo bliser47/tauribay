@@ -74,6 +74,7 @@ class RaidController extends Controller
     public function getRoleClassSpecs(Request $_request , $_role_id, $_class_id)
     {
         $specs = EncounterMember::getRoleClassSpecs($_role_id, $_class_id);
+        $specs[0] = __("Minden spec");
         return FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz role spec-et")]);
 
     }
