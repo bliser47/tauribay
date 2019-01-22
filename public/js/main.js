@@ -526,8 +526,11 @@ $(function()
             },
             success: function(response)
             {
+                response = $.parseJSON(response);
                 var newContainer = $("#map-loading-container");
-                $(newContainer).html(response);
+                $(newContainer).html(response["view"]);
+                prevState = window.location.href;
+                history.pushState(null, '', response["url"]);
                 listenForEncounterFormSubmit();
                 handleEncounterModes(newContainer, data);
                 UpdateTimes();
@@ -556,7 +559,8 @@ $(function()
             },
             success: function(response)
             {
-                $(container).html(response);
+                response = $.parseJSON(response);
+                $(container).html(response["view"]);
                 $(container).find(".pagination a").click(function(e)
                 {
                     e.preventDefault();
@@ -578,7 +582,10 @@ $(function()
             var storeData = data;
 
             storeData += "&mode_id=" + mode;
-            storeData += "&difficulty_id=" + $("select[name='difficulty_id'] option:selected").val();
+            var difficultyId = $("select[name='difficulty_id'] option:selected").val();
+            if ( difficultyId ) {
+                storeData += "&difficulty_id=" + difficultyId;
+            }
 
             $.ajax({
                 type: "POST",
@@ -589,7 +596,8 @@ $(function()
                 },
                 success: function (response) {
 
-                    $(tab).html(response);
+                    response = $.parseJSON(response);
+                    $(tab).html(response["view"]);
 
                     if ( mode === "dps" || mode === "hps" )
                     {
@@ -736,7 +744,9 @@ $(function()
     var loadMapDifficulty = function(container, data)
     {
         var difficulty = $(container).data("difficulty");
-        data += "&difficulty_id=" + difficulty;
+        if ( difficulty ) {
+            data += "&difficulty_id=" + difficulty;
+        }
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -746,8 +756,11 @@ $(function()
             },
             success: function(response)
             {
+                response = $.parseJSON(response);
                 $(container).find(".encounters_loading").hide();
-                $(container).parent().html(response);
+                $(container).parent().html(response["view"]);
+                prevState = window.location.href;
+                history.pushState(null, '', response["url"]);
                 UpdateTimes();
             }
         });
@@ -758,10 +771,14 @@ $(function()
     {
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
-        $(".map-difficulty-tab.unLoaded").on("click",function(){
-            $(this).removeClass("unLoaded");
-            var id = $(this).find("a").attr("href");
-            loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
+        $(".map-difficulty-tab").on("click",function(){
+            prevState = window.location.href;
+            history.pushState(null, '', $(this).data("url"));
+            if ( $(this).hasClass("unLoaded") ) {
+                $(this).removeClass("unLoaded");
+                var id = $(this).find("a").attr("href");
+                loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
+            }
         });
     };
 
@@ -778,7 +795,27 @@ $(function()
             $("#collapseOne").collapse("hide");
         }
         firstSubmit = false;
-        var data = $(this).serialize();
+        var data = $(this).serializeArray();
+        var isEncounterZero = false;
+        var i;
+        for ( i = 0 ; i < data.length ; ++i )
+        {
+            if ( data[i]["name"] === "encounter_id" )
+            {
+                isEncounterZero = data[i]["value"] === "0";
+            }
+        }
+        if ( isEncounterZero )
+        {
+            for ( i = 0 ; i < data.length ; ++i )
+            {
+                if ( data[i]["name"] === "difficulty_id" )
+                {
+                    data.splice(i,1);
+                }
+            }
+        }
+        data = $.param(data);
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
@@ -788,8 +825,12 @@ $(function()
             },
             success: function(response)
             {
+                response = $.parseJSON(response);
                 $(loader).hide();
-                $(container).html(response);
+                $(container).html(response["view"]);
+
+                prevState = window.location.href;
+                history.pushState(null, '', response["url"]);
 
                 $(".selectpicker").selectpicker();
                 $(".bossName select[name='map_id']").on("change",function(){
@@ -820,4 +861,10 @@ $(function()
     {
         $("#pve-ladder-form").submit();
     }
+
+    var prevState = null;
+    $(window).on("popstate", function (e) {
+        e.preventDefault();
+        location.reload(prevState !== null ? prevState : window.location.href);
+    });
 });

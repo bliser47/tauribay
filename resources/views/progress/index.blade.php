@@ -80,7 +80,13 @@
                     </tr>
                     @foreach ( $guilds as $nr => $guild )
                         <tr class="progressRow">
-                            <td class="cellDesktop"> {{ $loop->index+1 }} </td>
+                            <td class="cellDesktop">
+                                @if ( $loop->index+1 < 4 )
+                                    <img alt="" src="{{  URL::asset("img/award_small/" . ($loop->index+1) . ".png?v=4") }}"/>
+                                @else
+                                    <b>{{ $loop->index+1 }}</b>
+                                @endif
+                            </td>
                             <td class="cellDesktop"> {{ $shortRealms[$guild->realm] }} </td>
                             <td class="cellDesktop faction-{{ $guild->faction  }}">  <a href="{{ URL::to("guild/" . $guild->id) }}"> {{  $guild->name  }} </a>
                             <td class="cellMobile faction-{{ $guild->faction  }}">  <a href="{{ URL::to("guild/" . $guild->id) }}"> {{ \TauriBay\Guild::getShortName($guild->name)  }} </a>

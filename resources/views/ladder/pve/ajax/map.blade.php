@@ -9,8 +9,8 @@
 @endif
 <ul class="nav nav-tabs" role="tablist">
     @foreach ( $difficulties as $index => $difficulty )
-        <li class="map-difficulty-tab divDesktop home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "unLoaded" }}" role="presentation"><a href="#difficulty-{{ $index }}" aria-controls="difficulty-{{ $index}}" role="tab" data-toggle="tab">{{ $difficulty["name"] }}</a></li>
-        <li class="map-difficulty-tab divMobile home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "unLoaded" }}" role="presentation"><a href="#difficulty-{{ $index }}" aria-controls="difficulty-{{ $index}}" role="tab" data-toggle="tab">{{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$difficulty["id"]] }}</a></li>
+        <li data-url="{{ URL::to("/ladder/pve/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] ."/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficulty["id"]]) }}" class="map-difficulty-tab divDesktop home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "unLoaded" }}" role="presentation"><a href="#difficulty-{{ $index }}" aria-controls="difficulty-{{ $index}}" role="tab" data-toggle="tab">{{ $difficulty["name"] }}</a></li>
+        <li data-url="{{ URL::to("/ladder/pve/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] ."/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficulty["id"]]) }}" class="map-difficulty-tab divMobile home-main-tab {{ $index == $defaultDifficultyIndex ? "active" : "unLoaded" }}" role="presentation"><a href="#difficulty-{{ $index }}" aria-controls="difficulty-{{ $index}}" role="tab" data-toggle="tab">{{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$difficulty["id"]] }}</a></li>
     @endforeach
 </ul>
 <div class="tab-content">

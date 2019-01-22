@@ -11,6 +11,12 @@ class Encounter extends Model
     const DURUMU_DMG_INVALID_BEFORE_TIMESTAMP = 1546950226;
     const INVALID_RAIDS = array(43718);
 
+    const DIFFICULTY_NAME = array(
+        0 => "N",
+        1 => "HC",
+        2 => "?"
+    );
+
     const ENCOUNTER_NAME_SHORTS = array(
         "Jin'rokh the Breaker" => "Jin'rokh",
         "Council of Elders" => "Council",
@@ -516,4 +522,20 @@ class Encounter extends Model
             ++$index;
         }
     }
+
+    public static function getExpansionMaps($_expansion_id)
+    {
+        $maps = array();
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                $maps[$raid["id"]] = $raid["name"];
+            }
+            return $maps;
+        }
+        return array();
+    }
+
 }

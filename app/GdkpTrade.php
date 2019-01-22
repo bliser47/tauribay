@@ -35,8 +35,8 @@ class GdkpTrade extends Model
 
         $gdkpTrades = DB::table('gdkp_trades')->orderBy('updated_at','desc');
 
-        if ( $_request->has("filter") ) {
 
+        if ( $_request->has("filter") ) {
             // 1. Faction filter
             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
                 $factions = array();
@@ -52,17 +52,18 @@ class GdkpTrade extends Model
                 $gdkpTrades = $gdkpTrades->whereIn('faction', $factions);
             }
 
-            $instances = [];
-            $instanceNames = WowInstance::WOW_INSTANCE_SHORT_NAMES;
-            foreach ($instanceNames as $instanceId => $instanceName) {
-                if ($_request->has($instanceName)) {
-                    array_push($instances, $instanceId);
-                }
-            }
-            if ( count($instances) > 0 ) {
-                $gdkpTrades = $gdkpTrades->whereIn('instance', $instances);
+
+        }
+
+        $instances = [];
+        $instanceNames = WowInstance::WOW_INSTANCE_SHORT_NAMES;
+        foreach ($instanceNames as $instanceId => $instanceName) {
+            if (!$_request->has("filter") || $_request->has($instanceName)) {
+                array_push($instances, $instanceId);
             }
         }
+
+        $gdkpTrades = $gdkpTrades->whereIn('instance', $instances);
 
         return $gdkpTrades;
 

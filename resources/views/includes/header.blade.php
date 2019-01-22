@@ -24,14 +24,14 @@
             <ul class="nav navbar-nav">
 
                 <li class="dropdown {{ Request::segment(1) == 'trade' ? 'active' : '' }}">
-                    <a href="/hirdetesek" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hirdetések<span class="caret"></span></a>
+                    <a href="/hirdetesek" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ __("Hirdetések") }}<span class="caret"></span></a>
                     <ul class="dropdown-menu trade-types-dropdown-menu">
                         <li><a href="/trade/char">{{ __("Karakter") }}</a></li>
                         <li><a href="/trade/raid">Raid</a></li>
                     </ul>
                 </li>
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
-                <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Guild progress") }}</a></li>
+                <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Guilds") }}</a></li>
                 <li class="{{ Request::segment(1) == 'ladder' ? 'active' : '' }}"><a href="/ladder/pve/mop/tot">{{ __("PVE Ladder") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
