@@ -43,7 +43,7 @@ class ProgressController extends Controller
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
-        $latestRaids = json_decode($api->getRaidLast(Realm::REALMS[$realmId], $lastLogOnRealm->log_id), true);
+        $latestRaids = $api->getRaidLast(Realm::REALMS[$realmId], $lastLogOnRealm->log_id);
         $logs = $latestRaids["response"]["logs"];
         return $logs;
     }
@@ -171,7 +171,8 @@ class ProgressController extends Controller
         $realmId = $_request->has("data") ? $_request->get("data") : rand(0,2);
         $realmName = Realm::REALMS[$realmId];
 
-        $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->take(1);
+
+        $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
         $latestRaids =  $api->getRaidLast($realmName, $lastLogOnRealm);
         $logs = $latestRaids["response"]["logs"];
