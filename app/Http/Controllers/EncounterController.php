@@ -114,7 +114,6 @@ class EncounterController extends Controller
                 $guild = Guild::where("id", "=",$enc->guild_id)->first();
             }
             Encounter::refreshMemberTop($member, $guild);
-            $member->top_processed = 1;
             $member->save();
         }
         return $fixed;

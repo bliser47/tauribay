@@ -185,7 +185,7 @@ class PveLadderController extends Controller
                                     "member_tops.hps as hps",
                                     "member_tops.faction_id as faction_id",
                                     "encounters.guild_id as guild_id",
-                                    "member_tops.encounter_id as encounter_id",
+                                    "encounters.id as encounter_id",
                                     "encounters.encounter_id as encounter",
                                     "member_tops.realm_id as realm_id",
                                     "encounters.fight_time as fight_time",

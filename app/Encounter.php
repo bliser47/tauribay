@@ -352,6 +352,8 @@ class Encounter extends Model
                 }
             }
 
+            $member->top_processed = 1;
+            $member->save();
             $top->save();
         }
     }
