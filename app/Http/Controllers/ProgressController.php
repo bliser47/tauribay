@@ -39,7 +39,7 @@ class ProgressController extends Controller
     public function debug(Request $_request)
     {
         $api = new Tauri\ApiClient();
-        $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
+        $realmId = 0;//$_request->has("data") ? $_request->get("data") : 2;
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
@@ -174,7 +174,7 @@ class ProgressController extends Controller
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
-        $latestRaids =  $api->getRaidLast($realmName, $lastLogOnRealm);
+        $latestRaids =  $api->getRaidLast($realmName, $lastLogOnRealm->log_id);
         $logs = $latestRaids["response"]["logs"];
         $result = array();
         if ( is_array($logs) ) {
