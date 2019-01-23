@@ -175,14 +175,13 @@ class ProgressController extends Controller
 
         $latestRaids =  json_decode($api->getRaidLast($realmName, $lastLogOnRealm), true);
         $logs = $latestRaids["response"]["logs"];
-
-        for ( $i = 0 ; $i < count($logs) ; ++$i)
-        {
-            $encounter = Encounter::store($api, $logs[$i], $realmId);
-            $result[] = $encounter;
-            if ( !$encounter["result"] )
-            {
-                break;
+        if ( is_array($logs) ) {
+            for ($i = 0; $i < count($logs); ++$i) {
+                $encounter = Encounter::store($api, $logs[$i], $realmId);
+                $result[] = $encounter;
+                if (!$encounter["result"]) {
+                    break;
+                }
             }
         }
         return json_encode($result);

@@ -16,6 +16,8 @@ use TauriBay\Guild;
 use TauriBay\LadderCache;
 use TauriBay\Realm;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class PveLadderController extends Controller
 {
@@ -124,89 +126,96 @@ class PveLadderController extends Controller
 
                     if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
-                        $members = EncounterMember::where("encounter", "=", $encounterId)
-                            ->where("difficulty_id", "=", $difficultyId);
 
-                        if ( $_request->has("spec_id") && $_request->get("spec_id") > 0 )
-                        {
-                            $members = $members->where("spec", "=", $_request->get("spec_id"));
-                        }
-                        else if ( $_request->has("class_id") && $_request->get("class_id") > 0 )
-                        {
-                            $members = $members->where("class", "=", $_request->get("class_id"));
-                        }
-                        if ( $_request->has("role_id") && $_request->get("role_id") > 0 )
-                        {
-                            $members = $members->whereIn("spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
-                        }
+                        $cacheKey = http_build_query($_request->all());
+                        $cacheValue = Cache::get($cacheKey);
+                        if ( !$cacheValue ) {
 
-                        //  Realm filter
-                        if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                            $realms = array();
-                            if ($_request->has('tauri')) {
-                                array_push($realms, 0);
+                            $members = EncounterMember::where("encounter_members.encounter", "=", $encounterId)
+                                ->where("encounter_members.difficulty_id", "=", $difficultyId);
+
+                            if ($_request->has("spec_id") && $_request->get("spec_id") > 0) {
+                                $members = $members->where("encounter_members.spec", "=", $_request->get("spec_id"));
                             }
-                            if ($_request->has('wod')) {
-                                array_push($realms, 1);
+                            else if ($_request->has("class_id") && $_request->get("class_id") > 0) {
+                                $members = $members->where("encounter_members.class", "=", $_request->get("class_id"));
                             }
-                            if ($_request->has('evermoon')) {
-                                array_push($realms, 2);
+                            if ($_request->has("role_id") && $_request->get("role_id") > 0) {
+                                $members = $members->whereIn("encounter_members.spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
                             }
-                            $members = $members->whereIn('realm_id', $realms);
-                        }
 
-                        // Faction filter
-                        if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                            $factions = array();
-                            if ($_request->has('alliance')) {
-                                array_push($factions, 0);
+                            //  Realm filter
+                            if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                                $realms = array();
+                                if ($_request->has('tauri')) {
+                                    array_push($realms, 0);
+                                }
+                                if ($_request->has('wod')) {
+                                    array_push($realms, 1);
+                                }
+                                if ($_request->has('evermoon')) {
+                                    array_push($realms, 2);
+                                }
+                                $members = $members->whereIn('encounter_members.realm_id', $realms);
                             }
-                            if ($_request->has('horde')) {
-                                array_push($factions, 1);
+
+                            // Faction filter
+                            if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
+                                $factions = array();
+                                if ($_request->has('alliance')) {
+                                    array_push($factions, 0);
+                                }
+                                if ($_request->has('horde')) {
+                                    array_push($factions, 1);
+                                }
+                                if ($_request->has('ismeretlen')) {
+                                    array_push($factions, 3);
+                                }
+                                $members = $members->whereIn('encounter_members.faction_id', $factions);
                             }
-                            if ($_request->has('ismeretlen')) {
-                                array_push($factions, 3);
+
+                            // Hack for fixing HPS and Durumu DPS
+                            if ($modeId == "hps" || ($modeId == "dps" && $encounterId == 1572)) {
+                                $members = $members->where("encounter_members.killtime", ">", 0)->where("encounter_members.killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
                             }
-                            $members = $members->whereIn('faction_id', $factions);
-                        }
-
-                        // Hack for fixing HPS and Durumu DPS
-                        if ( $modeId == "hps" || ($modeId == "dps" && $encounterId == 1572) )
-                        {
-                            $members = $members->where("killtime",">",0)->where("killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
-                        }
 
 
 
-                        $members = $members->orderBy($modeId,"desc")->get();
 
-                        $membersAdded = array();
-                        foreach ( $members as $key => $member )
-                        {
-                            $memberKey = $member->realm_id . "-"  . $member->name;
-                            if ( count($membersAdded) < 100 && !in_array($memberKey, $membersAdded) ) {
-                                $membersAdded[] = $memberKey;
-                                $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                                if ($encounter->guild_id !== 0) {
-                                    $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                    $member->guild_id = $encounter->guild_id;
-                                    $member->guild_name = $guild->name;
-                                    $member->faction = $guild->faction;
+                            $members = $members->orderBy($modeId,"desc")->get();
+
+                            $membersAdded = array();
+                            foreach ( $members as $key => $member )
+                            {
+                                $memberKey = $member->realm_id . "-"  . $member->name;
+                                if ( count($membersAdded) < 100 && !in_array($memberKey, $membersAdded) ) {
+                                    $membersAdded[] = $memberKey;
+                                    $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
+                                    if ($encounter->guild_id !== 0) {
+                                        $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                        $member->guild_id = $encounter->guild_id;
+                                        $member->guild_name = $guild->name;
+                                        $member->faction = $guild->faction;
+                                    }
+                                }
+                                else
+                                {
+                                    $members->forget($key);
                                 }
                             }
-                            else
-                            {
-                                $members->forget($key);
-                            }
+
+
+                            $view = view("ladder/pve/ajax/members", compact(
+                                "modeId",
+                                "members"
+                            ));
+
+                            $cacheValue = $view->render();
+                            Cache::put($cacheKey, $cacheValue, 120); // 2 hours
                         }
 
-                        $view = view("ladder/pve/ajax/members", compact(
-                            "modeId",
-                            "members"
-                        ));
-
                         return json_encode(array(
-                            "view" => $view->render(),
+                            "view" => $cacheValue,
                             "url" => ""
                         ));
                     }

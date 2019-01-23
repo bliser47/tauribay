@@ -15,7 +15,7 @@
                 @if (  $nr < 4 )
                     <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=4") }}"/>
                 @else
-                    <b>{{ $nr }}</b>
+                    <b>{{ $nr  }}</b>
                 @endif
             </td>
             <td class="topDpsSpecContainer">
