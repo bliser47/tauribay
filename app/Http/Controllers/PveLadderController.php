@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use TauriBay\EncounterMember;
 use TauriBay\Guild;
 use TauriBay\LadderCache;
+use TauriBay\MemberTop;
 use TauriBay\Realm;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Cache;
@@ -129,19 +130,19 @@ class PveLadderController extends Controller
 
                         $cacheKey = http_build_query($_request->all());
                         $cacheValue = Cache::get($cacheKey);
-                        if ( !$cacheValue ) {
+                        if ( true || !$cacheValue ) {
 
-                            $members = EncounterMember::where("encounter_members.encounter", "=", $encounterId)
-                                ->where("encounter_members.difficulty_id", "=", $difficultyId);
+                            $members = MemberTop::where("member_tops.encounter_id", "=", $encounterId)
+                                ->where("member_tops.difficulty_id", "=", $difficultyId);
 
                             if ($_request->has("spec_id") && $_request->get("spec_id") > 0) {
-                                $members = $members->where("encounter_members.spec", "=", $_request->get("spec_id"));
+                                $members = $members->where("member_tops.spec", "=", $_request->get("spec_id"));
                             }
                             else if ($_request->has("class_id") && $_request->get("class_id") > 0) {
-                                $members = $members->where("encounter_members.class", "=", $_request->get("class_id"));
+                                $members = $members->where("member_tops.class", "=", $_request->get("class_id"));
                             }
                             if ($_request->has("role_id") && $_request->get("role_id") > 0) {
-                                $members = $members->whereIn("encounter_members.spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
+                                $members = $members->whereIn("member_tops.spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
                             }
 
                             //  Realm filter
@@ -156,7 +157,7 @@ class PveLadderController extends Controller
                                 if ($_request->has('evermoon')) {
                                     array_push($realms, 2);
                                 }
-                                $members = $members->whereIn('encounter_members.realm_id', $realms);
+                                $members = $members->whereIn('member_tops.realm_id', $realms);
                             }
 
                             // Faction filter
@@ -171,39 +172,39 @@ class PveLadderController extends Controller
                                 if ($_request->has('ismeretlen')) {
                                     array_push($factions, 3);
                                 }
-                                $members = $members->whereIn('encounter_members.faction_id', $factions);
+                                $members = $members->whereIn('member_tops.faction_id', $factions);
                             }
 
-                            // Hack for fixing HPS and Durumu DPS
-                            if ($modeId == "hps" || ($modeId == "dps" && $encounterId == 1572)) {
-                                $members = $members->where("encounter_members.killtime", ">", 0)->where("encounter_members.killtime", ">", Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP);
-                            }
+                            $members = $members->orderBy($modeId,"desc");
+                            $members = $members->leftJoin("encounters", "encounters.id" , "=", "member_tops." . $modeId . "_encounter_id")
+                                ->select(array(
+                                    "member_tops.name as name",
+                                    "member_tops.class as class",
+                                    "member_tops.spec as spec",
+                                    "member_tops.dps as dps",
+                                    "member_tops.hps as hps",
+                                    "member_tops.faction_id as faction_id",
+                                    "encounters.guild_id as guild_id",
+                                    "member_tops.encounter_id as encounter_id",
+                                    "encounters.encounter_id as encounter",
+                                    "member_tops.realm_id as realm_id",
+                                    "encounters.fight_time as fight_time",
+                                    "encounters.killtime as killtime",
+                                    "member_tops.dps_ilvl as dps_ilvl",
+                                    "member_tops.hps_ilvl as hps_ilvl"
+                                ));
+                            $members = $members->paginate(16);
 
-
-
-
-                            $members = $members->orderBy($modeId,"desc")->get();
-
-                            $membersAdded = array();
-                            foreach ( $members as $key => $member )
+                            foreach ( $members as $member )
                             {
-                                $memberKey = $member->realm_id . "-"  . $member->name;
-                                if ( count($membersAdded) < 100 && !in_array($memberKey, $membersAdded) ) {
-                                    $membersAdded[] = $memberKey;
-                                    $encounter = Encounter::where("id", "=", $member->encounter_id)->first();
-                                    if ($encounter->guild_id !== 0) {
-                                        $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                        $member->guild_id = $encounter->guild_id;
+                                if ($member->guild_id !== 0) {
+                                    $guild = Guild::where("id", "=", $member->guild_id)->first();
+                                    if ( $guild !== null ) {
                                         $member->guild_name = $guild->name;
                                         $member->faction = $guild->faction;
                                     }
                                 }
-                                else
-                                {
-                                    $members->forget($key);
-                                }
                             }
-
 
                             $view = view("ladder/pve/ajax/members", compact(
                                 "modeId",

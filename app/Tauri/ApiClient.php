@@ -406,7 +406,7 @@ class ApiClient {
         {
             $this->request['params']['limit'] = $limit;
         }
-        return $this->communicate(true);
+        return $this->communicate();
     }
 
     public function getRaidPlayer($realm, $character)

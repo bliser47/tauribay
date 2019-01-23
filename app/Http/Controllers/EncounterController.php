@@ -16,6 +16,7 @@ use TauriBay\Tauri\Skada;
 use TauriBay\Tauri\CharacterClasses;
 use TauriBay\Guild;
 use TauriBay\Tauri\ApiClient;
+use Carbon\Carbon;
 
 
 class EncounterController extends Controller
@@ -102,19 +103,19 @@ class EncounterController extends Controller
 
     public function fixMissing(Request $_request)
     {
-        $api = new ApiClient();
         ini_set('max_execution_time', 0);
-        $encounters = Encounter::where("members_processed", "=" ,false)->get();
+        $members = EncounterMember::where('top_processed',0)->take(10000)->get();
         $fixed = 0;
-        foreach ( $encounters as $encounter )
+        foreach ( $members as $member )
         {
-            $anyMember = EncounterMember::where("encounter_id","=",$encounter->id)->first();
-            if ( $anyMember === null )
-            {
-                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                Encounter::updateEncounterMembers($api, $encounter, $guild);
-                ++$fixed;
+            $enc = Encounter::where("id","=",$member->encounter_id)->first();
+            $guild = null;
+            if ( $enc->guild_id ) {
+                $guild = Guild::where("id", "=",$enc->guild_id)->first();
             }
+            Encounter::refreshMemberTop($member, $guild);
+            $member->top_processed = 1;
+            $member->save();
         }
         return $fixed;
     }

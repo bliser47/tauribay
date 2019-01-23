@@ -8,14 +8,13 @@
         <th class="cellDesktop">{{ __("iLvL") }}</th>
         <th class="cellDesktop">{{ __("Idő") }}</th>
     </tr>
-    @php $nr = 1 @endphp
-    @foreach( $members as $member )
+    @foreach( $members as $index => $member )
         <tr>
             <td>
-                @if (  $nr < 4 )
-                    <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=4") }}"/>
+                @if (  (($members->currentPage()-1)*16)+$index < 3 )
+                    <img alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
                 @else
-                    <b>{{ $nr  }}</b>
+                    <b>{{ (($members->currentPage()-1)*16)+$index+1  }}</b>
                 @endif
             </td>
             <td class="topDpsSpecContainer">
@@ -34,13 +33,11 @@
             <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId], true) }}</a></td>
             <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
             <td class="cellDesktop">{{ date('M d, Y', $member["killtime"])}}</td>
-            <td class="cellDesktop">{{ $member["ilvl"] }}</td>
-            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"] }}</a></td>
+            <td class="cellDesktop">{{ $member[$modeId."_ilvl"] }}</td>
+            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"] / 1000 }}</a></td>
         </tr>
-        @php ++$nr @endphp
     @endforeach
 </table>
-{{--
 <div class="text-center paginator">
     <div class="divDesktop">
         {{ $members->appends(Illuminate\Support\Facades\Input::except('page')) }}
@@ -87,4 +84,3 @@
         </ul>
     </div>
 </div>
---}}
