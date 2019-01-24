@@ -20,7 +20,7 @@
         {!! Form::close() !!}
     </div>
 </div>
-<div id="encounter-form-response-{{ $modeId }}">
+<div id="encounter-form-response-{{ $modeId }}" class="encounter-form-response-mode">
     <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
     <div class="encounter-loading-container"></div>
 </div>

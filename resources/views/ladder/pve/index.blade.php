@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel table-responsive">
+            <div class="panel table-responsive nomargin">
                 <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
                 <div id="map-loading-container"></div>
             </div>
