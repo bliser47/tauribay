@@ -669,8 +669,16 @@ $(function()
                             selectContainer.html(classSpecsSelectHTML);
                             selectContainer.find(".selectpicker").selectpicker('refresh');
                             selectContainer.attr('disabled', false);
+                            $(selectContainer).change(function(){
+                                $(this).parent().submit();
+                            });
+                            $(selectContainer).parent().submit();
                         }
                     });
+                }
+                else
+                {
+                    $(this).parent().submit();
                 }
             }
         });
@@ -703,6 +711,10 @@ $(function()
                         selectContainer.html(roleClassesSelectHTML);
                         selectContainer.find(".selectpicker").selectpicker('refresh');
                         selectContainer.attr('disabled', false);
+                        $(selectContainer).change(function(){
+                            $(this).parent().submit();
+                        });
+                        $(selectContainer).parent().submit();
 
                         listenForClassChange(mode, currentRole);
                         UpdateTimes();
