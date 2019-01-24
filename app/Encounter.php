@@ -309,14 +309,14 @@ class Encounter extends Model
         {
             if ( $top !== null )
             {
-                if ( $top->dps < $member->dps )
-                {
-                    $top->dps = $member->dps;
-                    $top->dps_encounter_id = $member->encounter_id;
-                    $top->dps_ilvl = $member->ilvl;
-                    if ( $guild !== null )
-                    {
-                        $top->dps_guild_id = $guild->id;
+                if ( $member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP ) {
+                    if ($top->dps < $member->dps) {
+                        $top->dps = $member->dps;
+                        $top->dps_encounter_id = $member->encounter_id;
+                        $top->dps_ilvl = $member->ilvl;
+                        if ($guild !== null) {
+                            $top->dps_guild_id = $guild->id;
+                        }
                     }
                 }
                 if ( $member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
@@ -340,7 +340,7 @@ class Encounter extends Model
                 $top->difficulty_id = $member->difficulty_id;
                 $top->encounter_id = $member->encounter;
                 $top->faction_id = $member->faction_id;
-                if ( $member->spec !== EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP ) {
+                if ( $member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP ) {
                     $top->dps = $member->dps;
                     $top->dps_encounter_id = $member->encounter_id;
                     $top->dps_ilvl = $member->ilvl;
