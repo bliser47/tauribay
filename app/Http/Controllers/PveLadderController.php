@@ -224,14 +224,14 @@ class PveLadderController extends Controller
                     {
 
                         $classes = EncounterMember::getClasses();
-                        $classes[0] = __("Minden kaszt");
+                        $classes[0] = __("Mind");
                         $classId = 0;
                         $specs = array();
-                        $specs[0] = __("Minden spec");
+                        $specs[0] = __("Mind");
                         $specId = 0;
 
                         $roles = EncounterMember::getRoles();
-                        $roles[0] = __("Minden role");
+                        $roles[0] = __("Mind");
                         $roleId = 0;
 
                         $view = view("ladder/pve/ajax/hps_dps", compact(
@@ -328,8 +328,8 @@ class PveLadderController extends Controller
                 $modeId = Defaults::ENCOUNTER_SORT;
                 $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
 
-                $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
-                $encounters = Encounter::getMapEncounters($expansionId, $mapId);
+                $difficulties = Encounter::getMapDifficultiesShortForSelect($expansionId, $mapId, $encounterId);
+                $encounters = Encounter::getMapEncountersShort($expansionId, $mapId);
 
                 $view = view("ladder/pve/ajax/encounter", compact(
                     "modes",

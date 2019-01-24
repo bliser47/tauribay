@@ -18,17 +18,17 @@
     @endif
     <div class="encounter-body">
         {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
-        <div class="col-md-3">
+        <div class="col-md-3 col-xs-6">
             <div id="expansions-container" class="input-group col-md-12">
                 {!! Form::select('encounter_id', $encounters, Input::get('encounter_id', $encounterId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-xs-6">
             <div id="expansions-container" class="input-group col-md-12">
                 {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
             </div>
         </div>
-        <div class="col-md-3 pd-top-7">
+        <div class="col-md-3 col-xs-12 pd-top-7">
             <div class="input-group">
                 <div class="checkbox checkbox-inline checkbox-realm">
                     {!! Form::checkbox('tauri',2,Input::get('tauri'),array("id"=>"realm-tauri","class"=>"realm")) !!}
@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 pd-top-7">
+        <div class="col-md-3 col-xs-12 pd-top-7">
             <div class="input-group">
                 <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
                     {!! Form::checkbox('alliance',2,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
