@@ -11,10 +11,10 @@
     @foreach( $members as $index => $member )
         <tr>
             <td>
-                @if (  (($members->currentPage()-1)*16)+$index < 3 )
+                @if (  (($members->currentPage()-1)*15)+$index < 3 )
                     <img alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
                 @else
-                    <b>{{ (($members->currentPage()-1)*16)+$index+1  }}</b>
+                    <b>{{ (($members->currentPage()-1)*15)+$index+1  }}</b>
                 @endif
             </td>
             <td class="topDpsSpecContainer">

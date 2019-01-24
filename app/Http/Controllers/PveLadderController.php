@@ -193,7 +193,7 @@ class PveLadderController extends Controller
                                     "member_tops.dps_ilvl as dps_ilvl",
                                     "member_tops.hps_ilvl as hps_ilvl"
                                 ));
-                            $members = $members->paginate(16);
+                            $members = $members->paginate(15);
 
                             foreach ( $members as $member )
                             {
