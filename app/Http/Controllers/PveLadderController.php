@@ -133,7 +133,7 @@ class PveLadderController extends Controller
                         if ( true || !$cacheValue ) {
 
                             $members = MemberTop::where("member_tops.encounter_id", "=", $encounterId)
-                                ->where("member_tops.difficulty_id", "=", $difficultyId);
+                                ->where("member_tops.difficulty_id", "=", $difficultyId)->where($modeId,">",0);
 
                             if ($_request->has("spec_id") && $_request->get("spec_id") > 0) {
                                 $members = $members->where("member_tops.spec", "=", $_request->get("spec_id"));

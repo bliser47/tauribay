@@ -375,7 +375,7 @@ class Encounter extends Model
     {
         $topDpsMemberId = LadderCache::getTopDpsId($encounterId,$difficultyId);
         if ( $topDpsMemberId !== null ) {
-            return EncounterMember::where("id", "=", $topDpsMemberId)->first();
+            return MemberTop::where("id", "=", $topDpsMemberId)->first();
         }
         return null;
     }

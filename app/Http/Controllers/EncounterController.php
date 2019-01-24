@@ -107,6 +107,7 @@ class EncounterController extends Controller
         $members = EncounterMember::whereIn("encounter",Encounter::getMapEncountersIds(4,1098))->where('top_processed','=',0)->take(10000)->get();
         $encounters = array();
         $guilds = array();
+        $fixed = 0;
         foreach ( $members as $member )
         {
             $guild = null;
@@ -133,7 +134,8 @@ class EncounterController extends Controller
                 }
             }
             Encounter::refreshMemberTop($member, $guild);
+            ++$fixed;
         }
-        return "done";
+        return $fixed;
     }
 }
