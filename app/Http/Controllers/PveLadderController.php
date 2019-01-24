@@ -329,10 +329,12 @@ class PveLadderController extends Controller
                 $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
 
                 $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
+                $encounters = Encounter::getMapEncounters($expansionId, $mapId);
 
                 $view = view("ladder/pve/ajax/encounter", compact(
                     "modes",
                     "modeId",
+                    "encounters",
                     "encounterId",
                     "mapId",
                     "difficulties",

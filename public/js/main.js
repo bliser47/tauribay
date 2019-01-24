@@ -509,7 +509,7 @@ $(function()
             }
         });
     };
-    listenForMapChange();
+    //listenForMapChange();
 
     var loadEncounter = function()
     {
@@ -613,8 +613,10 @@ $(function()
 
                         $(tab).find(".encounter-subform-form").submit(function(e){
                             e.preventDefault();
-                            $("#encounterMemberFilter"+mode).collapse("hide");
                             loadEncounterMode(encounterId,1, mode, $(this).serialize());
+                        });
+                        $(tab).find(".encounter-subform-form select").change(function(){
+                            $(this).parent().submit();
                         });
 
                         listenForRoleChange(mode);
@@ -632,8 +634,10 @@ $(function()
     {
         $("#encounter-form").submit(function(e){
             e.preventDefault();
-            $("#encounterFilter").collapse("hide");
             loadEncounter();
+        });
+        $("#encounter-form input, #encounter-form checkbox, #encounter-form select").change(function(){
+            $("#encounter-form").submit();
         });
     };
 
@@ -791,30 +795,18 @@ $(function()
         var loader = $(".encounters_loading");
         loader.show();
         $("#pve-ladder-filter").attr("disabled",true);
+        var data = $(this).serializeArray();
+        var keys = ["difficulty_id","encounter_id"];
         if ( !firstSubmit ) {
-            $("#collapseOne").collapse("hide");
+            for (var k = 0; k < keys.length; ++k) {
+                data.forEach(function (value, i) {
+                    if (value["name"] === keys[k]) {
+                        data.splice(i, 1);
+                    }
+                });
+            }
         }
         firstSubmit = false;
-        var data = $(this).serializeArray();
-        var isEncounterZero = false;
-        var i;
-        for ( i = 0 ; i < data.length ; ++i )
-        {
-            if ( data[i]["name"] === "encounter_id" )
-            {
-                isEncounterZero = data[i]["value"] === "0";
-            }
-        }
-        if ( isEncounterZero )
-        {
-            for ( i = 0 ; i < data.length ; ++i )
-            {
-                if ( data[i]["name"] === "difficulty_id" )
-                {
-                    data.splice(i,1);
-                }
-            }
-        }
         data = $.param(data);
         $.ajax({
             type: "POST",
