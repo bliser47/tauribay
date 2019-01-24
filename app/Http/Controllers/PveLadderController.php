@@ -352,79 +352,99 @@ class PveLadderController extends Controller
             if ( $_request->has("difficulty_id"))
             {
 
-                $raidEncounters = array();
-                $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
-                foreach ($raids as $raid) {
-                    if ($raid["id"] == $mapId) {
-                        $raidEncounters = $raid["encounters"];
-                        break;
-                    }
-                }
+                $cacheKey = http_build_query($_request->all());
+                $cacheValue = Cache::get($cacheKey);
+                if (  !$cacheValue ) {
 
-                $difficultyId = $_request->get("difficulty_id");
-
-                $encounters = array();
-                foreach ($raidEncounters as $raidEncounter) {
-                    $encounterId = $raidEncounter["encounter_id"];
-                    $fastestEncounterId = LadderCache::getFastestEncounterId($encounterId, $difficultyId);
-                    $encounter = Encounter::where("id", "=", $fastestEncounterId)->first();
-                    if ($encounter !== null) {
-                        if ($encounter->guild_id !== 0) {
-                            $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                            $encounter->guild_name = $guild->name;
-                            $encounter->faction = $guild->faction;
+                    $raidEncounters = array();
+                    $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
+                    foreach ($raids as $raid) {
+                        if ($raid["id"] == $mapId) {
+                            $raidEncounters = $raid["encounters"];
+                            break;
                         }
-                        $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
-                        $encounters[] = $encounter;
                     }
+
+                    $difficultyId = $_request->get("difficulty_id");
+
+                    $encounters = array();
+                    foreach ($raidEncounters as $raidEncounter) {
+                        $encounterId = $raidEncounter["encounter_id"];
+                        $fastestEncounterId = LadderCache::getFastestEncounterId($encounterId, $difficultyId);
+                        $encounter = Encounter::where("id", "=", $fastestEncounterId)->first();
+                        if ($encounter !== null) {
+                            if ($encounter->guild_id !== 0) {
+                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                $encounter->guild_name = $guild->name;
+                                $encounter->faction = $guild->faction;
+                            }
+                            $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
+                            $encounters[] = $encounter;
+                        }
+                    }
+
+
+                    $view = view("ladder/pve/ajax/map_difficulty", compact(
+                        "encounters",
+                        "expansionId",
+                        "mapId",
+                        "difficultyId"));
+
+                    $cacheValue = $view->render();
+                    Cache::put($cacheKey, $cacheValue, 120); // 2 hours
                 }
 
-                $view = view("ladder/pve/ajax/map_difficulty", compact(
-                    "encounters",
-                    "expansionId",
-                    "mapId",
-                    "difficultyId"));
 
                 return json_encode(array(
-                    "view" => $view->render(),
+                    "view" => $cacheValue,
                     "url" => ""
                 ));
             }
             else
             {
 
-                $defaultDifficultyIndex = 0;
-                $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
-                $encounters = array();
-                $defaultDifficultyId = null;
-                $backUpDifficultyId = null;
-                foreach ($difficulties as $index => $difficulty) {
-                    $difficultyId = $difficulty["id"];
-                    $backUpDifficultyId = $difficultyId;
-                    if ($difficultyId == 5 && !$_request->has("default_difficulty_id") || $_request->get("default_difficulty_id") == $difficultyId ) {
-                        $defaultDifficultyIndex = $index;
-                        $defaultDifficultyId = $difficultyId;
+                $cacheKey = http_build_query($_request->all());
+                $cacheValue = Cache::get($cacheKey);
+                $cacheUrlValue = Cache::get($cacheKey."URL");
+                if (  !$cacheValue || !$cacheUrlValue ) {
+                    $defaultDifficultyIndex = 0;
+                    $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+                    $encounters = array();
+                    $defaultDifficultyId = null;
+                    $backUpDifficultyId = null;
+                    foreach ($difficulties as $index => $difficulty) {
+                        $difficultyId = $difficulty["id"];
+                        $backUpDifficultyId = $difficultyId;
+                        if ($difficultyId == 5 && !$_request->has("default_difficulty_id") || $_request->get("default_difficulty_id") == $difficultyId) {
+                            $defaultDifficultyIndex = $index;
+                            $defaultDifficultyId = $difficultyId;
+                        }
                     }
+                    if ($defaultDifficultyId == null) {
+                        $defaultDifficultyId = $backUpDifficultyId;
+                    }
+
+                    $maps = Encounter::getExpansionMaps($expansionId);
+
+
+                    $view = view("ladder/pve/ajax/map", compact("encounters",
+                        "difficulties",
+                        "defaultDifficultyIndex",
+                        "mapId",
+                        "maps",
+                        "expansionId"
+                    ));
+
+                    $cacheValue = $view->render();
+                    Cache::put($cacheKey, $cacheValue, 1200); // 20 hours
+
+                    $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$defaultDifficultyId]);
+                    Cache::put($cacheKey . "URL", $cacheUrlValue, 1200);
                 }
-                if ( $defaultDifficultyId == null )
-                {
-                    $defaultDifficultyId = $backUpDifficultyId;
-                }
-
-                $maps = Encounter::getExpansionMaps($expansionId);
-
-
-                $view = view("ladder/pve/ajax/map", compact("encounters",
-                    "difficulties",
-                    "defaultDifficultyIndex",
-                    "mapId",
-                    "maps",
-                    "expansionId"
-                ));
 
                 return json_encode(array(
-                    "view" => $view->render(),
-                    "url" => URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$defaultDifficultyId])
+                    "view" => $cacheValue,
+                    "url" => $cacheUrlValue
                 ));
             }
         }
