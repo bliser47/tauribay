@@ -104,18 +104,36 @@ class EncounterController extends Controller
     public function fixMissing(Request $_request)
     {
         ini_set('max_execution_time', 0);
-        $members = EncounterMember::where('top_processed',0)->take(10000)->get();
-        $fixed = 0;
+        $members = EncounterMember::whereIn("encounter",Encounter::getMapEncountersIds(4,1098))->where('top_processed','=',0)->take(10000)->get();
+        $encounters = array();
+        $guilds = array();
         foreach ( $members as $member )
         {
-            $enc = Encounter::where("id","=",$member->encounter_id)->first();
             $guild = null;
+            $enc = null;
+            if (  array_key_exists($member->encounter_id, $encounters) )
+            {
+                $enc = $encounters[$member->encounter_id];
+            }
+            else
+            {
+                $enc = Encounter::where("id","=",$member->encounter_id)->first();;
+                $encounters[$member->encounter_id] = $enc;
+            }
             if ( $enc->guild_id ) {
-                $guild = Guild::where("id", "=",$enc->guild_id)->first();
+                $guild =  null;
+                if ( array_key_exists($enc->guild_id, $guilds) )
+                {
+                    $guild = $guilds[$enc->guild_id];
+                }
+                else
+                {
+                    $guild = Guild::where("id", "=",$enc->guild_id)->first();
+                    $guilds[$enc->guild_id] = $guild;
+                }
             }
             Encounter::refreshMemberTop($member, $guild);
-            $member->save();
         }
-        return $fixed;
+        return "done";
     }
 }

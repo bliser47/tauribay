@@ -9,6 +9,7 @@ class Encounter extends Model
 {
     const HPS_INVALID_BEFORE_TIMESTAMP = 1546950226;
     const DURUMU_DMG_INVALID_BEFORE_TIMESTAMP = 1546950226;
+    const BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP = 1548201600;
     const INVALID_RAIDS = array(43718);
 
     const DIFFICULTY_NAME = array(
@@ -318,14 +319,14 @@ class Encounter extends Model
                         $top->dps_guild_id = $guild->id;
                     }
                 }
-                if ( $top->hps < $member->hps )
-                {
-                    $top->hps = $member->hps;
-                    $top->hps_encounter_id = $member->encounter_id;
-                    $top->hps_ilvl = $member->ilvl;
-                    if ( $guild !== null )
-                    {
-                        $top->hps_guild_id = $guild->id;
+                if ( $member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
+                    if ($top->hps < $member->hps) {
+                        $top->hps = $member->hps;
+                        $top->hps_encounter_id = $member->encounter_id;
+                        $top->hps_ilvl = $member->ilvl;
+                        if ($guild !== null) {
+                            $top->hps_guild_id = $guild->id;
+                        }
                     }
                 }
             }
@@ -339,23 +340,27 @@ class Encounter extends Model
                 $top->difficulty_id = $member->difficulty_id;
                 $top->encounter_id = $member->encounter;
                 $top->faction_id = $member->faction_id;
-                $top->dps = $member->dps;
-                $top->dps_encounter_id = $member->encounter_id;
-                $top->dps_ilvl = $member->ilvl;
-                $top->hps = $member->hps;
-                $top->hps_encounter_id = $member->encounter_id;
-                $top->hps_ilvl = $member->ilvl;
+                if ( $member->spec !== EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP ) {
+                    $top->dps = $member->dps;
+                    $top->dps_encounter_id = $member->encounter_id;
+                    $top->dps_ilvl = $member->ilvl;
+                }
+                if ( $member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
+                    $top->hps = $member->hps;
+                    $top->hps_encounter_id = $member->encounter_id;
+                    $top->hps_ilvl = $member->ilvl;
+                }
                 if ( $guild !== null )
                 {
                     $top->dps_guild_id = $guild->id;
                     $top->hps_guild_id = $guild->id;
                 }
             }
-
-            $member->top_processed = 1;
-            $member->save();
             $top->save();
         }
+
+        $member->top_processed = 1;
+        $member->save();
     }
 
     public static function getFastest($encounterId, $difficultyId)
@@ -465,6 +470,28 @@ class Encounter extends Model
                             continue;
                         }
                         $encounters[$encounter["encounter_id"]] = $encounter["encounter_name"];
+                    }
+                    return $encounters;
+                }
+            }
+        }
+        return array();
+    }
+
+
+    public static function getMapEncountersIds($_expansion_id, $_map_id)
+    {
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                if ( $raid["id"] == $_map_id )
+                {
+                    $encounters = array();
+                    foreach ( $raid["encounters"] as $encounter )
+                    {
+                        $encounters[] = $encounter["encounter_id"];
                     }
                     return $encounters;
                 }

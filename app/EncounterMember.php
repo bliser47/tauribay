@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class EncounterMember extends Model
 {
+    const SPEC_DRUID_BALALANCE = 102;
+
     const ROLES = array(
         1 => array(
             "name" => "Tank",
@@ -22,7 +24,7 @@ class EncounterMember extends Model
                 1,2,3,4,5,6,7,8,9,10,11
             ),
             "specs" => array(
-                71,72, 70, 253, 254, 255, 259, 260, 261, 258, 251, 252, 262, 263, 62, 63, 64, 265, 266, 267, 269, 102, 103
+                71,72, 70, 253, 254, 255, 259, 260, 261, 258, 251, 252, 262, 263, 62, 63, 64, 265, 266, 267, 269, self::SPEC_DRUID_BALALANCE, 103
             )
         ),
         3 => array(
@@ -120,7 +122,7 @@ class EncounterMember extends Model
         11 => array(
             "name" => "Druid",
             "specs" => array(
-                102 => "Balance",
+                self::SPEC_DRUID_BALALANCE => "Balance",
                 103 => "Feral",
                 104 => "Guardian",
                 105 => "Restoration",
