@@ -291,7 +291,7 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 }
 
 .nopadding {
-    padding:0px;
+    padding:0px !important;
 }
 
 .nomargin {
@@ -1184,17 +1184,40 @@ tbody tr:nth-child(odd){
     color:white;
 }
 
-.award-1
+#encounter-form
 {
-
+    display: table;
+    width: 100%;
+    padding:5px;
+    border-bottom:2px solid white;
 }
 
-.award-2
+.encounterMemberFilter
 {
-
+    background:#f5f5f5;
+    display: table;
+    width:100%;
+    padding:5px;
 }
 
-.award-3
+.encounterMemberFilter .col-xs-4
 {
+    padding-left:5px;
+    padding-right:5px;
+}
 
+.pd-top-7
+{
+    padding-top:7px;
+}
+
+#encounter-form .col-md-3, #encounter-form .col-xs-6
+{
+    padding-left:5px;
+    padding-right:5px;
+}
+
+.encounter-form-response-mode .encounters_loading
+{
+    min-height:388px;
 }
