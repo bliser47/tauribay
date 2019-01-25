@@ -130,7 +130,7 @@ class PveLadderController extends Controller
 
                         $cacheKey = http_build_query($_request->all());
                         $cacheValue = Cache::get($cacheKey);
-                        if ( true || !$cacheValue ) {
+                        if ( !$cacheValue ) {
 
                             $members = MemberTop::where("member_tops.encounter_id", "=", $encounterId)
                                 ->where("member_tops.difficulty_id", "=", $difficultyId)->where($modeId,">",0);
@@ -224,14 +224,14 @@ class PveLadderController extends Controller
                     {
 
                         $classes = EncounterMember::getClasses();
-                        $classes[0] = __("Mind");
+                        $classes[0] = __("Minden kaszt");
                         $classId = 0;
                         $specs = array();
-                        $specs[0] = __("Mind");
+                        $specs[0] = __("Minden spec");
                         $specId = 0;
 
                         $roles = EncounterMember::getRoles();
-                        $roles[0] = __("Mind");
+                        $roles[0] = __("Minden role");
                         $roleId = 0;
 
                         $view = view("ladder/pve/ajax/hps_dps", compact(
