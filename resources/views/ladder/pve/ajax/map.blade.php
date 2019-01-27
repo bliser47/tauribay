@@ -1,13 +1,9 @@
-@if ( $mapId == 1098 )
+@if ( $expansionId == 4 )
     <div class="bossName" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
 @else
-    <div class="bossName">
+    <div class="bossName" style="background-image:url('{{ URL::asset("img/maps/default.jpg") }}')">
 @endif
-    @if ( count($maps) > 1 )
-        {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz raidet")]); !!}
-    @else
-        <span> {{ \TauriBay\Encounter::getMapName($expansionId, $mapId) }}</span>
-    @endif
+    <span> {{ \TauriBay\Encounter::getMapName($expansionId, $mapId) }}</span>
 </div>
 <ul class="nav nav-tabs" role="tablist">
     @foreach ( $difficulties as $index => $difficulty )

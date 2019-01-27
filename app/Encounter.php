@@ -42,7 +42,10 @@ class Encounter extends Model
 
 
     const MAPS = array(
-        1098 => array(
+        1136 => array(
+            "name" => "Siege of Orgrimmar",
+            "id" => 1136
+        ), 1098 => array(
             "name" => "Throne of Thunder",
             "id" => 1098
         ),

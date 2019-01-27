@@ -338,7 +338,8 @@ class PveLadderController extends Controller
                     "encounterId",
                     "mapId",
                     "difficulties",
-                    "difficultyId"
+                    "difficultyId",
+                    "expansionId"
                 ));
 
                 return json_encode(array(
