@@ -140,7 +140,7 @@ class PveLadderController extends Controller
 
                         $cacheKey = http_build_query($_request->all());
                         $cacheValue = Cache::get($cacheKey);
-                        if ( true ||  !$cacheValue ) {
+                        if ( !$cacheValue ) {
 
                             $members = MemberTop::where("member_tops.encounter_id", "=", $encounterId)
                                 ->where("member_tops.difficulty_id", "=", $difficultyId)->where($modeId,">",0);
@@ -227,7 +227,7 @@ class PveLadderController extends Controller
                             ));
 
                             $cacheValue = $view->render();
-                            Cache::put($cacheKey, $cacheValue, 120); // 2 hours
+                            Cache::put($cacheKey, $cacheValue, 15); // 15 minutes
                         }
 
                         return json_encode(array(
