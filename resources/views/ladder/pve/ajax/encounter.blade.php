@@ -68,7 +68,7 @@
     </ul>
     <div class="tab-content">
         @foreach ( $modes as $modeKey => $modeName )
-            <div role="tabpanel" class="tab-pane {{  $modeKey == $modeId ? "active" : "" }}" id="mode-{{ $modeKey}}">
+            <div data-mode="{{ $modeKey }}" role="tabpanel" class="tab-pane {{  $modeKey == $modeId ? "active" : "" }}" id="mode-{{ $modeKey}}">
                 <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
                 <div data-mode="{{ $modeKey }}" class="encounter-mode-loading-container"></div>
             </div>

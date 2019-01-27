@@ -529,6 +529,7 @@ $(function()
                 response = $.parseJSON(response);
                 var newContainer = $("#map-loading-container");
                 $(newContainer).html(response["view"]);
+                $(".selectpicker").selectpicker();
                 prevState = window.location.href;
                 history.pushState(null, '', response["url"]);
                 listenForEncounterFormSubmit();
@@ -573,63 +574,110 @@ $(function()
         });
     };
 
+    var loadMode = function(pane, data)
+    {
+        var tab = $(pane);
+        var mode = $(pane).data("mode");
+
+        var storeData = data;
+        storeData += "&mode_id=" + mode;
+        var difficultyId = $("select[name='difficulty_id'] option:selected").val();
+        if (difficultyId) {
+            storeData += "&difficulty_id=" + difficultyId;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/ladder/pve",
+            data: storeData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (response) {
+
+                response = $.parseJSON(response);
+                $(tab).html(response["view"]);
+                $(".selectpicker").selectpicker();
+
+                if (mode === "dps" || mode === "hps") {
+
+                    var classVal = $(tab).find("#class").val();
+                    if (classVal === "0") {
+                        var specPicker = $(tab).find("#spec-container .selectpicker");
+                        specPicker.attr('disabled', true);
+                        specPicker.val(0);
+                        specPicker.selectpicker('refresh');
+                    }
+
+                    var encounterId = $("select[name='encounter_id'] option:selected").val();
+
+
+                    $(tab).find(".encounter-subform-form").submit(function (e) {
+                        e.preventDefault();
+                        loadEncounterMode(encounterId, 1, mode, $(this).serialize());
+                    });
+                    $(tab).find(".encounter-subform-form select").change(function () {
+                        $(this).parent().submit();
+                    });
+
+                    listenForRoleChange(mode);
+                    listenForClassChange(mode);
+
+                    loadEncounterMode(encounterId, 1, mode, $(tab).find(".encounter-subform-form").serialize());
+                }
+                UpdateTimes();
+            }
+        });
+    };
+
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
     var handleEncounterModes = function (container, data)
     {
-        $(container).find(".encounter-mode-loading-container").each(function(){
-            var tab = $(this).parent();
-            var mode = $(this).data("mode");
+        var modeSaved = getCookie("modeSaved");
+        if ( modeSaved !== "" )
+        {
+            $(".modePanel, .tab-pane").removeClass("active");
+            $("#modePanel" + modeSaved + ", #mode-" + modeSaved).addClass("active");
+        }
+        $(container).find(".tab-pane").each(function(){
 
-            var storeData = data;
-
-            storeData += "&mode_id=" + mode;
-            var difficultyId = $("select[name='difficulty_id'] option:selected").val();
-            if ( difficultyId ) {
-                storeData += "&difficulty_id=" + difficultyId;
+            var pane = $(this);
+            if ( $(pane).hasClass("active") ) {
+                loadMode(pane,data)
             }
-
-            $.ajax({
-                type: "POST",
-                url: URL_WEBSITE + "/ladder/pve",
-                data: storeData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (response) {
-
-                    response = $.parseJSON(response);
-                    $(tab).html(response["view"]);
-
-                    if ( mode === "dps" || mode === "hps" )
+            else
+            {
+                $("#modePanel" + $(pane).data("mode")).on("click",function(){
+                    setCookie("modeSaved",$(this).data("mode"));
+                    if ( !$(this).hasClass("loadingMode") )
                     {
-                        $(".selectpicker").selectpicker();
-
-                        var classVal =  $(tab).find("#class").val();
-                        if ( classVal === "0" ) {
-                            var specPicker = $(tab).find("#spec-container .selectpicker");
-                            specPicker.attr('disabled', true);
-                            specPicker.val(0);
-                            specPicker.selectpicker('refresh');
-                        }
-
-                        var encounterId = $("select[name='encounter_id'] option:selected").val();
-
-
-                        $(tab).find(".encounter-subform-form").submit(function(e){
-                            e.preventDefault();
-                            loadEncounterMode(encounterId,1, mode, $(this).serialize());
-                        });
-                        $(tab).find(".encounter-subform-form select").change(function(){
-                            $(this).parent().submit();
-                        });
-
-                        listenForRoleChange(mode);
-                        listenForClassChange(mode);
-
-                        loadEncounterMode(encounterId,1,mode,$(tab).find(".encounter-subform-form").serialize());
+                        $(this).addClass("loadingMode");
+                        loadMode(pane,data);
                     }
-                    UpdateTimes();
-                }
-            });
+                })
+            }
         });
     };
 
@@ -823,6 +871,7 @@ $(function()
         }
         firstSubmit = false;
         data = $.param(data);
+        setCookie("modeSaved","");
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",

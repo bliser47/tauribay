@@ -105,7 +105,7 @@ class EncounterController extends Controller
     public function fixMissing(Request $_request)
     {
         ini_set('max_execution_time', 0);
-        $members = EncounterMember::whereIn("encounter",Encounter::getMapEncountersIds(4,1098))->where('top_processed','<>',1)->take(20000)->get();
+        $members = EncounterMember::where('top_processed','<>',1)->take(20000)->get();
         $encounters = array();
         $guilds = array();
         $fixed = 0;

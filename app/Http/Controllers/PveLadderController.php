@@ -101,7 +101,6 @@ class PveLadderController extends Controller
             if ( $_request->has("mode_id") )
             {
                 $modeId = $_request->get("mode_id");
-                $_request->session()->put('modeId', $modeId);
 
                 $defaultDifficulty = Defaults::DIFFICULTY_ID;
                 if ( !$_request->has("difficulty_id") ) {
@@ -342,7 +341,7 @@ class PveLadderController extends Controller
                     "dps" => "DPS",
                     "hps" => "HPS"
                 );
-                $modeId = $_request->session()->get("modeId",Defaults::ENCOUNTER_SORT);
+                $modeId = Defaults::ENCOUNTER_SORT;
                 $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
 
                 $difficulties = Encounter::getMapDifficultiesShortForSelect($expansionId, $mapId, $encounterId);
