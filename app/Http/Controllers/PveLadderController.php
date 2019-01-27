@@ -70,9 +70,13 @@ class PveLadderController extends Controller
             $_encounter_name_short
         );
 
-        $_request->session()->put('roleId', 0);
-        $_request->session()->put('classId', 0);
-        $_request->session()->put('specId', 0);
+        $_request->session()->put('dps-roleId', 0);
+        $_request->session()->put('dps-classId', 0);
+        $_request->session()->put('dps-specId', 0);
+
+        $_request->session()->put('hps-roleId', 0);
+        $_request->session()->put('hps-classId', 0);
+        $_request->session()->put('hps-specId', 0);
 
 
         $_request->request->add(array(
@@ -142,17 +146,17 @@ class PveLadderController extends Controller
 
                             if ($_request->has("spec_id") && $_request->get("spec_id") > 0) {
                                 $members = $members->where("member_tops.spec", "=", $_request->get("spec_id"));
-                                $_request->session()->put('specId', $_request->get("spec_id"));
-                                $_request->session()->put('classId', $_request->get("class_id"));
+                                $_request->session()->put($modeId.'-specId', $_request->get("spec_id"));
+                                $_request->session()->put($modeId.'-classId', $_request->get("class_id"));
                             }
                             else if ($_request->has("class_id") && $_request->get("class_id") > 0) {
                                 $members = $members->where("member_tops.class", "=", $_request->get("class_id"));
-                                $_request->session()->put('classId', $_request->get("class_id"));
-                                $_request->session()->put('specId', 0);
+                                $_request->session()->put($modeId.'-classId', $_request->get("class_id"));
+                                $_request->session()->put($modeId.'-specId', 0);
                             }
                             if ($_request->has("role_id") && $_request->get("role_id") > 0) {
                                 $members = $members->whereIn("member_tops.spec", EncounterMember::getRoleSpecs($_request->get("role_id")));
-                                $_request->session()->put('roleId', $_request->get("role_id"));
+                                $_request->session()->put($modeId.'-roleId', $_request->get("role_id"));
                             }
 
                             //  Realm filter
@@ -232,25 +236,22 @@ class PveLadderController extends Controller
                     }
                     else
                     {
-
-
-
                         $roles = EncounterMember::getRoles();
                         $roles[0] = __("Minden role");
-                        $roleId = $_request->session()->get("roleId", 0);
+                        $roleId = $_request->session()->get($modeId."-roleId", 0);
 
                         $classes = $roleId == 0 ? EncounterMember::getClasses() : EncounterMember::getRoleClasses($roleId);
                         $classes[0] = __("Minden kaszt");
-                        $classId = $_request->session()->get("classId", 0);
+                        $classId = $_request->session()->get($modeId."-classId", 0);
 
-                        $specId = $_request->session()->get("specId", 0);
+                        $specId = $_request->session()->get($modeId."-specId", 0);
                         $specs = $classId == 0 ? array() : ($roleId == 0 ? EncounterMember::getSpecs($classId) : EncounterMember::getRoleClassSpecs($roleId, $classId));
                         $specs[0] = __("Minden spec");
 
 
                         $view = view("ladder/pve/ajax/hps_dps", compact(
-                            "classes",
                             "modeId",
+                            "classes",
                             "specs",
                             "classId",
                             "specId",
