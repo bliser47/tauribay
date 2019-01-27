@@ -23,12 +23,12 @@
                         <input type="hidden" name="encounter_id" value="{{ $encounterId }}"/>
                         <div class="col-sm-4 col-md-4 col-sm-nopadding">
                             <div id="expansions-container" class="input-group col-md-12">
-                                {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz kieget")]); !!}
+                                {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4 col-sm-nopadding">
                             <div id="maps-container" class="input-group col-md-12">
-                                {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz raidet")]); !!}
+                                {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large"]); !!}
                             </div>
                         </div>
                         <div class="col-md-4 nomargin col-sm-nopadding">
