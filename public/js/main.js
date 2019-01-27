@@ -603,10 +603,13 @@ $(function()
                     {
                         $(".selectpicker").selectpicker();
 
-                        var specPicker = $("#spec-container").find(".selectpicker");
-                        specPicker.attr('disabled', true);
-                        specPicker.val(0);
-                        specPicker.selectpicker('refresh');
+                        var classVal =  $(tab).find("#class").val();
+                        if ( classVal === "0" ) {
+                            var specPicker = $(tab).find("#spec-container .selectpicker");
+                            specPicker.attr('disabled', true);
+                            specPicker.val(0);
+                            specPicker.selectpicker('refresh');
+                        }
 
                         var encounterId = $("select[name='encounter_id'] option:selected").val();
 
