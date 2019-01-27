@@ -305,8 +305,8 @@ class Encounter extends Model
 
     public static function refreshMemberTop($member, $guild)
     {
-        $top = MemberTop::where("encounter_id",$member->encounter)->where("difficulty_id",$member->difficulty_id)->where("realm_id", $member->realm_id)
-            ->where("name",$member->name)->where("class",$member->class)->where("spec", $member->spec)->first();
+        $top = MemberTop::where("name",$member->name)->where("realm_id",$member->realm_id)->where("encounter_id", $member->encounter)
+            ->where("difficulty_id",$member->difficulty_id)->where("spec", $member->spec)->first();
 
         if ( $top !== null )
         {
