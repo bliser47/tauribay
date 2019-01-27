@@ -19,6 +19,7 @@ use TauriBay\Realm;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 
 class PveLadderController extends Controller
 {
@@ -138,7 +139,7 @@ class PveLadderController extends Controller
                     if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
 
-                        $cacheKey = http_build_query($_request->all());
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                         $cacheValue = Cache::get($cacheKey);
                         if ( !$cacheValue ) {
 
@@ -371,7 +372,7 @@ class PveLadderController extends Controller
             if ( $_request->has("difficulty_id"))
             {
 
-                $cacheKey = http_build_query($_request->all());
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                 $cacheValue = Cache::get($cacheKey);
                 if (  !$cacheValue ) {
 
@@ -422,7 +423,7 @@ class PveLadderController extends Controller
             else
             {
 
-                $cacheKey = http_build_query($_request->all());
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
