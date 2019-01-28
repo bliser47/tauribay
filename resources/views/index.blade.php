@@ -5,6 +5,37 @@
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
+                        <img class="media-object" src="img/cms/news/fix_ladder.jpg" alt="PVE Ladder">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-header">
+                            <h3 class="media-heading"> {{ __("Újítások") }} </h3>
+                            <p class="text-left text-italic">
+                                {{ __("írta") }} <span class="warlock">Bliser</span> 2019.01.28
+                            </p>
+                        </div>
+                    </div>
+                    <div class="media-content">
+                        <p class="nomargin">
+                        <p>
+                            {{ __("Az útóbbi hónapban egyre többen látogatjátok az oldalt és hetente ugyancsak növekszik a raidekről való adatmennyiség. Ennek én csak örülni tudok de a webszerver nem :D.") }}
+                        </p>
+                        <p>
+                            {{ __("Emiatt az utóbbi hónapban a PVE ladder optimalizálásával foglalkoztam nagyrészt és átrendeztem a keresési rendszer működését is. Remélem sokkal könnyebb és kellemesebb lesz haszálni majd!") }}
+                        </p>
+                        <p>
+                            {{ __("Egyéb hírekben: Chris megírta a supportot, hogy WoDról és Evermoonról is érkezzenek trade/world/global üzenetek így most a Hirdetések oldalon onnan jövő hirdetéseket is találtok majd. Valamint sikerült visszaraknom a Raid hirdetés keresőt, de evel még sok sok munka van még hátra!") }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 blog-main">
+            <div class="well nomargin">
+                <div class="media">
+                    <a class="pull-left" href="#">
                         <img class="media-object" src="img/cms/news/dps_rankings.jpg" alt="Új encounter adatok">
                     </a>
                     <div class="media-body">
@@ -56,60 +87,6 @@
                         </ul>
                         <p class="nomargin">
                             {{ __("Hamarosan a progress oldal sokkal több statisztikával bővűl!") }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 blog-main">
-            <div class="well nomargin">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="img/cms/news/ujitas_az_oldalon.jpg" alt="Újítások az oldalon">
-                    </a>
-                    <div class="media-body">
-                        <div class="media-header">
-                            <h3 class="media-heading"> {{ __("Újítások") }} </h3>
-                            <p class="text-left text-italic">
-                                {{ __("írta") }} <span class="warlock">Bliser</span> 2018.08.10
-                            </p>
-                        </div>
-                    </div>
-                    <div class="media-content">
-                        <p>
-                            {{ __("Újra nekiláttam az oldal fejlesztésének. Legútóbbi újítások:") }}
-                        </p>
-                        <ul class="nomargin">
-                            <li> {{ __("Új zöld design") }} </li>
-                            <li> {{ __("ItemLevel oldal frissítés") }} </li>
-                            <li> {{ __("Aug. 30") }} {{ __(": Manuális iLvl frissítés!") }} </li>
-                            <li> <b> {{ __("Szept. 6") }} </b> {{ __(": Manuális iLvl frissítés fixed") }} </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 blog-main">
-            <div class="well nomargin">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="img/cms/news/udovozollek_a_tauri_bayen.jpg" alt="Üdvözöllek a TauriBayen">
-                    </a>
-                    <div class="media-body">
-                        <div class="media-header">
-                            <h3 class="media-heading"> {{ __("Üdvözöllek a TauriBayen") }} </h3>
-                            <p class="text-left text-italic">
-                                {{ __("írta") }} <span class="warlock">Bliser</span> 2018.02.09
-                            </p>
-                        </div>
-                    </div>
-                    <div class="media-content">
-                        <p class="nomargin">
-                            {{ __("Sziasztok! Végre újra fut az oldal és egyenlőre a karakter hirdetésekben tudtok keresgélni. Az elkövetkező hetekben megírom a GDKP, a Kredit és a Guild hirdetések felismerését is amit a kézzel felvihető hirdetések lehetősége követ a regisztrált felhasználóknak.") }}
                         </p>
                     </div>
                 </div>

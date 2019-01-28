@@ -156,5 +156,11 @@
   "Legközelebb még több feature várható!" : "More features to come next time!",
   "Új" : "New",
   "Szervezés" : "Create",
-  "Csatlakozás" : "Join"
+  "Csatlakozás" : "Join",
+  "Az útóbbi hónapban egyre többen látogatjátok az oldalt és hetente ugyancsak növekszik a raidekről való adatmennyiség. Ennek én csak örülni tudok de a webszerver nem :D."
+          : "For the past few weeks the amount of visitors has been increasing, as has the data from encounters! While this makes ME happy, the webserver was under a lot of load.",
+  "Emiatt az utóbbi hónapban a PVE ladder optimalizálásával foglalkoztam nagyrészt és átrendeztem a keresési rendszer működését is. Remélem sokkal könnyebb és kellemesebb lesz haszálni majd!"
+          : "Thus most of my time has been taken up by optimizing the PVE ladder page and reworking how the filter/search works. I hope the user experience has been increased and you enjoy it!",
+  "Egyéb hírekben: Chris megírta a supportot, hogy WoDról és Evermoonról is érkezzenek trade/world/global üzenetek így most a Hirdetések oldalon onnan jövő hirdetéseket is találtok majd. Valamint sikerült visszaraknom a Raid hirdetés keresőt, de evel még sok sok munka van még hátra!":
+          "In other news: Chris implemented support so that in-game messages from world/global/trade chat now also get sent from Evermoon and WoD, hence you can now see them on the Trade page. I have also re-added the Raid trade page, but there is a lot of work left to be done on it!"
 }
