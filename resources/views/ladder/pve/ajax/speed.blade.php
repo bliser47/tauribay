@@ -9,7 +9,7 @@
     @foreach( $encounters as $encounter )
         <tr>
             <td>
-                @if ( $modeId == "speed" && $nr < 4 )
+                @if ( $nr < 4 )
                     <img alt="" src="{{  URL::asset("img/award_small/" . $nr . ".png?v=4") }}"/>
                 @else
                     <b>{{ $nr }}</b>

@@ -574,13 +574,19 @@ $(function()
         });
     };
 
-    var loadMode = function(pane, data)
+    var loadMode = function(pane, data, page)
     {
         var tab = $(pane);
+        $(tab).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
+
         var mode = $(pane).data("mode");
 
         var storeData = data;
         storeData += "&mode_id=" + mode;
+        if ( page !== null )
+        {
+            storeData += "&page=" + page;
+        }
         var difficultyId = $("select[name='difficulty_id'] option:selected").val();
         if (difficultyId) {
             storeData += "&difficulty_id=" + difficultyId;
@@ -624,6 +630,16 @@ $(function()
                     listenForClassChange(mode);
 
                     loadEncounterMode(encounterId, 1, mode, $(tab).find(".encounter-subform-form").serialize());
+                }
+                else
+                {
+                    $(tab).find(".pagination a").click(function(e)
+                    {
+                        e.preventDefault();
+                        var url = new URL($(this).attr("href"));
+                        var page = url.searchParams.get("page");
+                        loadMode(pane, data, page);
+                    });
                 }
                 UpdateTimes();
             }

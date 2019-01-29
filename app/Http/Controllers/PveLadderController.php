@@ -298,27 +298,31 @@ class PveLadderController extends Controller
                         if ($_request->has('ismeretlen')) {
                             array_push($factions, 3);
                         }
+                        $encounters = $encounters->where("guild_id","<>",0);
                     }
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
 
-                    $encounters = $encounters->orderBy($order, $order2)->get();
+                    $encounters = $encounters->orderBy($order, $order2);
+                    if ( $modeId == "speed" ) {
+                        $encounters = $encounters->get();
+                    }
+                    else {
+                        $encounters = $encounters->paginate(10);
+                    }
 
                     $guildAdded = array();
                     foreach ($encounters as $key => $encounter) {
                         if ($encounter->guild_id !== 0) {
-                            if ( !in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent" )
-                            {
+                            if (!in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent") {
                                 $guildAdded[] = $encounter->guild_id;
                                 $guild = Guild::where("id", "=", $encounter->guild_id)->first();
                                 $encounter->guild_name = $guild->name;
                                 $encounter->faction = $guild->faction;
                                 if (count($factions) && !in_array($encounter->faction, $factions)) {
-                                    $encounters->forget($key);
+                                    //$encounters->forget($key);
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 $encounters->forget($key);
                             }
                         } else if (count($factions)) {
@@ -326,7 +330,7 @@ class PveLadderController extends Controller
                         }
                     }
 
-                    $view = view("ladder/pve/ajax/rescent_speed", compact("encounters", "modeId"));
+                    $view = view("ladder/pve/ajax/" . $modeId, compact("encounters", "modeId"));
 
                     return json_encode(array(
                         "view" => $view->render(),

@@ -23,7 +23,10 @@ class Skada
                 $x_parts = array('k', 'm', 'b', 't');
                 $x_count_parts = count($x_array) - 1;
                 $x_display = $x_array[0] . (count($x_array) > 1 ? ((int)$x_array[1][0] !== 0 ? '.' . $x_array[1][0] : '') : '');
-                $x_display .= $x_parts[$x_count_parts - 1];
+                if ( array_key_exists($x_count_parts - 1, $x_parts))
+                {
+                    $x_display .= $x_parts[$x_count_parts - 1];
+                }
                 return $x_display;
             }
             return $x_number_format;
