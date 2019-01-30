@@ -36,3 +36,49 @@
         @php ++$nr @endphp
     @endforeach
 </table>
+<div class="text-center paginator">
+    <div class="divDesktop">
+        {{ $encounters->appends(Illuminate\Support\Facades\Input::except('page')) }}
+    </div>
+    <div class="divMobile">
+        <ul class="pagination pagination-sm">
+            @if ($encounters->onFirstPage())
+                <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            @else
+                <li class="page-item"><a class="page-link" href="{{ $encounters->previousPageUrl() }}" rel="prev">&laquo;</a></li>
+            @endif
+
+            @if($encounters->currentPage() > 3)
+                <li class="page-item hidden-xs"><a class="page-link" href="{{ $encounters->url(1) }}">1</a></li>
+            @endif
+
+            @if($encounters->currentPage() > 4)
+                <li class="page-item disabled hidden-xs"><span class="page-link">...</span></li>
+            @endif
+
+            @foreach(range(1, $encounters->lastPage()) as $i)
+                @if($i >= $encounters->currentPage() - 2 && $i <= $encounters->currentPage() + 2)
+                    @if ($i == $encounters->currentPage())
+                        <li class="page-item active"><span class="page-link">{{ $i }}</span></li>
+                    @else
+                        <li class="page-item" ><a class="page-link" href="{{ $encounters->url($i) }}">{{ $i }}</a></li>
+                    @endif
+                @endif
+            @endforeach
+
+            @if($encounters->currentPage() < $encounters->lastPage() - 3)
+                <li class="page-item disabled hidden-xs"><span class="page-link">...</span></li>
+            @endif
+
+            @if($encounters->currentPage() < $encounters->lastPage() - 2)
+                <li class="page-item hidden-xs"><a class="page-link" href="{{ $encounters->url($encounters->lastPage()) }}">{{ $encounters->lastPage() }}</a></li>
+            @endif
+
+            @if ($encounters->hasMorePages())
+                <li class="page-item"><a class="page-link" href="{{ $encounters->nextPageUrl() }}" rel="next">&raquo;</a></li>
+            @else
+                <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            @endif
+        </ul>
+    </div>
+</div>

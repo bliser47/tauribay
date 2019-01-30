@@ -296,37 +296,16 @@ class PveLadderController extends Controller
                             array_push($factions, 1);
                         }
                         $encounters = $encounters->where("guild_id","<>",0);
-                        $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id');
                         $encounters->whereIn('faction', $factions);
                     }
+
+                    $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id');
+
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
 
                     $encounters = $encounters->orderBy($order, $order2);
-                    if ( $modeId == "speed" ) {
-                        $encounters = $encounters->get();
-                    }
-                    else {
-                        $encounters = $encounters->paginate(10);
-                    }
-
-                    if ( !count($factions) ) {
-                        $guildAdded = array();
-                        foreach ($encounters as $key => $encounter) {
-                            if ($encounter->guild_id !== 0) {
-                                if (!in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent") {
-                                    $guildAdded[] = $encounter->guild_id;
-                                    $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                    $encounter->name = $guild->name;
-                                    $encounter->faction = $guild->faction;
-                                } else {
-                                    $encounters->forget($key);
-                                }
-                            } else if (count($factions)) {
-                                $encounters->forget($key);
-                            }
-                        }
-                    }
+                    $encounters = $encounters->paginate(10);
 
                     $view = view("ladder/pve/ajax/" . $modeId, compact("encounters", "modeId"));
 
