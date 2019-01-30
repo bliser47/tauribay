@@ -303,7 +303,7 @@ class PveLadderController extends Controller
                             $encounters->whereIn('faction', $factions);
                         }
 
-                        $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id');
+                        $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
 
                         $order = $modeId == "rescent" ? "killtime" : "fight_time";
                         $order2 = $modeId == "rescent" ? "desc" : "asc";
