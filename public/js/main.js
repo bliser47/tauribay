@@ -681,7 +681,7 @@ $(function()
 
             var pane = $(this);
             if ( $(pane).hasClass("active") ) {
-                loadMode(pane,data)
+                loadMode(pane,data, 1)
             }
             else
             {
@@ -690,7 +690,7 @@ $(function()
                     if ( !$(this).hasClass("loadingMode") )
                     {
                         $(this).addClass("loadingMode");
-                        loadMode(pane,data);
+                        loadMode(pane,data, 1);
                     }
                 })
             }
