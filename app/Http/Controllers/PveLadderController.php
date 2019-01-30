@@ -295,10 +295,9 @@ class PveLadderController extends Controller
                         if ($_request->has('horde')) {
                             array_push($factions, 1);
                         }
-                        if ($_request->has('ismeretlen')) {
-                            array_push($factions, 3);
-                        }
                         $encounters = $encounters->where("guild_id","<>",0);
+                        $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id');
+                        $encounters->whereIn('faction', $factions);
                     }
                     $order = $modeId == "rescent" ? "killtime" : "fight_time";
                     $order2 = $modeId == "rescent" ? "desc" : "asc";
@@ -311,22 +310,21 @@ class PveLadderController extends Controller
                         $encounters = $encounters->paginate(10);
                     }
 
-                    $guildAdded = array();
-                    foreach ($encounters as $key => $encounter) {
-                        if ($encounter->guild_id !== 0) {
-                            if (!in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent") {
-                                $guildAdded[] = $encounter->guild_id;
-                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                $encounter->guild_name = $guild->name;
-                                $encounter->faction = $guild->faction;
-                                if (count($factions) && !in_array($encounter->faction, $factions)) {
-                                    //$encounters->forget($key);
+                    if ( !count($factions) ) {
+                        $guildAdded = array();
+                        foreach ($encounters as $key => $encounter) {
+                            if ($encounter->guild_id !== 0) {
+                                if (!in_array($encounter->guild_id, $guildAdded) || $modeId == "rescent") {
+                                    $guildAdded[] = $encounter->guild_id;
+                                    $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                    $encounter->name = $guild->name;
+                                    $encounter->faction = $guild->faction;
+                                } else {
+                                    $encounters->forget($key);
                                 }
-                            } else {
+                            } else if (count($factions)) {
                                 $encounters->forget($key);
                             }
-                        } else if (count($factions)) {
-                            $encounters->forget($key);
                         }
                     }
 

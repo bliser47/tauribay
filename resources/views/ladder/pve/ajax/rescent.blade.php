@@ -10,15 +10,15 @@
         <tr>
             <td><b>{{ (($encounters->currentPage()-1)*10)+$nr  }}</b></td>
             <td class="cellDesktop faction-{{ $encounter["faction"] }}">
-                @if ( strlen($encounter["guild_name"]) )
-                    <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["guild_name"] }} </a>
+                @if ( strlen($encounter["name"]) )
+                    <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["name"] }} </a>
                 @else
                     Random
                 @endif
             </td>
             <td class="cellMobile faction-{{ $encounter["faction"] }}">
-                @if ( strlen($encounter["guild_name"]) )
-                    <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ \TauriBay\Guild::getShortName($encounter["guild_name"]) }} </a>
+                @if ( strlen($encounter["name"]) )
+                    <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ \TauriBay\Guild::getShortName($encounter["name"]) }} </a>
                 @else
                     Random
                 @endif
