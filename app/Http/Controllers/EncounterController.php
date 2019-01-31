@@ -111,8 +111,8 @@ class EncounterController extends Controller
         $guilds = array();
         foreach ( $encounters as $encounter )
         {
+            $guild =  null;
             if ( $encounter->guild_id ) {
-                $guild =  null;
                 if ( array_key_exists($encounter->guild_id, $guilds) )
                 {
                     $guild = $guilds[$encounter->guild_id];
