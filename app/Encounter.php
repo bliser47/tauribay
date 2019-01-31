@@ -234,6 +234,7 @@ class Encounter extends Model
                 $encounter->item_count = $_data["item_count"];
                 $encounter->save();
 
+                self::refreshEncounterTop($encounter, $guild);
                 self::updateEncounterMembers($api, $encounter, $guild);
 
                 $result["result"] = true;
@@ -301,6 +302,41 @@ class Encounter extends Model
             $encounter->members_processed = true;
             $encounter->save();
         }
+    }
+
+    public static function refreshEncounterTop($encounter, $guild)
+    {
+        $guildId = $guild !== null ? $guild->id : 0;
+
+        $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
+            ->where("difficulty_id",$encounter->difficulty_id)->where("guild_id", $guildId)->first();
+
+
+        if ( $top !== null )
+        {
+            if ( $top->fastest_encounter_time > $encounter->fight_time  ) {
+                $top->fastest_encounter_id = $encounter->id;
+                $top->fastest_encounter_time = $encounter->fight_time;
+                $top->fastest_encounter_date = $encounter->killtime;
+            }
+        }
+        else
+        {
+
+            $top = new EncounterTop();
+            $top->realm_id = $encounter->realm_id;
+            $top->encounter_id = $encounter->encounter_id;
+            $top->difficulty_id = $encounter->difficulty_id;
+            $top->guild_id = $guildId;
+            $top->fastest_encounter_id = $encounter->id;
+            $top->fastest_encounter_time = $encounter->fight_time;
+            $top->fastest_encounter_date = $encounter->killtime;
+        }
+
+        $top->save();
+
+        $encounter->top_processed = 1;
+        $encounter->save();
     }
 
     public static function refreshMemberTop($member, $guild)

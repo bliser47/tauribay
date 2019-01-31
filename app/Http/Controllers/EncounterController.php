@@ -10,6 +10,7 @@ namespace TauriBay\Http\Controllers;
 
 use Illuminate\Http\Request;
 use TauriBay\EncounterMember;
+use TauriBay\EncounterTop;
 use TauriBay\Realm;
 use TauriBay\Encounter;
 use TauriBay\Tauri\Skada;
@@ -105,36 +106,24 @@ class EncounterController extends Controller
     public function fixMissing(Request $_request)
     {
         ini_set('max_execution_time', 0);
-        $members = EncounterMember::where('top_processed','<>',1)->take(20000)->get();
-        $encounters = array();
-        $guilds = array();
+        $encounters = Encounter::where('top_processed','<>',1)->take(20000)->get();
         $fixed = 0;
-        foreach ( $members as $member )
+        $guilds = array();
+        foreach ( $encounters as $encounter )
         {
-            $guild = null;
-            $enc = null;
-            if (  array_key_exists($member->encounter_id, $encounters) )
-            {
-                $enc = $encounters[$member->encounter_id];
-            }
-            else
-            {
-                $enc = Encounter::where("id","=",$member->encounter_id)->first();;
-                $encounters[$member->encounter_id] = $enc;
-            }
-            if ( $enc->guild_id ) {
+            if ( $encounter->guild_id ) {
                 $guild =  null;
-                if ( array_key_exists($enc->guild_id, $guilds) )
+                if ( array_key_exists($encounter->guild_id, $guilds) )
                 {
-                    $guild = $guilds[$enc->guild_id];
+                    $guild = $guilds[$encounter->guild_id];
                 }
                 else
                 {
-                    $guild = Guild::where("id", "=",$enc->guild_id)->first();
-                    $guilds[$enc->guild_id] = $guild;
+                    $guild = Guild::where("id", "=",$encounter->guild_id)->first();
+                    $guilds[$encounter->guild_id] = $guild;
                 }
             }
-            Encounter::refreshMemberTop($member, $guild);
+            Encounter::refreshEncounterTop($encounter, $guild);
             ++$fixed;
         }
         return $fixed;

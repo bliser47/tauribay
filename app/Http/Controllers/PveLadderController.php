@@ -12,6 +12,7 @@ use TauriBay\Defaults;
 use TauriBay\Encounter;
 use Illuminate\Http\Request;
 use TauriBay\EncounterMember;
+use TauriBay\EncounterTop;
 use TauriBay\Guild;
 use TauriBay\LadderCache;
 use TauriBay\MemberTop;
@@ -267,7 +268,7 @@ class PveLadderController extends Controller
                         ));
                     }
                 }
-                else if ( $modeId == "rescent" || $modeId == "speed")
+                else if ( $modeId == "rescent" )
                 {
                     $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                     $cacheValue = Cache::get($cacheKey);
@@ -304,17 +305,63 @@ class PveLadderController extends Controller
                         }
 
                         $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
-
-                        $order = $modeId == "rescent" ? "killtime" : "fight_time";
-                        $order2 = $modeId == "rescent" ? "desc" : "asc";
-
-                        $encounters = $encounters->orderBy($order, $order2);
+                        $encounters = $encounters->orderBy("killtime", "desc");
                         $encounters = $encounters->paginate(10);
 
-                        $view = view("ladder/pve/ajax/" . $modeId, compact("encounters", "modeId"));
+                        $view = view("ladder/pve/ajax/rescent", compact("encounters", "modeId"));
 
                         $cacheValue = $view->render();
-                        Cache::put($cacheKey, $cacheValue, $modeId == "rescent" ? 10 : 60); // 10 mintues for recent and 1 hour for speed kills
+                        Cache::put($cacheKey, $cacheValue, 10); // 10 mintues
+                    }
+                    return json_encode(array(
+                        "view" => $view->render(),
+                        "url" => ""
+                    ));
+                }
+                else if ( $modeId == "speed" )
+                {
+                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
+                    $cacheValue = Cache::get($cacheKey);
+                    if (  !$cacheValue ) {
+
+                        $encounters = EncounterTop::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId);
+
+                        //  Realm filter
+                        if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+                            $realms = array();
+                            if ($_request->has('tauri')) {
+                                array_push($realms, 0);
+                            }
+                            if ($_request->has('wod')) {
+                                array_push($realms, 1);
+                            }
+                            if ($_request->has('evermoon')) {
+                                array_push($realms, 2);
+                            }
+                            $encounters = $encounters->whereIn('realm_id', $realms);
+                        }
+
+                        // Faction filter
+                        $factions = array();
+                        if ($_request->has('alliance') || $_request->has('horde')) {
+                            if ($_request->has('alliance')) {
+                                array_push($factions, 0);
+                            }
+                            if ($_request->has('horde')) {
+                                array_push($factions, 1);
+                            }
+                            $encounters = $encounters->where("guild_id", "<>", 0);
+                            $encounters->whereIn('faction', $factions);
+                        }
+
+                        $encounters = $encounters->leftJoin('guilds', 'encounter_tops.guild_id', '=', 'guilds.id')->select('encounter_tops.*', 'guilds.name', 'guilds.faction');
+                        $encounters = $encounters->orderBy("fastest_encounter_time", "desc");
+                        $encounters = $encounters->paginate(10);
+
+                        $view = view("ladder/pve/ajax/speed", compact("encounters", "modeId"));
+
+                        $cacheValue = $view->render();
+                        Cache::put($cacheKey, $cacheValue, 60); // 1 hour
                     }
                     return json_encode(array(
                         "view" => $cacheValue,
