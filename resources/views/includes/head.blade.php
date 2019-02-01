@@ -19,10 +19,8 @@
     .wrapper
     {
         opacity:0;
-        overflow: hidden;
     }
     .loader {
-        opacity:0;
         margin: 60px auto;
         font-size: 10px;
         position: relative;
@@ -53,9 +51,6 @@
             -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
         }
-        50% {
-            opacity:1;
-        }
         100% {
             -webkit-transform: rotate(360deg);
             transform: rotate(360deg);
@@ -65,9 +60,6 @@
         0% {
             -webkit-transform: rotate(0deg);
             transform: rotate(0deg);
-        }
-        50% {
-            opacity:1;
         }
         100% {
             -webkit-transform: rotate(360deg);

@@ -239,31 +239,39 @@ class PveLadderController extends Controller
                     }
                     else
                     {
-                        $roles = EncounterMember::getRoles();
-                        $roles[0] = __("Minden role");
-                        $roleId = $_request->session()->get($modeId."-roleId", 0);
+                        $roleId = $_request->session()->get($modeId . "-roleId", 0);
+                        $classId = $_request->session()->get($modeId . "-classId", 0);
+                        $specId = $_request->session()->get($modeId . "-specId", 0);
 
-                        $classes = $roleId == 0 ? EncounterMember::getClasses() : EncounterMember::getRoleClasses($roleId);
-                        $classes[0] = __("Minden kaszt");
-                        $classId = $_request->session()->get($modeId."-classId", 0);
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $roleId . "-" . $classId . "-" . $specId;
+                        $cacheValue = Cache::get($cacheKey);
+                        if (  !$cacheValue ) {
+                            $roles = EncounterMember::getRoles();
+                            $roles[0] = __("Minden role");
 
-                        $specId = $_request->session()->get($modeId."-specId", 0);
-                        $specs = $classId == 0 ? array() : ($roleId == 0 ? EncounterMember::getSpecs($classId) : EncounterMember::getRoleClassSpecs($roleId, $classId));
-                        $specs[0] = __("Minden spec");
+                            $classes = $roleId == 0 ? EncounterMember::getClasses() : EncounterMember::getRoleClasses($roleId);
+                            $classes[0] = __("Minden kaszt");
+
+                            $specs = $classId == 0 ? array() : ($roleId == 0 ? EncounterMember::getSpecs($classId) : EncounterMember::getRoleClassSpecs($roleId, $classId));
+                            $specs[0] = __("Minden spec");
 
 
-                        $view = view("ladder/pve/ajax/hps_dps", compact(
-                            "modeId",
-                            "classes",
-                            "specs",
-                            "classId",
-                            "specId",
-                            "roleId",
-                            "roles"
-                        ));
+                            $view = view("ladder/pve/ajax/hps_dps", compact(
+                                "modeId",
+                                "classes",
+                                "specs",
+                                "classId",
+                                "specId",
+                                "roleId",
+                                "roles"
+                            ));
+
+                            $cacheValue = $view->render();
+                            Cache::put($cacheKey, $cacheValue, 1440); // 1 day
+                        }
 
                         return json_encode(array(
-                            "view" => $view->render(),
+                            "view" => $cacheValue,
                             "url" => ""
                         ));
                     }
@@ -314,7 +322,7 @@ class PveLadderController extends Controller
                         Cache::put($cacheKey, $cacheValue, 10); // 10 mintues
                     }
                     return json_encode(array(
-                        "view" => $view->render(),
+                        "view" => $cacheValue,
                         "url" => ""
                     ));
                 }
@@ -372,32 +380,43 @@ class PveLadderController extends Controller
             }
             else
             {
-                $modes = array(
-                    "rescent" => __("Új"),
-                    "speed" => __("Speedkill"),
-                    "dps" => "DPS",
-                    "hps" => "HPS"
-                );
-                $modeId = Defaults::ENCOUNTER_SORT;
-                $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
+                $cacheValue = Cache::get($cacheKey);
+                $cacheUrlValue = Cache::get($cacheKey."URL");
+                if (  !$cacheValue || !$cacheUrlValue ) {
+                    $modes = array(
+                        "rescent" => __("Új"),
+                        "speed" => __("Speedkill"),
+                        "dps" => "DPS",
+                        "hps" => "HPS"
+                    );
+                    $modeId = Defaults::ENCOUNTER_SORT;
+                    $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
 
-                $difficulties = Encounter::getMapDifficultiesShortForSelect($expansionId, $mapId, $encounterId);
-                $encounters = Encounter::getMapEncountersShort($expansionId, $mapId);
+                    $difficulties = Encounter::getMapDifficultiesShortForSelect($expansionId, $mapId, $encounterId);
+                    $encounters = Encounter::getMapEncountersShort($expansionId, $mapId);
 
-                $view = view("ladder/pve/ajax/encounter", compact(
-                    "modes",
-                    "modeId",
-                    "encounters",
-                    "encounterId",
-                    "mapId",
-                    "difficulties",
-                    "difficultyId",
-                    "expansionId"
-                ));
+                    $view = view("ladder/pve/ajax/encounter", compact(
+                        "modes",
+                        "modeId",
+                        "encounters",
+                        "encounterId",
+                        "mapId",
+                        "difficulties",
+                        "difficultyId",
+                        "expansionId"
+                    ));
+
+                    $cacheValue = $view->render();
+                    Cache::put($cacheKey, $cacheValue, 1440); // 1 d
+
+                    $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]);
+                    Cache::put($cacheKey . "URL", $cacheUrlValue, 1200);
+                }
 
                 return json_encode(array(
-                    "view" => $view->render(),
-                    "url" => URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId])
+                    "view" => $cacheValue,
+                    "url" => $cacheUrlValue
                 ));
             }
         }
@@ -407,7 +426,6 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-
                 $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                 $cacheValue = Cache::get($cacheKey);
                 if (  !$cacheValue ) {
@@ -450,7 +468,6 @@ class PveLadderController extends Controller
                     Cache::put($cacheKey, $cacheValue, 120); // 2 hours
                 }
 
-
                 return json_encode(array(
                     "view" => $cacheValue,
                     "url" => ""
@@ -458,7 +475,6 @@ class PveLadderController extends Controller
             }
             else
             {
-
                 $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");

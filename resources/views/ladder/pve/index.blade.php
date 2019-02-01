@@ -21,12 +21,12 @@
                             <input type="hidden" name="default_difficulty_id" value="{{ $defaultDifficultyId }}"/>
                         @endif
                         <input type="hidden" name="encounter_id" value="{{ $encounterId }}"/>
-                        <div class="col-sm-4 col-md-4 col-sm-nopadding">
+                        <div class="col-sm-4 col-md-4 col-sm-nopadding col-sm-margin">
                             <div id="expansions-container" class="input-group col-md-12">
                                 {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
                             </div>
                         </div>
-                        <div class="col-sm-4 col-md-4 col-sm-nopadding">
+                        <div class="col-sm-4 col-md-4 col-sm-nopadding col-sm-margin">
                             <div id="maps-container" class="input-group col-md-12">
                                 {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large"]); !!}
                             </div>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel table-responsive nomargin">
+            <div class="panel table-responsive">
                 <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
                 <div id="map-loading-container"></div>
             </div>
