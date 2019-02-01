@@ -1,11 +1,11 @@
-<link rel="shortcut icon" href="{{ URL::asset('favicon.ico') }}" type="image/x-icon">
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-<link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/style.css?v=208') }}"/>
-<link rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=8') }}"/>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+<link type="image/x-icon" rel="shortcut icon" href="{{ URL::asset('favicon.ico') }}">
+<link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+<link type="text/css" rel="stylesheet" href='https://fonts.googleapis.com/css?family=Play:400,700'>
+<link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=208') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=8') }}"/>
+<link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script>
     var URL_WEBSITE = "{{ URL::to('/') }}";
 
@@ -31,16 +31,16 @@
     var VALIDATION_LOCAL_REMOTE = "{{ __("Kérem javítsa ki ezt a mezőt.") }}";
     var VALIDATION_LOCAL_DATEISO = "{{ __("Kérem írjon be egy érvényes dátumot (ISO).") }}";
 </script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
-<script type="text/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js?v=226') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>
+<script type="application/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="application/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+<script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
+<script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+<script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=226') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>
 @yield('pagespecificscripts')
-<script>
+<script type="application/javascript">
     $(window).on('load', function() {
         $(".loadWrapper").fadeTo(500,0);
         $("<img src=\"{{ URL::asset("img/back.jpg") }}\">").load(function() {
@@ -58,7 +58,7 @@
         });
     });
 </script>
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-30988835-1"></script>
+<script type="application/javascript" async src="https://www.googletagmanager.com/gtag/js?id=UA-30988835-1"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}

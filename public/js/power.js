@@ -156,7 +156,7 @@ if (typeof $TauriPower == "undefined") {
 
         function X(ay) {
             Y(q, z("script", {
-                type: "text/javascript",
+                type: "application/javascript",
                 src: ay
             }))
         }
