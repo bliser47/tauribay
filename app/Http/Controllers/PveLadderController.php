@@ -249,21 +249,33 @@ class PveLadderController extends Controller
                             $roles = EncounterMember::getRoles();
                             $roles[0] = __("Minden role");
 
+                            $rolesShort = EncounterMember::getRolesShort();
+                            $rolesShort[0] = __("Minden");
+
                             $classes = $roleId == 0 ? EncounterMember::getClasses() : EncounterMember::getRoleClasses($roleId);
                             $classes[0] = __("Minden kaszt");
 
+                            $classesShort = $roleId == 0 ? EncounterMember::getClassesShort() : EncounterMember::getRoleClassesShort($roleId);
+                            $classesShort[0] = __("Minden");
+
                             $specs = $classId == 0 ? array() : ($roleId == 0 ? EncounterMember::getSpecs($classId) : EncounterMember::getRoleClassSpecs($roleId, $classId));
                             $specs[0] = __("Minden spec");
+
+                            $specsShort = $classId == 0 ? array() : ($roleId == 0 ? EncounterMember::getSpecsShort($classId) : EncounterMember::getRoleClassSpecsShort($roleId, $classId));
+                            $specsShort[0] = __("Minden");
 
 
                             $view = view("ladder/pve/ajax/hps_dps", compact(
                                 "modeId",
                                 "classes",
+                                "classesShort",
                                 "specs",
+                                "specsShort",
                                 "classId",
                                 "specId",
                                 "roleId",
-                                "roles"
+                                "roles",
+                                "rolesShort"
                             ));
 
                             $cacheValue = $view->render();

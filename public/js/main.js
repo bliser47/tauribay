@@ -714,6 +714,7 @@ $(function()
         $("#mode-"+ mode +" #class-container .selectpicker").change(function()
         {
             var set = $(this).val();
+            $("#mode-"+ mode + " #class-container .selectpicker").val(set).selectpicker('refresh');
             if ( set !== currentClass )
             {
                 currentClass = set;
@@ -731,15 +732,23 @@ $(function()
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        success: function (classSpecsSelectHTML) {
-                            var selectContainer = $("#mode-" + mode + " #spec-container");
-                            selectContainer.html(classSpecsSelectHTML);
-                            selectContainer.find(".selectpicker").selectpicker('refresh');
-                            selectContainer.attr('disabled', false);
-                            $(selectContainer).change(function(){
-                                $(this).parent().submit();
+                        success: function (classSpecsJson) {
+
+                            classSpecsJson = jQuery.parseJSON(classSpecsJson);
+
+                            $("#mode-" + mode + " #spec-container").each(function(){
+                                var selectContainer = $(this);
+                                selectContainer.html($(selectContainer).hasClass("short") ? classSpecsJson["mobile"] : classSpecsJson["desktop"]);
+                                selectContainer.find(".selectpicker").selectpicker('refresh');
+                                selectContainer.attr('disabled', false);
+                                $(selectContainer).find(".selectpicker").change(function(){
+                                    var set = $(this).val();
+                                    $("#mode-" + mode + " #spec-container .selectpicker").val(set).selectpicker('refresh');
+                                    $(this).parent().submit();
+                                });
+                                $(selectContainer).parent().submit();
                             });
-                            $(selectContainer).parent().submit();
+
                         }
                     });
                 }
@@ -757,6 +766,7 @@ $(function()
         $("#mode-"+ mode + " #role-container .selectpicker").change(function()
         {
             var set = $(this).val();
+            $("#mode-"+ mode + " #role-container .selectpicker").val(set).selectpicker('refresh');
             if ( set !== currentRole )
             {
                 currentRole = set;
@@ -772,16 +782,20 @@ $(function()
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    success: function(roleClassesSelectHTML)
+                    success: function(roleClassesSelectsJson)
                     {
-                        var selectContainer = $("#mode-" + mode + " #class-container");
-                        selectContainer.html(roleClassesSelectHTML);
-                        selectContainer.find(".selectpicker").selectpicker('refresh');
-                        selectContainer.attr('disabled', false);
-                        $(selectContainer).change(function(){
-                            $(this).parent().submit();
+                        roleClassesSelectsJson = jQuery.parseJSON(roleClassesSelectsJson);
+                        $("#mode-" + mode + " #class-container").each(function(){
+                            var selectContainer = $(this);
+                            selectContainer.html($(selectContainer).hasClass("short") ? roleClassesSelectsJson["mobile"] : roleClassesSelectsJson["desktop"]);
+                            selectContainer.find(".selectpicker").selectpicker('refresh');
+                            selectContainer.attr('disabled', false);
+                            $(selectContainer).change(function(){
+                                $(this).parent().submit();
+                            });
+                            $(selectContainer).parent().submit();
                         });
-                        $(selectContainer).parent().submit();
+
 
                         listenForClassChange(mode, currentRole);
                         UpdateTimes();

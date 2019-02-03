@@ -12,6 +12,7 @@ use Collective\Html\FormFacade;
 use Illuminate\Http\Request;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
+use Illuminate\Http\Response;
 
 class RaidController extends Controller
 {
@@ -61,21 +62,52 @@ class RaidController extends Controller
     {
         $specs = EncounterMember::getSpecs($_class_id);
         $specs[0] = __("Minden spec");
-        return FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large"]);
+
+        $specsShort = EncounterMember::getSpecsShort($_class_id);
+        $specsShort[0] = __("Minden");
+
+        $desktop = FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large"]);
+        $mobile = FormFacade::select('spec_id', $specsShort, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large"]);
+
+        return json_encode(array(
+            "desktop" => utf8_encode($desktop),
+            "mobile" => utf8_encode($mobile)
+        ));
     }
+
 
     public function getRoleClasses(Request $_request, $_role_id)
     {
         $classes = EncounterMember::getRoleClasses($_role_id);
         $classes[0] = __("Minden kaszt");
-        return FormFacade::select('class_id', $classes, 0, ['required', 'id' => 'class', 'class' => "control selectpicker input-large"]);
+
+        $classesShort = EncounterMember::getRoleClassesShort($_role_id);
+        $classesShort[0] = __("Minden");
+
+        $desktop = FormFacade::select('class_id', $classes, 0, ['required', 'id' => 'class', 'class' => "control selectpicker input-large"]);
+        $mobile =  FormFacade::select('class_id', $classesShort, 0, ['required', 'id' => 'class', 'class' => "control selectpicker input-large"]);
+
+        return json_encode(array(
+            "desktop" => utf8_encode($desktop),
+            "mobile" => utf8_encode($mobile)
+        ));
     }
+
 
     public function getRoleClassSpecs(Request $_request , $_role_id, $_class_id)
     {
         $specs = EncounterMember::getRoleClassSpecs($_role_id, $_class_id);
         $specs[0] = __("Minden spec");
-        return FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large"]);
 
+        $specsShort = EncounterMember::getRoleClassSpecsShort($_role_id, $_class_id);
+        $specsShort[0] = __("Minden");
+
+        $desktop = FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large"]);
+        $mobile = FormFacade::select('spec_id', $specsShort, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large"]);
+
+        return json_encode(array(
+            "desktop" => utf8_encode($desktop),
+            "mobile" => utf8_encode($mobile)
+        ));
     }
 }

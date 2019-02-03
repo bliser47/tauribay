@@ -37,7 +37,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/main.js?v=226') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=229') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>
 @yield('pagespecificscripts')
 <script type="application/javascript">
