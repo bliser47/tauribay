@@ -130,7 +130,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel">
+            <div class="panel table-responsive">
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
                         <th class="cellDesktop">{{ __("Idő") }}</th>
@@ -139,18 +139,20 @@
                         <th class="cellDesktop">{{ __("Frakció") }}</th>
                         <th class="cellDesktop">{{ __("Szándék") }}</th>
                         <th>{{ __("Kaszt") }}</th>
-                        <th>{{ __("Hirdetés") }}</th>
                     </tr>
                     @foreach ( $characterTrades as $character )
                         <tr>
                             <td class="cellDesktop time" data-time="{{$character->updated_at}}"> {{ $character->updated_at }}</td>
                             <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
-                            <td>{{ \TauriBay\Realm::REALMS_SHORT[$character->realm_id] }}</td>
                             <td class="cellMobile faction-{{ $character->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
+                            <td>{{ \TauriBay\Realm::REALMS_SHORTEST[$character->realm_id] }}</td>
                             <td class="cellDesktop faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
                             <td class="cellDesktop"> {{ __($characterIntents[$character->intent]) }}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                            <td class="text-left"> {{ $character->text }} </td>
+                        </tr>
+                        <tr class="tradeTextRow">
+                            <td colspan="6" class="cellDesktop text-left"> {{ $character->text }} </td>
+                            <td colspan="3" class="cellMobile text-left"> {{ $character->text }} </td>
                         </tr>
                     @endforeach
                 </table>

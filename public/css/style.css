@@ -1219,3 +1219,13 @@ tbody tr:nth-child(odd){
 {
     min-height:388px;
 }
+
+table .tradeTextRow td
+{
+    padding:5px !important;
+}
+
+table .tradeTextRow
+{
+    border-bottom:2px solid #5cb85c !Important;
+}

@@ -3,6 +3,12 @@
     .navbar-nav .open .dropdown-menu {
         text-align: center;
     }
+
+    .table-responsive table
+    {
+        table-layout: fixed;
+        max-width: 100%;
+    }
 }
 
 @media screen and (max-width: 1024px)

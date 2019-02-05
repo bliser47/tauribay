@@ -25,6 +25,12 @@ class Realm extends Model
         2 => "Evermoon"
     );
 
+    const REALMS_SHORTEST = array(
+        0 => "T",
+        1 => "W",
+        2 => "E"
+    );
+
     const REALMS_URL = array(
         0 => "tauri",
         1 => "wod",
