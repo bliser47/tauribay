@@ -948,6 +948,10 @@ $(function()
         $("#pve-ladder-form").submit();
     }
 
+    $("#guild-form select").change(function(){
+        $("#guild-form").submit();
+    });
+
     var prevState = null;
     $(window).on("popstate", function (e) {
         e.preventDefault();
