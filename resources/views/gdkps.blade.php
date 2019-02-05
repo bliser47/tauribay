@@ -11,7 +11,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                         <div class="panel-body">
                             {!! Form::open(array("method" => "get","id"=>"gdkps-form")) !!}
                             <div class="form-group col-md-6 nopadding-left">
@@ -122,18 +122,18 @@
                     </div>
                 </div>
             </div>
-            <div class="panel">
-                <table class="table table-bordered table-classes">
-                    <tr>
+            <div class="nomargin panel">
+                <table class="table table-bordered table-classes table-transparent">
+                    <tr class="tHead">
                         <th class="cellDesktop">Idő</th>
-                        <th>Hirdető</th>
+                        <th>{{ __("Név") }}</th>
                         <th>Realm</th>
-                        <th class="cellDesktop">Frakció</th>
-                        <th class="cellDesktop">Szándék</th>
-                        <th>Insta</th>
-                        <th>Méret</th>
-                        <th>Nehézség</th>
-                        <th>Hirdetés</th>
+                        <th class="cellDesktop">{{ __("Frakció") }}</th>
+                        <th class="cellDesktop">{{ __("Szándék") }}</th>
+                        <th>{{ __("Raid") }}</th>
+                        <th>{{ __("Méret") }}</th>
+                        <th>{{ __("Nehézség") }}</th>
+                        <th class="headDesktop">{{ __("Hirdetés") }}</th>
                     </tr>
                     @foreach ( $gdkpTrades as $gdkp )
                         <tr>
@@ -146,8 +146,13 @@
                             <td class="instance-{{ $gdkp->instance  }}"> {{ \TauriBay\Tauri\WowInstance::WOW_INSTANCE_SHORT_NAMES_NICE[$gdkp->instance] }} </td>
                             <td> {{ $gdkpInstanceSizes[$gdkp->size] }} </td>
                             <td class="instance-difficulty">{{ \TauriBay\Encounter::DIFFICULTY_NAME[$gdkp->difficulty]  }}</td>
-                            <td> {{ $gdkp->text }} </td>
+                            <td class="cellDesktop tradeMessage"> {{ $gdkp->text }} </td>
                         </tr>
+                        <tr class="tradeTextRow rowMobile">
+                            <td colspan="5" class="text-left tradeMessage"> {{ $gdkp->text }} </td>
+                        </tr>
+                        <tr class="rowMobile spacer"><td colspan="5"></td></tr>
+                        <tr class="rowMobile spacer"><td colspan="5"></td></tr>
                     @endforeach
                 </table>
             </div>

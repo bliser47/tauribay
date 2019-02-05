@@ -1106,7 +1106,7 @@ footer
     text-align: center;
 }
 
-tbody tr:nth-child(odd){
+tbody tr:nth-child(odd) td{
     background-color: rgba(24,150,45,0.075);
 }
 
@@ -1231,12 +1231,37 @@ tbody tr:nth-child(odd){
     min-height:388px;
 }
 
-table .tradeTextRow td
+table tr td.tradeMessage
 {
-    padding:5px !important;
+    padding:5px !Important;
 }
 
-table .tradeTextRow
-{
-    border-bottom:2px solid #5cb85c !Important;
+table .tradeTextRow td {
+    white-space: normal !Important;
+    box-sizing: border-box;
 }
+
+tr.spacer td {
+    border: none !important;
+    background-color: transparent !Important;
+    height:5px;
+}
+
+tr.spacer
+{
+    border:none !Important;
+    background: transparent !Important;
+}
+
+.table-transparent
+{
+    background:transparent !Important;
+}
+
+.table-transparent tr
+{
+    background:#fff;
+    border:1px solid #ddd;
+}
+
+.table-transparent tr .cellMo
