@@ -54,7 +54,7 @@ class EncounterController extends Controller
 
 
             foreach ($members as $member) {
-                $member->total_heal = $member->heal_done + $member->damage_absorb;
+                $member->total_heal = $member->heal_done + $member->absorb_done;
             }
 
 
