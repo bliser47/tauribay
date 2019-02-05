@@ -5,6 +5,35 @@
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
+                        <img class="media-object" src="img/cms/news/mobile.jpg" alt="Mobil first">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-header">
+                            <h3 class="media-heading"> {{ __("Mobile & Trello") }} </h3>
+                            <p class="text-left text-italic">
+                                {{ __("írta") }} <span class="warlock">Bliser</span> 2018.12.09
+                            </p>
+                        </div>
+                    </div>
+                    <div class="media-content">
+                        <p>
+                            {{ __("Ezentúl nem csak Githubon hanem már Trellon is követni tudjátok az oldal fejlesztését itt:") }}
+                            <a href="https://trello.com/b/sfKX349T/tauribay">{{__("TauriBay Trello")}}</a>
+                            {{ __(", vagy az új zöld kis ikon segítségével az oldal tetején.") }}
+                        </p>
+                        <p>
+                            {{ __("Végre megcsináltam a Kari és Raid hirdetés oldalt mobilra, nem kell többet vele szenvedni a kis képernyőkön! Az optimalizálások sikeresen enyhítettek a szerveren de a mögötte lévő Cache rendszeren van mit még csíszolnom. Egyébként rengeteg ötletem van még hátra és ezek mind a Trello falra kerülnek majd fel!") }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 blog-main">
+            <div class="well nomargin">
+                <div class="media">
+                    <a class="pull-left" href="#">
                         <img class="media-object" src="img/cms/news/fix_ladder.jpg" alt="PVE Ladder">
                     </a>
                     <div class="media-body">
@@ -56,37 +85,6 @@
                         </ul>
                         <p class="nomargin">
                             {{ __("Legközelebb még több feature várható!") }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 blog-main">
-            <div class="well nomargin">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="img/cms/news/progress_adatok.jpg" alt="Új progress adatok">
-                    </a>
-                    <div class="media-body">
-                        <div class="media-header">
-                            <h3 class="media-heading"> {{ __("Progress oldal") }} </h3>
-                            <p class="text-left text-italic">
-                                {{ __("írta") }} <span class="warlock">Bliser</span> 2018.12.09
-                            </p>
-                        </div>
-                    </div>
-                    <div class="media-content">
-                        <p>
-                            {{ __("Örömmel jelentem be, hogy a progress oldal első rész kész van!") }}
-                        </p>
-                        <ul>
-                            <li> {{ __("A szerver összes guildjének ToT (HC) progressje:") }}  <a href="{{ URL::to("/progress") }}">{{ __("ITT") }}</a> </li>
-                            <li> {{ __("A content legjobb boss kill idői:") }} <a href="{{ URL::to("/ladder/pve/tot") }}">{{ __("ITT") }}</a> </li>
-                        </ul>
-                        <p class="nomargin">
-                            {{ __("Hamarosan a progress oldal sokkal több statisztikával bővűl!") }}
                         </p>
                     </div>
                 </div>
