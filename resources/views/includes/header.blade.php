@@ -15,8 +15,11 @@
                     {!! language()->flags() !!}
                 </ul>
             </div>
+            <div class="divMobile" id="mobileTrello">
+                <a class="trello" target="_blank" href="https://trello.com/b/sfKX349T/tauribay"></a>
+            </div>
             <div class="divMobile" id="mobileChangelog">
-                <a class="changelog" href="https://github.com/bliser47/tauribay/commits/master"></a>
+                <a class="changelog" target="_blank" href="https://github.com/bliser47/tauribay/commits/master"></a>
             </div>
             <a class="navbar-brand" href="/">TauriBay</a>
         </div>
@@ -43,7 +46,12 @@
                     <li><a href="{{URL::to('/home')}}"><span class="glyphicon glyphicon-user"></span>{{__("Profil")}}</a></li>
                     <li><a href="{{URL::to('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span>{{__("Kijelentkezés")}}</a></li>
                 @endif
-                <li class="listDesktop"><a class="changelog" href="https://github.com/bliser47/tauribay/commits/master"></a></li>
+                <li class="listDesktop">
+                    <a class="changelog" target="_blank" href="https://github.com/bliser47/tauribay/commits/master"></a>
+                </li>
+                <li class="listDesktop">
+                    <a class="trello" target="_blank" href="https://trello.com/b/sfKX349T/tauribay"></a>
+                </li>
                 <li class="dropdown listDesktop">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {!! language()->flag()  !!}<span class="caret"></span>

@@ -477,17 +477,28 @@ input.disabled:-webkit-autofill {
     animation: load8 1.1s infinite linear;
 }
 
-a.changelog
+a.changelog, a.trello
 {
     display:block;
     width:32px;
     height:32px;
     margin:9px auto;
     content:"";
+}
+
+a.changelog
+{
+    margin-right:5px;
     background:url("../img/github.png");
 }
 
-a.changelog:hover
+a.trello
+{
+    background:url("../img/trello.png");
+}
+
+
+a.changelog:hover, a.trello:hover
 {
     background-position:0px 32px;
 }
@@ -823,7 +834,7 @@ a.changelog:hover
     display:list-item;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .rowDesktop
     {
         display:none;
@@ -1118,7 +1129,7 @@ tbody tr:nth-child(odd){
     margin:14px;
 }
 
-#mobileChangelog
+#mobileChangelog, #mobileTrello
 {
     float:right;
     margin-right:10px;
