@@ -24,6 +24,9 @@
                         <p>
                             {{ __("Végre megcsináltam a Kari és Raid hirdetés oldalt mobilra, nem kell többet vele szenvedni a kis képernyőkön! Az optimalizálások sikeresen enyhítettek a szerveren de a mögötte lévő Cache rendszeren van mit még csíszolnom. Egyébként rengeteg ötletem van még hátra és ezek mind a Trello falra kerülnek majd fel!") }}
                         </p>
+                        <p>
+                            {{ __("P.S. Lehet szűrni a Guild oldalkon belűl!") }}
+                        </p>
                     </div>
                 </div>
             </div>
