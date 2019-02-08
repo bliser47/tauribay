@@ -318,6 +318,7 @@ class Encounter extends Model
                 $top->fastest_encounter_id = $encounter->id;
                 $top->fastest_encounter_time = $encounter->fight_time;
                 $top->fastest_encounter_date = $encounter->killtime;
+                self::refreshLadderSpeedKill($encounter, $guild);
             }
         }
         else
@@ -331,6 +332,7 @@ class Encounter extends Model
             $top->fastest_encounter_id = $encounter->id;
             $top->fastest_encounter_time = $encounter->fight_time;
             $top->fastest_encounter_date = $encounter->killtime;
+            self::refreshLadderSpeedKill($encounter, $guild);
         }
 
         $top->save();
@@ -355,6 +357,7 @@ class Encounter extends Model
                         if ($guild !== null) {
                             $top->dps_guild_id = $guild->id;
                         }
+                        self::refreshLadderDps($member, $guild);
                     }
                 }
             }
@@ -366,6 +369,7 @@ class Encounter extends Model
                     if ($guild !== null) {
                         $top->hps_guild_id = $guild->id;
                     }
+                    self::refreshLadderHps($member, $guild);
                 }
             }
         }
@@ -397,11 +401,46 @@ class Encounter extends Model
                 $top->dps_guild_id = $guild->id;
                 $top->hps_guild_id = $guild->id;
             }
+            self::refreshLadderDps($member, $guild);
+            self::refreshLadderHps($member, $guild);
         }
         $top->save();
 
         $member->top_processed = 1;
         $member->save();
+    }
+
+    public static function refreshLadderSpeedKill($encounter) {
+        $cache = LadderCache::getCache($encounter->encounter_id, $encounter->difficulty_id);
+        $fastest = Encounter::where("id", "=", $cache->fastest_encounter)->first();
+        if ($fastest !== null) {
+            if ($fastest->fight_time > $encounter->fight_time) {
+                $cache->fastest_encounter = $encounter->id;
+                $cache->save();
+            }
+        }
+    }
+
+    public static function refreshLadderDps($member) {
+        $cache = LadderCache::getCache($member->encounter, $member->difficulty_id);
+        $fastest = EncounterMember::where("id", "=", $cache->top_dps_encounter_member)->first();
+        if ($fastest !== null) {
+            if ($fastest->dps < $member->dps) {
+                $cache->top_dps_encounter_member = $member->id;
+                $cache->save();
+            }
+        }
+    }
+
+    public static function refreshLadderHps($member) {
+        $cache = LadderCache::getCache($member->encounter, $member->difficulty_id);
+        $fastest = EncounterMember::where("id", "=", $cache->top_hps_encounter_member)->first();
+        if ($fastest !== null) {
+            if ($fastest->hps < $member->hps) {
+                $cache->top_hps_encounter_member = $member->id;
+                $cache->save();
+            }
+        }
     }
 
     public static function getFastest($encounterId, $difficultyId)
