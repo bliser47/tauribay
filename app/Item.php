@@ -14,14 +14,36 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     const INVENTORY_TYPE = array(
+        26 => array(
+            "name" => "Ranged",
+            "sub_class" => array(
+                18 => "Crossbow",
+                19 => "Wand"
+            )
+        ),
+        23 => "Held In Off-hand",
         20 => "Chest",
-        19 => "Legs",
+        19 => "",
         18 => array(
             "name" => "Bag"
         ),
-        17 => "Legs",
-        16 => "Legs",
-        15 => "Legs",
+        17 => array(
+            "name" => "Two-hand",
+            "sub_class" => array(
+                1 => "Axe",
+                4 => "Mace",
+                6 => "Polearm",
+                8 =>"Sword",
+                10 => "Staff"
+            )
+        ),
+        16 => "Cloak",
+        15 => array(
+            "name" => "Ranged",
+            "sub_class" => array(
+                2 => "Bow"
+            )
+        ),
         14 => array(
             "name" => "Off-hand",
             "sub_class" => array(
@@ -29,8 +51,9 @@ class Item extends Model
             )
         ),
         13 => array(
-            "name" => "Main-hand",
+            "name" => "One-hand",
             "sub_class" => array(
+                0 => "Axe",
                 4 => "Mace",
                 7 => "Sword",
                 15 => "Dagger"

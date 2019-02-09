@@ -115,10 +115,10 @@
                                             <img class="lootItem" src="https://wow.zamimg.com/images/wow/icons/large/{{ $loot->icon }}.jpg">
                                         </td>
                                         <td>
-                                            {{ $loot->inventory_type . "-" . \TauriBay\Item::getInventoryType($loot->inventory_type) }}
+                                            {{ \TauriBay\Item::getInventoryType($loot->inventory_type) }}
                                         </td>
                                         <td>
-                                            {{ $loot->subclass . "-" . \TauriBay\Item::getSubClass($loot->inventory_type, $loot->subclass) }}
+                                            {{ \TauriBay\Item::getSubClass($loot->inventory_type, $loot->subclass) }}
                                         </td>
                                         <td class="cellDesktop" style="white-space:nowrap;">
                                             <a class="itemToolTip gearFrame" href="http://mop-shoot.tauri.hu/?item={{ $loot->item_id }}">
