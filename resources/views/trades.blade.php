@@ -22,7 +22,7 @@
                             <td class="cellDesktop">{{ \TauriBay\Realm::REALMS[$trade->realm_id] }}</td>
 
                             <td class="cellDesktop faction-{{ $trade->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $trade->faction . ".png") }}" alt=""/> </td>
-                            <td class="text-left"> {{ $trade->text }} </td>
+                            <td class="text-left"> {{ wordwrap($trade->text,80," ", true); }} </td>
                         </tr>
                     @endforeach
                 </table>

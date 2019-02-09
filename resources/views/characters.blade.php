@@ -152,10 +152,10 @@
                             <td class="cellDesktop faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
                             <td class="cellDesktop"> {{ __($characterIntents[$character->intent]) }}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                            <td class="cellDesktop text-left tradeMessage">{{ $character->text }}</td>
+                            <td class="cellDesktop text-left tradeMessage">{{ wordwrap($character->text,80," ", true) }}</td>
                         </tr>
                         <tr class="tradeTextRow rowMobile">
-                            <td colspan="3" class="text-left tradeMessage"> {{ $character->text }} </td>
+                            <td colspan="3" class="text-left tradeMessage"> {{ wordwrap($character->text,40," ", true) }} </td>
                         </tr>
                         <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                         <tr class="rowMobile spacer"><td colspan="3"></td></tr>
