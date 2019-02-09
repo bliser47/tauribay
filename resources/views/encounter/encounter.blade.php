@@ -99,16 +99,16 @@
                         @endif
                     </div>
                     <div role="tabpanel" class="tab-pane" id="loot">
-                        <table class="table table-bordered table-classes">
-                            <tr class="tHead">
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th class="cellDesktop">{{ __("Név") }}</th>
-                                <th>{{ __("Típus") }}</th>
-                                <th>{{ __("iLvL") }}</th>
-                            </tr>
-                            @if ( count($loots) )
+                        @if ( count($loots) )
+                            <table class="table table-bordered table-classes">
+                                <tr class="tHead">
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="cellDesktop">{{ __("Név") }}</th>
+                                    <th>{{ __("Típus") }}</th>
+                                    <th>{{ __("iLvL") }}</th>
+                                </tr>
                                 @foreach ( $loots as $loot )
                                     <tr>
                                         <td class="lootItemContainer">
@@ -129,8 +129,12 @@
                                         <td style="width:50px;">{{ $loot->ilvl }}</td>
                                     </tr>
                                 @endforeach
-                            @endif
-                        </table>
+                         </table>
+                         @else
+                            <div class="alert alert-warning nomargin">
+                                {{ __("A visszamenőleges loot adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!") }}
+                            </div>
+                         @endif
                     </div>
                 </div>
             </div>

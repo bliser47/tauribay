@@ -170,5 +170,7 @@
   "Végre megcsináltam a Kari és Raid hirdetés oldalt mobilra, nem kell többet vele szenvedni a kis képernyőkön! Az optimalizálások sikeresen enyhítettek a szerveren de a mögötte lévő Cache rendszeren van mit még csíszolnom. Egyébként rengeteg ötletem van még hátra és ezek mind a Trello falra kerülnek majd fel!":
           "I finally optimized the Character and Raid pages (on Trade page) for mobile, no more issues on your small screen! Last week's optimizations were a success and the server load has been reduced a lot, but the underlying Cache system needs more work. I have loads of ideas planned for the future: all of which will be added to the Trello bard!",
   "P.S. Lehet szűrni a Guild oldalkon belűl!":
-          "P.S. You can now filter on a Guild's page!"
+          "P.S. You can now filter on a Guild's page!",
+  "A visszamenőleges loot adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!":
+          "Preliminary loot data is curretly being processed. Please come back later!"
 }
