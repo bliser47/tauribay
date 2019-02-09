@@ -90,7 +90,7 @@ class EncounterController extends Controller
             $mapId = $encounterData["map_id"];
             $expansionId = Encounter::getMapExpansion($mapId);
 
-            $loots = Loot::take(2000)->leftJoin("items", "loots.item_id", "=", "items.id")->get();
+            $loots = Loot::where("encounter_id", $encounter->id)->leftJoin("items", "loots.item_id", "=", "items.id")->get();
 
             return view("encounter/encounter", compact("encounter",
                 "encounterData",
