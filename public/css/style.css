@@ -1149,15 +1149,15 @@ tbody tr:nth-child(odd) td{
     padding:70px;
 }
 
-.topDpsSpecContainer
+.topDpsSpecContainer, .lootItemContainer
 {
-    width: 35px;
+    width: 35px !Important;
     height: 35px !important;
     overflow: hidden;
     position: relative;
 }
 
-.topDpsSpec
+.topDpsSpec, .lootItem
 {
     width: 39px;
     height: 39px;

@@ -9,8 +9,10 @@
 namespace TauriBay\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Mockery\Exception;
 use TauriBay\EncounterMember;
 use TauriBay\EncounterTop;
+use TauriBay\Loot;
 use TauriBay\Realm;
 use TauriBay\Encounter;
 use TauriBay\Tauri\Skada;
@@ -18,6 +20,7 @@ use TauriBay\Tauri\CharacterClasses;
 use TauriBay\Guild;
 use TauriBay\Tauri\ApiClient;
 use Carbon\Carbon;
+use TauriBay\Tauri;
 
 
 class EncounterController extends Controller
@@ -87,6 +90,8 @@ class EncounterController extends Controller
             $mapId = $encounterData["map_id"];
             $expansionId = Encounter::getMapExpansion($mapId);
 
+            $loots = Loot::where("encounter_id", $encounter->id)->leftJoin("items", "loots.item_id", "=", "items.id")->get();
+
             return view("encounter/encounter", compact("encounter",
                 "encounterData",
                 "membersDamage",
@@ -99,13 +104,26 @@ class EncounterController extends Controller
                 "realms",
                 "shortRealms",
                 "expansionId",
-                "mapId"));
+                "mapId",
+                "loots"));
         }
     }
 
     public function fixMissing(Request $_request)
     {
-        $encounter = EncounterMember::where("id", "=", 1)->first();
-        Encounter::refreshLadderHps($encounter);
+        $encounters = Encounter::where('top_processed','=',0)->take(1000)->get();
+        $fixed = 0;
+        $api = new Tauri\ApiClient();
+
+        foreach ( $encounters as $encounter )
+        {
+            $data = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
+            if ($data["response"]) {
+                $items = $data["response"]["items"];
+                Loot::processItems($encounter, $items, $api);
+                ++$fixed;
+            }
+        }
+        return $fixed;
     }
 }

@@ -236,6 +236,7 @@ class Encounter extends Model
 
                 self::refreshEncounterTop($encounter, $guild);
                 self::updateEncounterMembers($api, $encounter, $guild);
+                Loot::processItems($encounter, $_data["items"], $api);
 
                 $result["result"] = true;
             }
@@ -346,6 +347,8 @@ class Encounter extends Model
         $top = MemberTop::where("name",$member->name)->where("realm_id",$member->realm_id)->where("encounter_id", $member->encounter)
             ->where("difficulty_id",$member->difficulty_id)->where("spec", $member->spec)->first();
 
+        $checkDps = false;
+        $checkHps = false;
         if ( $top !== null )
         {
             if ( $member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP ) {
@@ -357,7 +360,7 @@ class Encounter extends Model
                         if ($guild !== null) {
                             $top->dps_guild_id = $guild->id;
                         }
-                        self::refreshLadderDps($member, $guild);
+                        $checkDps = true;
                     }
                 }
             }
@@ -369,7 +372,7 @@ class Encounter extends Model
                     if ($guild !== null) {
                         $top->hps_guild_id = $guild->id;
                     }
-                    self::refreshLadderHps($member, $guild);
+                    $checkHps = true;
                 }
             }
         }
@@ -408,6 +411,13 @@ class Encounter extends Model
 
         $member->top_processed = 1;
         $member->save();
+
+        if ( $checkDps ) {
+            self::refreshLadderDps($member, $guild);
+        }
+        if ( $checkHps ) {
+            self::refreshLadderHps($member, $guild);
+        }
     }
 
     public static function refreshLadderSpeedKill($encounter) {

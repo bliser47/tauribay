@@ -43,9 +43,17 @@ class ProgressController extends Controller
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
-        $latestRaids = $api->getRaidLast(Realm::REALMS[$realmId], $lastLogOnRealm->log_id);
-        $logs = $latestRaids["response"]["logs"];
-        return $logs;
+
+        $data = $api->getRaidLast(Realm::REALMS[0],1,1);
+
+        return $data;
+
+        $items = $data["response"];
+        foreach ( $items as $key => $item )
+        {
+            return $key;
+        }
+        return $items;
     }
 
     public function index(Request $_request)

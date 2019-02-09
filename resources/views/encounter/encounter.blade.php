@@ -45,7 +45,8 @@
             <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="home-main-tab active" role="presentation"><a href="#fightDataDamage" aria-controls="fightDataDamage" role="tab" data-toggle="tab">Damage</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#fightDataHealing" aria-controls="fightDataHealingg" role="tab" data-toggle="tab">Healing</a></li>
+                    <li class="home-main-tab" role="presentation"><a href="#fightDataHealing" aria-controls="fightDataHealing" role="tab" data-toggle="tab">Healing</a></li>
+                    <li class="home-main-tab" role="presentation"><a href="#fightDataLoot" aria-controls="fightDataLoot" role="tab" data-toggle="tab">Loot</a></li>
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="fightDataDamage">
@@ -96,7 +97,40 @@
                                 {{ __("Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!") }}
                             </div>
                         @endif
-                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="fightDataLoot">
+                        <table class="table table-bordered table-classes">
+                            <tr class="tHead">
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th class="cellDesktop">{{ __("Név") }}</th>
+                                <th>{{ __("Típus") }}</th>
+                                <th>{{ __("iLvL") }}</th>
+                            </tr>
+                            @if ( count($loots) )
+                                @foreach ( $loots as $loot )
+                                    <tr>
+                                        <td class="lootItemContainer">
+                                            <img class="lootItem" src="https://wow.zamimg.com/images/wow/icons/large/{{ $loot->icon }}.jpg">
+                                        </td>
+                                        <td>
+                                            {{ $loot->inventory_type . "-" . \TauriBay\Item::getInventoryType($loot->inventory_type) }}
+                                        </td>
+                                        <td>
+                                            {{ $loot->subclass . "-" . \TauriBay\Item::getSubClass($loot->inventory_type, $loot->subclass) }}
+                                        </td>
+                                        <td class="cellDesktop" style="white-space:nowrap;">
+                                            <a class="itemToolTip gearFrame" href="http://mop-shoot.tauri.hu/?item={{ $loot->item_id }}">
+                                                {{ $loot->name }}
+                                            </a>
+                                        </td>
+                                        <td> {{ $loot->description }}</td>
+                                        <td style="width:50px;">{{ $loot->ilvl }}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </table>
                     </div>
                 </div>
             </div>

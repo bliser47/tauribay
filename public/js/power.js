@@ -462,7 +462,7 @@ if (typeof $TauriPower == "undefined") {
                 aC = "inv_misc_questionmark";
                 aD = true
             } else {
-                if ( characterArmoryData ) {
+                if ( typeof characterArmoryData !== 'undefined' ) {
                     var armoryData = characterArmoryData;
                     if (armoryData && armoryData.response) {
                         var armoryItems = characterArmoryData.response.characterItems;

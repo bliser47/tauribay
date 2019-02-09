@@ -6,8 +6,8 @@ class ApiClient {
 
 
     private $baseurl = 'http://chapi.tauri.hu/apiIndex.php';
-    private $apikey  = '388be4e5328ce804';
-    private $secret  = '8a233c4f2f27f27a9d74882d5e7204529adf4d8a';
+    private $apikey  = '0ff33944145eb785';
+    private $secret  = '1b01e00e88492048b1d6833c6ac175141cd41d6d';
 
     private $request = array(
         'url'    => '',

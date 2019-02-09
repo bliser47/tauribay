@@ -3,7 +3,7 @@
 <link type="text/css" rel="stylesheet" href='https://fonts.googleapis.com/css?family=Play:400,700'>
 <link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=212') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=213') }}"/>
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=8') }}"/>
 <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <script>
@@ -38,7 +38,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/main.js?v=230') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/power.js?v=25') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
 @yield('pagespecificscripts')
 <script type="application/javascript">
     $(window).on('load', function() {
