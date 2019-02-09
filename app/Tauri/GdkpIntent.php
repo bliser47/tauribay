@@ -19,6 +19,7 @@ class GdkpIntent
     const GDKP_INTENT_MAKE = array
     (
         ' invelek ',
+        ' invelek.',
         ' lfm '
     );
 
