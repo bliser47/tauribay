@@ -114,7 +114,7 @@ class EncounterController extends Controller
     {
         ini_set('max_execution_time', 0);
 
-        $encounters = Encounter::where('top_processed','=',0)->whereIn("encounter_id", Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID))->take(5000)->get();
+        $encounters = Encounter::where('top_processed','=',0)->take(5000)->get();
         $fixed = 0;
         $api = new Tauri\ApiClient();
 

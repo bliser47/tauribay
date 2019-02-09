@@ -208,58 +208,42 @@ class Encounter extends Model
         $result = array(
             "result" => false
         );
-        // Check if the raid doesn't exist yet
-        $logId = $_data["log_id"];
-        if ( strlen($logId) > 0 ) {
-            $raid = Encounter::where("log_id", '=', $logId)->where("realm_id", "=", $_realmId)->first();
-            if ($raid === null) {
-                $guild = Guild::getOrCreate($_data["guilddata"], $_realmId);
-                $encounter = new Encounter;
-                $encounter->log_id = $logId;
-                $encounter->realm_id = $_realmId;
-                $encounter->map_id = $_data["map_id"];
-                if ($guild !== null) {
-                    $encounter->guild_id = $guild->id;
-                }
-                $encounter->encounter_id = $_data["encounter_id"];
-                $encounter->encounter_difficulty_id = $_data["encounter_data"]["encounter_difficulty"];
-                $encounter->difficulty_id = $_data["difficulty"];
-                $encounter->killtime = $_data["killtime"];
-                $encounter->wipes = $_data["wipes"];
-                $encounter->deaths_total = $_data["deahts_total"];
-                $encounter->fight_time = $_data["fight_time"];
-                $encounter->deaths_fight = $_data["deaths_fight"];
-                $encounter->resurrects_fight = $_data["resurrects_fight"];
-                $encounter->member_count = $_data["member_count"];
-                $encounter->item_count = $_data["item_count"];
-                $encounter->save();
-
-                self::refreshEncounterTop($encounter, $guild);
-                self::updateEncounterMembers($api, $encounter, $guild);
-
-                if ( array_key_exists("items", $_data) ) {
-                    Loot::processItems($encounter, $_data["items"], $api);
-                }
-
-                $result["result"] = true;
-            }
-            else
-            {
-                $result["error"] = "Raid (log_id: " . $raid->log_id . ") already exists";
-            }
+        $guild = Guild::getOrCreate($_data["guilddata"], $_realmId);
+        $encounter = new Encounter;
+        $encounter->log_id = $_data["log_id"];
+        $encounter->realm_id = $_realmId;
+        $encounter->map_id = $_data["map_id"];
+        if ($guild !== null) {
+            $encounter->guild_id = $guild->id;
         }
-        else
-        {
-            $result["error"] = "Log_id missing: " . $logId;
+        $encounter->encounter_id = $_data["encounter_id"];
+        $encounter->encounter_difficulty_id = $_data["encounter_data"]["encounter_difficulty"];
+        $encounter->difficulty_id = $_data["difficulty"];
+        $encounter->killtime = $_data["killtime"];
+        $encounter->wipes = $_data["wipes"];
+        $encounter->deaths_total = $_data["deahts_total"];
+        $encounter->fight_time = $_data["fight_time"];
+        $encounter->deaths_fight = $_data["deaths_fight"];
+        $encounter->resurrects_fight = $_data["resurrects_fight"];
+        $encounter->member_count = $_data["member_count"];
+        $encounter->item_count = $_data["item_count"];
+        $encounter->save();
+
+        self::refreshEncounterTop($encounter, $guild);
+        self::updateEncounterMembers($_data, $encounter, $guild);
+
+        if ( array_key_exists("items", $_data) ) {
+            Loot::processItems($encounter, $_data["items"], $api);
         }
+
+        $result["result"] = true;
         return $result;
     }
 
-    public static function updateEncounterMembers($api, $encounter, $guild)
+    public static function updateEncounterMembers($_data, $encounter, $guild)
     {
         EncounterMember::where("encounter_id", "=", $encounter->id)->delete();
-        $raidLog = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
-        $members = $raidLog["response"]["members"];
+        $members = $_data["members"];
         $i = 0;
         $fightTime = $encounter->fight_time / 1000;
         foreach ( $members as $memberData )
@@ -407,8 +391,8 @@ class Encounter extends Model
                 $top->dps_guild_id = $guild->id;
                 $top->hps_guild_id = $guild->id;
             }
-            self::refreshLadderDps($member, $guild);
-            self::refreshLadderHps($member, $guild);
+            $checkDps = true;
+            $checkHps = true;
         }
         $top->save();
 

@@ -174,11 +174,9 @@ class ProgressController extends Controller
 
     public function updateRaids(Request $_request)
     {
-
         $api = new Tauri\ApiClient();
         $realmId = $_request->has("data") ? $_request->get("data") : rand(0,2);
         $realmName = Realm::REALMS[$realmId];
-
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
@@ -187,8 +185,24 @@ class ProgressController extends Controller
         $result = array();
         if ( is_array($logs) ) {
             for ($i = 0; $i < count($logs); ++$i) {
-                $encounter = Encounter::store($api, $logs[$i], $realmId);
-                $result[] = $encounter;
+                if ( strlen($logs[$i]["log_id"]) > 0 ) {
+                    $raid = Encounter::where("log_id", '=', $logs[$i]["log_id"])->where("realm_id", "=", $realmId)->first();
+                    if ($raid === null) {
+                        $logs[$i] = $api->getRaidLog($realmName, $logs[$i]["log_id"]);
+                        if (array_key_exists("response", $logs[$i])) {
+                            $encounter = Encounter::store($api, $logs[$i]["response"], $realmId);
+                            $result[$logs[$i]["response"]["log_id"]] = $encounter;
+                        }
+                    }
+                    else
+                    {
+                        $result["error"] = "Raid (log_id: " . $raid->log_id . ") already exists";
+                    }
+                }
+                else
+                {
+                    $result["error"] = "Log_id missing: " . $logId;
+                }
             }
         }
         return json_encode($result);
