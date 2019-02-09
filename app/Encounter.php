@@ -236,7 +236,10 @@ class Encounter extends Model
 
                 self::refreshEncounterTop($encounter, $guild);
                 self::updateEncounterMembers($api, $encounter, $guild);
-                Loot::processItems($encounter, $_data["items"], $api);
+
+                if ( array_key_exists("items", $_data) ) {
+                    Loot::processItems($encounter, $_data["items"], $api);
+                }
 
                 $result["result"] = true;
             }
