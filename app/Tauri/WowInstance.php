@@ -27,6 +27,12 @@ class WowInstance
 
     const WOW_INSTANCE_THRONE_OF_THUNDER = array(
             ' tot ',
+            ' tot10 ',
+            ' tot25 ',
+            ' tot10n ',
+            ' tot25n ',
+            ' tot10hc ',
+            ' tot25hc ',
             ' totra ',
             ' totre ',
             ' totba ',
@@ -40,6 +46,12 @@ class WowInstance
 
     const WOW_INSTANCE_TERRACE_OF_ENDLESS_SPRING = array(
         ' toes ',
+        ' toes10 ',
+        ' toes25 ',
+        ' toes10n ',
+        ' toes25n ',
+        ' toes10hc ',
+        ' toes25hc ',
         ' toesra ',
         ' toesre ',
         ' toes-ra ',
@@ -61,6 +73,12 @@ class WowInstance
 
     const WOW_INSTANCE_HEART_OF_FEAR = array(
             ' hof ',
+            ' hof10 ',
+            ' hof25 ',
+            ' hof10n ',
+            ' hof25n ',
+            ' hof10hc ',
+            ' hof25nc ',
             ' hofra',
             ' hofre ',
             ' hof-ra ',
@@ -74,6 +92,12 @@ class WowInstance
 
     const WOW_INSTANCE_MOGU_SHAN_VAULTS = array(
             ' msv ',
+            ' msv10 ',
+            ' msv25 ',
+            ' msv10n ',
+            ' msv25n ',
+            ' msv10hc ',
+            ' msv25hc ',
             ' msvra',
             ' msvre ',
             ' msv-ra ',
@@ -91,7 +115,12 @@ class WowInstance
     );
 
     const WOW_INSTANCE_BASTION_OF_TWILIGHT = array(
-
+        ' bot10 ',
+        ' bot25 ',
+        ' bot10n ',
+        ' bot25n ',
+        ' bot10hc ',
+        ' bot25hc ',
         ' bot ',
         ' botre ',
         ' botra ',
@@ -110,7 +139,12 @@ class WowInstance
     );
 
     const WOW_INSTANCE_THRONE_OF_THE_FOUR_WINDS = array(
-
+        ' totfw10 ',
+        ' totfw25 ',
+        ' totfw10n ',
+        ' totfw25n ',
+        ' totfw10hc ',
+        ' totfw25hc ',
         ' totfw ',
         ' totfwra ',
         ' totfwre ',
@@ -131,6 +165,10 @@ class WowInstance
     const WOW_INSTANCE_FIRELANDS = array(
         ' fl10 ',
         ' fl25 ',
+        ' fl10n ',
+        ' fl25n ',
+        ' fl10hc ',
+        ' fl25hc ',
         ' fl ',
         ' flre ',
         ' flra ',
@@ -148,6 +186,10 @@ class WowInstance
     const WOW_INSTANCE_DRAGON_SOUL = array(
         ' d10 ',
         ' d25 ',
+        ' d10n ',
+        ' d25n ',
+        ' d10hc ',
+        ' d25hc ',
         ' ds ',
         ' dsre ',
         ' dsra ',

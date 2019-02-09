@@ -10,6 +10,7 @@ namespace TauriBay\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mockery\Exception;
+use TauriBay\Defaults;
 use TauriBay\EncounterMember;
 use TauriBay\EncounterTop;
 use TauriBay\Loot;
@@ -111,7 +112,9 @@ class EncounterController extends Controller
 
     public function fixMissing(Request $_request)
     {
-        $encounters = Encounter::where('top_processed','=',0)->take(5000)->get();
+        ini_set('max_execution_time', 0);
+
+        $encounters = Encounter::where('top_processed','=',0)->whereIn("encounter_id", Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID))->take(5000)->get();
         $fixed = 0;
         $api = new Tauri\ApiClient();
 
