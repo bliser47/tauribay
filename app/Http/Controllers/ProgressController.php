@@ -201,7 +201,7 @@ class ProgressController extends Controller
                 }
                 else
                 {
-                    $result["error"] = "Log_id missing: " . $logId;
+                    $result["error"] = "Log_id missing: ";
                 }
             }
         }
