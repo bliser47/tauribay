@@ -111,7 +111,7 @@ class EncounterController extends Controller
 
     public function fixMissing(Request $_request)
     {
-        $encounters = Encounter::where('top_processed','=',0)->take(1000)->get();
+        $encounters = Encounter::where('top_processed','=',0)->take(5000)->get();
         $fixed = 0;
         $api = new Tauri\ApiClient();
 

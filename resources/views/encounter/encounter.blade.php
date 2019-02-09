@@ -44,12 +44,12 @@
             </div>
             <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="home-main-tab active" role="presentation"><a href="#fightDataDamage" aria-controls="fightDataDamage" role="tab" data-toggle="tab">Damage</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#fightDataHealing" aria-controls="fightDataHealing" role="tab" data-toggle="tab">Healing</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#fightDataLoot" aria-controls="fightDataLoot" role="tab" data-toggle="tab">Loot</a></li>
+                    <li class="home-main-tab active" role="presentation"><a href="#damage" aria-controls="damage" role="tab" data-toggle="tab">Damage</a></li>
+                    <li class="home-main-tab" role="presentation"><a href="#healing" aria-controls="healing" role="tab" data-toggle="tab">Healing</a></li>
+                    <li class="home-main-tab" role="presentation"><a href="#loot" aria-controls="loot" role="tab" data-toggle="tab">Loot</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="fightDataDamage">
+                    <div role="tabpanel" class="tab-pane active" id="damage">
                         @if ( count($membersDamage) )
                             @foreach ( $membersDamage as $member )
                                 <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
@@ -73,7 +73,7 @@
                             </div>
                         @endif
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="fightDataHealing">
+                    <div role="tabpanel" class="tab-pane" id="healing">
                         @if ( count($membersHealing) )
                             @foreach ( $membersHealing as $member )
                                 <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
@@ -98,7 +98,7 @@
                             </div>
                         @endif
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="fightDataLoot">
+                    <div role="tabpanel" class="tab-pane" id="loot">
                         <table class="table table-bordered table-classes">
                             <tr class="tHead">
                                 <th></th>

@@ -531,7 +531,7 @@ $(function()
                 $(newContainer).html(response["view"]);
                 $(".selectpicker").selectpicker();
                 prevState = window.location.href;
-                history.pushState(null, '', response["url"]);
+                history.pushState(null, '', response["url"]  + window.location.hash);
                 listenForEncounterFormSubmit();
                 handleEncounterModes(newContainer, data);
                 UpdateTimes();
@@ -604,7 +604,6 @@ $(function()
                 response = $.parseJSON(response);
                 $(tab).html(response["view"]);
                 $(".selectpicker").selectpicker();
-
                 if (mode === "dps" || mode === "hps") {
 
                     var classVal = $(tab).find("#class").val();
@@ -671,11 +670,12 @@ $(function()
 
     var handleEncounterModes = function (container, data)
     {
+        listenForTabChange(container);
         var modeSaved = getCookie("modeSaved");
         if ( modeSaved !== "" )
         {
             $(".modePanel, .tab-pane").removeClass("active");
-            $("#modePanel" + modeSaved + ", #mode-" + modeSaved).addClass("active");
+            $("#modePanel" + modeSaved + ", #" + modeSaved).addClass("active");
         }
         $(container).find(".tab-pane").each(function(){
 
@@ -711,14 +711,14 @@ $(function()
     var listenForClassChange = function(mode, role)
     {
         var currentClass = $("#class").val();
-        $("#mode-"+ mode +" #class-container .selectpicker").change(function()
+        $("#"+ mode +" #class-container .selectpicker").change(function()
         {
             var set = $(this).val();
-            $("#mode-"+ mode + " #class-container .selectpicker").val(set).selectpicker('refresh');
+            $("#"+ mode + " #class-container .selectpicker").val(set).selectpicker('refresh');
             if ( set !== currentClass )
             {
                 currentClass = set;
-                $("#mode-" + mode + " #spec-container").each(function(){
+                $("#" + mode + " #spec-container").each(function(){
                     var selectPicker = $(this).find(".selectpicker");
                     selectPicker.attr('disabled', true);
                     selectPicker.val(0);
@@ -736,14 +736,14 @@ $(function()
 
                             classSpecsJson = jQuery.parseJSON(classSpecsJson);
 
-                            $("#mode-" + mode + " #spec-container").each(function(){
+                            $("#" + mode + " #spec-container").each(function(){
                                 var selectContainer = $(this);
                                 selectContainer.html($(selectContainer).hasClass("short") ? classSpecsJson["mobile"] : classSpecsJson["desktop"]);
                                 selectContainer.find(".selectpicker").selectpicker('refresh');
                                 selectContainer.attr('disabled', false);
                                 $(selectContainer).find(".selectpicker").change(function(){
                                     var set = $(this).val();
-                                    $("#mode-" + mode + " #spec-container .selectpicker").val(set).selectpicker('refresh');
+                                    $("#" + mode + " #spec-container .selectpicker").val(set).selectpicker('refresh');
                                     $(this).parent().submit();
                                 });
                                 $(selectContainer).parent().submit();
@@ -763,14 +763,14 @@ $(function()
     var listenForRoleChange = function(mode)
     {
         var currentRole = $("#role").val();
-        $("#mode-"+ mode + " #role-container .selectpicker").change(function()
+        $("#"+ mode + " #role-container .selectpicker").change(function()
         {
             var set = $(this).val();
-            $("#mode-"+ mode + " #role-container .selectpicker").val(set).selectpicker('refresh');
+            $("#"+ mode + " #role-container .selectpicker").val(set).selectpicker('refresh');
             if ( set !== currentRole )
             {
                 currentRole = set;
-                $("#mode-" + mode + " #class-container, #mode-" + mode + " #spec-container").each(function(){
+                $("#" + mode + " #class-container, #" + mode + " #spec-container").each(function(){
                     var selectPicker = $(this).find(".selectpicker");
                     selectPicker.attr('disabled', true);
                     selectPicker.val(0);
@@ -785,7 +785,7 @@ $(function()
                     success: function(roleClassesSelectsJson)
                     {
                         roleClassesSelectsJson = jQuery.parseJSON(roleClassesSelectsJson);
-                        $("#mode-" + mode + " #class-container").each(function(){
+                        $("#" + mode + " #class-container").each(function(){
                             var selectContainer = $(this);
                             selectContainer.html($(selectContainer).hasClass("short") ? roleClassesSelectsJson["mobile"] : roleClassesSelectsJson["desktop"]);
                             selectContainer.find(".selectpicker").selectpicker('refresh');
@@ -857,7 +857,7 @@ $(function()
                 $(container).find(".encounters_loading").hide();
                 $(container).parent().html(response["view"]);
                 prevState = window.location.href;
-                history.pushState(null, '', response["url"]);
+                history.pushState(null, '', response["url"] + window.location.hash);
                 UpdateTimes();
             }
         });
@@ -870,11 +870,32 @@ $(function()
         loadMapDifficulty(container, data);
         $(".map-difficulty-tab").on("click",function(){
             prevState = window.location.href;
-            history.pushState(null, '', $(this).data("url"));
+            history.pushState(null, '', $(this).data("url") + window.location.hash);
             if ( $(this).hasClass("unLoaded") ) {
                 $(this).removeClass("unLoaded");
                 var id = $(this).find("a").attr("href");
                 loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
+            }
+        });
+    };
+
+    var listenForTabChange = function(container)
+    {
+        var hash = window.location.hash;
+        if ( hash )
+        {
+            $(container).find('ul.nav-tabs li').removeClass('active');
+            $(container).find('ul.nav-tabs a[href="' + hash + '"]').parent().addClass('active');
+            $(container).find(".tab-pane").removeClass("active");
+            $(hash).addClass('active');
+        }
+
+        $(container).find('.nav-tabs li a').click(function (e) {
+            history.replaceState(undefined, undefined, $(this).attr("href"));
+            var mode = $(this).parent().data("mode");
+            if ( mode )
+            {
+                setCookie("modeSaved",mode);
             }
         });
     };
@@ -916,7 +937,7 @@ $(function()
                 $(container).html(response["view"]);
 
                 prevState = window.location.href;
-                history.pushState(null, '', response["url"]);
+                history.pushState(null, '', response["url"] + window.location.hash);
 
                 $(".selectpicker").selectpicker();
                 $(".bossName select[name='map_id']").on("change",function(){
@@ -957,4 +978,6 @@ $(function()
         e.preventDefault();
         location.reload(prevState !== null ? prevState : window.location.href);
     });
+
+    listenForTabChange($("body"));
 });
