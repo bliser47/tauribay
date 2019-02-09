@@ -400,10 +400,10 @@ class Encounter extends Model
         $member->save();
 
         if ( $checkDps ) {
-            self::refreshLadderDps($member, $guild);
+            self::refreshLadderDps($top, $guild);
         }
         if ( $checkHps ) {
-            self::refreshLadderHps($member, $guild);
+            self::refreshLadderHps($top, $guild);
         }
     }
 
@@ -418,25 +418,21 @@ class Encounter extends Model
         }
     }
 
-    public static function refreshLadderDps($member) {
-        $cache = LadderCache::getCache($member->encounter, $member->difficulty_id);
-        $fastest = EncounterMember::where("id", "=", $cache->top_dps_encounter_member)->first();
-        if ($fastest !== null) {
-            if ($fastest->dps < $member->dps) {
-                $cache->top_dps_encounter_member = $member->id;
-                $cache->save();
-            }
+    public static function refreshLadderDps($memberTop) {
+        $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id);
+        $topDps = MemberTop::where("id", "=", $cache->top_dps_encounter_member)->first();
+        if ($topDps->dps < $memberTop->dps) {
+            $cache->top_dps_encounter_member = $memberTop->id;
+            $cache->save();
         }
     }
 
-    public static function refreshLadderHps($member) {
-        $cache = LadderCache::getCache($member->encounter, $member->difficulty_id);
-        $fastest = EncounterMember::where("id", "=", $cache->top_hps_encounter_member)->first();
-        if ($fastest !== null) {
-            if ($fastest->hps < $member->hps) {
-                $cache->top_hps_encounter_member = $member->id;
-                $cache->save();
-            }
+    public static function refreshLadderHps($memberTop) {
+        $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id);
+        $topHps = MemberTop::where("id", "=", $cache->top_hps_encounter_member)->first();
+        if ($topHps->hps < $memberTop->hps) {
+            $cache->top_hps_encounter_member = $memberTop->id;
+            $cache->save();
         }
     }
 
