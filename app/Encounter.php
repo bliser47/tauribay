@@ -420,7 +420,7 @@ class Encounter extends Model
     public static function refreshLadderDps($memberTop) {
         $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id);
         $topDps = MemberTop::where("id", "=", $cache->top_dps_encounter_member)->first();
-        if ($topDps->dps < $memberTop->dps) {
+        if (!$topDps || $topDps->dps < $memberTop->dps) {
             $cache->top_dps_encounter_member = $memberTop->id;
             $cache->save();
         }
@@ -429,7 +429,7 @@ class Encounter extends Model
     public static function refreshLadderHps($memberTop) {
         $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id);
         $topHps = MemberTop::where("id", "=", $cache->top_hps_encounter_member)->first();
-        if ($topHps->hps < $memberTop->hps) {
+        if (!$topHps || $topHps->hps < $memberTop->hps) {
             $cache->top_hps_encounter_member = $memberTop->id;
             $cache->save();
         }

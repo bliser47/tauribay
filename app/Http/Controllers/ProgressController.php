@@ -180,7 +180,7 @@ class ProgressController extends Controller
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
-        $latestRaids =  $api->getRaidLast($realmName, $lastLogOnRealm->log_id);
+        $latestRaids =  $api->getRaidLast($realmName, $lastLogOnRealm->log_id-2000);
         $logs = $latestRaids["response"]["logs"];
         $result = array();
         if ( is_array($logs) ) {
