@@ -13,6 +13,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+
+    const LOOT_TYPE_PLATE = 4;
+    const LOOT_TYPE_MAIL = 3;
+    const LOOT_TYPE_LEATHER = 2;
+    const LOOT_TYPE_CLOTH = 1;
+
     const INVENTORY_TYPE = array(
         26 => array(
             "name" => "Ranged",
@@ -84,10 +90,10 @@ class Item extends Model
 
     const SUB_CLASS = array(
         0 => "",
-        1 => "Cloth",
-        2 => "Leather",
-        3 => "Mail",
-        4 => "Plate",
+        self::LOOT_TYPE_CLOTH => "Cloth",
+        self::LOOT_TYPE_LEATHER => "Leather",
+        self::LOOT_TYPE_MAIL => "Mail",
+        self::LOOT_TYPE_PLATE => "Plate",
         5 => "?",
         6 => "Shield",
         7 => "Token",

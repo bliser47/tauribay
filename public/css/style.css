@@ -1276,3 +1276,8 @@ tr.spacer
 {
     padding:0px 5px 5px 5px;
 }
+
+.panel-white
+{
+    background:white;
+}

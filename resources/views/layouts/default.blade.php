@@ -16,6 +16,7 @@
             </div>
             <footer>
                 @include('includes.footer')
+                @yield('page.footer');
             </footer>
         </div>
     </body>

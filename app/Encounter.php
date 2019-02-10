@@ -71,7 +71,6 @@ class Encounter extends Model
         "Mists of Pandaria"
     );
 
-
     const ENCOUNTERS_DEFAULT = array(
         1577 => "Jin'rokh the Breaker",
         1575 => "Horridon",
@@ -379,20 +378,20 @@ class Encounter extends Model
                     $top->dps = $member->dps;
                     $top->dps_encounter_id = $member->encounter_id;
                     $top->dps_ilvl = $member->ilvl;
+                    $checkDps = true;
                 }
             }
             if ( $member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
                 $top->hps = $member->hps;
                 $top->hps_encounter_id = $member->encounter_id;
                 $top->hps_ilvl = $member->ilvl;
+                $checkHps = true;
             }
             if ( $guild !== null )
             {
                 $top->dps_guild_id = $guild->id;
                 $top->hps_guild_id = $guild->id;
             }
-            $checkDps = true;
-            $checkHps = true;
         }
         $top->save();
 

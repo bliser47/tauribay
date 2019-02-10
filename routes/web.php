@@ -84,5 +84,8 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
 
+    Route::get('/stats', 'StatsController@index');
+
+
     Route::auth();
 });
