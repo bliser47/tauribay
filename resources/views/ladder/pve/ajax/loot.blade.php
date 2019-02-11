@@ -1,3 +1,6 @@
+<div class="bossName">
+    {{ __("Összes kill: ") . $itemsTotal  }}
+</div>
 <table class="table table-bordered table-classes table-transparent">
     <tr class="tHead">
         <td style="width:35px"></td>

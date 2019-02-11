@@ -172,5 +172,6 @@
   "P.S. Lehet szűrni a Guild oldalkon belűl!":
           "P.S. You can now filter on a Guild's page!",
   "A visszamenőleges loot adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!":
-          "Preliminary loot data is curretly being processed. Please come back later!"
+          "Preliminary loot data is curretly being processed. Please come back later!",
+  "Összes kill: " : "Total kills: "
 }
