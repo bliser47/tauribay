@@ -3,8 +3,8 @@
         <td style="width:35px"></td>
         <td></td>
         <td></td>
-        <td>Item</td>
-        <td></td>
+        <td class="cellDesktop">Item</td>
+        <td class="cellDesktop"></td>
         <td></td>
         <td>%</td>
     </tr>
@@ -24,7 +24,7 @@
                     {{ $item->name }}
                 </a>
             </td>
-            <td> {{ $item->description }}</td>
+            <td class="cellDesktop"> {{ $item->description }}</td>
             <td style="width:50px;">{{ $item->ilvl }}</td>
             <td>
                 {{ number_format(($item->num*100)/$itemsTotal,2) }}%
