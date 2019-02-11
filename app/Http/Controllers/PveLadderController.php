@@ -405,11 +405,9 @@ class PveLadderController extends Controller
 
 
 
-                        $itemsTotal = 0;
-                        foreach ( $items as $item )
-                        {
-                            $itemsTotal += $item->num;
-                        }
+                        $itemsTotal = Encounter::where("encounters.encounter_id", "=", $encounterId)
+                            ->where("encounters.difficulty_id", "=", $difficultyId)->count();
+
 
                         $view = view("ladder/pve/ajax/loot", compact("items", "itemsTotal"));
 
