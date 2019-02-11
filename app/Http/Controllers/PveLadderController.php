@@ -391,7 +391,7 @@ class PveLadderController extends Controller
                     ));
                 }
                 else if ( $modeId == "loot" ) {
-                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=5";
+                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=6";
                     $cacheValue = Cache::get($cacheKey);
                     if (  !$cacheValue ) {
 
