@@ -102,7 +102,7 @@
                         @if ( count($loots) )
                             <table class="table table-bordered table-classes">
                                 <tr class="tHead">
-                                    <th></th>
+                                    <th style="width:35px"></th>
                                     <th></th>
                                     <th></th>
                                     <th class="cellDesktop">{{ __("Név") }}</th>

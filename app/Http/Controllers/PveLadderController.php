@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use TauriBay\Loot;
 
 class PveLadderController extends Controller
 {
@@ -389,18 +390,50 @@ class PveLadderController extends Controller
                         "url" => ""
                     ));
                 }
+                else if ( $modeId == "loot" ) {
+                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=3";
+                    $cacheValue = Cache::get($cacheKey);
+                    if (  !$cacheValue ) {
+
+
+                        $items = Loot::leftJoin("encounters", "encounters.id", "=", "loots.encounter_id")
+                            ->where("encounters.encounter_id", "=", $encounterId)->where("encounters.difficulty_id", "=", $difficultyId)
+                            ->leftJoin("items", "loots.item_id", "=", "items.id")
+                            ->groupBy("items.item_id")->select(
+                                DB::raw('items.name as name, items.item_id, count(items.item_id) as num, items.icon as icon, items.subclass as subclass, items.inventory_type as inventory_type, items.description as description, items.ilvl as ilvl')
+                            )->orderBy("num","DESC")->get();
+
+
+
+                        $itemsTotal = 0;
+                        foreach ( $items as $item )
+                        {
+                            $itemsTotal += $item->num;
+                        }
+
+                        $view = view("ladder/pve/ajax/loot", compact("items", "itemsTotal"));
+
+                        $cacheValue = $view->render();
+                        Cache::put($cacheKey, $cacheValue, 1440); // 1 day
+                    }
+                    return json_encode(array(
+                        "view" => $cacheValue,
+                        "url" => ""
+                    ));
+                }
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl();
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=2";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
                     $modes = array(
                         "rescent" => __("Új"),
-                        "speed" => __("Speedkill"),
+                        "speed" => "Speed",
                         "dps" => "DPS",
-                        "hps" => "HPS"
+                        "hps" => "HPS",
+                        "loot" => "Loot"
                     );
                     $modeId = Defaults::ENCOUNTER_SORT;
                     $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);

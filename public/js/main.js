@@ -682,6 +682,10 @@ $(function()
             var pane = $(this);
             if ( $(pane).hasClass("active") ) {
                 loadMode(pane,data, 1)
+                if ( $(pane).data("mode") === "loot" )
+                {
+                    $(".encounter-sub-filter-faction, .encounter-sub-filter-realm").hide();
+                }
             }
             else
             {
@@ -694,6 +698,15 @@ $(function()
                     }
                 })
             }
+            $("#modePanel" + $(pane).data("mode")).on("click",function(){
+                var mode = $(this).data("mode");
+                if (mode === "loot") {
+                    $(".encounter-sub-filter-faction, .encounter-sub-filter-realm").hide();
+                }
+                else {
+                    $(".encounter-sub-filter-faction, .encounter-sub-filter-realm").show();
+                }
+            });
         });
     };
 

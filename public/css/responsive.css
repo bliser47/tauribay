@@ -9,6 +9,10 @@
         table-layout: fixed;
         max-width: 100%;
     }
+
+    #encounter-form-response .nav li a {
+        padding:7.5px 7.5px;
+    }
 }
 
 @media screen and (max-width: 1024px)

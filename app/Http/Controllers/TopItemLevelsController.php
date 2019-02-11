@@ -215,23 +215,24 @@ class TopItemLevelsController extends Controller
     public function update(Request $request)
     {
         $refreshData = array(
-            530 => 1,
-            520 => 2,
-            510 => 3,
-            500 => 4,
-            490 => 8,
-            480 => 12,
-            400 => 24,
-            300 => 48
+            530 => 10,
+            520 => 20,
+            510 => 30,
+            500 => 40,
+            490 => 80,
+            480 => 120,
+            400 => 240,
+            300 => 480
         );
         $refreshed = false;
+
+        $api = new Tauri\ApiClient();
 
         foreach ( $refreshData as $limit => $refreshTime )
         {
             $characters = Characters::where('ilvl','>',$limit)->where('updated_at', '<', Carbon::now()->subHours($refreshTime)->toDateTimeString())->orderBy('ilvl', 'desc')->limit(10)->get();
             if ( $characters->count() )
             {
-                $api = new Tauri\ApiClient();
                 foreach ( $characters as $character )
                 {
                     TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(Realm::REALMS[$character->realm], $character->name), $character);
