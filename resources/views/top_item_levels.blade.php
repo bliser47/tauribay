@@ -4,6 +4,7 @@
         <div class="col-md-12">
             <div class="panel-group trade-filter" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
+                    {{--
                     <div id="topResponseModal" class="modal" tabindex="-1" role="dialog">
                       <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -55,6 +56,7 @@
                             {!! Form::close() !!}
                         </div>
                     </div>
+                    --}}
                     <div class="panel-heading nopadding" role="tab" id="headingTwo">
                         <h4 class="panel-title">
                             <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">

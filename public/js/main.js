@@ -130,6 +130,12 @@ $(function()
         $("#top-filter-submit").click();
     });
 
+    $('.sortByTop.sortInactive').click(function(){
+        $("select[name='sort']").val($(this).data("sort"));
+        $(".selectpicker").selectpicker("refresh");
+        $("#top-filter-submit").click();
+    });
+
     $(".register-form").validate({
         ignore: [],
         rules : {
