@@ -67,8 +67,6 @@ class OAuthController extends Controller
 
                 $responseJson = json_decode($response,true);
 
-                return $responseJson;
-
                 if ( isset($responseJson["access_token"]) ) {
                     $user->tauri_oauth_access_token = $responseJson["access_token"];
                     $user->tauri_oauth_refresh_token = $responseJson["refresh_token"];
