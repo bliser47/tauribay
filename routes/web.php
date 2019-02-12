@@ -11,7 +11,8 @@
 |
 */
 
-Route::get('oauth', 'OAuthController@authorize');
+Route::get('oauth', 'OAuthController@auth');
+Route::get('oauthd', 'OAuthController@debug');
 
 
 Route::get('gdkp', 'BliserGdkpController@index');

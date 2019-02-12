@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ModifyDateItemsAgain extends Migration
+class AccountsAddOauth extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class ModifyDateItemsAgain extends Migration
      */
     public function up()
     {
-        Schema::table('accounts', function($table) {
+        Schema::table('users', function($table) {
             $table->string("tauri_oauth_access_token");
             $table->string("tauri_oauth_refresh_token");
         });
@@ -26,7 +26,7 @@ class ModifyDateItemsAgain extends Migration
      */
     public function down()
     {
-        Schema::table('items', function($table) {
+        Schema::table('users', function($table) {
             $table->dropColumn("tauri_oauth_access_token");
             $table->dropColumn("tauri_oauth_refresh_token");
         });
