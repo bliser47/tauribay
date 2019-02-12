@@ -132,7 +132,8 @@
                         <th class="cellDesktop">{{ __("Szándék") }}</th>
                         <th>{{ __("Raid") }}</th>
                         <th>{{ __("Méret") }}</th>
-                        <th>{{ __("Nehézség") }}</th>
+                        <th class="cellDesktop">{{ __("Nehézség") }}</th>
+                        <th class="cellMobile">Dif.</th>
                         <th class="headDesktop">{{ __("Hirdetés") }}</th>
                     </tr>
                     @foreach ( $gdkpTrades as $gdkp )
