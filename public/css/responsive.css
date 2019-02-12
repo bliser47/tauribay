@@ -4,12 +4,6 @@
         text-align: center;
     }
 
-    .table-responsive table
-    {
-        table-layout: fixed;
-        max-width: 100%;
-    }
-
     #encounter-form-response .nav li a {
         padding:7.5px 7.5px;
     }
