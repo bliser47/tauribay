@@ -11,6 +11,9 @@
 |
 */
 
+Route::get('oauth', 'OAuthController@authorize');
+
+
 Route::get('gdkp', 'BliserGdkpController@index');
 Route::get('tooltip', 'TooltipController@Request');
 Route::get('tooltip2', 'TooltipController@ArmoryRequest');
