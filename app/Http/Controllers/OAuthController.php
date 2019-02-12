@@ -64,9 +64,14 @@ class OAuthController extends Controller
                 $response = curl_exec($curl);
                 curl_close($curl);
 
-                if (array_key_exists("access_token", $response)) {
+
+                if ( isset($response["access_token"]) ) {
                     $user->tauri_oauth_access_token = $response["access_token"];
                     $user->tauri_oauth_refresh_token = $response["refresh_token"];
+                }
+                else
+                {
+                    return var_dump($response);
                 }
             }
             return redirect('/home');
