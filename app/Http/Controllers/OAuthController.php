@@ -16,27 +16,10 @@ class OAuthController extends Controller
             if ( strlen($user->tauri_oauth_access_token) ) {
                 $curl = curl_init();
 
-                $authorization = "Authorization: Bearer " . $user->tauri_oauth_access_token;
-
-                $postFields = array(
-                    "client_id" => env('TAURI_OAUTH_CLIENT'),
-                    "client_secret" => env("TAURI_OAUTH_SECRET")
-                );
-
-
                 curl_setopt_array($curl, array(
-                    CURLOPT_URL => "https://oauth.tauriwow.com/api/v1/publicuserdata",
+                    CURLOPT_URL => "https://oauth.tauriwow.com/api/v1/publicuserdata?access_token=" . $user->tauri_oauth_access_token,
                     CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_POST => 1,
-                    CURLOPT_FOLLOWLOCATION => 1,
-                    CURLOPT_CUSTOMREQUEST => "POST",
-                    CURLOPT_VERBOSE => true,
-                    CURLOPT_HTTPHEADER, array(
-                        'Content-Type: application/json',
-                        $authorization
-                    ),
-                    CURLOPT_POSTFIELDS => $postFields
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1
                 ));
 
                 $response = curl_exec($curl);
