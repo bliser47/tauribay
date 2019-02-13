@@ -70,7 +70,7 @@ class OAuthController extends Controller
                     return var_dump($response);
                 }
             }
-            return redirect('/home');
+            return redirect('/home#oauth');
         }
         else {
             return redirect('/login');

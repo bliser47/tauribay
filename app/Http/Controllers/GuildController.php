@@ -30,12 +30,13 @@ class GuildController extends Controller
         $encounterId = $_request->get("encounter_id", 0);
 
         $expansions = Encounter::EXPANSIONS;
+        $expansionsShort = Encounter::EXPANSIONS_SHORT;
         $maps = Encounter::getExpansionMaps($expansionId);
+        $mapsShort = Encounter::getExpansionMapsShort($expansionId);
         if ( !array_key_exists($mapId, $maps))
         {
             $mapId = array_keys($maps)[0];
         }
-        $difficulties = Defaults::SIZE_AND_DIFFICULTY;
 
         $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
         if ( !in_array($encounterId, $mapEncounters) )
@@ -54,6 +55,9 @@ class GuildController extends Controller
         {
             $encounterIds = array($encounterId);
         }
+
+        $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
+        $difficultiesShort = Encounter::getMapDifficultiesShortForSelect($expansionId, $mapId, $encounterId);
 
         $guildEncounters = $encounter = Encounter::where("guild_id", "=", $_guild_id)
             ->whereNotIn("encounters.id", Encounter::INVALID_RAIDS)
@@ -78,9 +82,9 @@ class GuildController extends Controller
             "guild",
             "realm"
             ,"encounterIDs",
-            "encounters", "encounterId",
+            "encounters", "expansionsShort", "encounterId",
             "expansionId", "mapId","difficultyId",
-            "expansions", "maps", "difficulties"
+            "expansions", "maps", "mapsShort", "difficulties", "difficultiesShort"
         ));
     }
 }

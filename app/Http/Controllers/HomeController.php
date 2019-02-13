@@ -35,7 +35,12 @@ class HomeController extends Controller
             4 => __("Vétel")
         );
 
-        return view('home', array('user' => Auth::user(), 'realms' => Realm::REALMS, 'realmsShort' => Realm::REALMS_SHORT, 'adIntents' => $adIntents));
+        return view('home', array(
+            'user' => Auth::user(),
+            'realms' => Realm::REALMS,
+            'realmsShort' => Realm::REALMS_SHORT,
+            'adIntents' => $adIntents
+        ));
     }
 
 

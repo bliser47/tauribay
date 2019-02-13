@@ -71,6 +71,14 @@ class Encounter extends Model
         "Mists of Pandaria"
     );
 
+    const EXPANSIONS_SHORT = array(
+        "Classic",
+        "BC",
+        "WotLK",
+        "Cata",
+        "MoP"
+    );
+
     const ENCOUNTERS_DEFAULT = array(
         1577 => "Jin'rokh the Breaker",
         1575 => "Horridon",
@@ -87,7 +95,33 @@ class Encounter extends Model
         1580 => "Ra-den"
     );
 
+    const MAP_SHORT = array(
+        615 => "OS",
+        616 => "EoE",
+        624 => "VoA",
+        631 => "ICC",
+        649 => "TotC",
+        724 => "RS",
+        669 => "BWD",
+        671 => "BoT",
+        754 => "TotFW",
+        1008 => "MSV",
+        1009 => "HoF",
+        996 => "ToES",
+        1098 => "ToT",
+        1136 => "SoO"
+    );
+
     const MAP_SHORTS = array(
+        615 => "os",
+        616 => "eoe",
+        624 => "voa",
+        631 => "icc",
+        649 => "totc",
+        724 => "rs",
+        669 => "bwd",
+        671 => "bot",
+        754 => "totfw",
         1008 => "msv",
         1009 => "hof",
         996 => "toes",
@@ -737,6 +771,21 @@ class Encounter extends Model
             }
             ++$index;
         }
+    }
+
+    public static function getExpansionMapsShort($_expansion_id)
+    {
+        $maps = array();
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                $maps[$raid["id"]] = array_key_exists($raid["id"], self::MAP_SHORT) ? self::MAP_SHORT[$raid["id"]] : $raid["name"];
+            }
+            return $maps;
+        }
+        return array();
     }
 
     public static function getExpansionMaps($_expansion_id)
