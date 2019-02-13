@@ -293,36 +293,35 @@ class Encounter extends Model
 
     public static function refreshEncounterTop($encounter, $guild)
     {
-        $guildId = $guild !== null ? $guild->id : 0;
 
-        $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
-            ->where("difficulty_id",$encounter->difficulty_id)->where("guild_id", $guildId)->first();
+        if ( !in_array($encounter->id,self::INVALID_RAIDS) ) {
+            $guildId = $guild !== null ? $guild->id : 0;
+            $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
+                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->first();
 
 
-        if ( $top !== null )
-        {
-            if ( $top->fastest_encounter_time > $encounter->fight_time  ) {
+            if ($top !== null) {
+                if ($top->fastest_encounter_time > $encounter->fight_time) {
+                    $top->fastest_encounter_id = $encounter->id;
+                    $top->fastest_encounter_time = $encounter->fight_time;
+                    $top->fastest_encounter_date = $encounter->killtime;
+                    self::refreshLadderSpeedKill($encounter, $guild);
+                }
+            } else {
+
+                $top = new EncounterTop();
+                $top->realm_id = $encounter->realm_id;
+                $top->encounter_id = $encounter->encounter_id;
+                $top->difficulty_id = $encounter->difficulty_id;
+                $top->guild_id = $guildId;
                 $top->fastest_encounter_id = $encounter->id;
                 $top->fastest_encounter_time = $encounter->fight_time;
                 $top->fastest_encounter_date = $encounter->killtime;
                 self::refreshLadderSpeedKill($encounter, $guild);
             }
-        }
-        else
-        {
 
-            $top = new EncounterTop();
-            $top->realm_id = $encounter->realm_id;
-            $top->encounter_id = $encounter->encounter_id;
-            $top->difficulty_id = $encounter->difficulty_id;
-            $top->guild_id = $guildId;
-            $top->fastest_encounter_id = $encounter->id;
-            $top->fastest_encounter_time = $encounter->fight_time;
-            $top->fastest_encounter_date = $encounter->killtime;
-            self::refreshLadderSpeedKill($encounter, $guild);
+            $top->save();
         }
-
-        $top->save();
 
         $encounter->top_processed = 1;
         $encounter->save();
