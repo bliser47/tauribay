@@ -106,14 +106,14 @@ class ProgressController extends Controller
         }
 
         $sortBy = array(
-            "clear" => "clear_time",
-            "first_kill" => "first_kill_unix"
+            "first_kill_unix" => __("Első kill"),
+            "clear_time" => __("Legjobb idő")
         );
 
-        $orderBy = 'first_kill_unix';
+        $orderByValue = 'first_kill_unix';
         if ( $_request->has('sort') )
         {
-            $orderBy = $_request->get('sort');
+            $orderByValue = $_request->get('sort');
         }
 
         $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')->get();
@@ -128,15 +128,19 @@ class ProgressController extends Controller
             {
                 $guild->first_kill_unix = 100000000000 / $guild->progress;
             }
+            $guild->clear_time = $guild->clear_time > 0 ? $guild->clear_time :  1/$guild->progress * 100000000000;
         }
 
-        $guilds = $guilds->sortBy("first_kill_unix");
+        $guilds = $guilds->sortBy($orderByValue);
 
 
         $shortRealms = Realm::REALMS;
         $longRealms = Realm::REALMS_SHORT;
 
-        return view("progress/index", compact("guilds", 'shortRealms', 'longRealms'));
+
+
+
+        return view("progress/index", compact("guilds", 'shortRealms', 'longRealms', 'sortBy'));
     }
 
 

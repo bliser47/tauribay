@@ -691,14 +691,21 @@ a.changelog:hover, a.trello:hover
     margin:0px 2px 0px 2px;
 }
 
+.sortByTop
+{
+    padding:4px 8px 4px 8px;
+    background:white;
+    border-radius:4px;
+}
+
 .sortActive
 {
-    color:black;
+    color:#5cb85c;
 }
 
 .sortActive:hover
 {
-    color:black;
+    color:#5cb85c;
     text-decoration: none;
 }
 

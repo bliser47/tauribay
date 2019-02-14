@@ -14,6 +14,14 @@
                     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                         <div class="panel-body">
                             {!! Form::open(array("method" => "get","id"=>"top-filter-form")) !!}
+                            <div class="form-group col-md-2">
+                                <legend> {{ __("Rendezés") }} </legend>
+                                <div id="top-sort-by" class="form-group">
+                                    <div class="input-group col-md-12">
+                                        {!! Form::select('sort', $sortBy, (!Input::has('sort') || Input::get('sort') == 'first_kill_unix') ? 'first'  : 'clear_time', ['required', 'id' => 'sort-by', 'class' => "control selectpicker input-large"]); !!}
+                                    </div>
+                                </div>
+                            </div>
                             <div class="form-group col-md-4">
                                 <legend> {{ __("Realm") }} </legend>
                                 <div class="input-group">
@@ -31,7 +39,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
@@ -44,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-3">
                                 <legend> {{ __("Méret") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-10man checkbox-difficulty">
@@ -57,8 +65,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
-                                {{ __("Szűrés") }}
+                            <button id="top-filter-submit" class="btn btn-block btn-success" name="filter" value="1" type="submit">
+                                {{ __("Keresés") }}
                             </button>
                             {!! Form::close() !!}
                         </div>
@@ -74,8 +82,8 @@
                         <th class="cellDesktop">{{ __("Progress") }}</th>
                         <th class="cellMobile">{{ __("Prog.") }}</th>
                         <th class="cellDesktop">{{ __("Méret") }}</th>
-                        <th class="cellDesktop">{{ __("Legjobb idő") }}</th>
-                        <th>{{ __("Első kill") }}</th>
+                        <th><a id="sortByClear" data-sort="clear_time" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'clear_time') ? 'sortActive'  : 'sortInactive' }}">{{ __("Legjobb idő") }}</a></th>
+                        <th><a id="sortByFirst" data-sort="first_kill_unix" class="sortByTop {{ (!Input::has('sort') || Input::get('sort') == 'first_kill_unix') ? 'sortActive'  : 'sortInactive' }}">{{ __("Első kill") }}</a></th>
                         <th class="cellDesktop"></th>
                     </tr>
                     @foreach ( $guilds as $nr => $guild )
@@ -93,7 +101,7 @@
                             </td>
                             <td class="guildProgress"> {{ $guild->progress }}/13 </td>
                             <td class="cellDesktop"> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>
-                            <td class="cellDesktop guildClearTime">{{ $guild->clear_time > 0 ?  $guild->clear_time : "" }}</td>
+                            <td class="guildClearTime">{{ $guild->clear_time > 0 && $guild->clear_time < 604800 ?  $guild->clear_time : "" }}</td>
                             <td class="firstKillTime">{{ $guild->first_kill_unix <= time() ? date('M d, Y', $guild->first_kill_unix) : "" }}</td>
                             <td class="updateLoaderContainer cellDesktop">
                                 <div class="update-loader" id="updated-loader{{$guild->id}}"></div>
