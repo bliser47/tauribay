@@ -18,8 +18,12 @@ class GdkpIntent
 
     const GDKP_INTENT_MAKE = array
     (
+        ' invel. ',
+        ' invel.',
         ' invelek ',
         ' invelek.',
+        ' invelünk ',
+        ' invelünk.',
         ' lfm '
     );
 
@@ -39,7 +43,9 @@ class GdkpIntent
 
         ' gdkp t keresek  ',
         ' gdkp-t keresek  ',
-        ' gdkpt keresek  '
+        ' gdkpt keresek  ',
+
+        ' lf '
     );
 
 
