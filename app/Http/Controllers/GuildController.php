@@ -26,7 +26,7 @@ class GuildController extends Controller
 
         $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
         $mapId = $_request->get("map_id", Defaults::MAP_ID);
-        $difficultyId = $_request->get("difficulty_id", Defaults::DIFFICULTY_ID);
+        $difficultyId = $_request->get("difficulty_id", 0);
         $encounterId = $_request->get("encounter_id", 0);
 
         $expansions = Encounter::EXPANSIONS;
@@ -57,12 +57,20 @@ class GuildController extends Controller
         }
 
         $difficulties = Encounter::getMapDifficultiesForSelect($expansionId, $mapId, $encounterId);
+        $difficulties[0] = __("Minden");
+
         $difficultiesShort = Encounter::getMapDifficultiesShortForSelect($expansionId, $mapId, $encounterId);
+        $difficultiesShort[0] = __("Minden");
 
         $guildEncounters = $encounter = Encounter::where("guild_id", "=", $_guild_id)
             ->whereNotIn("encounters.id", Encounter::INVALID_RAIDS)
-            ->whereIn("encounters.encounter_id", $encounterIds)
-            ->where("encounters.difficulty_id", $difficultyId)
+            ->whereIn("encounters.encounter_id", $encounterIds);
+
+        if ( $difficultyId > 0 )
+        {
+            $guildEncounters = $guildEncounters->where("encounters.difficulty_id", $difficultyId);
+        }
+        $guildEncounters = $guildEncounters
             ->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')
             ->select(array(
                     "encounters.id as id",
