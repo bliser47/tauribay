@@ -34,7 +34,50 @@ class Encounter extends Model
         "Wind Lord Mel'jarak" => "Mel'jarak",
         "Amber-Shaper Un'sok" => "Un'sok",
         "Grand Empress Shek'zeer" => "Shek'zeer",
-        "Protectors of the Endless" => "Protectors"
+        "Protectors of the Endless" => "Protectors",
+        "Omnotron Defense System" => "Omnotron",
+        "Halfus Wyrmbreaker" => "Halfus",
+        "Theralion and Valiona" => "Theralion",
+        "Ascendant Council" => "Council",
+        "Majordomo Staghelm" => "Majordomo",
+        "Conclave of Wind" => "Conclave",
+        "Warlord Zon'ozz" => "Zon'ozz",
+        "Yor'sahj the Unsleeping" => "Yor'sahj",
+        "Warmaster Blackhorn" => "Warmaster",
+        "Spine of Deathwing" => "Spine",
+        "Madness of Deathwing" => "Deathwing",
+        "Instructor Razuvious" => "Razuvious",
+        "Gothik the Harvester" => "Gothik",
+        "The Four Horsemen" => "Horsemen",
+        "Flame Leviathan" => "Leviathan",
+        "Ignis the Furnace Master" => "Ignis",
+        "XT-002 Deconstructor" => "XT-002",
+        "The Assembly of Iron" => "Assembly",
+        "General Vezax" => "Vezax",
+        "Algalon the Observer" => "Algalon",
+        "Elder Brightleaf" => "E. Brightleaf",
+        "Elder Ironbranch" => "E. Ironbranch",
+        "Elder Stonebark" => "E. Stonebark",
+        "Archavon the Stone Watcher" => "Archavon",
+        "Emalon the Storm Watcher" => "Emalon",
+        "Koralon the Flame Watcher" => "Koralon",
+        "Toravon the Ice Watcher" => "Toravon",
+        "Lord Marrowgar" => "Marrowgar",
+        "Lady Deathwhisper" => "Deathwhisper",
+        "Icecrown Gunship Battle" => "Gunship",
+        "Deathbringer Saurfang" => "Saurfang",
+        "Professor Putricide" => "Putricide",
+        "Blood Council" => "Council",
+        "Queen Lana'thel" => "Lana'thel",
+        "Valithria Dreamwalker" => "Valithria",
+        "The Lich King" => "LK",
+        "Northrend Beasts" => "Beasts",
+        "Lord Jaraxxus" => "Jaraxxus",
+        "Faction Champions" => "Champions",
+        "Val'kyr Twins" => "Twins",
+        "Baltharus the Warborn" => "Baltharus",
+        "Saviana Ragefire" => "Saviana",
+        "General Zarithrian" => "Zarithrian"
     );
 
 
@@ -71,6 +114,14 @@ class Encounter extends Model
         "Mists of Pandaria"
     );
 
+    const EXPANSIONS_SHORT = array(
+        "Classic",
+        "BC",
+        "WotLK",
+        "Cata",
+        "MoP"
+    );
+
     const ENCOUNTERS_DEFAULT = array(
         1577 => "Jin'rokh the Breaker",
         1575 => "Horridon",
@@ -87,7 +138,33 @@ class Encounter extends Model
         1580 => "Ra-den"
     );
 
+    const MAP_SHORT = array(
+        615 => "OS",
+        616 => "EoE",
+        624 => "VoA",
+        631 => "ICC",
+        649 => "TotC",
+        724 => "RS",
+        669 => "BWD",
+        671 => "BoT",
+        754 => "TotFW",
+        1008 => "MSV",
+        1009 => "HoF",
+        996 => "ToES",
+        1098 => "ToT",
+        1136 => "SoO"
+    );
+
     const MAP_SHORTS = array(
+        615 => "os",
+        616 => "eoe",
+        624 => "voa",
+        631 => "icc",
+        649 => "totc",
+        724 => "rs",
+        669 => "bwd",
+        671 => "bot",
+        754 => "totfw",
         1008 => "msv",
         1009 => "hof",
         996 => "toes",
@@ -736,6 +813,21 @@ class Encounter extends Model
             }
             ++$index;
         }
+    }
+
+    public static function getExpansionMapsShort($_expansion_id)
+    {
+        $maps = array();
+        $expansionKey = "map_exp_".$_expansion_id;
+        if ( array_key_exists($expansionKey, Encounter::EXPANSION_RAIDS_COMPLEX)) {
+            $expansionRaids = Encounter::EXPANSION_RAIDS_COMPLEX[$expansionKey];
+            foreach ( $expansionRaids as $raid )
+            {
+                $maps[$raid["id"]] = array_key_exists($raid["id"], self::MAP_SHORT) ? self::MAP_SHORT[$raid["id"]] : $raid["name"];
+            }
+            return $maps;
+        }
+        return array();
     }
 
     public static function getExpansionMaps($_expansion_id)

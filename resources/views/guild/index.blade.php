@@ -10,14 +10,24 @@
     <div class="row">
         <div class="col-md-12">
             {!! Form::open(array("method" => "get","id"=>"guild-form")) !!}
-            <div class="col-md-3 col-xs-6">
+            <div class="divDesktop col-md-3 col-xs-6">
                 <div id="expansions-container" class="input-group col-md-12">
                     {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
                 </div>
             </div>
-            <div class="col-md-3 col-xs-6">
+            <div class="divMobile col-md-3 col-xs-6">
+                <div id="expansions-container" class="input-group col-md-12">
+                    {!! Form::select('expansion_id', $expansionsShort, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
+                </div>
+            </div>
+            <div class="divDesktop col-md-3 col-xs-6">
                 <div id="expansions-container" class="input-group">
                     {!! Form::select('map_id', $maps, Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large"]); !!}
+                </div>
+            </div>
+            <div class="divMobile col-md-3 col-xs-6">
+                <div id="expansions-container" class="input-group">
+                    {!! Form::select('map_id', $mapsShort, Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large"]); !!}
                 </div>
             </div>
             <div class="col-md-3 col-xs-6">
@@ -25,9 +35,14 @@
                     {!! Form::select('encounter_id', $encounters, Input::get('encounter_id', $encounterId), ['required', 'id' => 'encounter', 'class' => "control selectpicker input-large"]); !!}
                 </div>
             </div>
-            <div class="col-md-3 col-xs-6">
+            <div class="divDesktop col-md-3 col-xs-6">
                 <div id="expansions-container" class="input-group">
                     {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'difficulty', 'class' => "control selectpicker input-large"]); !!}
+                </div>
+            </div>
+            <div class="divMobile col-md-3 col-xs-6">
+                <div id="expansions-container" class="input-group">
+                    {!! Form::select('difficulty_id', $difficultiesShort, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'difficulty', 'class' => "control selectpicker input-large"]); !!}
                 </div>
             </div>
             {!! Form::close() !!}
