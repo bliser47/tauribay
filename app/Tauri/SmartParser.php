@@ -9,8 +9,10 @@ class SmartParser
 
     public static function TextContainsArrayPart($_text,$array)
     {
+        $_text = strtolower($_text);
         foreach($array as $value) {
 
+            $value = strtolower($value);
             $pos = strpos($_text,$value);
             if ($pos !== false && ( strlen($value) > 3 || $pos < 3 ) ) {
                 return $pos;
