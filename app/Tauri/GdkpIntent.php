@@ -24,7 +24,12 @@ class GdkpIntent
         ' invelek.',
         ' invelünk ',
         ' invelünk.',
-        ' lfm '
+        ' lfm ',
+        ' gdkp ',
+        ' gdkp-ra ',
+        ' gdkp.',
+        ' gdkp-ra.',
+        ' gdkp-re.',
     );
 
     const GDKP_INTENT_JOIN = array
