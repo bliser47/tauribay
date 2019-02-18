@@ -22,6 +22,7 @@ use TauriBay\Guild;
 use TauriBay\Tauri\ApiClient;
 use Carbon\Carbon;
 use TauriBay\Tauri;
+use DB;
 
 
 class EncounterController extends Controller
@@ -112,21 +113,93 @@ class EncounterController extends Controller
 
     public function fixMissing(Request $_request)
     {
+
+    }
+
+    public function fixMissingEncounterMembers(Request $_request)
+    {
         ini_set('max_execution_time', 0);
 
-        $encounters = Encounter::where('top_processed','=',0)->take(5000)->get();
-        $fixed = 0;
+        $encounters = Encounter::where('members_processed','=',false)->get();
         $api = new Tauri\ApiClient();
-
+        $result = array(
+            "fixed" => array(),
+            "failed" => array()
+        );
         foreach ( $encounters as $encounter )
         {
-            $data = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
-            if ($data["response"]) {
-                $items = $data["response"]["items"];
-                Loot::processItems($encounter, $items, $api);
-                ++$fixed;
+            $log = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
+            if ( array_key_exists("response", $log) ) {
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                Encounter::updateEncounterMembers($log["response"], $encounter, $guild);
+                $result["fixed"][] = $encounter->log_id;
+            } else {
+                $result["failed"][] = $encounter->log_id;
             }
         }
-        return $fixed;
+        return $result;
+    }
+
+    public function fixMissingEncounters(Request $_request)
+    {
+        ini_set('max_execution_time', 0);
+
+        $missing = array();
+
+        $realms = Realm::REALMS;
+        foreach ( $realms as $realm_id => $realm ) {
+            $page = 0;
+            $pageNr = 10000;
+            $last = 0;
+            $missing[$realm_id] = array();
+            do {
+                $encounters = Encounter::where("realm_id", "=", $realm_id)->where("log_id", ">", $pageNr * $page)->where("log_id", "<", $pageNr * ($page + 1))->orderBy("log_id")->get();
+                foreach ($encounters as $encounter) {
+                    $id = $encounter->log_id;
+                    if ($last > 0 && $id - 1 !== $last) {
+                        for ($i = $last + 1; $i < $id; ++$i) {
+                            $missing[$realm_id][] = $i;
+                        }
+                    }
+                    $last = $id;
+                }
+                $recordsExist = count($encounters) > 0;
+                ++$page;
+            } while ( $recordsExist );
+        }
+
+        $api = new Tauri\ApiClient();
+        $result = array(
+            "fixed" => array(),
+            "failed" => array(),
+            "guilddata" => array(),
+            "duplicate" => array()
+        );
+        foreach ( $missing as $realm_id => $realmMissing )
+        {
+            foreach ( $realmMissing as $missingLogId )
+            {
+                $raid = Encounter::where("log_id", '=', $missingLogId)->where("realm_id", "=", $realm_id)->first();
+                if ($raid == null) {
+                    $log = $api->getRaidLog(Realm::REALMS[$realm_id], $missingLogId);
+                    if (array_key_exists("response", $log)) {
+                        if ( array_key_exists("guilddata",$log["response"]) ) {
+                            Encounter::store($api, $log["response"], $realm_id);
+                            $result["fixed"][] = $realm_id . '-' . $missingLogId;
+                        }
+                        else {
+                            $result["guilddata"][] = $realm_id . '-' . $missingLogId;
+                        }
+                    }
+                    else {
+                        $result["failed"][] = $realm_id . '-' . $missingLogId;
+                    }
+                }
+                else {
+                    $result["duplicate"][] = $realm_id . '-' . $missingLogId;
+                }
+            }
+        }
+        return $result;
     }
 }

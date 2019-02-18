@@ -86,6 +86,9 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/raid/{expansion_id}/{map_id}', 'RaidController@getMapEncounters');
 
 
+    Route::get('/player/{realm_short}/{name}', 'PlayerController@index');
+
+
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
 
     Route::get('/stats', 'StatsController@index');

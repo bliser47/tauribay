@@ -71,6 +71,7 @@ class Loot extends Model
                 }
             }
         }
+
         foreach ( $loots as $itemData )
         {
             $item = $itemData["item"];

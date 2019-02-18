@@ -36,4 +36,12 @@ class Realm extends Model
         1 => "wod",
         2 => "evermoon"
     );
+
+    public static function getShortNameFromURL($_short_name)
+    {
+        $index = array_search($_short_name, self::REALMS_URL);
+        if ( $index >= 0 ) {
+            return self::REALMS_SHORT[$index];
+        }
+    }
 }

@@ -289,7 +289,7 @@ class PveLadderController extends Controller
                         ));
                     }
                 }
-                else if ( $modeId == "rescent" )
+                else if ( $modeId == "recent" )
                 {
                     $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                     $cacheValue = Cache::get($cacheKey);
@@ -329,7 +329,7 @@ class PveLadderController extends Controller
                         $encounters = $encounters->orderBy("killtime", "desc");
                         $encounters = $encounters->paginate(10);
 
-                        $view = view("ladder/pve/ajax/rescent", compact("encounters", "modeId"));
+                        $view = view("ladder/pve/ajax/recent", compact("encounters", "modeId"));
 
                         $cacheValue = $view->render();
                         Cache::put($cacheKey, $cacheValue, 10); // 10 mintues
@@ -427,7 +427,7 @@ class PveLadderController extends Controller
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
                     $modes = array(
-                        "rescent" => __("Új"),
+                        "recent" => __("Új"),
                         "speed" => "Speed",
                         "dps" => "DPS",
                         "hps" => "HPS",

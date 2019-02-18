@@ -228,6 +228,9 @@ return [
             'MAIL_PASSWORD',
             'PUSHER_APP_KEY',
             'PUSHER_APP_SECRET',
+            'TAURI_OAUTH_SECRET',
+            'RECAPTCHA_PRIVATE_KEY',
+            'TAURI_API_SECRET'
         ],
         '_SERVER' => [
             'APP_KEY',
