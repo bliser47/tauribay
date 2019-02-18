@@ -48,7 +48,7 @@
         $("<img src=\"{{ URL::asset("img/back.jpg") }}\">").load(function() {
             var originalWidth = this.width;
             var originalHeight = this.height;
-            //$(".wrapper").prepend("<img class=\"backLoaded\" src=\"{{ URL::asset("img/back.jpg") }}\">");
+            $(".wrapper").prepend("<img class=\"backLoaded\" src=\"{{ URL::asset("img/back.jpg") }}\">");
             $(".wrapper").fadeTo(500,1,"swing");
             function resizeBackground() {
                 var windowWidth = $(window).width();
