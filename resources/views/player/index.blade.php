@@ -10,14 +10,14 @@
     <div class="row">
         <div class="col-md-12">
             {!! Form::open(array("method" => "get","id"=>"player-form")) !!}
-            <div class="col-xs-6">
+            <div class="col-md-6">
                 <div id="expansions-container" class="input-group col-md-12">
-                    {!! Form::select('realm_id', $realms, Input::get('realm_id', $realmId), ['required', 'id' => 'realm', 'class' => "control selectpicker input-large"]); !!}
+                    {!! Form::select('realm_url', $realms, Input::get('realm_url', $realmUrl), ['required', 'id' => 'realm_url', 'class' => "control selectpicker input-large"]); !!}
                 </div>
             </div>
-            <div class="col-xs-6">
+            <div class="col-md-6">
                 <div class="input-group">
-                    <input type="text" class="form-control" name="search" value="{!! Input::get('name',$playerName) !!}" placeholder="{{ __("Karakter neve") }}">
+                    <input id="player_name" type="text" class="form-control" name="player_name" value="{!! Input::get('player_name',$playerName) !!}" placeholder="{{ __("Karakter neve") }}">
                     <span class="input-group-btn">
                     <button class="btn btn-success" name="filter" value="1" type="submit">
                         {{ __("Keresés") }}

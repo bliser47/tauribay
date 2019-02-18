@@ -37,6 +37,12 @@ class Realm extends Model
         2 => "evermoon"
     );
 
+    const REALMS_URL_KEY = array(
+        "tauri" => "Tauri",
+        "wod" => "WoD",
+        "evermoon" => "Evermoon"
+    );
+
     public static function getShortNameFromURL($_short_name)
     {
         $index = array_search($_short_name, self::REALMS_URL);

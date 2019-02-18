@@ -87,6 +87,7 @@ Route::group(['middleware' => 'language'], function () {
 
 
     Route::get('/player/{realm_short}/{name}', 'PlayerController@index');
+    Route::get('/player/{realm_short}/{name}/{mode}', 'PlayerController@mode');
 
 
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website

@@ -133,7 +133,7 @@ $(function()
     $('.sortByTop.sortInactive').click(function(){
         $("select[name='sort']").val($(this).data("sort"));
         $(".selectpicker").selectpicker("refresh");
-        $("#top-filter-submit").click();
+        $("#    top-filter-submit").click();
     });
 
     $(".register-form").validate({
@@ -925,24 +925,24 @@ $(function()
         {
             $(tab).addClass("loadingMode");
 
-            var loader = $(".encounters_loading");
-            loader.show();
+            var realm = $("#realm_url").val();
+            var name = $("#player_name").val();
+
+            $.ajax({
+                type: "GET",
+                url: URL_WEBSITE + "/player/" + realm + "/" + name + "/" + mode,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response)
+                {
+                    $("#"+mode).html(response);
+                    UpdateTimes();
+                }
+            });
+
         }
     };
-
-    $("#player-response-form").find(".modePanel").each(function(){
-        var tab = $(this);
-        if ($(tab).hasClass("active"))
-        {
-            loadPlayerMode(tab, $(tab).data("mode"));
-        }
-        else
-        {
-            $(this).on("click",function(){
-                loadPlayerMode(tab, $(tab).data("mode"));
-            });
-        }
-    });
 
     var firstSubmit = true;
     $("#pve-ladder-form").submit(function(e){
@@ -1023,4 +1023,25 @@ $(function()
     });
 
     listenForTabChange($("body"));
+
+    $("#player-form").submit(function(e){
+        e.preventDefault();
+        var realm = $("#realm_url").val();
+        var name = $("#player_name").val();
+        window.location.href = URL_WEBSITE + "/player/" + realm + "/" + name;
+    });
+
+    $("#player-response-form").find(".modePanel").each(function(){
+        var tab = $(this);
+        if ($(tab).hasClass("active"))
+        {
+            loadPlayerMode(tab, $(tab).data("mode"));
+        }
+        else
+        {
+            $(this).on("click",function(){
+                loadPlayerMode(tab, $(tab).data("mode"));
+            });
+        }
+    });
 });

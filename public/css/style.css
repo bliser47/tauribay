@@ -1009,7 +1009,7 @@ a.changelog:hover, a.trello:hover
 
 .memberDataContainer
 {
-    background:rgba(0,0,0,0.65);
+    background:rgba(0,0,0,0.65) !Important;
 }
 
 .memberDataContainerFirst
@@ -1021,6 +1021,15 @@ a.changelog:hover, a.trello:hover
     height:30px;
     position: relative;
     border-bottom:2px solid rgba(0,0,0,0.5);
+}
+
+.playerDataContainer .memberDataWidthContainer
+{
+    border-bottom:none;
+}
+
+.playerDataContainer .memberDataWidth{
+    top:1px;
 }
 
 .memberName, .memberPosition
@@ -1279,7 +1288,7 @@ tr.spacer
     width:100%;
 }
 
-#guild-form .col-xs-6, #player-form .col-xs-6
+#guild-form .col-xs-6, #player-form .col-md-6
 {
     padding:0px 5px 5px 5px;
 }
