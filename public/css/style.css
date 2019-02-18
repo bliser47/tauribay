@@ -1271,7 +1271,7 @@ tr.spacer
     border:1px solid #ddd;
 }
 
-#guild-form
+#guild-form, #player-form
 {
     padding:5px 5px 0px 5px;
     background:#f5f5f5;
@@ -1279,7 +1279,7 @@ tr.spacer
     width:100%;
 }
 
-#guild-form .col-xs-6
+#guild-form .col-xs-6, #player-form .col-xs-6
 {
     padding:0px 5px 5px 5px;
 }

@@ -919,7 +919,31 @@ $(function()
         });
     };
 
-    $(".encounters_loading").hide();
+    var loadPlayerMode = function(tab, mode)
+    {
+        if ( !$(tab).hasClass("loadingMode") )
+        {
+            $(tab).addClass("loadingMode");
+
+            var loader = $(".encounters_loading");
+            loader.show();
+        }
+    };
+
+    $("#player-response-form").find(".modePanel").each(function(){
+        var tab = $(this);
+        if ($(tab).hasClass("active"))
+        {
+            loadPlayerMode(tab, $(tab).data("mode"));
+        }
+        else
+        {
+            $(this).on("click",function(){
+                loadPlayerMode(tab, $(tab).data("mode"));
+            });
+        }
+    });
+
     var firstSubmit = true;
     $("#pve-ladder-form").submit(function(e){
         e.preventDefault();

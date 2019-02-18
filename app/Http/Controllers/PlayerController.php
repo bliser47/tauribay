@@ -83,17 +83,24 @@ class PlayerController extends Controller
         }
         else
         {
-            $playerTitle = Realm::getShortNameFromURL($_realm_short) . " - " . ucfirst($_player_name);
+            $realmId = array_search($_realm_short, Realm::REALMS_URL);
+            $playerName = ucfirst($_player_name);
+            $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
 
             $modes = array(
                 "recent" => __("Új"),
                 "dps" => "DPS",
                 "hps" => "HPS",
             );
-            $modeId = Defaults::ENCOUNTER_SORT;
+            $modeId = Defaults::PLAYER_MODE;
+
+            $realms = Realm::REALMS_SHORT;
 
             return view("player/index", compact(
             "playerTitle",
+                "playerName",
+                "realms",
+                "realmId",
                 "modes",
                 "modeId"
             ));
