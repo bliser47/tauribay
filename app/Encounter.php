@@ -355,9 +355,12 @@ class Encounter extends Model
             {
                 $member->faction_id = -1;
             }
-            $member->save();
 
             self::refreshMemberTop($member, $guild);
+            self::calculateScores($member);
+
+            $member->top_processed = 1;
+            $member->save();
 
             ++$i;
         }
@@ -366,6 +369,29 @@ class Encounter extends Model
             $encounter->members_processed = true;
             $encounter->save();
         }
+    }
+
+    public static function calculateScores($member)
+    {
+        // Calculate dps score
+        $avgDps = MemberTop::where("encounter_id","=",$member->encounter)
+            ->where("difficulty_id","=",$member->difficulty_id)
+            ->where("spec","=",$member->spec)
+            ->whereBetween("dps_ilvl", array($member->ilvl-4,$member->ilvl+4))
+            ->take(5)
+            ->orderBy("dps","desc")->avg("dps");
+
+        $member->dps_score = intval(($member->dps * 100) / max($avgDps,1));
+
+        // Calculate hps score
+        $avgHps = MemberTop::where("encounter_id","=",$member->encounter)
+            ->where("difficulty_id","=",$member->difficulty_id)
+            ->where("spec","=",$member->spec)
+            ->whereBetween("hps_ilvl", array($member->ilvl-4,$member->ilvl+4))
+            ->take(5)
+            ->orderBy("hps","desc")->avg("hps");
+
+        $member->hps_score = intval(($member->hps * 100) / max($avgHps,1));
     }
 
     public static function refreshEncounterTop($encounter, $guild)
@@ -470,9 +496,6 @@ class Encounter extends Model
             }
         }
         $top->save();
-
-        $member->top_processed = 1;
-        $member->save();
 
         if ( $checkDps ) {
             self::refreshLadderDps($top, $guild);

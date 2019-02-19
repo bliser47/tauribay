@@ -113,7 +113,13 @@ class EncounterController extends Controller
 
     public function fixMissing(Request $_request)
     {
-
+        $members = EncounterMember::where("top_processed","<>",1)->take(1)->get();
+        foreach ( $members as $member )
+        {
+            Encounter::calculateScores($member);
+            $member->top_processed = 1;
+            $member->save();
+        }
     }
 
     public function fixMissingEncounterMembers(Request $_request)
