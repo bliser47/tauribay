@@ -9,6 +9,8 @@
 namespace TauriBay\Http\Controllers;
 
 use Illuminate\Http\Request;
+use TauriBay\CharacterEncounters;
+use TauriBay\Characters;
 use TauriBay\Defaults;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
@@ -30,23 +32,20 @@ class PlayerController extends Controller
             case "recent":
 
                 $realmId = array_search($_realm_short,Realm::REALMS_URL);
-                $playerEncounters = EncounterMember::where("realm_id","=",$realmId)->where("name","=",$_player_name)->orderBy("killtime","desc")->paginate(16);
-                $encounterIDs = Encounter::ENCOUNTER_IDS;
+                $character = Characters::where("realm","=",$realmId)->where("name","=",$_player_name)->first();
+                if ( $character !== null ) {
 
-                foreach ( $playerEncounters as $encounter )
-                {
-                    $avgDps = MemberTop::where("encounter_id","=",$encounter->encounter)->where("difficulty_id","=",$encounter->difficulty_id)->where("spec","=",$encounter->spec)->orderBy("dps","desc")->first();
-                    $avgHps = MemberTop::where("encounter_id","=",$encounter->encounter)->where("difficulty_id","=",$encounter->difficulty_id)->where("spec","=",$encounter->spec)->orderBy("hps","desc")->first();
-                    $encounter->dps_score = intval(($encounter->dps * 100) / max($avgDps->dps,1));
-                    $encounter->hps_score = intval(($encounter->hps * 100) / max($avgHps->hps,1));
+                    $encounters = CharacterEncounters::leftJoin("characters", "characters.id", "=", "character_encounters.character_id")
+                        ->leftJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
+                        ->where("characters.realm", "=", $realmId)->where("characters.name", "=", $_player_name)->orderBy("killtime", "desc")->paginate(16);
+                    $encounterIDs = Encounter::ENCOUNTER_IDS;
+
+                    return view("player/ajax/recent", compact("encounters", "encounterIDs"));
                 }
-
-                return view("player/ajax/recent",compact("playerEncounters","encounterIDs"));
 
                 break;
 
-            case "hps":
-            case "dps":
+            case "top":
 
                 break;
 
@@ -61,26 +60,32 @@ class PlayerController extends Controller
     public function index(Request $_request, $_realm_short, $_player_name)
     {
         $realmId = array_search($_realm_short, Realm::REALMS_URL);
-        $realmUrl = $_realm_short;
         $playerName = ucfirst($_player_name);
-        $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
+        $character = Characters::where("realm","=",$realmId)->where("name","=",$playerName)->first();
+        if ( $character !== null ) {
 
-        $modes = array(
-            "recent" => __("Új"),
-            "dps" => "DPS",
-            "hps" => "HPS",
-        );
-        $modeId = Defaults::PLAYER_MODE;
+            $realmUrl = $_realm_short;
+            $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
 
-        $realms = Realm::REALMS_URL_KEY;
+            $modes = array(
+                "recent" => __("Új"),
+                "top" => __("Top"),
+            );
+            $modeId = Defaults::PLAYER_MODE;
 
-        return view("player/index", compact(
-        "playerTitle",
-            "playerName",
-            "realms",
-            "realmUrl",
-            "modes",
-            "modeId"
-        ));
+            $realms = Realm::REALMS_URL_KEY;
+            $playerClass = $character->class;
+
+            return view("player/index", compact(
+                "playerTitle",
+                "playerClass",
+                "playerName",
+                "realms",
+                "realmUrl",
+                "modes",
+                "modeId"
+            ));
+        }
+        return "";
     }
 }

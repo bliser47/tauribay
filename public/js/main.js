@@ -919,24 +919,36 @@ $(function()
         });
     };
 
-    var loadPlayerMode = function(tab, mode)
+    var loadPlayerMode = function(tab, mode, page)
     {
         if ( !$(tab).hasClass("loadingMode") )
         {
+
             $(tab).addClass("loadingMode");
 
             var realm = $("#realm_url").val();
             var name = $("#player_name").val();
 
+            var container = $("#"+mode);
+            $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
+
             $.ajax({
                 type: "GET",
-                url: URL_WEBSITE + "/player/" + realm + "/" + name + "/" + mode,
+                url: URL_WEBSITE + "/player/" + realm + "/" + name + "/" + mode + "?page=" + page,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function(response)
                 {
-                    $("#"+mode).html(response);
+                    $(container).html(response);
+                    $(container).find(".pagination a").click(function(e)
+                    {
+                        e.preventDefault();
+                        var url = new URL($(this).attr("href"));
+                        var page = url.searchParams.get("page");
+                        $(tab).removeClass("loadingMode");
+                        loadPlayerMode(tab, mode, page);
+                    });
                     UpdateTimes();
                 }
             });
@@ -1035,12 +1047,12 @@ $(function()
         var tab = $(this);
         if ($(tab).hasClass("active"))
         {
-            loadPlayerMode(tab, $(tab).data("mode"));
+            loadPlayerMode(tab, $(tab).data("mode"),1);
         }
         else
         {
             $(this).on("click",function(){
-                loadPlayerMode(tab, $(tab).data("mode"));
+                loadPlayerMode(tab, $(tab).data("mode"),1);
             });
         }
     });

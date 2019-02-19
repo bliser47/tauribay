@@ -76,15 +76,6 @@ class TopItemLevelsController extends Controller
                 $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
-                // TODO: Fix this
-                if ( $character->class == 10 )
-                {
-                    $character->class = 11;
-                }
-                else if ( $character->class == 11)
-                {
-                    $character->class = 10;
-                }
                 $character->realm = $_realmId;
                 $character->achievement_points = $characterSheetResponse["pts"];
                 $character->save();

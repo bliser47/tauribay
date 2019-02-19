@@ -113,10 +113,15 @@ class EncounterController extends Controller
 
     public function fixMissing(Request $_request)
     {
-        $members = EncounterMember::where("top_processed","<>",1)->take(5000)->get();
+        ini_set('max_execution_time', 0);
+
+        $api = new Tauri\ApiClient();
+
+        $members = EncounterMember::where("top_processed","<>",1)->take(1000)->get();
         foreach ( $members as $member )
         {
             Encounter::calculateScores($member);
+            Encounter::logCharacter($member, $api);
             $member->top_processed = 1;
             $member->save();
         }

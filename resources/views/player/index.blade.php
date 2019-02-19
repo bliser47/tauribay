@@ -2,7 +2,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="bossName">
+            <div class="className memberClass{{ $playerClass }}">
                 {{ $playerTitle }}
             </div>
         </div>
@@ -31,7 +31,7 @@
     <br/>
     <div class="row">
         <div class="col-md-12">
-            <div class="panel panel-default nomargin">
+            <div class="panel nomargin">
                 <div id="player-response-form">
                     <ul class="nav nav-tabs" role="tablist">
                         @foreach ( $modes as $modeKey => $modeName )

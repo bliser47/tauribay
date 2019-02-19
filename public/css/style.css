@@ -900,7 +900,7 @@ a.changelog:hover, a.trello:hover
     margin-bottom:0px;
 }
 
-.bossName
+.bossName, .className
 {
     text-align: center;
     font-weight:bold;

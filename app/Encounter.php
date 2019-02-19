@@ -4,6 +4,7 @@ namespace TauriBay;
 
 use Illuminate\Database\Eloquent\Model;
 use TauriBay\Tauri\Skada;
+use TauriBay\Tauri\CharacterClasses;
 
 class Encounter extends Model
 {
@@ -306,7 +307,7 @@ class Encounter extends Model
         $encounter->save();
 
         self::refreshEncounterTop($encounter, $guild);
-        self::updateEncounterMembers($_data, $encounter, $guild);
+        self::updateEncounterMembers($_data, $encounter, $guild, $api);
 
         if ( array_key_exists("items", $_data) ) {
             Loot::processItems($encounter, $_data["items"], $api);
@@ -316,7 +317,7 @@ class Encounter extends Model
         return $result;
     }
 
-    public static function updateEncounterMembers($_data, $encounter, $guild)
+    public static function updateEncounterMembers($_data, $encounter, $guild, $api)
     {
         EncounterMember::where("encounter_id", "=", $encounter->id)->delete();
         $members = $_data["members"];
@@ -358,6 +359,7 @@ class Encounter extends Model
 
             self::refreshMemberTop($member, $guild);
             self::calculateScores($member);
+            self::logCharacter($member, $api);
 
             $member->top_processed = 1;
             $member->save();
@@ -368,6 +370,36 @@ class Encounter extends Model
         {
             $encounter->members_processed = true;
             $encounter->save();
+        }
+    }
+
+    public static function logCharacter($member, $_api)
+    {
+        $character = Characters::where("realm","=",$member->realm_id)->where("name","=",$member->name)->first();
+        if ( $character == null )
+        {
+            $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$member->realm_id], $member->name);
+            if ($characterSheet && array_key_exists("response", $characterSheet)) {
+                $characterSheetResponse = $characterSheet["response"];
+                $character = new Characters;
+                $character->name = $member->name;
+                $character->ilvl = $member->ilvl;
+                $character->faction = $member->faction;
+                $character->class = $member->class;
+                $character->realm = $member->realm_id;
+                $character->achievement_points = $characterSheetResponse["pts"];
+                $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
+                $character->save();
+
+                $member->faction_id = $character->faction;
+                Characters::addEncounter($character, $member);
+            }
+        }
+        else {
+            $character->class = $member->class;
+            $character->save();
+            $member->faction_id = $character->faction;
+            Characters::addEncounter($character, $member);
         }
     }
 
