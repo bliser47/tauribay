@@ -377,21 +377,31 @@ class Encounter extends Model
         $avgDps = MemberTop::where("encounter_id","=",$member->encounter)
             ->where("difficulty_id","=",$member->difficulty_id)
             ->where("spec","=",$member->spec)
-            ->whereBetween("dps_ilvl", array($member->ilvl-4,$member->ilvl+4))
+            ->whereBetween("dps_ilvl", array($member->ilvl-5,$member->ilvl+5))
             ->take(5)
             ->orderBy("dps","desc")->avg("dps");
 
-        $member->dps_score = intval(($member->dps * 100) / max($avgDps,1));
+        if ( $avgDps > 0 ) {
+            $member->dps_score = intval(($member->dps * 100) / $avgDps);
+        }
+        else {
+            $member->dps_score = 100;
+        }
+
 
         // Calculate hps score
         $avgHps = MemberTop::where("encounter_id","=",$member->encounter)
             ->where("difficulty_id","=",$member->difficulty_id)
             ->where("spec","=",$member->spec)
-            ->whereBetween("hps_ilvl", array($member->ilvl-4,$member->ilvl+4))
+            ->whereBetween("hps_ilvl", array($member->ilvl-5,$member->ilvl+5))
             ->take(5)
             ->orderBy("hps","desc")->avg("hps");
 
-        $member->hps_score = intval(($member->hps * 100) / max($avgHps,1));
+        if ( $avgHps > 0 ) {
+            $member->hps_score = intval(($member->hps * 100) / $avgHps);
+        } else {
+            $member->hps_score = 100;
+        }
     }
 
     public static function refreshEncounterTop($encounter, $guild)
