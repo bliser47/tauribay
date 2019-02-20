@@ -26,7 +26,6 @@ class PlayerController extends Controller
 {
     public function mode(Request $_request, $_realm_short, $_player_name, $modeId)
     {
-        $returnView = "";
         switch($modeId)
         {
             case "recent":
@@ -48,12 +47,8 @@ class PlayerController extends Controller
             case "top":
 
                 break;
-
-            default :
-                $returnView = "Mode not found: " . $modeId;
-                break;
         }
-        return $returnView;
+        return view("player/ajax/notfound");
     }
 
 
@@ -62,28 +57,22 @@ class PlayerController extends Controller
         $realmId = array_search($_realm_short, Realm::REALMS_URL);
         $playerName = ucfirst($_player_name);
         $character = Characters::where("realm","=",$realmId)->where("name","=",$playerName)->first();
+        $playerTitle = __("Karakter keresése");
+        $realmUrl = $_realm_short;
+        $modes = array(
+            "recent" => __("Új")
+        );
+        $modeId = Defaults::PLAYER_MODE;
         if ( $character !== null ) {
-
-            $realmUrl = $_realm_short;
             $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
-
-            $modes = array(
-                "recent" => __("Új")
-            );
-            $modeId = Defaults::PLAYER_MODE;
-
-            $playerClass = $character->class;
-
-            return view("player/search", compact(
-                "playerTitle",
-                "playerClass",
-                "playerName",
-                "realmUrl",
-                "modes",
-                "modeId"
-            ));
         }
-        return "";
+        return view("player/search", compact(
+        "playerTitle",
+        "playerName",
+        "realmUrl",
+        "modes",
+        "modeId"
+    ));
     }
 
     public function index(Request $_request)

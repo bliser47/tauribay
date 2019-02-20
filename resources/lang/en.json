@@ -173,5 +173,9 @@
           "P.S. You can now filter on a Guild's page!",
   "A visszamenőleges loot adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!":
           "Preliminary loot data is curretly being processed. Please come back later!",
-  "Összes kill: " : "Total kills: "
+  "A visszamenőleges karakter bossfight adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!":
+  "Preliminary character bossfight data is curretly being processed. Please come back later!",
+  "Összes kill: " : "Total kills: ",
+  "Karakter keresése" : "Search character",
+  "Ezen a realm-en nem található ilyen karakter!" : "No such character exists on this realm!"
 }
