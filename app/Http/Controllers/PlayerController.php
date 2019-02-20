@@ -68,8 +68,7 @@ class PlayerController extends Controller
             $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
 
             $modes = array(
-                "recent" => __("Új"),
-                "top" => __("Top"),
+                "recent" => __("Új")
             );
             $modeId = Defaults::PLAYER_MODE;
 

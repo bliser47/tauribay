@@ -16,7 +16,7 @@
                         <th class="cellDesktop">{{ __("Halálok") }}</th>
                     </tr>
                     <tr>
-                        <td>{{ $shortRealms[$encounter->realm_id]  }}</td>
+                        <td>{{ \TauriBay\Realm::REALMS_SHORTEST[$encounter->realm_id]  }}</td>
                         <td class="cellDesktop" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$encounter->difficulty_id] }}">{{ $encounterData["name"]  }}</a></td>
                         <td class="cellMobile" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter->encounter_id) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$encounter->difficulty_id] }}">{{ \TauriBay\Encounter::getNameShort($encounter->encounter_id)  }}</a></td>
                         <td class="cellDesktop faction-{{ $encounter->faction }}">
@@ -35,7 +35,8 @@
                         </td>
                         <td class="cellDesktop">{{ date('M d, Y', $encounter->killtime) }}</td>
                         <td class="cellMobile">{{ date('M d', $encounter->killtime) }}</td>
-                        <td class="guildClearTime">{{ $encounter->fight_time/1000 }}</td>
+                        <td class="guildClearTime cellDesktop">{{ $encounter->fight_time/1000 }}</td>
+                        <td class="guildClearTimeMobile cellMobile">{{ $encounter->fight_time/1000 }}</td>
                         <td class="cellDesktop">{{ $encounter->wipes }}</td>
                         <td class="cellDesktop">{{ $encounter->deaths_total }}</td>
                         <td class="cellDesktop">{{ $encounter->deaths_fight }}</td>
@@ -62,7 +63,8 @@
                                         <span class="memberName">
                                             <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member["name"] }}">{{ $member->name }}</a>
                                         </span>
-                                        <span class="memberData memberData1">{{ number_format($member->damage_done) }}</span>
+                                        <span class="memberData memberData1 divDesktop">{{ number_format($member->damage_done) }}</span>
+                                        <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->damage_done) }}</span>
                                         <span class="memberData memberData2">({{ $member->dps }})</span>
                                     </div>
                                 </div>
@@ -86,7 +88,8 @@
                                         <span class="memberName">
                                             <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member->name}}">{{ $member->name }}</a>
                                         </span>
-                                        <span class="memberData memberData1">{{ number_format($member->total_heal) }}</span>
+                                        <span class="memberData memberData1 divDesktop">{{ number_format($member->total_heal) }}</span>
+                                        <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->total_heal) }}</span>
                                         <span class="memberData memberData2">({{ $member->hps }})</span>
                                     </div>
                                 </div>

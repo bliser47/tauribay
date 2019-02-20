@@ -343,6 +343,7 @@ $(function()
                         var clearTime = parseInt(progress["clear_time"]);
                         if ( clearTime > 0 ) {
                             $(row).find(".guildClearTime").html(clearTime.toString().toHHMMSS());
+                            $(row).find(".guildClearTimeMobile").html(clearTime.toString().toMMSS());
                         }
 
                         var form = $(row).find(".progressupdate-form");
@@ -446,6 +447,13 @@ $(function()
             var time = $(this).html();
             if ( time.length > 0 ) {
                 $(this).html((parseInt(time)).toString().toHHMMSS());
+            }
+        });
+        $(".guildClearTimeMobile").each(function () {
+            $(this).removeClass("guildClearTimeMobile");
+            var time = $(this).html();
+            if ( time.length > 0 ) {
+                $(this).html((parseInt(time)).toString().toMMSS());
             }
         });
         $(".encounterKillTime").each(function () {

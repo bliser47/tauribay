@@ -39,7 +39,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/main.js?v=236') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=237') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
 @yield('pagespecificscripts')
 <script type="application/javascript">
