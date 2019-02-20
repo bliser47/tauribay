@@ -357,6 +357,9 @@ class Encounter extends Model
                 $member->faction_id = -1;
             }
 
+
+            $member->save();
+
             self::refreshMemberTop($member, $guild);
             self::calculateScores($member);
             self::logCharacter($member, $api);

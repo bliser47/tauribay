@@ -60,7 +60,7 @@
                                         </div>
                                         <span class="memberPosition">{{ $loop->index+1 }}.</span>
                                         <span class="memberName">
-                                            <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a>
+                                            <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member["name"] }}">{{ $member->name }}</a>
                                         </span>
                                         <span class="memberData memberData1">{{ number_format($member->damage_done) }}</span>
                                         <span class="memberData memberData2">({{ $member->dps }})</span>

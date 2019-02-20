@@ -111,12 +111,7 @@ class EncounterController extends Controller
         }
     }
 
-    public function fixMissing(Request $_request)
-    {
-        ini_set('max_execution_time', 0);
-
-        $api = new Tauri\ApiClient();
-
+    public function fix($api) {
         $members = EncounterMember::where("top_processed","<>",1)->take(1000)->get();
         foreach ( $members as $member )
         {
@@ -125,6 +120,14 @@ class EncounterController extends Controller
             $member->top_processed = 1;
             $member->save();
         }
+        $this->fix($api);
+    }
+
+    public function fixMissing(Request $_request)
+    {
+        ini_set('max_execution_time', 0);
+        $api = new Tauri\ApiClient();
+        $this->fix($api);
     }
 
     public function fixMissingEncounterMembers(Request $_request)
