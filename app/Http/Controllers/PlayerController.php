@@ -57,7 +57,7 @@ class PlayerController extends Controller
     }
 
 
-    public function index(Request $_request, $_realm_short, $_player_name)
+    public function search(Request $_request, $_realm_short, $_player_name)
     {
         $realmId = array_search($_realm_short, Realm::REALMS_URL);
         $playerName = ucfirst($_player_name);
@@ -72,19 +72,22 @@ class PlayerController extends Controller
             );
             $modeId = Defaults::PLAYER_MODE;
 
-            $realms = Realm::REALMS_URL_KEY;
             $playerClass = $character->class;
 
-            return view("player/index", compact(
+            return view("player/search", compact(
                 "playerTitle",
                 "playerClass",
                 "playerName",
-                "realms",
                 "realmUrl",
                 "modes",
                 "modeId"
             ));
         }
         return "";
+    }
+
+    public function index(Request $_request)
+    {
+        return view("player/index");
     }
 }

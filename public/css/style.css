@@ -1028,7 +1028,7 @@ a.changelog:hover, a.trello:hover
     border-bottom:none;
 }
 
-.playerDataContainer .memberDataWidth{
+.playerDataContainer .memberDataWidth, .playerDataContainer .memberData {
     top:1px;
 }
 
@@ -1296,4 +1296,17 @@ tr.spacer
 .panel-white
 {
     background:white;
+}
+
+.topDpsSpec.mobile
+{
+    position: inherit;
+    top:3px;
+    left:0px;
+    width: 28px;
+    height: 28px;
+}
+
+.topDpsSpecContainer.divMobile {
+    margin:auto;
 }

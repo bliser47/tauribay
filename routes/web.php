@@ -86,7 +86,8 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/raid/{expansion_id}/{map_id}', 'RaidController@getMapEncounters');
 
 
-    Route::get('/player/{realm_short}/{name}', 'PlayerController@index');
+    Route::get('/player/', 'PlayerController@index');
+    Route::get('/player/{realm_short}/{name}', 'PlayerController@search');
     Route::get('/player/{realm_short}/{name}/{mode}', 'PlayerController@mode');
 
 

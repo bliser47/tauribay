@@ -17,6 +17,7 @@ class Defaults extends Model
     const DIFFICULTY_ID  = 5; // 10 Heroic
     const ENCOUNTER_SORT = "dps";
     const PLAYER_MODE = "recent";
+    const REALM_URL = "tauri";
 
     const SIZE_AND_DIFFICULTY = array(
         3 => "10 Player",

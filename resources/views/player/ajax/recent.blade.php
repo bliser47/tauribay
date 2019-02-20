@@ -1,15 +1,16 @@
-<table class="table table-bordered table-classes">
+<table class="table table-classes table-transparent">
     <tr class="tHead">
         <th>{{ __("Boss") }}</th>
-        <th>{{ __("Nehézség") }}</th>
+        <th class="headDesktop">{{ __("Nehézség") }}</th>
+        <th class="headMobile">Dif</th>
         <th>{{ __("Dátum") }}</th>
         <th>{{ __("Idő") }}</th>
         <th></th>
         <th>iLvL</th>
-        <th>{{ __("DPS") }}</th>
-        <th>{{ __("DPS Score") }}</th>
-        <th>{{ __("HPS") }}</th>
-        <th>{{ __("HPS Score") }}</th>
+        <th class="headDesktop">{{ __("DPS") }}</th>
+        <th class="headDesktop">{{ __("DPS Score") }}</th>
+        <th class="headDesktop">{{ __("HPS") }}</th>
+        <th class="headDesktop">{{ __("HPS Score") }}</th>
     </tr>
     @foreach( $encounters as $encounter )
         <tr>
@@ -19,18 +20,40 @@
             <td class="cellMobile">{{ TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$encounter->difficulty_id] }}</td>
             <td class="cellDesktop">{{ date('M d, Y', $encounter->killtime) }}</td>
             <td class="cellMobile">{{ date('M d', $encounter->killtime) }}</td>
-            <td><a class="guildClearTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time  }}</a></td>
-            <td class="topDpsSpecContainer">
+            <td class="cellDesktop"><a class="guildClearTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time  }}</a></td>
+            <td class="cellMobile"><a class="guildClearTimeMobile" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time  }}</a></td>
+            <td class="divDesktop topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $encounter->spec . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter->spec] }}"/>
             </td>
+            <td class="divMobile topDpsSpecContainer">
+                <img class="topDpsSpec mobile" src="{{ URL::asset("img/classes/specs/" . $encounter->spec . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter->spec] }}"/>
+            </td>
             <td>{{ $encounter->ilvl }}</td>
-            <td>{{ \TauriBay\Tauri\Skada::format($encounter->dps) }}</td>
-            <td class="memberDataContainer playerDataContainer">
+            <td class="cellDesktop">{{ \TauriBay\Tauri\Skada::format($encounter->dps) }}</td>
+            <td class="cellDesktop memberDataContainer playerDataContainer">
                 <div class="memberDataWidthContainer">
                     <div style="width:{{ min(100,$encounter->dps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
                     <span class="memberData memberData2">{{ $encounter->dps_score }}%</span>
                 </div>
             </td>
+            <td class="cellDesktop">{{ \TauriBay\Tauri\Skada::format($encounter->hps) }}</td>
+            <td class="cellDesktop memberDataContainer playerDataContainer">
+                <div class="memberDataWidthContainer">
+                    <div style="width:{{ min(100,$encounter->hps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
+                    <span class="memberData memberData2">{{ $encounter->hps_score }}%</span>
+                </div>
+            </td>
+        </tr>
+        <tr class="rowMobile">
+            <td><b>DPS</b></td>
+            <td>{{ \TauriBay\Tauri\Skada::format($encounter->dps) }}</td>
+            <td class=" memberDataContainer playerDataContainer">
+                <div class="memberDataWidthContainer">
+                    <div style="width:{{ min(100,$encounter->dps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
+                    <span class="memberData memberData2">{{ $encounter->dps_score }}%</span>
+                </div>
+            </td>
+            <td><b>HPS</b></td>
             <td>{{ \TauriBay\Tauri\Skada::format($encounter->hps) }}</td>
             <td class="memberDataContainer playerDataContainer">
                 <div class="memberDataWidthContainer">
@@ -39,6 +62,8 @@
                 </div>
             </td>
         </tr>
+        <tr class="rowMobile spacer"><td colspan="3"></td></tr>
+        <tr class="rowMobile spacer"><td colspan="3"></td></tr>
     @endforeach
 </table>
 <div class="text-center paginator">
