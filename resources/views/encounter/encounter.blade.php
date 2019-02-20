@@ -84,8 +84,7 @@
                                         </div>
                                         <span class="memberPosition">{{ $loop->index+1 }}.</span>
                                         <span class="memberName">
-                                            <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ $realms[$member->realm_id] }}&n={{ $member->name }}"> {{ $member->name }} </a>
-                                            {{--<a href="{{ URL::to("progress/guild/" . $member->realm_id . "/" . $member->name) }}"> {{ $member->name }} </a> --}}
+                                            <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member->name}}">{{ $member->name }}</a>
                                         </span>
                                         <span class="memberData memberData1">{{ number_format($member->total_heal) }}</span>
                                         <span class="memberData memberData2">({{ $member->hps }})</span>

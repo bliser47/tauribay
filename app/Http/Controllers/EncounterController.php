@@ -126,8 +126,9 @@ class EncounterController extends Controller
     public function fixMissing(Request $_request)
     {
         ini_set('max_execution_time', 0);
-        $api = new Tauri\ApiClient();
-        $this->fix($api);
+        //$api = new Tauri\ApiClient();
+        //$this->fix($api);
+        $this->fixMissingEncounters($_request);
     }
 
     public function fixMissingEncounterMembers(Request $_request)
