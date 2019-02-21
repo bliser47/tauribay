@@ -177,5 +177,11 @@
   "Preliminary character bossfight data is curretly being processed. Please come back later!",
   "Összes kill: " : "Total kills: ",
   "Karakter keresése" : "Search character",
-  "Ezen a realm-en nem található ilyen karakter!" : "No such character exists on this realm!"
+  "Ezen a realm-en nem található ilyen karakter!" : "No such character exists on this realm!",
+  "Végre rávettem magam pár hete, hogy elmentsem a boss fightok alatt kiesett lootot. Most már láthatjátok a DPS és Heal melletti tabban mit dobott az adott boss. Valamint a boss oldalon, a Loot tabban láthatjátok az itemeket kiesésének esélyét." :
+          "I have finally taken it upon myself a few weeks ago to implement the Loot feature. From now on, on an encounter page next to the DPS and HPS tabs, you will be able to see the encounter loot as well. You will also be able to check out each bosses loot drop chances on the boss pages, on the Loot tab.",
+  "A player oldalon már nagyon rég óta gondolkodtam és az is már használható de a visszamenőleges adatoknak kelleni fog 1-2 hét míg megjelennek. Na de, mi az a DPS és HPS score és hogy kerűl kiszámításra?" :
+          "The player page has been on my mind for a long time and it's finally available now, but previous encounter datas will take 1-2 weeks to fill up. But what exactly is DPS and HPS scoring you might ask?",
+  "Minden fight után a játékos DPS és HPSje összehasonlítódik a legjobb 5 ugyanazon class és spec-en lévő játékosok DPS/HPS-eikhez, akik -4 és +4 item level-en belűl vannak a játékos gearjéhez képest. Ha valaki 100% alatt van akkor azt jelenti, hogy átlagoson alúlteljesít ha pedig fölötte akkor a 100an felűli érték jelenti a túlteljesítményt!":
+          "After every encounter, the player's DPS and HPS is compared to the top 5 dps/hps of the same class and spec player who is withing -4 and +4 item levels of the player's gear. If someone is below 100% it means they are underperforming, and if they are over 100, the surplus is equal to how much they are overperforming!"
 }

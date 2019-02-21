@@ -5,6 +5,34 @@
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
+                        <img class="media-object" src="img/cms/news/dps_loot.jpg" alt="Loot & Score">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-header">
+                            <h3 class="media-heading"> {{ __("Loot & Score") }} </h3>
+                            <p class="text-left text-italic">
+                                {{ __("írta") }} <span class="warlock">Bliser</span> 2019.02.21
+                            </p>
+                        </div>
+                    </div>
+                    <div class="media-content">
+                        <p>
+                            {{ __("Végre rávettem magam pár hete, hogy elmentsem a boss fightok alatt kiesett lootot. Most már láthatjátok a DPS és Heal melletti tabban mit dobott az adott boss. Valamint a boss oldalon, a Loot tabban láthatjátok az itemeket kiesésének esélyét.") }}
+                        </p>
+                        <p>
+                            {{ __("A player oldalon már nagyon rég óta gondolkodtam és az is már használható de a visszamenőleges adatoknak kelleni fog 1-2 hét míg megjelennek. Na de, mi az a DPS és HPS score és hogy kerűl kiszámításra?") }}
+                        </p>
+                        <p> {{ __("Minden fight után a játékos DPS és HPSje összehasonlítódik a legjobb 5 ugyanazon class és spec-en lévő játékosok DPS/HPS-eikhez, akik -4 és +4 item level-en belűl vannak a játékos gearjéhez képest. Ha valaki 100% alatt van akkor azt jelenti, hogy átlagoson alúlteljesít ha pedig fölötte akkor a 100an felűli érték jelenti a túlteljesítményt!") }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 blog-main">
+            <div class="well nomargin">
+                <div class="media">
+                    <a class="pull-left" href="#">
                         <img class="media-object" src="img/cms/news/mobile.jpg" alt="Mobil first">
                     </a>
                     <div class="media-body">
@@ -57,37 +85,6 @@
                         </p>
                         <p>
                             {{ __("Egyéb hírekben: Chris megírta a supportot, hogy WoDról és Evermoonról is érkezzenek trade/world/global üzenetek így most a Hirdetések oldalon onnan jövő hirdetéseket is találtok majd. Valamint sikerült visszaraknom a Raid hirdetés keresőt, de evel még sok sok munka van még hátra!") }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 blog-main">
-            <div class="well nomargin">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="img/cms/news/dps_rankings.jpg" alt="Új encounter adatok">
-                    </a>
-                    <div class="media-body">
-                        <div class="media-header">
-                            <h3 class="media-heading"> {{ __("Fight adatok") }} </h3>
-                            <p class="text-left text-italic">
-                                {{ __("írta") }} <span class="warlock">Bliser</span> 2019.01.14
-                            </p>
-                        </div>
-                    </div>
-                    <div class="media-content">
-                        <p>
-                            {{ __("Sikeresen újraírtam a rendszer bizonyos részeit, így most már több adatra lehet rákeresni fightonként!") }}
-                        </p>
-                        <ul>
-                            <li> {{ __("Az új PVE ladder oldal:") }}  <a href="{{ URL::to("/ladder/pve/tot/mop/") }}">{{ __("ITT") }}</a> </li>
-                            <li> {{ __("A legjobb DPS-ek pld Durumu-n") }} <a href="{{ URL::to("/ladder/pve/mop/tot/durumu/10hc") }}">{{ __("ITT") }}</a> </li>
-                        </ul>
-                        <p class="nomargin">
-                            {{ __("Legközelebb még több feature várható!") }}
                         </p>
                     </div>
                 </div>
