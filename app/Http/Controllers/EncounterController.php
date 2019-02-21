@@ -128,19 +128,7 @@ class EncounterController extends Controller
     {
         ini_set('max_execution_time', 0);
         $api = new Tauri\ApiClient();
-        //$this->fix($api);
-
-        $characters = Characters::where("guid","=","")->get();
-
-        foreach ( $characters as $character )
-        {
-            $characterSheet = $api->getCharacterSheet(Realm::REALMS[$character->realm], $character->name);
-            if ($characterSheet && array_key_exists("response", $characterSheet)) {
-                $characterSheetResponse = $characterSheet["response"];
-                $character->guid = $characterSheetResponse["guid"];
-                $character->save();
-            }
-        }
+        $this->fix($api);
     }
 
     public function fixMissingEncounterMembers(Request $_request)
