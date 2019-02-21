@@ -392,6 +392,7 @@ class Encounter extends Model
                 $character->realm = $member->realm_id;
                 $character->achievement_points = $characterSheetResponse["pts"];
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
+                $character->guid = $characterSheetResponse["guid"];
                 $character->save();
 
                 $member->faction_id = $character->faction;

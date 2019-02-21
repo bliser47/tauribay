@@ -28,6 +28,6 @@ class CreateCharactersLinkToEncounterMembers extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('character_encounters');
     }
 }

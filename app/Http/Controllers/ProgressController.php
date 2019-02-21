@@ -44,9 +44,9 @@ class ProgressController extends Controller
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
 
-        $data = $api->getRaidLast(Realm::REALMS[0], $lastLogOnRealm);
+        $log = $api->getCharacterSheet(Realm::REALMS[0], "Blizer", 26877838);
 
-        return $data;
+        return $log;
 
 
         $items = $data["response"];

@@ -46,22 +46,30 @@
                 </td>
             </tr>
             <tr class="rowMobile">
-                <td><b>DPS</b></td>
-                <td>{{ \TauriBay\Tauri\Skada::format($encounter->dps) }}</td>
-                <td class=" memberDataContainer playerDataContainer">
-                    <div class="memberDataWidthContainer">
-                        <div style="width:{{ min(100,$encounter->dps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
-                        <span class="memberData memberData2">{{ $encounter->dps_score }}%</span>
-                    </div>
-                </td>
-                <td><b>HPS</b></td>
-                <td>{{ \TauriBay\Tauri\Skada::format($encounter->hps) }}</td>
-                <td class="memberDataContainer playerDataContainer">
-                    <div class="memberDataWidthContainer">
-                        <div style="width:{{ min(100,$encounter->hps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
-                        <span class="memberData memberData2">{{ $encounter->hps_score }}%</span>
-                    </div>
-                </td>
+                @if ( $canHeal )
+                    <td colspan="3" class="memberDataContainer playerDataContainer">
+                        <div class="memberDataWidthContainer">
+                            <div style="width:{{ min(100,$encounter->dps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
+                            <span class="memberData memberDataLeft"><b>DPS</b> {{ \TauriBay\Tauri\Skada::format($encounter->dps) }}</span>
+                            <span class="memberData memberData2">{{ $encounter->dps_score }}%</span>
+                        </div>
+                    </td>
+                    <td colspan="3" class="memberDataContainer playerDataContainer">
+                        <div class="memberDataWidthContainer">
+                            <div style="width:{{ min(100,$encounter->hps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
+                            <span class="memberData memberDataLeft"><b>HPS</b> {{ \TauriBay\Tauri\Skada::format($encounter->hps) }}</span>
+                            <span class="memberData memberData2">{{ $encounter->hps_score }}%</span>
+                        </div>
+                    </td>
+                @else
+                    <td colspan="6" class="memberDataContainer playerDataContainer">
+                        <div class="memberDataWidthContainer">
+                            <div style="width:{{ min(100,$encounter->dps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
+                            <span class="memberData memberDataLeft"><b>DPS</b> {{ \TauriBay\Tauri\Skada::format($encounter->dps) }}</span>
+                            <span class="memberData memberData2">{{ $encounter->dps_score }}%</span>
+                        </div>
+                    </td>
+                @endif
             </tr>
             <tr class="rowMobile spacer"><td colspan="3"></td></tr>
             <tr class="rowMobile spacer"><td colspan="3"></td></tr>

@@ -34,12 +34,16 @@ class PlayerController extends Controller
                 $character = Characters::where("realm","=",$realmId)->where("name","=",$_player_name)->first();
                 if ( $character !== null ) {
 
+                    $characterClass = $character->class;
+
+                    $canHeal = EncounterMember::canClassHeal($characterClass);
+
                     $encounters = CharacterEncounters::leftJoin("characters", "characters.id", "=", "character_encounters.character_id")
                         ->leftJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
                         ->where("characters.realm", "=", $realmId)->where("characters.name", "=", $_player_name)->orderBy("killtime", "desc")->paginate(16);
                     $encounterIDs = Encounter::ENCOUNTER_IDS;
 
-                    return view("player/ajax/recent", compact("encounters", "encounterIDs"));
+                    return view("player/ajax/recent", compact("encounters", "encounterIDs","canHeal"));
                 }
 
                 break;

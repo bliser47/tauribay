@@ -10,6 +10,7 @@ namespace TauriBay\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Mockery\Exception;
+use TauriBay\Characters;
 use TauriBay\Defaults;
 use TauriBay\EncounterMember;
 use TauriBay\EncounterTop;
@@ -126,9 +127,20 @@ class EncounterController extends Controller
     public function fixMissing(Request $_request)
     {
         ini_set('max_execution_time', 0);
-        //$api = new Tauri\ApiClient();
+        $api = new Tauri\ApiClient();
         //$this->fix($api);
-        $this->fixMissingEncounters($_request);
+
+        $characters = Characters::where("guid","=","")->get();
+
+        foreach ( $characters as $character )
+        {
+            $characterSheet = $api->getCharacterSheet(Realm::REALMS[$character->realm], $character->name);
+            if ($characterSheet && array_key_exists("response", $characterSheet)) {
+                $characterSheetResponse = $characterSheet["response"];
+                $character->guid = $characterSheetResponse["guid"];
+                $character->save();
+            }
+        }
     }
 
     public function fixMissingEncounterMembers(Request $_request)

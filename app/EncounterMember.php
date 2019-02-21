@@ -252,6 +252,13 @@ class EncounterMember extends Model
         )
     );
 
+    const CLASSES_CAN_HEAL = array(
+        2,5,7,10,11
+    );
+
+    public static function canClassHeal($class) {
+        return in_array($class,self::CLASSES_CAN_HEAL);
+    }
 
     public static function getClasses()
     {

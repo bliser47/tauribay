@@ -144,14 +144,18 @@ class ApiClient {
      * Returns information about a character
      * @param string $realm - Full name of the realm
      * @param string $character - Character name
+     * @param integer|null $guild - Character guid
      * @return array
      */
-    public function getCharacterSheet ($realm, $character) {
+    public function getCharacterSheet ($realm, $character, $guild = null) {
         $this->request['url'] = 'character-sheet';
         $this->request['params'] = array(
             'r' => $realm,
             'n' => $character
         );
+        if ( $guild !== null ) {
+            $this->request['params']['guid'] = $guild;
+        }
         return $this->communicate();
     }
 

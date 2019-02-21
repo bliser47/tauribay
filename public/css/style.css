@@ -1059,6 +1059,11 @@ a.changelog:hover, a.trello:hover
     right:10px;
 }
 
+.memberDataLeft
+{
+    left:10px;
+}
+
 .memberData1
 {
     font-weight:normal !important;
