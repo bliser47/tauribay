@@ -122,42 +122,35 @@ class ApiController extends Controller
     {
         $parseData = ParsedData::find($_parsed_data_id);
         $smartResult = SmartParser::SmartParse($parseData->text);
-        if ( $smartResult['character_intent'] !== false )
+        if ( $smartResult['character_intent'] !== false && $smartResult['character_class'] !== false )
         {
-            if ( $smartResult['character_class'] !== false )
+            $foundTrade = CharacterTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
+            if ( !$foundTrade )
             {
-                $foundTrade = CharacterTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
-                if ( !$foundTrade )
-                {
-                    $mostSimmilarTrade = CharacterTrade::GetSimmilar($parseData->name,$parseData->text);
-                    if ( $mostSimmilarTrade === false ) {
-                        $characterTrade = new CharacterTrade;
-                    }
-                    else {
-                        $characterTrade = CharacterTrade::find($mostSimmilarTrade["id"]);
-                    }
-                } else {
-                    $characterTrade = $foundTrade;
-                }
-                $characterTrade->name = $parseData->name;
-                $characterTrade->text = $parseData->text;
-                $characterTrade->faction = $parseData->faction ? $parseData->faction : 3;
-                $characterTrade->intent = $smartResult['character_intent'];
-                $characterTrade->class = $smartResult['character_class'];
-                $characterTrade->realm_id = $parseData->realm_id;
-                if ( !$no_update )
-                {
-                    $characterTrade->updated_at = Carbon::now();
+                $mostSimmilarTrade = CharacterTrade::GetSimmilar($parseData->name,$parseData->text);
+                if ( $mostSimmilarTrade === false ) {
+                    $characterTrade = new CharacterTrade;
                 }
                 else {
-                    $characterTrade->updated_at = $parseData->updated_at;
+                    $characterTrade = CharacterTrade::find($mostSimmilarTrade["id"]);
                 }
-                $characterTrade->save();
+            } else {
+                $characterTrade = $foundTrade;
             }
-            else if ( strpos($parseData->text,"kredit") === false && strpos($parseData->text,"Hitem") === false )
+            $characterTrade->name = $parseData->name;
+            $characterTrade->text = $parseData->text;
+            $characterTrade->faction = $parseData->faction ? $parseData->faction : 3;
+            $characterTrade->intent = $smartResult['character_intent'];
+            $characterTrade->class = $smartResult['character_class'];
+            $characterTrade->realm_id = $parseData->realm_id;
+            if ( !$no_update )
             {
-                //Log::warning('Could not get class of ' . $_parsed_data_id . PHP_EOL);
+                $characterTrade->updated_at = Carbon::now();
             }
+            else {
+                $characterTrade->updated_at = $parseData->updated_at;
+            }
+            $characterTrade->save();
         }
         else if ( $smartResult['gdkp_intent'] !== false )
         {
