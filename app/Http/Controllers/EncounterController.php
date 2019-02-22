@@ -113,7 +113,9 @@ class EncounterController extends Controller
     }
 
     public function fix($api) {
-        $members = EncounterMember::where("top_processed","<>",1)->take(1000)->get();
+
+        $totEncounterIds = array_keys(Encounter::ENCOUNTERS_DEFAULT);
+        $members = EncounterMember::where("top_processed","<>",1)->whereIn("encounter",$totEncounterIds)->take(1000)->get();
         foreach ( $members as $member )
         {
             Encounter::calculateScores($member);
