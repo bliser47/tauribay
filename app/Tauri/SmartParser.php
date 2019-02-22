@@ -44,26 +44,39 @@ class SmartParser
     public static function SmartParse($_text)
     {
         $_text = self::PrepareString($_text);
-        $smart_result = array();
-        $smart_result["character_intent"] = CharacterIntent::IsCharacterTrade($_text);
-        if ( $smart_result["character_intent"] !== false )
+
+        $characterIntent = CharacterIntent::IsCharacterTrade($_text);
+        if ( $characterIntent !== false )
         {
-            $smart_result["character_class"] = CharacterClasses::GetCharacterClass($_text);
-            if ( $smart_result["character_class"] === false ) {
-                $smart_result["credit_intent"] = CreditIntent::IsCreditTrade($_text);
+            $characterClass = CharacterClasses::GetCharacterClass($_text);
+            if ( $characterClass!== false ) {
+                return array(
+                    "character_intent" => $characterIntent,
+                    "character_class" => $characterClass
+                );
             }
         }
-        else {
-            $smart_result["gdkp_intent"] = GdkpIntent::IsGdkpTrade($_text);
-            if ( $smart_result["gdkp_intent"] !== false )
-            {
-                $smart_result["gdkp_data"] = GdkpIntent::GetData($_text);
-            }
-            else
-            {
-                $smart_result["credit_intent"] = CreditIntent::IsCreditTrade($_text);
+
+        $gdkpIntent = GdkpIntent::IsGdkpTrade($_text);
+        if ( $gdkpIntent !== false )
+        {
+            $gdkpData = GdkpIntent::GetData($_text);
+            if ( $gdkpData !== false ) {
+                return array(
+                    "gdkp_intent" => $gdkpIntent,
+                    "gdkp_data" => $gdkpData
+                );
             }
         }
-        return $smart_result;
+
+        $creditIntent = CreditIntent::IsCreditTrade($_text);
+        if ( $creditIntent !== false )
+        {
+            return array(
+                "credit_intent" => $creditIntent
+            );
+        }
+
+        return array();
     }
 }

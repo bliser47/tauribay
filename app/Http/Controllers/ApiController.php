@@ -153,44 +153,39 @@ class ApiController extends Controller
             }
             $characterTrade->save();
         }
-        else if ( array_key_exists("gdkp_intent", $smartResult) && $smartResult['gdkp_intent'] !== false )
+        else if ( array_key_exists("gdkp_intent", $smartResult) && $smartResult['gdkp_intent'] !== false &&
+                array_key_exists("gdkp_data", $smartResult) && $smartResult['gdkp_data'] !== false )
         {
-            if ( $smartResult['gdkp_data'] !== false )
+            $foundGdkp = GdkpTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
+            if ( !$foundGdkp )
             {
-                $foundGdkp = GdkpTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
-                if ( !$foundGdkp )
-                {
-                    $mostSimmilarGdkp = GdkpTrade::GetSimmilar($parseData->name,$parseData->text);
-                    if ( $mostSimmilarGdkp === false ) {
-                        $gdkpTrade = new GdkpTrade();
-                    }
-                    else {
-                        $gdkpTrade = GdkpTrade::find($mostSimmilarGdkp["id"]);
-                    }
-                } else {
-                    $gdkpTrade = $foundGdkp;
-                }
-                $gdkpTrade->realm_id = $parseData->realm_id;
-                $gdkpTrade->name = $parseData->name;
-                $gdkpTrade->text = $parseData->text;
-                $gdkpTrade->faction = $parseData->faction ? $parseData->faction : 3;
-                $gdkpTrade->intent = $smartResult['gdkp_intent'];
-                $gdkpTrade->instance = $smartResult['gdkp_data']['wow_instance_id'] !== false ? $smartResult['gdkp_data']['wow_instance_id'] : 5;
-                $gdkpTrade->size = $smartResult['gdkp_data']['wow_instance_size_id'] !== false ? $smartResult['gdkp_data']['wow_instance_size_id'] : 2;
-                $gdkpTrade->difficulty = $smartResult['gdkp_data']['wow_instance_difficulty_id'] !== false ? $smartResult['gdkp_data']['wow_instance_difficulty_id'] : 2;
-
-                if ( !$no_update )
-                {
-                    $gdkpTrade->updated_at = Carbon::now();
+                $mostSimmilarGdkp = GdkpTrade::GetSimmilar($parseData->name,$parseData->text);
+                if ( $mostSimmilarGdkp === false ) {
+                    $gdkpTrade = new GdkpTrade();
                 }
                 else {
-                    $gdkpTrade->updated_at = $parseData->updated_at;
+                    $gdkpTrade = GdkpTrade::find($mostSimmilarGdkp["id"]);
                 }
-                $gdkpTrade->save();
+            } else {
+                $gdkpTrade = $foundGdkp;
+            }
+            $gdkpTrade->realm_id = $parseData->realm_id;
+            $gdkpTrade->name = $parseData->name;
+            $gdkpTrade->text = $parseData->text;
+            $gdkpTrade->faction = $parseData->faction ? $parseData->faction : 3;
+            $gdkpTrade->intent = $smartResult['gdkp_intent'];
+            $gdkpTrade->instance = $smartResult['gdkp_data']['wow_instance_id'] !== false ? $smartResult['gdkp_data']['wow_instance_id'] : 5;
+            $gdkpTrade->size = $smartResult['gdkp_data']['wow_instance_size_id'] !== false ? $smartResult['gdkp_data']['wow_instance_size_id'] : 2;
+            $gdkpTrade->difficulty = $smartResult['gdkp_data']['wow_instance_difficulty_id'] !== false ? $smartResult['gdkp_data']['wow_instance_difficulty_id'] : 2;
+
+            if ( !$no_update )
+            {
+                $gdkpTrade->updated_at = Carbon::now();
             }
             else {
-                Log::warning('Coult not get data of gdkp ' . $_parsed_data_id . PHP_EOL);
+                $gdkpTrade->updated_at = $parseData->updated_at;
             }
+            $gdkpTrade->save();
         }
         else if ( array_key_exists("credit_intent", $smartResult) && $smartResult['credit_intent'] !== false ) {
 
