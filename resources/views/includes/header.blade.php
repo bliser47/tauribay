@@ -31,6 +31,7 @@
                     <ul class="dropdown-menu trade-types-dropdown-menu">
                         <li><a href="/trade/char">{{ __("Karakter") }}</a></li>
                         <li><a href="/trade/raid">Raid</a></li>
+                        <li><a href="/trade/credit">{{ __("Kredit") }}</a></li>
                     </ul>
                 </li>
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>

@@ -3,6 +3,7 @@
 namespace TauriBay\Http\Controllers;
 
 use TauriBay\CharacterTrade;
+use TauriBay\CreditTrade;
 use TauriBay\ParsedData;
 use TauriBay\GdkpTrade;
 use TauriBay\Tauri\GdkpIntent;
@@ -32,7 +33,7 @@ class TradesController extends Controller
         $characterIntents = CharacterIntent::CHARACTER_INTENT_NAMES;
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
-        return view('characters')->with(compact('characterTrades','characterIntents','characterClasses','characterFactions'));
+        return view('trade/characters')->with(compact('characterTrades','characterIntents','characterClasses','characterFactions'));
     }
 
     public function ShowGdkps(Request $_request)
@@ -43,11 +44,14 @@ class TradesController extends Controller
         $gdkpInstanceSizes = WowInstanceSize::WOW_INSTANCE_SIZE_NAMES;
         $gdkpInstanceDifficulties = WoWInstanceDifficulty::WOW_INSTANCE_DIFFICULTY_NAMES;
 
-        return view('gdkps')->with(compact('gdkpTrades','gdkpIntents','gdkpInstances','gdkpInstanceSizes','gdkpInstanceDifficulties'));
+        return view('trade/gdkps')->with(compact('gdkpTrades','gdkpIntents','gdkpInstances','gdkpInstanceSizes','gdkpInstanceDifficulties'));
     }
 
     public function ShowCredits(Request $_request)
     {
-        
+        $creditTrades = CreditTrade::GetTrades($_request)->where('created_at','>',Carbon::now()->subDays(10))->paginate(16);
+        $creditIntents = CreditTrade::CREDIT_INTENT_NAMES;
+
+        return view('trade/credit')->with(compact('creditTrades','creditIntents'));
     }
 }

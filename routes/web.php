@@ -56,6 +56,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/trade', 'TradesController@ShowAll');
     Route::get('/trade/char', 'TradesController@ShowCharacters');
     Route::get('/trade/raid', 'TradesController@ShowGdkps');
+    Route::get('/trade/credit', 'TradesController@ShowCredits');
 
     Route::get('/changelog', 'ChangelogController@ShowChanges');
 

@@ -56,6 +56,10 @@ class SmartParser
             {
                 $smart_result["gdkp_data"] = GdkpIntent::GetData($_text);
             }
+            else
+            {
+                $smart_result["credit_intent"] = CreditIntent::IsCreditTrade($_text);
+            }
         }
         return $smart_result;
     }

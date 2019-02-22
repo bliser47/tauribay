@@ -60,33 +60,14 @@ class GdkpIntent
     );
 
     public static function IsGdkpTrade($_text) {
-        $foundIntents = array();
         foreach ( GdkpIntent::GDKP_INTENTS as $gdkp_intent_id => $gdkp_intent )
         {
             $pos = SmartParser::TextContainsArrayPart($_text,$gdkp_intent);
             if ( $pos !== false )
             {
                 return $gdkp_intent_id;
-                /*
-                if ( $gdkp_intent_id < 1 )
-                {
-                    return $gdkp_intent_id;
-                }
-                array_push($foundIntents,array(
-                    "pos" => $pos,
-                    "gdkp_intent_id" => $gdkp_intent_id
-                ));
-                */
             }
         }
-        /*
-        if ( count($foundIntents) > 0 ) {
-            usort($foundIntents, function ($a, $b) {
-                return $a["pos"] > $b["pos"];
-            });
-            return $foundIntents[0]["gdkp_intent_id"];
-        }
-        */
         return false;
     }
 

@@ -4,6 +4,7 @@ namespace TauriBay\Http\Controllers;
 
 use TauriBay\CharacterTrade;
 use TauriBay\GdkpTrade;
+use TauriBay\CreditTrade;
 use TauriBay\ParsedData;
 use TauriBay\TradeData;
 use TauriBay\Trader;
@@ -197,7 +198,37 @@ class ApiController extends Controller
                 Log::warning('Coult not get data of gdkp ' . $_parsed_data_id . PHP_EOL);
             }
         }
-        else {
+        else if ( $smartResult['credit_intent'] !== false ) {
+
+            $foundCredit = CreditTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
+            if ( !$foundCredit )
+            {
+                $mostSimmilarCredit = CreditTrade::GetSimmilar($parseData->name,$parseData->text);
+                if ( $mostSimmilarCredit === false ) {
+                    $creditTrade = new CreditTrade();
+                }
+                else {
+                    $creditTrade = CreditTrade::find($mostSimmilarCredit["id"]);
+                }
+            } else {
+                $creditTrade = $foundCredit;
+            }
+
+            $creditTrade->realm_id = $parseData->realm_id;
+            $creditTrade->name = $parseData->name;
+            $creditTrade->text = $parseData->text;
+            $creditTrade->faction = $parseData->faction ? $parseData->faction : 3;
+            $creditTrade->intent = $smartResult['credit_intent'];
+
+
+            if ( !$no_update )
+            {
+                $creditTrade->updated_at = Carbon::now();
+            }
+            else {
+                $creditTrade->updated_at = $parseData->updated_at;
+            }
+            $creditTrade->save();
         }
     }
 

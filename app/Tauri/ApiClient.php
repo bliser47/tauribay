@@ -345,6 +345,7 @@ class ApiClient {
      * The request is url and json decoded.
      * Stops execution on error.
      * @param bool $noParse
+     * @throws \Exception
      * @return mixed
      */
     private function communicate ($noParse = false) {
@@ -360,8 +361,7 @@ class ApiClient {
         $err = curl_error($ch);
         curl_close($ch);
         if ($err) {
-            print $err;
-            exit;
+            throw new \Exception($err);
         } else {
             if ( $noParse )
             {
@@ -370,9 +370,7 @@ class ApiClient {
             else {
                 $ret = json_decode(urldecode($response), true);
                 if (json_last_error() != JSON_ERROR_NONE) {
-                    print 'JSON Error: ' . json_last_error();
-                    print $response;
-                    exit;
+                    throw new \Exception(json_last_error());
                 } else {
                     return $ret;
                 }
