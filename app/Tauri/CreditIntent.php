@@ -42,7 +42,15 @@ class CreditIntent
         ' aranyat venek ',
         ' aranyat vasarolnek ',
         ' aranyat veszek ',
-        ' aranyat vasarolok '
+        ' aranyat vasarolok ',
+
+        ' wts credit ',
+        ' wts credits ',
+        ' want to sell credit ',
+        ' want to sell credits ',
+        ' selling credits ',
+        ' wtb tauri credits ',
+        ' wtb tauricredits ',
     );
 
     const CREDIT_INTENT_BUY = array
@@ -63,7 +71,13 @@ class CreditIntent
 
         ' goldot adok ',
         ' goldot adok el ',
-        ' gold elado '
+        ' gold elado ',
+
+        ' wtb credit ',
+        ' wtb credits ',
+        ' buying credits ',
+        ' want to buy credits ',
+        ' want to buy credit ',
     );
 
 
