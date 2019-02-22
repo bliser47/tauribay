@@ -122,7 +122,8 @@ class ApiController extends Controller
     {
         $parseData = ParsedData::find($_parsed_data_id);
         $smartResult = SmartParser::SmartParse($parseData->text);
-        if ( $smartResult['character_intent'] !== false && $smartResult['character_class'] !== false )
+        if (  array_key_exists("character_intent", $smartResult) && $smartResult['character_intent'] !== false &&
+            array_key_exists("character_class", $smartResult) && $smartResult['character_class'] !== false )
         {
             $foundTrade = CharacterTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
             if ( !$foundTrade )
@@ -152,7 +153,7 @@ class ApiController extends Controller
             }
             $characterTrade->save();
         }
-        else if ( $smartResult['gdkp_intent'] !== false )
+        else if ( array_key_exists("gdkp_intent", $smartResult) && $smartResult['gdkp_intent'] !== false )
         {
             if ( $smartResult['gdkp_data'] !== false )
             {
@@ -191,7 +192,7 @@ class ApiController extends Controller
                 Log::warning('Coult not get data of gdkp ' . $_parsed_data_id . PHP_EOL);
             }
         }
-        else if ( $smartResult['credit_intent'] !== false ) {
+        else if ( array_key_exists("credit_intent", $smartResult) && $smartResult['credit_intent'] !== false ) {
 
             $foundCredit = CreditTrade::where(array("text"=>$parseData->text,"name"=>$parseData->name))->first();
             if ( !$foundCredit )
