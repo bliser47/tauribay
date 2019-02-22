@@ -49,6 +49,9 @@ class SmartParser
         if ( $smart_result["character_intent"] !== false )
         {
             $smart_result["character_class"] = CharacterClasses::GetCharacterClass($_text);
+            if ( $smart_result["character_class"] === false ) {
+                $smart_result["credit_intent"] = CreditIntent::IsCreditTrade($_text);
+            }
         }
         else {
             $smart_result["gdkp_intent"] = GdkpIntent::IsGdkpTrade($_text);
