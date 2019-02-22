@@ -19,7 +19,9 @@ class WoWInstanceDifficulty
         " normal ",
         " normalt ",
         " normalra ",
-        " normalre "
+        " normalre ",
+        " normra",
+        " norm-ra "
     );
 
     const WOW_INSTANCE_DIFFICULTY_HEROIC = array(
