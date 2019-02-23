@@ -1,14 +1,14 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="bossName">
                 {{ $realm . " - " . $guild["name"]  }}
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             {!! Form::open(array("method" => "get","id"=>"guild-form")) !!}
             {{--
             <div class="divDesktop col-md-3 col-xs-6">
@@ -56,7 +56,7 @@
     </div>
     </br>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel panel-default nomargin">
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">

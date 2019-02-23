@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel-group trade-filter" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading nopadding" role="tab" id="headingOne">
@@ -88,8 +88,6 @@
                         <th class="cellDesktop">{{ __("Szándék") }}</th>
                         <th class="headDesktop">{{ __("Hirdetés") }}</th>
                     </tr>
-                    <tr class="rowMobile spacer"><td colspan="3"></td></tr>
-                    <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                     @foreach ( $creditTrades as $creditTrade )
                         <tr>
                             <td class="cellDesktop time" data-time="{{$creditTrade->updated_at}}"> {{ $creditTrade->updated_at }}</td>
@@ -103,7 +101,6 @@
                         <tr class="tradeTextRow rowMobile">
                             <td colspan="2" class="text-left tradeMessage"> {{ wordwrap($creditTrade->text,40," ", true) }} </td>
                         </tr>
-                        <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                         <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                     @endforeach
                 </table>

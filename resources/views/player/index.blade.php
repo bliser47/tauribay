@@ -1,14 +1,14 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="bossName">
                 {{ __("Karakter keresése") }}
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             {!! Form::open(array("method" => "get","id"=>"player-form")) !!}
             <div class="col-md-6">
                 <div id="expansions-container" class="input-group col-md-12">

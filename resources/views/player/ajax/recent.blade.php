@@ -71,8 +71,7 @@
                     </td>
                 @endif
             </tr>
-            <tr class="rowMobile spacer"><td colspan="3"></td></tr>
-            <tr class="rowMobile spacer"><td colspan="3"></td></tr>
+            <tr class="rowMobile spacer"><td colspan="6"></td></tr>
         @endforeach
     @else
         <div class="alert alert-warning nomargin">

@@ -1,4 +1,4 @@
-@media (max-width: 767px)
+@media (max-width: 768px)
 {
     .navbar-nav .open .dropdown-menu {
         text-align: center;
@@ -6,6 +6,56 @@
 
     #encounter-form-response .nav li a {
         padding:7.5px 7.5px;
+    }
+    .col-sm-nopadding
+    {
+        padding:0px;
+    }
+    .col-sm-margin
+    {
+        margin-bottom:10px;
+    }
+    .panel-group .panel, .panel-heading , .well{
+        border-radius: 0px;
+    }
+    .panel-group {
+        margin:0px;
+    }
+    .navbar {
+        margin:0px;
+    }
+    .panel {
+        border:none;
+        margin:0px;
+    }
+    .table-transparent tr
+    {
+        border:none;
+    }
+    .table-transparent
+    {
+        background:white !important;
+    }
+    .navbar-brand
+    {
+        padding-right:5px;
+        padding-left:5px;
+    }
+    #mobileChangelog, #mobileTrello
+    {
+        margin-right:5px;
+    }
+    .blog-main .well {
+        margin:0px;
+    }
+    .panel>.table:first-child, .panel>.table-responsive:first-child>.table:first-child
+    {
+        border-radius: 0px;
+    }
+    br {
+        height: 0px;
+        margin: 0px;
+        display: none;
     }
 }
 
@@ -41,18 +91,6 @@
         padding:0px;
     }
 }
-
-@media (max-width:768px){
-    .col-sm-nopadding
-    {
-        padding:0px;
-    }
-    .col-sm-margin
-    {
-        margin-bottom:10px;
-    }
-}
-
 
 @media screen and (max-width: 480px)
 {

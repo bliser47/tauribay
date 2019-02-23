@@ -1115,7 +1115,7 @@ a.changelog:hover, a.trello:hover
 
 footer
 {
-    background:#fff;
+    display: none;
 }
 
 .table tbody td {
@@ -1263,14 +1263,14 @@ table .tradeTextRow td {
 }
 
 tr.spacer td {
-    border: none !important;
-    background-color: transparent !Important;
-    height:5px;
+    border:none !Important;
+    height:0px;
+    background:white !Important;
 }
 
 tr.spacer
 {
-    border:none !Important;
+    border-bottom: 2px solid #5cb85c !important;
     background: transparent !Important;
 }
 

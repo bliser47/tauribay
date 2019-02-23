@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel-group trade-filter" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading nopadding" role="tab" id="headingOne">
@@ -125,7 +125,7 @@
             <div class="nomargin panel">
                 <table class="table table-bordered table-classes table-transparent">
                     <tr class="tHead">
-                        <th class="cellDesktop">Idő</th>
+                        <th>Idő</th>
                         <th>{{ __("Név") }}</th>
                         <th>Realm</th>
                         <th class="cellDesktop">{{ __("Frakció") }}</th>
@@ -138,10 +138,11 @@
                     </tr>
                     @foreach ( $gdkpTrades as $gdkp )
                         <tr>
-                            <td class="cellDesktop time" data-time="{{$gdkp->updated_at}}"> {{ $gdkp->updated_at }}</td>
+                            <td class="time" data-time="{{$gdkp->updated_at}}"> {{ $gdkp->updated_at }}</td>
                             <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ \TauriBay\Realm::REALMS[$gdkp->realm_id] }}&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
-                            <td class="cellMobile faction-{{ $gdkp->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ \TauriBay\Realm::REALMS[$gdkp->realm_id] }}&n={{ $gdkp->name }}"> {{ $gdkp->name }} </a></td>
-                            <td>{{ \TauriBay\Realm::REALMS_SHORT[$gdkp->realm_id] }}</td>
+                            <td class="cellMobile faction-{{ $gdkp->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r={{ \TauriBay\Realm::REALMS[$gdkp->realm_id] }}&n={{ $gdkp->name }}"> {{ \TauriBay\EncounterMember::getShortName($gdkp->name) }} </a></td>
+                            <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[$gdkp->realm_id] }}</td>
+                            <td class="cellMobile">{{ \TauriBay\Realm::REALMS_SHORTEST[$gdkp->realm_id] }}</td>
                             <td class="cellDesktop gdkp-faction faction-{{ $gdkp->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $gdkp->faction . ".png") }}" alt=""/> </td>
                             <td class="cellDesktop"> {{ __($gdkpIntents[$gdkp->intent]) }}</td>
                             <td class="instance-{{ $gdkp->instance  }}"> {{ \TauriBay\Tauri\WowInstance::WOW_INSTANCE_SHORT_NAMES_NICE[$gdkp->instance] }} </td>
@@ -150,10 +151,9 @@
                             <td class="cellDesktop tradeMessage"> {{ $gdkp->text }} </td>
                         </tr>
                         <tr class="tradeTextRow rowMobile">
-                            <td colspan="5" class="text-left tradeMessage"> {{ $gdkp->text }} </td>
+                            <td colspan="6" class="text-left tradeMessage"> {{ $gdkp->text }} </td>
                         </tr>
-                        <tr class="rowMobile spacer"><td colspan="5"></td></tr>
-                        <tr class="rowMobile spacer"><td colspan="5"></td></tr>
+                        <tr class="rowMobile spacer"><td colspan="6"></td></tr>
                     @endforeach
                 </table>
             </div>

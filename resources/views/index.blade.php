@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12 blog-main">
+        <div class="col-md-12 blog-main col-sm-nopadding">
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 blog-main">
+        <div class="col-md-12 blog-main col-sm-nopadding">
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
@@ -61,7 +61,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 blog-main">
+        <div class="col-md-12 blog-main col-sm-nopadding">
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel panel-default nomargin">
                  <ul class="nav nav-tabs" role="tablist">
                     <li class="home-main-tab active" role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">{{__("Profil")}}</a></li>

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel panel-default">
                 <div class="panel-heading nopadding" role="tab" id="headingOne">
                     <h4 class="panel-title">

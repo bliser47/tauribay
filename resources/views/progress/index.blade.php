@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel-group trade-filter" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading nopadding" role="tab" id="headingTwo">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel table-responsive">
+            <div class="panel table-responsive nomargin">
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
                         <th class="headDesktop">{{ __("Nr.") }}</th>

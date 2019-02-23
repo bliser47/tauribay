@@ -1,62 +1,9 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel-group trade-filter" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
-                    {{--
-                    <div id="topResponseModal" class="modal" tabindex="-1" role="dialog">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                            <h5 class="modal-title">{{__("Sikeresen hozzáadva!")}}</h5>
-                          </div>
-                          <div id="topResponseBody" class="modal-body">
-
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="panel-heading nopadding" role="tab" id="headingOne">
-                        <h4 class="panel-title">
-                            <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                {{ __("Karakter/Guild hozzáadása") }}
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <div class="loader"></div>
-                            {!! Form::open(array("method" => "post","id"=>"newcharacter-form")) !!}
-                            <input name="fromAdd" type="hidden" value="1"/>
-                            <div class="form-group col-md-12 nopadding-left nopadding-right">
-                                <h4> {{ __("1. Válaszd ki a realmet!") }} </h4>
-                                <div class="input-group col-md-12">
-                                    {!! Form::select('realm', $realms, null, ['required', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz realmet")]); !!}
-                                </div>
-                                <h4> {{ __("2. Add meg a guild és/vagy a karakter nevét") }} </h4>
-                                <div class="col-sm-5 nopadding-left">
-                                    <input type="text" class="form-control" name="guildName" value="{!! Input::get('guildName') !!}" placeholder="{{ __("Guild neve") }}"/>
-                                </div>
-                                <div class="col-sm-1">
-                                    <p style="padding:10px">{{ __("és/vagy") }}</p>
-                                </div>
-                                <div class="col-sm-5 nopadding-right">
-                                    <input type="text" class="form-control" name="name" value="{!! Input::get('name') !!}" placeholder="{{ __("Karakter neve") }}"/>
-                                </div>
-                                <div class="col-sm-1">
-                                    <button class="btn btn-block btn-success" name="add" value="1" type="submit">
-                                        {{ __("Hozzáadás") }}
-                                    </button>
-                                </div>
-                            </div>
-                            {!! Form::close() !!}
-                        </div>
-                    </div>
-                    --}}
                     <div class="panel-heading nopadding" role="tab" id="headingTwo">
                         <h4 class="panel-title">
                             <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -170,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            <div class="panel table-responsive">
+            <div class="panel table-responsive nomargin">
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
                         <th>{{ __("Nr") }}</th>

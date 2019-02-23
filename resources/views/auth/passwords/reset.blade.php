@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel panel-default nomargin">
                 <div class="panel-heading">{{__("Jelszó Frissítése")}}</div>
                 <div class="panel-body reset">

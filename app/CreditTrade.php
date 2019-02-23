@@ -8,7 +8,7 @@ use DB;
 class CreditTrade extends Model
 {
     const CREDIT_INTENT_NAMES = array(
-        'Eladás', 'Vásárlás'
+        'Eladás', 'Vétel'
     );
 
 

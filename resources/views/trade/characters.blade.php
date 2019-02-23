@@ -1,7 +1,7 @@
 @extends('layouts.default')
 @section('content')
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 col-sm-nopadding">
             <div class="panel-group trade-filter" id="accordion" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
                     <div class="panel-heading nopadding" role="tab" id="headingOne">
@@ -133,7 +133,7 @@
             <div class="nomargin panel table-responsive">
                 <table class="table table-bordered table-classes table-transparent">
                     <tr class="tHead">
-                        <th class="cellDesktop">{{ __("Idő") }}</th>
+                        <th>{{ __("Idő") }}</th>
                         <th>{{ __("Név") }}</th>
                         <th>{{ __("Realm") }}</th>
                         <th class="cellDesktop">{{ __("Frakció") }}</th>
@@ -141,11 +141,9 @@
                         <th>{{ __("Kaszt") }}</th>
                         <th class="headDesktop">{{ __("Hirdetés") }}</th>
                     </tr>
-                    <tr class="rowMobile spacer"><td colspan="3"></td></tr>
-                    <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                     @foreach ( $characterTrades as $character )
                         <tr>
-                            <td class="cellDesktop time" data-time="{{$character->updated_at}}"> {{ $character->updated_at }}</td>
+                            <td class="time" data-time="{{$character->updated_at}}"> {{ $character->updated_at }}</td>
                             <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
                             <td class="cellMobile faction-{{ $character->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $character->name }}"> {{ $character->name }} </a></td>
                             <td>{{ \TauriBay\Realm::REALMS_SHORT[$character->realm_id] }}</td>
@@ -155,10 +153,9 @@
                             <td class="cellDesktop text-left tradeMessage">{{ wordwrap($character->text,80," ", true) }}</td>
                         </tr>
                         <tr class="tradeTextRow rowMobile">
-                            <td colspan="3" class="text-left tradeMessage"> {{ wordwrap($character->text,40," ", true) }} </td>
+                            <td colspan="4" class="text-left tradeMessage"> {{ wordwrap($character->text,40," ", true) }} </td>
                         </tr>
-                        <tr class="rowMobile spacer"><td colspan="3"></td></tr>
-                        <tr class="rowMobile spacer"><td colspan="3"></td></tr>
+                        <tr class="rowMobile spacer"><td colspan="4"></td></tr>
                     @endforeach
                 </table>
             </div>
