@@ -81,7 +81,7 @@
             <div class="nomargin panel table-responsive">
                 <table class="table table-bordered table-classes table-transparent">
                     <tr class="tHead">
-                        <th class="cellDesktop">{{ __("Idő") }}</th>
+                        <th>{{ __("Idő") }}</th>
                         <th>{{ __("Név") }}</th>
                         <th>{{ __("Realm") }}</th>
                         <th class="cellDesktop">{{ __("Frakció") }}</th>
@@ -90,7 +90,7 @@
                     </tr>
                     @foreach ( $creditTrades as $creditTrade )
                         <tr>
-                            <td class="cellDesktop time" data-time="{{$creditTrade->updated_at}}"> {{ $creditTrade->updated_at }}</td>
+                            <td class="time" data-time="{{$creditTrade->updated_at}}"> {{ $creditTrade->updated_at }}</td>
                             <td class="cellDesktop"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $creditTrade->name }}"> {{ $creditTrade->name }} </a></td>
                             <td class="cellMobile faction-{{ $creditTrade->faction  }}"> <a target="_blank" href="https://tauriwow.com/armory#character-sheet.xml?r=%5BHU%5D%20Tauri%20WoW%20Server&n={{ $creditTrade->name }}"> {{ $creditTrade->name }} </a></td>
                             <td>{{ \TauriBay\Realm::REALMS_SHORT[$creditTrade->realm_id] }}</td>
@@ -99,8 +99,9 @@
                             <td class="cellDesktop text-left tradeMessage">{{ wordwrap($creditTrade->text,80," ", true) }}</td>
                         </tr>
                         <tr class="tradeTextRow rowMobile">
-                            <td colspan="2" class="text-left tradeMessage"> {{ wordwrap($creditTrade->text,40," ", true) }} </td>
+                            <td colspan="3" class="text-left tradeMessage"> {{ wordwrap($creditTrade->text,40," ", true) }} </td>
                         </tr>
+                        <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                         <tr class="rowMobile spacer"><td colspan="3"></td></tr>
                     @endforeach
                 </table>

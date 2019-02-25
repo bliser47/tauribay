@@ -154,6 +154,7 @@
                             <td colspan="6" class="text-left tradeMessage"> {{ $gdkp->text }} </td>
                         </tr>
                         <tr class="rowMobile spacer"><td colspan="6"></td></tr>
+                        <tr class="rowMobile spacer"><td colspan="6"></td></tr>
                     @endforeach
                 </table>
             </div>

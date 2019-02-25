@@ -156,6 +156,7 @@
                             <td colspan="4" class="text-left tradeMessage"> {{ wordwrap($character->text,40," ", true) }} </td>
                         </tr>
                         <tr class="rowMobile spacer"><td colspan="4"></td></tr>
+                        <tr class="rowMobile spacer"><td colspan="4"></td></tr>
                     @endforeach
                 </table>
             </div>
