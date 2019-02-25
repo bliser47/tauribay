@@ -4,10 +4,12 @@ namespace TauriBay\Http\Controllers;
 
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
+use TauriBay\EncounterTop;
 use TauriBay\Guild;
 use TauriBay\GuildProgress;
 use Illuminate\Http\Request;
 use TauriBay\Http\Requests;
+use TauriBay\MemberTop;
 use TauriBay\Tauri;
 use TauriBay\Tauri\CharacterClasses;
 use DB;
@@ -38,6 +40,51 @@ class ProgressController extends Controller
 
     public function debug(Request $_request)
     {
+        $invalid = [
+            141359,
+            158853,
+            171431,
+            240304
+        ];
+
+        EncounterTop::whereIn("encounter_id",$invalid)->delete();
+
+        foreach ( $invalid as $invalidId ) {
+
+            $encounter = Encounter::where("id","=",$invalidId)->first();
+
+            $guildEncounters = Encounter::where("encounter_id", $encounter->encounter_id)
+                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $encounter->guild_id)->get();
+
+            foreach ( $guildEncounters as $guildEncounter ) {
+                $guild = Guild::where("id","=",$encounter->guild_id);
+                Encounter::refreshEncounterTop($guildEncounter, $guild);
+            }
+        }
+
+        $memberTops = EncounterMember::whereIn("encounter_id",$invalid)->get();
+        $ret = array();
+        foreach ( $memberTops as $member )
+        {
+            MemberTop::where("dps_encounter_id","=",$member->encounter)->delete();
+            MemberTop::where("hps_encounter_id","=",$member->encounter)->delete();
+
+            $memberEncounters = EncounterMember::where("name", $member->name)->where("realm_id", $member->realm_id)->where("encounter", $member->encounter)
+                ->where("difficulty_id", $member->difficulty_id)->where("spec", $member->spec)->get();
+
+            $ret[$member->name] = array();
+
+            foreach ( $memberEncounters as $memberEncounter ) {
+                $encounter = Encounter::where("id","=",$memberEncounter->encounter_id)->first();
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                Encounter::refreshMemberTop($memberEncounter, $guild);
+
+                $ret[$member->name][] = $memberEncounter->id;
+            }
+        }
+        return $ret;
+
+        /*
         $api = new Tauri\ApiClient();
         $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
 
@@ -55,6 +102,7 @@ class ProgressController extends Controller
             return $key;
         }
         return $items;
+        */
     }
 
     public function index(Request $_request)

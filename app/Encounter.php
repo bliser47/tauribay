@@ -555,76 +555,74 @@ class Encounter extends Model
 
     public static function refreshMemberTop($member, $guild)
     {
-        $top = MemberTop::where("name",$member->name)->where("realm_id",$member->realm_id)->where("encounter_id", $member->encounter)
-            ->where("difficulty_id",$member->difficulty_id)->where("spec", $member->spec)->first();
+        if ( !in_array($member->encounter_id,self::INVALID_RAIDS) ) {
+            $top = MemberTop::where("name", $member->name)->where("realm_id", $member->realm_id)->where("encounter_id", $member->encounter)
+                ->where("difficulty_id", $member->difficulty_id)->where("spec", $member->spec)->first();
 
-        $checkDps = false;
-        $checkHps = false;
-        if ( $top !== null )
-        {
-            if ( $member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP ) {
-                if ($member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP) {
-                    if ($top->dps < $member->dps) {
+            $checkDps = false;
+            $checkHps = false;
+            if ($top !== null) {
+                if ($member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP) {
+                    if ($member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP) {
+                        if ($top->dps < $member->dps) {
+                            $top->dps = $member->dps;
+                            $top->dps_encounter_id = $member->encounter_id;
+                            $top->dps_ilvl = $member->ilvl;
+                            if ($guild !== null) {
+                                $top->dps_guild_id = $guild->id;
+                            }
+                            $checkDps = true;
+                        }
+                    }
+                }
+                if ($member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP) {
+                    if ($top->hps < $member->hps) {
+                        $top->hps = $member->hps;
+                        $top->hps_encounter_id = $member->encounter_id;
+                        $top->hps_ilvl = $member->ilvl;
+                        if ($guild !== null) {
+                            $top->hps_guild_id = $guild->id;
+                        }
+                        $checkHps = true;
+                    }
+                }
+            } else {
+                $top = new MemberTop();
+                $top->name = $member->name;
+                $top->class = $member->class;
+                $top->spec = $member->spec;
+                $top->realm_id = $member->realm_id;
+                $top->difficulty_id = $member->difficulty_id;
+                $top->encounter_id = $member->encounter;
+                $top->faction_id = $member->faction_id;
+                if ($member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP) {
+
+                    if ($member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP) {
                         $top->dps = $member->dps;
                         $top->dps_encounter_id = $member->encounter_id;
                         $top->dps_ilvl = $member->ilvl;
-                        if ($guild !== null) {
-                            $top->dps_guild_id = $guild->id;
-                        }
                         $checkDps = true;
                     }
                 }
-            }
-            if ( $member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
-                if ($top->hps < $member->hps) {
+                if ($member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP) {
                     $top->hps = $member->hps;
                     $top->hps_encounter_id = $member->encounter_id;
                     $top->hps_ilvl = $member->ilvl;
-                    if ($guild !== null) {
-                        $top->hps_guild_id = $guild->id;
-                    }
                     $checkHps = true;
                 }
-            }
-        }
-        else
-        {
-            $top = new MemberTop();
-            $top->name = $member->name;
-            $top->class = $member->class;
-            $top->spec = $member->spec;
-            $top->realm_id = $member->realm_id;
-            $top->difficulty_id = $member->difficulty_id;
-            $top->encounter_id = $member->encounter;
-            $top->faction_id = $member->faction_id;
-            if ( $member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP ) {
-
-                if ($member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP) {
-                    $top->dps = $member->dps;
-                    $top->dps_encounter_id = $member->encounter_id;
-                    $top->dps_ilvl = $member->ilvl;
-                    $checkDps = true;
+                if ($guild !== null) {
+                    $top->dps_guild_id = $guild->id;
+                    $top->hps_guild_id = $guild->id;
                 }
             }
-            if ( $member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP ) {
-                $top->hps = $member->hps;
-                $top->hps_encounter_id = $member->encounter_id;
-                $top->hps_ilvl = $member->ilvl;
-                $checkHps = true;
-            }
-            if ( $guild !== null )
-            {
-                $top->dps_guild_id = $guild->id;
-                $top->hps_guild_id = $guild->id;
-            }
-        }
-        $top->save();
+            $top->save();
 
-        if ( $checkDps ) {
-            self::refreshLadderDps($top, $guild);
-        }
-        if ( $checkHps ) {
-            self::refreshLadderHps($top, $guild);
+            if ($checkDps) {
+                self::refreshLadderDps($top);
+            }
+            if ($checkHps) {
+                self::refreshLadderHps($top);
+            }
         }
     }
 

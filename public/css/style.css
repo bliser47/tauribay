@@ -1315,3 +1315,8 @@ tr.spacer
 .topDpsSpecContainer.divMobile {
     margin:auto;
 }
+
+.noborder *, .noborder {
+    border-radius:0px;
+    border:none;
+}

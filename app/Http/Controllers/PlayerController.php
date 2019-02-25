@@ -50,7 +50,8 @@ class PlayerController extends Controller
 
             case "top":
 
-                break;
+
+            break;
         }
         return view("player/ajax/notfound");
     }
@@ -64,23 +65,50 @@ class PlayerController extends Controller
         $playerTitle = __("Karakter keresése");
         $realmUrl = $_realm_short;
         $modes = array(
-            "recent" => __("Új")
+            "recent" => __("Új"),
+            "top" => __("Top"),
         );
         $modeId = Defaults::PLAYER_MODE;
         if ( $character !== null ) {
             $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
         }
+
+
+        $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
+        $mapId = $_request->get("map_id", Defaults::MAP_ID);
+        $encounterId = $_request->get("encounter_id", 0);
+        $difficultyId = $_request->get("difficulty_id");
+        $defaultDifficultyId = $_request->get("difficulty_id_default");
+
+        $expansions = Encounter::EXPANSIONS;
+        $maps = Encounter::getExpansionMaps($expansionId);
+
+        $difficulties = Defaults::SIZE_AND_DIFFICULTY;
+
+        $encounters = Encounter::getMapEncounters($expansionId, $mapId);
+        $encounters[0] = __("Minden boss");
+
         return view("player/search", compact(
         "playerTitle",
         "playerName",
         "realmUrl",
         "modes",
-        "modeId"
+        "modeId",
+        "expansions",
+        "maps",
+        "mapId",
+        "expansionId",
+        "difficulties",
+        "encounters",
+        "encounterId",
+        "difficultyId",
+        "defaultDifficultyId"
     ));
     }
 
     public function index(Request $_request)
     {
+
         return view("player/index");
     }
 }
