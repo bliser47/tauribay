@@ -41,13 +41,9 @@ class ProgressController extends Controller
     public function debug(Request $_request)
     {
         $invalid = [
-            141359,
-            158853,
-            171431,
-            240304
+            92775
         ];
 
-        /*
         EncounterTop::whereIn("fastest_encounter_id",$invalid)->delete();
 
         foreach ( $invalid as $invalidId ) {
@@ -62,7 +58,6 @@ class ProgressController extends Controller
                 Encounter::refreshEncounterTop($guildEncounter, $guild);
             }
         }
-        */
 
         $memberTops = EncounterMember::whereIn("encounter_id",$invalid)->get();
         $ret = array();

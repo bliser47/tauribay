@@ -1320,3 +1320,8 @@ tr.spacer
     border-radius:0px;
     border:none;
 }
+
+.alert {
+    border:none;
+    border-radius:0px;
+}

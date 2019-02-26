@@ -16,7 +16,8 @@ class Encounter extends Model
         141359, // Animus Prot Pala exploit
         158853, // Animus Prot Pala exploit
         171431, // Animus Prot Pala exploit
-        240304  // Animus Prot Pala exploit
+        240304, // Animus Prot Pala exploit
+        92775   // Ra-den Prot Pala exploit
     ];
 
     const DIFFICULTY_NAME = array(

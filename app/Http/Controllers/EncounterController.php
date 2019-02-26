@@ -62,6 +62,7 @@ class EncounterController extends Controller
 
             foreach ($members as $member) {
                 $member->total_heal = $member->heal_done + $member->absorb_done;
+                $member->total_damage_taken = $member->damage_taken + $member->damage_absorb;
             }
 
 
@@ -72,6 +73,12 @@ class EncounterController extends Controller
                 $member->dps = Skada::calculatePS($encounter, $member, "damage_done");
                 $member->dpsNonFormatted = Skada::calculatePS($encounter, $member, "damage_done", true);
                 $member->percentageDamage = Skada::calculatePercentage($member, $membersDamage->first(), "damage_done");
+            }
+
+            $membersDamageTaken = array();
+            $membersDamageTaken = $members->sortByDesc("total_damage_taken");
+            foreach ($membersDamageTaken as $member) {
+                $member->percentageDamageTaken = Skada::calculatePercentage($member, $membersDamageTaken->first(), "total_damage_taken");
             }
 
             $membersHealing = array();
@@ -96,6 +103,7 @@ class EncounterController extends Controller
 
             return view("encounter/encounter", compact("encounter",
                 "encounterData",
+                "membersDamageTaken",
                 "membersDamage",
                 "membersDps",
                 "membersHealing",

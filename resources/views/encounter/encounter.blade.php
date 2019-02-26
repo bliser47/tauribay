@@ -47,6 +47,7 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="home-main-tab active" role="presentation"><a href="#damage" aria-controls="damage" role="tab" data-toggle="tab">Damage</a></li>
                     <li class="home-main-tab" role="presentation"><a href="#healing" aria-controls="healing" role="tab" data-toggle="tab">Healing</a></li>
+                    <li class="home-main-tab" role="presentation"><a href="#damage_taken" aria-controls="healing" role="tab" data-toggle="tab">Damage taken</a></li>
                     <li class="home-main-tab" role="presentation"><a href="#loot" aria-controls="loot" role="tab" data-toggle="tab">Loot</a></li>
                 </ul>
                 <div class="tab-content">
@@ -77,7 +78,7 @@
                     <div role="tabpanel" class="tab-pane" id="healing">
                         @if ( !$hpsValid )
                             <div class="alert alert-danger nomargin">
-                                {{ __("Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!") }}
+                                {{ __("Figyelem! Ezek az adatok hibásak lehetnek!") }}
                             </div>
                         @endif
                         @foreach ( $membersHealing as $member )
@@ -94,6 +95,25 @@
                                     <span class="memberData memberData1 divDesktop">{{ number_format($member->total_heal) }}</span>
                                     <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->total_heal) }}</span>
                                     <span class="memberData memberData2">({{ $member->hps }})</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="damage_taken">
+                        @foreach ( $membersDamageTaken as $member )
+                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
+                                <div class="memberDataWidthContainer">
+                                    <div style="width:{{ $member->percentageDamageTaken }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
+                                    <div class="memberSpec">
+                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
+                                    </div>
+                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
+                                    <span class="memberName">
+                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member["name"] }}">{{ $member->name }}</a>
+                                    </span>
+                                    <span class="memberData memberData1 divDesktop">{{ number_format($member->damage_absorb) }} abs</span>
+                                    <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->damage_absorb) }} abs</span>
+                                    <span class="memberData memberData2">{{  \TauriBay\Tauri\Skada::format($member->total_damage_taken) }}</span>
                                 </div>
                             </div>
                         @endforeach
