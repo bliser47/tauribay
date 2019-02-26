@@ -66,7 +66,7 @@ class PlayerController extends Controller
         $realmUrl = $_realm_short;
         $modes = array(
             "recent" => __("Új"),
-            "top" => __("Top"),
+            //"top" => __("Top"),
         );
         $modeId = Defaults::PLAYER_MODE;
         if ( $character !== null ) {
