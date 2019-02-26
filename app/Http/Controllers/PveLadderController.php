@@ -141,7 +141,7 @@ class PveLadderController extends Controller
                     if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
 
-                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=1";
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=3";
                         $cacheValue = Cache::get($cacheKey);
                         if ( !$cacheValue ) {
 
@@ -341,7 +341,7 @@ class PveLadderController extends Controller
                 }
                 else if ( $modeId == "speed" )
                 {
-                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=4";
+                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=7";
                     $cacheValue = Cache::get($cacheKey);
                     if (  !$cacheValue ) {
 

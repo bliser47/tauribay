@@ -47,7 +47,8 @@ class ProgressController extends Controller
             240304
         ];
 
-        EncounterTop::whereIn("encounter_id",$invalid)->delete();
+        /*
+        EncounterTop::whereIn("fastest_encounter_id",$invalid)->delete();
 
         foreach ( $invalid as $invalidId ) {
 
@@ -57,17 +58,18 @@ class ProgressController extends Controller
                 ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $encounter->guild_id)->get();
 
             foreach ( $guildEncounters as $guildEncounter ) {
-                $guild = Guild::where("id","=",$encounter->guild_id);
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
                 Encounter::refreshEncounterTop($guildEncounter, $guild);
             }
         }
+        */
 
         $memberTops = EncounterMember::whereIn("encounter_id",$invalid)->get();
         $ret = array();
         foreach ( $memberTops as $member )
         {
-            MemberTop::where("dps_encounter_id","=",$member->encounter)->delete();
-            MemberTop::where("hps_encounter_id","=",$member->encounter)->delete();
+            MemberTop::where("dps_encounter_id","=",$member->encounter_id)->delete();
+            MemberTop::where("hps_encounter_id","=",$member->encounter_id)->delete();
 
             $memberEncounters = EncounterMember::where("name", $member->name)->where("realm_id", $member->realm_id)->where("encounter", $member->encounter)
                 ->where("difficulty_id", $member->difficulty_id)->where("spec", $member->spec)->get();
