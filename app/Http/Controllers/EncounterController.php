@@ -63,10 +63,10 @@ class EncounterController extends Controller
             foreach ($members as $member) {
                 $member->total_heal = $member->heal_done + $member->absorb_done;
                 $member->total_damage_taken = $member->damage_taken + $member->damage_absorb;
+                $member->score = max($member->dps_score, $member->hps_score);
             }
 
 
-            $membersDamage = array();
             $dpsValid = $encounter->encounter_id !== 1572 || $encounter->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP;
             $membersDamage = $members->sortByDesc("damage_done");
             foreach ($membersDamage as $member) {
@@ -75,13 +75,16 @@ class EncounterController extends Controller
                 $member->percentageDamage = Skada::calculatePercentage($member, $membersDamage->first(), "damage_done");
             }
 
-            $membersDamageTaken = array();
             $membersDamageTaken = $members->sortByDesc("total_damage_taken");
             foreach ($membersDamageTaken as $member) {
                 $member->percentageDamageTaken = Skada::calculatePercentage($member, $membersDamageTaken->first(), "total_damage_taken");
             }
 
-            $membersHealing = array();
+            $membersScore = $members->sortByDesc("score");
+            foreach ($membersScore as $member) {
+                $member->percentageScore = Skada::calculatePercentage($member, $membersScore->first(), "score");
+            }
+
             $hpsValid = $encounter->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP;
             $membersHealing = $members->sortByDesc("total_heal");
             foreach ($membersHealing as $member) {
@@ -103,6 +106,7 @@ class EncounterController extends Controller
 
             return view("encounter/encounter", compact("encounter",
                 "encounterData",
+                "membersScore",
                 "membersDamageTaken",
                 "membersDamage",
                 "membersDps",
