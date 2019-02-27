@@ -112,8 +112,7 @@
                                     <span class="memberName">
                                         <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member["name"] }}">{{ $member->name }}</a>
                                     </span>
-                                    {{--<span class="memberData memberData1 divDesktop">{{ number_format($member->damage_absorb) }} abs</span>--}}
-                                    {{--<span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->damage_absorb) }} abs</span>--}}
+                                    <span class="memberData memberData1">{{ $member->ilvl }} iLvL</span>
                                     <span class="memberData memberData2">{{ $member->score }}%</span>
                                 </div>
                             </div>
