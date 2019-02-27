@@ -61,9 +61,12 @@ class EncounterController extends Controller
 
 
             foreach ($members as $member) {
+                if ( $member->dps_score == 0 && $member->hps_score == 0 ) {
+                    Encounter::calculateScores($member);
+                }
                 $member->total_heal = $member->heal_done + $member->absorb_done;
                 $member->total_damage_taken = $member->damage_taken + $member->damage_absorb;
-                $member->score = max($member->dps_score, $member->hps_score);
+                $member->score = EncounterMember::isHealer($member->spec) ? $member->hps_score : $member->dps_score;
             }
 
 
@@ -131,7 +134,7 @@ class EncounterController extends Controller
             $totEncounterIds = array_keys(Encounter::ENCOUNTERS_DEFAULT);
             $members = EncounterMember::where("top_processed", "<>", 1)->whereIn("encounter", $totEncounterIds)->take(1000)->get();
             foreach ($members as $member) {
-                Encounter::calculateScores($member);
+                //Encounter::calculateScores($member);
                 Encounter::logCharacter($member, $api);
                 $member->top_processed = 1;
                 $member->save();

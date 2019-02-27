@@ -256,8 +256,16 @@ class EncounterMember extends Model
         2,5,7,10,11
     );
 
+    const SPEC_IS_HEAL = array(
+        65, 256, 257, 264, 270, 105
+    );
+
     public static function canClassHeal($class) {
         return in_array($class,self::CLASSES_CAN_HEAL);
+    }
+
+    public static function isHealer($spec) {
+        return in_array($spec,self::SPEC_IS_HEAL);
     }
 
     public static function getClasses()
