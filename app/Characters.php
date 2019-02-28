@@ -8,10 +8,13 @@ use DB;
 class Characters extends Model
 {
     public static function addEncounter($character, $member) {
-        $characterEncounter = new CharacterEncounters;
-        $characterEncounter->character_id = $character->id;
-        $characterEncounter->encounter_member_id = $member->id;
-        $characterEncounter->save();
+        $characterEncounter = CharacterEncounters::where("character_id","=",$character->id)->where("encounter_member_id","=",$member->id)->first();
+        if ( $characterEncounter == null ) {
+            $characterEncounter = new CharacterEncounters;
+            $characterEncounter->character_id = $character->id;
+            $characterEncounter->encounter_member_id = $member->id;
+            $characterEncounter->save();
+        }
     }
 
     public static function GetTopItemLevels($_request)
