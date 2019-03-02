@@ -27,7 +27,6 @@ class TradesController extends Controller
 
     public function ShowCharacters(Request $_request)
     {
-        
         $characterTrades = CharacterTrade::GetTrades($_request)->paginate(16);
         $characterFactions = array("Ismeretlen", "Horde", "Alliance");
         $characterIntents = CharacterIntent::CHARACTER_INTENT_NAMES;

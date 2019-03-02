@@ -283,8 +283,8 @@ class CharacterClasses
         self::CHARACTER_CLASS_SHAMAN,
         self::CHARACTER_CLASS_MAGE,
         self::CHARACTER_CLASS_WARLOCK,
-        self::CHARACTER_CLASS_DRUID,
-        self::CHARACTER_CLASS_MONK
+        self::CHARACTER_CLASS_MONK,
+        self::CHARACTER_CLASS_DRUID
     );
 
     public static function GetCharacterClass($_text)
