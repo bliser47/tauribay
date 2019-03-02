@@ -624,19 +624,21 @@ class Encounter extends Model
         }
     }
 
-    public static function refreshLadderSpeedKill($encounter) {
-        $cache = LadderCache::getCache($encounter->encounter_id, $encounter->difficulty_id);
-        $fastest = Encounter::where("id", "=", $cache->fastest_encounter)->first();
-        if ($fastest !== null) {
-            if ($fastest->fight_time > $encounter->fight_time) {
-                $cache->fastest_encounter = $encounter->id;
-                $cache->save();
+    public static function refreshLadderSpeedKill($encounter, $guild) {
+        if ( $guild != null ){
+            $cache = LadderCache::getCache($encounter->encounter_id, $encounter->difficulty_id, $encounter->realm_id, $guild->faction);
+            $fastest = Encounter::where("id", "=", $cache->fastest_encounter)->first();
+            if ($fastest !== null) {
+                if ($fastest->fight_time > $encounter->fight_time) {
+                    $cache->fastest_encounter = $encounter->id;
+                    $cache->save();
+                }
             }
         }
     }
 
     public static function refreshLadderDps($memberTop) {
-        $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id);
+        $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->realm_id, $memberTop->faction_id);
         $topDps = MemberTop::where("id", "=", $cache->top_dps_encounter_member)->first();
         if (!$topDps || $topDps->dps < $memberTop->dps) {
             $cache->top_dps_encounter_member = $memberTop->id;
@@ -645,7 +647,7 @@ class Encounter extends Model
     }
 
     public static function refreshLadderHps($memberTop) {
-        $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id);
+        $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->realm_id, $memberTop->faction_id);
         $topHps = MemberTop::where("id", "=", $cache->top_hps_encounter_member)->first();
         if (!$topHps || $topHps->hps < $memberTop->hps) {
             $cache->top_hps_encounter_member = $memberTop->id;
