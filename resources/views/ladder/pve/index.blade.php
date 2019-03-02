@@ -15,11 +15,11 @@
                     <div class="panel-body">
                         {!! Form::open(array("method" => "get","id"=>"pve-ladder-form")) !!}
                         <div class="hidden">
-                            <input type="checkbox" checked name="tauri" value="1"/>
-                            <input type="checkbox" checked name="wod" value="2"/>
-                            <input type="checkbox" checked name="evermoon" value="3"/>
-                            <input type="checkbox" checked name="alliance" value="1"/>
-                            <input type="checkbox" checked name="horde" value="2"/>
+                            {!! Form::checkbox('tauri',1,Input::get('tauri')) !!}
+                            {!! Form::checkbox('wod',1,Input::get('wod')) !!}
+                            {!! Form::checkbox('evermoon',1,Input::get('evermoon')) !!}
+                            {!! Form::checkbox('alliance',1,Input::get('alliance')) !!}
+                            {!! Form::checkbox('horde',1,Input::get('horde')) !!}
                         </div>
                         @if ( $difficultyId )
                             <input type="hidden" name="difficulty_id" value="{{ $difficultyId }}"/>

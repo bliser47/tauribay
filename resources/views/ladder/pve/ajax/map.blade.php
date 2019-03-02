@@ -13,11 +13,11 @@
                 <label for="realm-tauri"> Tauri </label>
             </div>
             <div class="checkbox checkbox-inline checkbox-realm">
-                {!! Form::checkbox('wod',2,Input::get('wod'),array("id"=>"realm-wod","class"=>"realm")) !!}
+                {!! Form::checkbox('wod',1,Input::get('wod'),array("id"=>"realm-wod","class"=>"realm")) !!}
                 <label for="realm-wod"> WoD </label>
             </div>
             <div class="checkbox checkbox-inline checkbox-realm">
-                {!! Form::checkbox('evermoon',3,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
+                {!! Form::checkbox('evermoon',1,Input::get('evermoon'),array("id"=>"realm-evermoon","class"=>"realm")) !!}
                 <label for="realm-evermoon"> Evermoon </label>
             </div>
         </div>
@@ -25,7 +25,7 @@
     <div class="col-md-6 col-xs-12">
         <div class="input-group">
             <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
-                {!! Form::checkbox('alliance',2,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
+                {!! Form::checkbox('alliance',1,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
                 <label for="faction-alliance"> Alliance </label>
             </div>
             <div class="checkbox checkbox-inline checkbox-horde checkbox-white-tick checkbox-faction">

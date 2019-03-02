@@ -469,8 +469,9 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=18";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=20";
                 $cacheValue = Cache::get($cacheKey);
+                $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue ) {
 
                     $raidEncounters = array();
@@ -541,13 +542,25 @@ class PveLadderController extends Controller
                         "mapId",
                         "difficultyId"));
 
+                    $realmFactionQuery = "/?" . http_build_query(array(
+                        "tauri" => $_request->get("tauri"),
+                        "wod" => $_request->get("wod"),
+                        "evermoon" => $_request->get("evermoon"),
+                        "alliance" => $_request->get("alliance"),
+                        "horde" => $_request->get("horde")
+                    ));
+
                     $cacheValue = $view->render();
+                    $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" .
+                        Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $realmFactionQuery;
                     Cache::put($cacheKey, $cacheValue, 120); // 2 hours
+                    Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
+
                 }
 
                 return json_encode(array(
                     "view" => $cacheValue,
-                    "url" => ""
+                    "url" => $cacheUrlValue
                 ));
             }
             else
@@ -614,10 +627,6 @@ class PveLadderController extends Controller
         $encounters = Encounter::getMapEncounters($expansionId, $mapId);
         $encounters[0] = __("Minden boss");
 
-        $realmTauriChecked = $_request->get("tauri");
-        $realmWoDChecked = $_request->get("wod");
-        $realmEvermoonChecked = $_request->get("evermoon");
-
         return view("ladder/pve/index", compact(
             "expansions",
             "maps",
@@ -627,10 +636,7 @@ class PveLadderController extends Controller
             "encounters",
             "encounterId",
             "difficultyId",
-            "defaultDifficultyId",
-            "realmTauriChecked",
-            "realmWoDChecked",
-            "realmEvermoonChecked"
+            "defaultDifficultyId"
         ));
     }
 }
