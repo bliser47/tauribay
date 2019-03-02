@@ -653,21 +653,14 @@ class Encounter extends Model
         }
     }
 
-    public static function getFastest($encounterId, $difficultyId)
+    public static function getFastest($encounterId, $difficultyId, $realms, $factions)
     {
-        return Encounter::where("encounter_id", "=", $encounterId)
-            ->where("difficulty_id", "=", $difficultyId)
-            ->whereNotIn("id", Encounter::INVALID_RAIDS)
-            ->orderBy("fight_time")->first();
+        return LadderCache::getFastestEncounter($encounterId,$difficultyId, $realms, $factions);
     }
 
-    public static function getTopDps($encounterId, $difficultyId)
+    public static function getTopDps($encounterId, $difficultyId, $realms, $factions)
     {
-        $topDpsMemberId = LadderCache::getTopDpsId($encounterId,$difficultyId);
-        if ( $topDpsMemberId !== null ) {
-            return MemberTop::where("id", "=", $topDpsMemberId)->first();
-        }
-        return null;
+        return LadderCache::getTopDps($encounterId,$difficultyId, $realms, $factions);
     }
 
     // Ra-den and Sinestra

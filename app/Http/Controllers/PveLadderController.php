@@ -469,7 +469,7 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=8";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=18";
                 $cacheValue = Cache::get($cacheKey);
                 if (  !$cacheValue ) {
 
@@ -484,49 +484,52 @@ class PveLadderController extends Controller
 
                     $difficultyId = $_request->get("difficulty_id");
 
+
+                    //  Realm filter
+                    $realms = array();
+                    if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
+
+                        if ($_request->has('tauri')) {
+                            array_push($realms, 0);
+                        }
+                        if ($_request->has('wod')) {
+                            array_push($realms, 1);
+                        }
+                        if ($_request->has('evermoon')) {
+                            array_push($realms, 2);
+                        }
+                    } else {
+                        $realms = array(0,1,2);
+                    }
+
+                    // Faction filter
+                    $factions = array();
+                    if ($_request->has('alliance') || $_request->has('horde')) {
+                        $factions = array();
+                        if ($_request->has('alliance')) {
+                            array_push($factions, 0);
+                        }
+                        if ($_request->has('horde')) {
+                            array_push($factions, 1);
+                        }
+                    } else {
+                        $factions = array(0,1);
+                    }
+
                     $encounters = array();
                     foreach ($raidEncounters as $raidEncounter) {
                         $encounterId = $raidEncounter["encounter_id"];
-                        $fastestEncounter = EncounterTop::where("encounter_id","=",$encounterId)->where("difficulty_id",$difficultyId)->orderBy("fastest_encounter_time");
-
-                        //  Realm filter
-                        if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                            $realms = array();
-                            if ($_request->has('tauri')) {
-                                array_push($realms, 0);
-                            }
-                            if ($_request->has('wod')) {
-                                array_push($realms, 1);
-                            }
-                            if ($_request->has('evermoon')) {
-                                array_push($realms, 2);
-                            }
-                            $fastestEncounter = $fastestEncounter->whereIn('realm_id', $realms);
-                        }
-
-                        // Faction filter
-                        if ($_request->has('alliance') || $_request->has('horde')) {
-                            $factions = array();
-                            if ($_request->has('alliance')) {
-                                array_push($factions, 0);
-                            }
-                            if ($_request->has('horde')) {
-                                array_push($factions, 1);
-                            }
-                            $fastestEncounter = $fastestEncounter->where('guild_id',">",0)->leftJoin("guilds","guilds.id","=","encounter_tops.guild_id")
-                                    ->whereIn("guilds.faction",$factions);
-                        }
-
-                        $fastestEncounter = $fastestEncounter->first();
+                        $fastestEncounter = Encounter::getFastest($encounterId, $difficultyId, $realms, $factions);
                         if ( $fastestEncounter !== null ) {
-                            $encounter = Encounter::where("id", "=", $fastestEncounter->fastest_encounter_id)->first();
+                            $encounter = Encounter::where("id", "=", $fastestEncounter->fastest_encounter)->first();
                             if ($encounter !== null) {
                                 if ($encounter->guild_id !== 0) {
                                     $guild = Guild::where("id", "=", $encounter->guild_id)->first();
                                     $encounter->guild_name = $guild->name;
                                     $encounter->faction = $guild->faction;
                                 }
-                                $encounter->top_dps = Encounter::getTopDps($encounterId, $difficultyId);
+                                $topDps = Encounter::getTopDps($encounterId, $difficultyId, $realms, $factions);
+                                $encounter->top_dps = $topDps;
                                 $encounters[] = $encounter;
                             }
                         }
@@ -549,7 +552,7 @@ class PveLadderController extends Controller
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=16";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=17";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
