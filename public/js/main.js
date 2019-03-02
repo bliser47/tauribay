@@ -893,6 +893,18 @@ $(function()
 
     var listenForMapDifficultyLoad = function(data)
     {
+        $("#ladder-filter-form").submit(function(e){
+            e.preventDefault();
+            $("input[name='tauri']").prop("checked",$("#realm-tauri").is(':checked'));
+            $("input[name='wod']").prop("checked",$("#realm-wod").is(':checked'));
+            $("input[name='evermoon']").prop("checked",$("#realm-evermoon").is(':checked'));
+            $("input[name='alliance']").prop("checked",$("#faction-alliance").is(':checked'));
+            $("input[name='horde']").prop("checked",$("#faction-horde").is(':checked'));
+            $("#pve-ladder-form").submit();
+        });
+        $("#ladder-filter-form input").change(function(){
+            $("#ladder-filter-form").submit();
+        });
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
         $(".map-difficulty-tab").on("click",function(){

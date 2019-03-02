@@ -14,6 +14,13 @@
                 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
                         {!! Form::open(array("method" => "get","id"=>"pve-ladder-form")) !!}
+                        <div class="hidden">
+                            <input type="checkbox" name="tauri" value="1"/>
+                            <input type="checkbox" name="wod" value="2"/>
+                            <input type="checkbox" name="evermoon" value="3"/>
+                            <input type="checkbox" name="alliance" value="1"/>
+                            <input type="checkbox" name="horde" value="2"/>
+                        </div>
                         @if ( $difficultyId )
                             <input type="hidden" name="difficulty_id" value="{{ $difficultyId }}"/>
                         @endif
