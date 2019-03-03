@@ -530,17 +530,25 @@ class PveLadderController extends Controller
                                     $encounter->faction = $guild->faction;
                                 }
                                 $topDps = Encounter::getTopDps($encounterId, $difficultyId, $realms, $factions);
-                                $encounter->top_dps = $topDps;
-                                $encounters[] = $encounter;
+                                if ( $topDps != null && $topDps->id > 0 ) {
+                                    $encounter->top_dps = $topDps;
+                                    $encounters[] = $encounter;
+                                }
                             }
                         }
                     }
 
-                    $view = view("ladder/pve/ajax/map_difficulty", compact(
-                        "encounters",
-                        "expansionId",
-                        "mapId",
-                        "difficultyId"));
+                    if ( count($encounters) > 0 ) {
+                        $view = view("ladder/pve/ajax/map_difficulty", compact(
+                            "encounters",
+                            "expansionId",
+                            "mapId",
+                            "difficultyId"));
+                        $view = $view->render();
+                    } else {
+                        $view = "";
+                    }
+
 
                     $realmFactionQuery = "/?" . http_build_query(array(
                         "tauri" => $_request->get("tauri"),
@@ -550,7 +558,7 @@ class PveLadderController extends Controller
                         "horde" => $_request->get("horde")
                     ));
 
-                    $cacheValue = $view->render();
+                    $cacheValue = $view;
                     $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" .
                         Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $realmFactionQuery;
                     Cache::put($cacheKey, $cacheValue, 120); // 2 hours
