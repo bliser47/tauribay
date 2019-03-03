@@ -19,6 +19,9 @@
     <div class="encounter-body">
         {!! Form::open(array("method" => "get","id"=>"encounter-form")) !!}
         <input type="hidden" name="map_id" value="{{ $mapId }}"/>
+        <input type="hidden" name="role" value="{{ Input::get('role') }}"/>
+        <input type="hidden" name="class" value="{{ Input::get('class') }}"/>
+        <input type="hidden" name="spec" value="{{ Input::get('spec') }}"/>
         <div class="col-md-3 col-xs-6">
             <div id="expansions-container" class="input-group col-md-12">
                 {!! Form::select('encounter_id', $encounters, Input::get('encounter_id', $encounterId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}

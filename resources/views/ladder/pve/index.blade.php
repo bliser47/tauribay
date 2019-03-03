@@ -28,6 +28,9 @@
                             <input type="hidden" name="default_difficulty_id" value="{{ $defaultDifficultyId }}"/>
                         @endif
                         <input type="hidden" name="encounter_id" value="{{ $encounterId }}"/>
+                        <input type="hidden" name="role" value="{{ Input::get('role') }}"/>
+                        <input type="hidden" name="class" value="{{ Input::get('class') }}"/>
+                        <input type="hidden" name="spec" value="{{ Input::get('spec') }}"/>
                         <div class="col-sm-4 col-sm-nopadding col-sm-margin">
                             <div id="expansions-container" class="input-group col-md-12">
                                 {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}

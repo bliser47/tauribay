@@ -583,6 +583,10 @@ $(function()
                     var page = url.searchParams.get("page");
                     loadEncounterMode(encounterId, page, mode, subForm)
                 });
+
+                prevState = window.location.href;
+                history.pushState(null, '', response["url"] + window.location.hash);
+
                 UpdateTimes();
             }
         });
@@ -620,6 +624,9 @@ $(function()
                 $(".selectpicker").selectpicker();
                 if (mode === "dps" || mode === "hps") {
 
+                    prevState = window.location.href;
+                    history.pushState(null, '', response["url"] + window.location.hash);
+
                     var classVal = $(tab).find("#class").val();
                     if (classVal === "0") {
                         var specPicker = $(tab).find("#spec-container .selectpicker");
@@ -636,6 +643,7 @@ $(function()
                         loadEncounterMode(encounterId, 1, mode, $(this).serialize());
                     });
                     $(tab).find(".encounter-subform-form select").change(function () {
+                        $("input[type='hidden'][name='" + $(this).attr("id") + "']").val($(this).val());
                         $(this).parent().submit();
                     });
 
@@ -742,6 +750,7 @@ $(function()
         {
             var set = $(this).val();
             $("#"+ mode + " #class-container .selectpicker").val(set).selectpicker('refresh');
+            $("input[type='hidden'][name='class").val($(this).val());
             if ( set !== currentClass )
             {
                 currentClass = set;
@@ -750,6 +759,7 @@ $(function()
                     selectPicker.attr('disabled', true);
                     selectPicker.val(0);
                     selectPicker.selectpicker('refresh');
+                    $("input[type='hidden'][name='spec").val($(this).val());
                 });
                 if ( currentClass > 0 ) {
                     var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
@@ -771,6 +781,7 @@ $(function()
                                 $(selectContainer).find(".selectpicker").change(function(){
                                     var set = $(this).val();
                                     $("#" + mode + " #spec-container .selectpicker").val(set).selectpicker('refresh');
+                                    $("input[type='hidden'][name='spec']").val(set);
                                     $(this).parent().submit();
                                 });
                                 $(selectContainer).parent().submit();
@@ -794,6 +805,7 @@ $(function()
         {
             var set = $(this).val();
             $("#"+ mode + " #role-container .selectpicker").val(set).selectpicker('refresh');
+            $("input[type='hidden'][name='role']").val(set);
             if ( set !== currentRole )
             {
                 currentRole = set;
@@ -802,6 +814,8 @@ $(function()
                     selectPicker.attr('disabled', true);
                     selectPicker.val(0);
                     selectPicker.selectpicker('refresh');
+
+                    $("input[type='hidden'][name='" + $(selectPicker).attr("id") + "']").val($(this).val());
                 });
                 $.ajax({
                     type: "GET",
@@ -818,6 +832,8 @@ $(function()
                             selectContainer.find(".selectpicker").selectpicker('refresh');
                             selectContainer.attr('disabled', false);
                             $(selectContainer).change(function(){
+                                var newClassId = $(this).find(".selectpicker").val();
+                                $("input[type='hidden'][name='class']").val(newClassId);
                                 $(this).parent().submit();
                             });
                             $(selectContainer).parent().submit();

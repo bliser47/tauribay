@@ -141,8 +141,9 @@ class PveLadderController extends Controller
                     if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
 
-                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=3";
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=5";
                         $cacheValue = Cache::get($cacheKey);
+                        $cacheUrlValue = Cache::get($cacheKey."URL");
                         if ( !$cacheValue ) {
 
                             $members = MemberTop::where("member_tops.encounter_id", "=", $encounterId)
@@ -231,21 +232,43 @@ class PveLadderController extends Controller
 
                             $cacheValue = $view->render();
                             Cache::put($cacheKey, $cacheValue, 15); // 15 minutes
+
+                            $subQuery = "/?" . http_build_query(array(
+                                    "tauri" => $_request->get("tauri"),
+                                    "wod" => $_request->get("wod"),
+                                    "evermoon" => $_request->get("evermoon"),
+                                    "alliance" => $_request->get("alliance"),
+                                    "horde" => $_request->get("horde"),
+                                    "role" => $_request->get("role"),
+                                    "class" => $_request->get("class"),
+                                    "spec" => $_request->get("spec"),
+                                ));
+
+                            $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" .
+                                    Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $subQuery;
+                            Cache::put($cacheKey . "URL", $cacheUrlValue, 1200);
                         }
 
                         return json_encode(array(
                             "view" => $cacheValue,
-                            "url" => ""
+                            "url" => $cacheUrlValue
                         ));
                     }
                     else
                     {
-                        $roleId = $_request->session()->get($modeId . "-roleId", 0);
-                        $classId = $_request->session()->get($modeId . "-classId", 0);
-                        $specId = $_request->session()->get($modeId . "-specId", 0);
+                        if ( $_request->has("role") || $_request->has("class") || $_request->has("spec") ) {
+                            $roleId = $_request->has("role") && $_request->get("role") != null ? $_request->get("role") : 0;
+                            $classId = $_request->has("class") && $_request->get("class") != null ? $_request->get("class") : 0;
+                            $specId = $_request->has("spec") && $_request->get("spec") != null ? $_request->get("spec") :  0;
+                        } else {
+                            $roleId = $_request->session()->get($modeId . "-roleId", 0);
+                            $classId = $_request->session()->get($modeId . "-classId", 0);
+                            $specId = $_request->session()->get($modeId . "-specId", 0);
+                        }
 
-                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $roleId . "-" . $classId . "-" . $specId;
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $roleId . "-" . $classId . "-" . $specId . "?v=2";
                         $cacheValue = Cache::get($cacheKey);
+                        $cacheUrlValue = Cache::get($cacheKey."URL");
                         if (  !$cacheValue ) {
                             $roles = EncounterMember::getRoles();
                             $roles[0] = __("Minden role");
@@ -281,11 +304,26 @@ class PveLadderController extends Controller
 
                             $cacheValue = $view->render();
                             Cache::put($cacheKey, $cacheValue, 1440); // 1 day
+
+                            $subQuery = "/?" . http_build_query(array(
+                                    "tauri" => $_request->get("tauri"),
+                                    "wod" => $_request->get("wod"),
+                                    "evermoon" => $_request->get("evermoon"),
+                                    "alliance" => $_request->get("alliance"),
+                                    "horde" => $_request->get("horde"),
+                                    "role" => $_request->get("role"),
+                                    "class" => $_request->get("class"),
+                                    "spec" => $_request->get("spec"),
+                                ));
+
+                            $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" .
+                                    Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $subQuery;
+                            Cache::put($cacheKey . "URL", $cacheUrlValue, 1200);
                         }
 
                         return json_encode(array(
                             "view" => $cacheValue,
-                            "url" => ""
+                            "url" => $cacheUrlValue
                         ));
                     }
                 }
@@ -422,7 +460,7 @@ class PveLadderController extends Controller
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=3";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=4";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
@@ -573,7 +611,7 @@ class PveLadderController extends Controller
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=17";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=18";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {

@@ -66,8 +66,8 @@ class RaidController extends Controller
         $specsShort = EncounterMember::getSpecsShort($_class_id);
         $specsShort[0] = __("Minden");
 
-        $desktop = FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large"]);
-        $mobile = FormFacade::select('spec_id', $specsShort, 0, ['required', 'id' => 'specs', 'class' => "control selectpicker input-large"]);
+        $desktop = FormFacade::select('spec_id', $specs, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large"]);
+        $mobile = FormFacade::select('spec_id', $specsShort, 0, ['required', 'id' => 'spec', 'class' => "control selectpicker input-large"]);
 
         return json_encode(array(
             "desktop" => utf8_encode($desktop),
