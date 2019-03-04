@@ -233,6 +233,8 @@ class ProgressController extends Controller
 
     public function updateRaids(Request $_request)
     {
+        ini_set('max_execution_time', 0);
+
         $api = new Tauri\ApiClient();
         $realmId = $_request->has("data") ? $_request->get("data") : rand(0,2);
         $realmName = Realm::REALMS[$realmId];

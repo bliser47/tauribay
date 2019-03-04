@@ -693,7 +693,7 @@ $(function()
     var handleEncounterModes = function (container, data)
     {
         listenForTabChange(container);
-        var modeSaved = getCookie("modeSaved");
+        var modeSaved = getCookie("modeSaved2");
         if ( modeSaved !== "" )
         {
             $(".modePanel, .tab-pane").removeClass("active");
@@ -712,7 +712,7 @@ $(function()
             else
             {
                 $("#modePanel" + $(pane).data("mode")).on("click",function(){
-                    setCookie("modeSaved",$(this).data("mode"));
+                    setCookie("modeSaved2",$(this).data("mode"));
                     if ( !$(this).hasClass("loadingMode") )
                     {
                         $(this).addClass("loadingMode");
@@ -950,7 +950,7 @@ $(function()
             var mode = $(this).parent().data("mode");
             if ( mode )
             {
-                setCookie("modeSaved",mode);
+                setCookie("modeSaved2",mode);
             }
         });
     };
@@ -1013,7 +1013,7 @@ $(function()
         }
         firstSubmit = false;
         data = $.param(data);
-        setCookie("modeSaved","");
+        setCookie("modeSaved2","");
         $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
