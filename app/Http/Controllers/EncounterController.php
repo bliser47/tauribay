@@ -61,9 +61,6 @@ class EncounterController extends Controller
 
 
             foreach ($members as $member) {
-                if ( $member->dps_score == 0 && $member->hps_score == 0 ) {
-                    Encounter::calculateScores($member);
-                }
                 $member->total_heal = $member->heal_done + $member->absorb_done;
                 $member->total_damage_taken = $member->damage_taken + $member->damage_absorb;
                 $member->score = EncounterMember::isHealer($member->spec) ? $member->hps_score : $member->dps_score;
