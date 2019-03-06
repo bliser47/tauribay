@@ -128,24 +128,57 @@ class EncounterController extends Controller
         }
     }
 
-    public function fix($api) {
+    public function fix($topData) {
+        $members = EncounterMember::where("top_processed","=",0)->orderBy("created_at","desc")->take(10000)->get();
+        foreach ( $members as $member ) {
 
-        try {
-            $members = EncounterMember::where("top_processed", "<>", 1)->take(1000)->get();
-            foreach ($members as $member) {
-                Encounter::logCharacter($member, $api);
-                $member->top_processed = 1;
-                $member->save();
+            $topMember = null;
+            if ( array_key_exists($member->encounter, $topData) &&
+                array_key_exists($member->difficulty_id, $topData[$member->encounter]) &&
+                array_key_exists($member->spec, $topData[$member->encounter][$member->difficulty_id]) ){
+                $topMember = $topData[$member->encounter][$member->difficulty_id][$member->spec];
             }
-        } catch (\Exception $e) {}
-        $this->fix($api);
+            $topDps = $topMember !== null ? $topMember["dps"] : 0;
+            if ( $topDps > 0 && $member->dps < $topDps ) {
+                $member->dps_score = intval(($member->dps * 100) / $topDps);
+            }
+            else {
+                $member->dps_score = 100;
+            }
+            $topHps = $topMember !== null ? $topMember["hps"] : 0;
+            if ( $topHps > 0 && $member->hps < $topHps ) {
+                $member->hps_score = intval(($member->hps * 100) / $topHps);
+            }
+            else {
+                $member->hps_score = 100;
+            }
+
+            $member->top_processed = 1;
+            $member->save();
+        }
+        $this->fix($topData);
     }
 
-    public function fixMissing(Request $_request)
+    public function fixTopNotProcessed(Request $_request)
     {
         ini_set('max_execution_time', 0);
-        $api = new Tauri\ApiClient();
-        $this->fix($api);
+
+        $tops = MemberTop::groupBy(array(
+            "encounter_id",
+            "difficulty_id",
+            "spec"
+        ))->selectRaw("encounter_id, difficulty_id, spec, max(dps) as maxDps, max(hps) as maxHps")->get();
+
+        $topData = array();
+        foreach ( $tops as $top ) {
+            $topData[$top->encounter_id] = array_key_exists($top->encounter_id, $topData) ? $topData[$top->encounter_id] : array();
+            $topData[$top->encounter_id][$top->difficulty_id] = array_key_exists($top->difficulty_id, $topData[$top->encounter_id]) ? $topData[$top->encounter_id][$top->difficulty_id] : array();
+            $topData[$top->encounter_id][$top->difficulty_id][$top->spec] = array_key_exists($top->spec, $topData[$top->encounter_id][$top->difficulty_id]) ? $topData[$top->encounter_id][$top->difficulty_id][$top->spec] : array(
+                "dps" => $top->maxDps,
+                "hps" => $top->maxHps
+            );
+        }
+        $this->fix($topData);
     }
 
     public function fixMissingEncounterMembers(Request $_request)
@@ -163,7 +196,7 @@ class EncounterController extends Controller
             $log = $api->getRaidLog(Realm::REALMS[$encounter->realm_id], $encounter->log_id);
             if ( array_key_exists("response", $log) ) {
                 $guild = Guild::where("id","=",$encounter->guild_id)->first();
-                Encounter::updateEncounterMembers($log["response"], $encounter, $guild);
+                Encounter::updateEncounterMembers($log["response"], $encounter, $guild, $api);
                 $result["fixed"][] = $encounter->log_id;
             } else {
                 $result["failed"][] = $encounter->log_id;

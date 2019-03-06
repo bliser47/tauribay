@@ -492,7 +492,7 @@ class Encounter extends Model
             ->where("spec","=",$member->spec)->orderBy("dps","desc")->first();
 
         $topDps = $topDpsMember !== null ? $topDpsMember->dps : 0;
-        if ( $topDps > 0 ) {
+        if ( $topDps > 0 && $member->dps < $topDps ) {
             $member->dps_score = intval(($member->dps * 100) / $topDps);
         }
         else {
@@ -505,7 +505,7 @@ class Encounter extends Model
             ->where("spec","=",$member->spec)->orderBy("hps","desc")->first();
 
         $topHps = $topHpsMember !== null ? $topHpsMember->hps : 0;
-        if ( $topHps > 0 ) {
+        if ( $topHps > 0 && $member->hps < $topHps ) {
             $member->hps_score = intval(($member->hps * 100) / $topHps);
         }
         else {
