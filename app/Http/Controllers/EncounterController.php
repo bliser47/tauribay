@@ -143,6 +143,14 @@ class EncounterController extends Controller
                 $memberTop->save();
             }
         }
+        $embmers = EncounterMember::where("faction_id","<",1)->get();
+        foreach ( $embmers as $member ) {
+            $encounter = Encounter::where("id","=",$member->encounter_id)->first();
+            if ( $encounter != null ) {
+                $member->faction_id = $encounter->faction_id;
+                $member->save();
+            }
+        }
     }
 
     public function fixEncounterFactions(Request $_request) {
