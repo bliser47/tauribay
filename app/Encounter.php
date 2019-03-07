@@ -435,7 +435,6 @@ class Encounter extends Model
                 $member->faction_id = -1;
             }
 
-
             $member->save();
 
             self::refreshMemberTop($member, $guild);
@@ -444,6 +443,10 @@ class Encounter extends Model
 
             $member->top_processed = 1;
             $member->save();
+
+            if ( $i == 0 ) {
+                $encounter->faction_id = $member->faction_id;
+            }
 
             ++$i;
         }

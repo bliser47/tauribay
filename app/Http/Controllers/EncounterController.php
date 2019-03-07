@@ -125,8 +125,45 @@ class EncounterController extends Controller
         }
     }
 
-    public function fix($topData) {
-        $members = EncounterMember::where("top_processed","=",0)->orderBy("created_at","desc")->take(10000)->get();
+    public function fix(Request $_request) {
+        $encounters = Encounter::where('faction_id','=',0)->take(10000)->get();
+        foreach ( $encounters as $encounter ) {
+            $member = EncounterMember::where("encounter_id","=",$encounter->id)->first();
+            if ( $member != null ){
+                $factionId = $member->faction_id;
+                if ( $factionId == -1 ) {
+                    $character = Characters::where("realm","=",$encounter->realm_id)->where("class","=",$member->class)->where("name","=",$member->name)->first();
+                    if ( $character != null ) {
+                        $factionId = $character->faction;
+                    }
+                }
+                $encounter->faction_id = $factionId;
+                $encounter->save();
+            }
+        }
+    }
+
+    public function fixTopNotProcessed(Request $_request)
+    {
+        ini_set('max_execution_time', 0);
+
+        $tops = MemberTop::groupBy(array(
+            "encounter_id",
+            "difficulty_id",
+            "spec"
+        ))->selectRaw("encounter_id, difficulty_id, spec, max(dps) as maxDps, max(hps) as maxHps")->get();
+
+        $topData = array();
+        foreach ( $tops as $top ) {
+            $topData[$top->encounter_id] = array_key_exists($top->encounter_id, $topData) ? $topData[$top->encounter_id] : array();
+            $topData[$top->encounter_id][$top->difficulty_id] = array_key_exists($top->difficulty_id, $topData[$top->encounter_id]) ? $topData[$top->encounter_id][$top->difficulty_id] : array();
+            $topData[$top->encounter_id][$top->difficulty_id][$top->spec] = array_key_exists($top->spec, $topData[$top->encounter_id][$top->difficulty_id]) ? $topData[$top->encounter_id][$top->difficulty_id][$top->spec] : array(
+                "dps" => $top->maxDps,
+                "hps" => $top->maxHps
+            );
+        }
+
+        $members = EncounterMember::where("top_processed","=",0)->orderBy("created_at","desc")->take(5000)->get();
         foreach ( $members as $member ) {
 
             $topMember = null;
@@ -153,29 +190,6 @@ class EncounterController extends Controller
             $member->top_processed = 1;
             $member->save();
         }
-        $this->fix($topData);
-    }
-
-    public function fixTopNotProcessed(Request $_request)
-    {
-        ini_set('max_execution_time', 0);
-
-        $tops = MemberTop::groupBy(array(
-            "encounter_id",
-            "difficulty_id",
-            "spec"
-        ))->selectRaw("encounter_id, difficulty_id, spec, max(dps) as maxDps, max(hps) as maxHps")->get();
-
-        $topData = array();
-        foreach ( $tops as $top ) {
-            $topData[$top->encounter_id] = array_key_exists($top->encounter_id, $topData) ? $topData[$top->encounter_id] : array();
-            $topData[$top->encounter_id][$top->difficulty_id] = array_key_exists($top->difficulty_id, $topData[$top->encounter_id]) ? $topData[$top->encounter_id][$top->difficulty_id] : array();
-            $topData[$top->encounter_id][$top->difficulty_id][$top->spec] = array_key_exists($top->spec, $topData[$top->encounter_id][$top->difficulty_id]) ? $topData[$top->encounter_id][$top->difficulty_id][$top->spec] : array(
-                "dps" => $top->maxDps,
-                "hps" => $top->maxHps
-            );
-        }
-        $this->fix($topData);
     }
 
     public function fixMissingEncounterMembers(Request $_request)

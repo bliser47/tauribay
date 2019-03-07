@@ -41,12 +41,14 @@ class ProgressController extends Controller
 
     public function debug(Request $_request)
     {
+        /*
         $enc = CharacterEncounters::groupBy(array("character_id","encounter_member_id"))->havingRaw("count(*) > 1")->selectRaw("min(id) as id")->get();
         $remove = array();
         foreach ( $enc as $e) {
             $remove[] = $e->id;
         }
         CharacterEncounters::whereIn("id",$remove)->delete();
+        */
         /*
         $invalid = [
             92775

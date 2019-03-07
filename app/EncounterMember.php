@@ -427,4 +427,8 @@ class EncounterMember extends Model
         }
         return $classSpecs;
     }
+
+    public static function findFaction($member) {
+
+    }
 }
