@@ -125,22 +125,70 @@ class EncounterController extends Controller
         }
     }
 
-    public function fix(Request $_request) {
-        $encounters = Encounter::where('faction_id','=',0)->take(10000)->get();
+    public function fix() {
+        ini_set('max_execution_time', 0);
+        $encounters = EncounterTop::where('faction_id','<',1)->get();
+        foreach ( $encounters as $encounterTop ) {
+            $encounter = Encounter::where("id","=",$encounterTop->fastest_encounter_id)->first();
+            if ( $encounter != null ) {
+                $encounterTop->faction_id = $encounter->faction_id;
+                $encounterTop->save();
+            }
+        }
+        $members = MemberTop::where('faction_id','<',1)->take(20000)->get();
+        foreach ( $members as $memberTop ) {
+            $encounter = Encounter::where("id","=",$memberTop->dps_encounter_id)->first();
+            if ( $encounter != null ) {
+                $memberTop->faction_id = $encounter->faction_id;
+                $memberTop->save();
+            }
+        }
+    }
+
+    public function fixEncounterFactions(Request $_request) {
+        $api = new Tauri\ApiClient();
+        ini_set('max_execution_time', 0);
+        $encounters = Encounter::where('faction_id','=',-1)->get();
+        $nulls = array();
         foreach ( $encounters as $encounter ) {
-            $member = EncounterMember::where("encounter_id","=",$encounter->id)->first();
-            if ( $member != null ){
+            $members = EncounterMember::where("encounter_id","=",$encounter->id)->get();
+            foreach ( $members as $member )
+            {
                 $factionId = $member->faction_id;
-                if ( $factionId == -1 ) {
-                    $character = Characters::where("realm","=",$encounter->realm_id)->where("class","=",$member->class)->where("name","=",$member->name)->first();
+                if ( $factionId == -1 || $factionId == 0 ) {
+                    $character = Characters::where("realm","=",$member->realm_id)->where("name","=",$member->name)->first();
                     if ( $character != null ) {
                         $factionId = $character->faction;
                     }
+                    else {
+                        $characterSheet = $api->getCharacterSheet(Realm::REALMS[$member->realm_id], $member->name);
+                        if ($characterSheet && array_key_exists("response", $characterSheet)) {
+                            $characterSheetResponse = $characterSheet["response"];
+                            $character = new Characters;
+                            $character->name = $member->name;
+                            $character->ilvl = $member->ilvl;
+                            $character->faction = $member->faction;
+                            $character->class = $member->class;
+                            $character->realm = $member->realm_id;
+                            $character->achievement_points = $characterSheetResponse["pts"];
+                            $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
+                            $character->guid = $characterSheetResponse["guid"];
+                            $character->save();
+                            $member->faction_id = $character->faction;
+                            $member->save();
+                            $factionId = $member->faction_id;
+                        }
+                        $nulls[] = $characterSheet;
+                    }
                 }
-                $encounter->faction_id = $factionId;
-                $encounter->save();
+                if ( $factionId > 0 ) {
+                    break;
+                }
             }
+            $encounter->faction_id = $factionId;
+            $encounter->save();
         }
+        return $nulls;
     }
 
     public function fixTopNotProcessed(Request $_request)

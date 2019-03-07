@@ -384,8 +384,8 @@ class Encounter extends Model
         $encounter->item_count = $_data["item_count"];
         $encounter->save();
 
-        self::refreshEncounterTop($encounter, $guild);
         self::updateEncounterMembers($_data, $encounter, $guild, $api);
+        self::refreshEncounterTop($encounter, $guild);
 
         if ( array_key_exists("items", $_data) ) {
             Loot::processItems($encounter, $_data["items"], $api);
@@ -434,18 +434,18 @@ class Encounter extends Model
             {
                 $member->faction_id = -1;
             }
-
             $member->save();
 
+            self::logCharacter($member, $api);
             self::refreshMemberTop($member, $guild);
             self::calculateScores($member);
-            self::logCharacter($member, $api);
 
             $member->top_processed = 1;
             $member->save();
 
             if ( $i == 0 ) {
                 $encounter->faction_id = $member->faction_id;
+                $encounter->save();
             }
 
             ++$i;
@@ -544,6 +544,7 @@ class Encounter extends Model
                 $top->fastest_encounter_id = $encounter->id;
                 $top->fastest_encounter_time = $encounter->fight_time;
                 $top->fastest_encounter_date = $encounter->killtime;
+                $top->faction_id = $encounter->faction_id;
                 self::refreshLadderSpeedKill($encounter, $guild);
             }
 
