@@ -23,7 +23,6 @@ class LadderCache extends Model
 
     public static function calculateTopDps($encounterId, $difficultyId, $realms, $factions)
     {
-        $result = array();
         foreach ( $realms as $realmId )
         {
             foreach ( $factions as $factionId ){
@@ -36,11 +35,9 @@ class LadderCache extends Model
                         $cache->top_dps_encounter_member = $topDps->id;
                         $cache->save();
                     }
-                    $result[] = $topDps;
                 }
             }
         }
-        return $result;
     }
 
     public static function getTopDps($encounterId, $difficultyId, $realms, $factions)
@@ -51,7 +48,6 @@ class LadderCache extends Model
     }
 
     public static function calculateFastestEncounter($encounterId, $difficultyId, $realms, $factions) {
-        $result = array();
         foreach ( $realms as $realmId ) {
             foreach ($factions as $factionId) {
                 $cache = self::getCache($encounterId, $difficultyId, $realmId, $factionId);
@@ -64,11 +60,9 @@ class LadderCache extends Model
                         $cache->fastest_encounter = $fastestEncounter->id;
                         $cache->save();
                     }
-                    $result[] = $fastestEncounter;
                 }
             }
         }
-        return $result;
     }
 
     public static function getFastestEncounter($encounterId, $difficultyId, $realms, $factions)

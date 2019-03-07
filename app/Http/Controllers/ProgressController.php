@@ -3,6 +3,7 @@
 namespace TauriBay\Http\Controllers;
 
 use TauriBay\CharacterEncounters;
+use TauriBay\Defaults;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
 use TauriBay\EncounterTop;
@@ -44,17 +45,13 @@ class ProgressController extends Controller
     {
         ini_set('max_execution_time', 0);
 
-        $results = array();
-        $ids = array(1084); //Encounter::ENCOUNTER_IDS;
+        $ids = Encounter::ENCOUNTER_IDS;
         foreach ( $ids as $encounter_id ) {
             foreach ( Encounter::SIZE_AND_DIFFICULTY as $difficulty_id => $difficultyName ) {
-                $results1 = LadderCache::calculateFastestEncounter($encounter_id, $difficulty_id, array(0,1,2), array(1,2));
-                $results2 = LadderCache::calculateTopDps($encounter_id, $difficulty_id, array(0,1,2), array(1,2));
-                $results = array_merge($results, $results1);
-                $results = array_merge($results, $results2);
+                LadderCache::calculateFastestEncounter($encounter_id, $difficulty_id, array(0,1,2), array(1,2));
+                LadderCache::calculateTopDps($encounter_id, $difficulty_id, array(0,1,2), array(1,2));
             }
         }
-        return $results;
         /*
         $enc = CharacterEncounters::groupBy(array("character_id","encounter_member_id"))->havingRaw("count(*) > 1")->selectRaw("min(id) as id")->get();
         $remove = array();
