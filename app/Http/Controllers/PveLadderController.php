@@ -553,7 +553,7 @@ class PveLadderController extends Controller
                             array_push($factions, 1);
                         }
                     } else {
-                        $factions = array(0,1);
+                        $factions = array(0,1,2);
                     }
 
                     $encounters = array();
