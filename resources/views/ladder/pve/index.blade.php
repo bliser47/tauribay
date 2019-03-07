@@ -27,6 +27,8 @@
                         @if ( $defaultDifficultyId )
                             <input type="hidden" name="default_difficulty_id" value="{{ $defaultDifficultyId }}"/>
                         @endif
+                        <input type="hidden" name="expansion_id" value="{{ $expansionId }}"/>
+                        <input type="hidden" name="map_id" value="{{ $mapId }}"/>
                         <input type="hidden" name="encounter_id" value="{{ $encounterId }}"/>
                         <input type="hidden" name="role" value="{{ Input::get('role') }}"/>
                         <input type="hidden" name="class" value="{{ Input::get('class') }}"/>

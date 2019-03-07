@@ -51,13 +51,11 @@ class LadderCache extends Model
         foreach ( $realms as $realmId ) {
             foreach ($factions as $factionId) {
                 $cache = self::getCache($encounterId, $difficultyId, $realmId, $factionId);
-                if (!$cache->fastest_encounter) {
+                if (!$cache->fastest_encounter || $cache->fastest_encounter == 0) {
                     $fastestEncounter = EncounterTop::where("encounter_id","=",$encounterId)->where("difficulty_id","=",$difficultyId)
-                        ->where("realm_id","=",$realmId)->where("faction_id","=", $factionId);
-                    $fastestEncounter = $fastestEncounter->orderBy("fastest_encounter_time","asc");
-                    $fastestEncounter = $fastestEncounter->select("encounter_tops.fastest_encounter_id as id")->first();
+                        ->where("realm_id","=",$realmId)->where("faction_id","=", $factionId)->orderBy("fastest_encounter_time","asc")->first();
                     if ($fastestEncounter !== null) {
-                        $cache->fastest_encounter = $fastestEncounter->id;
+                        $cache->fastest_encounter = $fastestEncounter->fastest_encounter_id;
                         $cache->save();
                     }
                 }
@@ -68,7 +66,8 @@ class LadderCache extends Model
     public static function getFastestEncounter($encounterId, $difficultyId, $realms, $factions)
     {
         return LadderCache::where("ladder_caches.encounter_id", "=", $encounterId)->where("ladder_caches.difficulty_id", "=", $difficultyId)
-            ->whereIn("ladder_caches.realm_id",$realms)->whereIn("ladder_caches.faction_id",$factions)->leftJoin("encounters","encounters.id","=","ladder_caches.fastest_encounter")
-            ->orderBy("encounters.fight_time","asc")->first();
+            ->whereIn("ladder_caches.realm_id",$realms)->whereIn("ladder_caches.faction_id",$factions)->
+            where("ladder_caches.fastest_encounter","<>",0)->
+            leftJoin("encounters","encounters.id","=","ladder_caches.fastest_encounter")->orderBy("encounters.fight_time","asc")->first();
     }
 }
