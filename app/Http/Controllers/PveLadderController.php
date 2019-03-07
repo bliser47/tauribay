@@ -354,7 +354,7 @@ class PveLadderController extends Controller
                         $factions = array();
                         if ($_request->has('alliance') || $_request->has('horde')) {
                             if ($_request->has('alliance')) {
-                                array_push($factions, 0);
+                                array_push($factions, 2);
                             }
                             if ($_request->has('horde')) {
                                 array_push($factions, 1);

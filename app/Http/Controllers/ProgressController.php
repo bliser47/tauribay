@@ -45,13 +45,15 @@ class ProgressController extends Controller
     {
         ini_set('max_execution_time', 0);
 
-        $ids = Encounter::ENCOUNTER_IDS;
+        $ids = Encounter::getMapEncountersIds(2, 615);
+        $data = array();
         foreach ( $ids as $encounter_id ) {
             foreach ( Encounter::SIZE_AND_DIFFICULTY as $difficulty_id => $difficultyName ) {
                 LadderCache::calculateFastestEncounter($encounter_id, $difficulty_id, array(0,1,2), array(1,2));
                 LadderCache::calculateTopDps($encounter_id, $difficulty_id, array(0,1,2), array(1,2));
             }
         }
+        return $data;
         /*
         $enc = CharacterEncounters::groupBy(array("character_id","encounter_member_id"))->havingRaw("count(*) > 1")->selectRaw("min(id) as id")->get();
         $remove = array();
