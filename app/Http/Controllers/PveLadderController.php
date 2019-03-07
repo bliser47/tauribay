@@ -360,8 +360,7 @@ class PveLadderController extends Controller
                             if ($_request->has('horde')) {
                                 array_push($factions, 1);
                             }
-                            $encounters = $encounters->where("guild_id", "<>", 0);
-                            $encounters->whereIn('faction', $factions);
+                            $encounters->whereIn('faction_id', $factions);
                         }
 
                         $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
@@ -408,12 +407,12 @@ class PveLadderController extends Controller
                         if ($_request->has('alliance') || $_request->has('horde')) {
                             if ($_request->has('alliance')) {
                                 array_push($factions, 0);
+                                array_push($factions, 2);
                             }
                             if ($_request->has('horde')) {
                                 array_push($factions, 1);
                             }
-                            $encounters = $encounters->where("guild_id", "<>", 0);
-                            $encounters->whereIn('faction', $factions);
+                            $encounters->whereIn('faction_id', $factions);
                         }
 
                         $encounters = $encounters->orderBy("fastest_encounter_time", "asc");
@@ -548,6 +547,7 @@ class PveLadderController extends Controller
                         $factions = array();
                         if ($_request->has('alliance')) {
                             array_push($factions, 0);
+                            array_push($factions, 2);
                         }
                         if ($_request->has('horde')) {
                             array_push($factions, 1);
