@@ -524,7 +524,7 @@ class Encounter extends Model
         if ( !in_array($encounter->id,self::INVALID_RAIDS) ) {
             $guildId = $guild !== null ? $guild->id : 0;
             $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
-                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->first();
+                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->where("realm_id","=",$encounter->realm_id)->first();
 
 
             if ($top !== null) {
@@ -532,6 +532,7 @@ class Encounter extends Model
                     $top->fastest_encounter_id = $encounter->id;
                     $top->fastest_encounter_time = $encounter->fight_time;
                     $top->fastest_encounter_date = $encounter->killtime;
+                    $top->faction_id = $encounter->faction_id;
                     self::refreshLadderSpeedKill($encounter);
                 }
             } else {
@@ -588,6 +589,7 @@ class Encounter extends Model
                         $checkHps = true;
                     }
                 }
+                $top->faction_id = $member->faction_id;
             } else {
                 $top = new MemberTop();
                 $top->name = $member->name;
