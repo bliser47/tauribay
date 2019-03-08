@@ -924,7 +924,7 @@ $(function()
         var diffSaved = getCookie("diffSaved2");
         if ( diffSaved !== "" )
         {
-            $(".map-difficulty.active").removeClass("active");
+            $(".map-difficulty.active, .map-difficulty-tab.active").removeClass("active");
             $("#difficultyPanel" + diffSaved + ", #difficulty-" + diffSaved).addClass("active");
         }
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
@@ -937,8 +937,8 @@ $(function()
             {
                 setCookie("diffSaved2",diff);
             }
-            if ( $(this).hasClass("unLoaded") ) {
-                $(this).removeClass("unLoaded");
+            if ( !$(this).hasClass("loaded") ) {
+                $(this).addClass("loaded");
                 var id = $(this).find("a").attr("href");
                 loadMapDifficulty($(id).find(".ajax-map-difficulty"), data)
             }

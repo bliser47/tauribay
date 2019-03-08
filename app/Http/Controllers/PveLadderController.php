@@ -612,7 +612,7 @@ class PveLadderController extends Controller
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=18";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=19";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
