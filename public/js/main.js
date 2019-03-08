@@ -933,7 +933,7 @@ $(function()
             prevState = window.location.href;
             history.pushState(null, '', $(this).data("url") + window.location.hash);
             var diff = $(this).data("diff");
-            if ( diff )
+            if ( diff !== null && diff !== "")
             {
                 setCookie("diffSaved2",diff);
             }
