@@ -925,7 +925,7 @@ $(function()
         if ( diffSaved !== "" )
         {
             $(".map-difficulty.active, .map-difficulty-tab.active").removeClass("active");
-            $("#difficultyPanel" + diffSaved + ", #difficulty-" + diffSaved).addClass("active");
+            $("#difficultyPanel" + diffSaved + ", #difficulty-" + diffSaved).addClass("active loaded")
         }
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
