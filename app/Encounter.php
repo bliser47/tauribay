@@ -524,7 +524,7 @@ class Encounter extends Model
         if ( !in_array($encounter->id,self::INVALID_RAIDS) ) {
             $guildId = $guild !== null ? $guild->id : 0;
             $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
-                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->where("faction_id","=",$encounter->faction_id)->first();
+                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->first();
 
 
             if ($top !== null) {

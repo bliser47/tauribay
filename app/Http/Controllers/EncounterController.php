@@ -131,9 +131,8 @@ class EncounterController extends Controller
             $found = false;
             $encounters = Encounter::where("top_processed", "=", 0)->take(5000)->get();
             foreach ($encounters as $encounter) {
-                Encounter::refreshLadderSpeedKill($encounter);
-                $encounter->top_processed = 1;
-                $encounter->save();
+                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                Encounter::refreshEncounterTop($encounter, $guild);
                 $found = true;
             }
         } while ( $found );
