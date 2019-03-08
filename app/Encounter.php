@@ -524,7 +524,7 @@ class Encounter extends Model
         if ( !in_array($encounter->id,self::INVALID_RAIDS) ) {
             $guildId = $guild !== null ? $guild->id : 0;
             $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
-                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->first();
+                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->where("faction_id","=",$encounter->faction_id)->first();
 
 
             if ($top !== null) {
@@ -532,7 +532,7 @@ class Encounter extends Model
                     $top->fastest_encounter_id = $encounter->id;
                     $top->fastest_encounter_time = $encounter->fight_time;
                     $top->fastest_encounter_date = $encounter->killtime;
-                    self::refreshLadderSpeedKill($encounter, $guild);
+                    self::refreshLadderSpeedKill($encounter);
                 }
             } else {
 
@@ -545,7 +545,7 @@ class Encounter extends Model
                 $top->fastest_encounter_time = $encounter->fight_time;
                 $top->fastest_encounter_date = $encounter->killtime;
                 $top->faction_id = $encounter->faction_id;
-                self::refreshLadderSpeedKill($encounter, $guild);
+                self::refreshLadderSpeedKill($encounter);
             }
 
             $top->save();
@@ -628,22 +628,18 @@ class Encounter extends Model
         }
     }
 
-    public static function refreshLadderSpeedKill($encounter, $guild) {
-        if ( $guild != null ){
-            $cache = LadderCache::getCache($encounter->encounter_id, $encounter->difficulty_id, $encounter->realm_id, $guild->faction);
-            $fastest = Encounter::where("id", "=", $cache->fastest_encounter)->first();
-            if ($fastest !== null) {
-                if ($fastest->fight_time > $encounter->fight_time) {
-                    $cache->fastest_encounter = $encounter->id;
-                    $cache->save();
-                }
-            }
+    public static function refreshLadderSpeedKill($encounter) {
+        $cache = LadderCache::getCache($encounter->encounter_id, $encounter->difficulty_id, $encounter->realm_id, $encounter->faction_id);
+        $fastest = $cache->fastest_encounter > 0 ? Encounter::where("id", "=", $cache->fastest_encounter)->first() : null;
+        if (!$fastest || $fastest->fight_time > $encounter->fight_time ) {
+            $cache->fastest_encounter = $encounter->id;
+            $cache->save();
         }
     }
 
     public static function refreshLadderDps($memberTop) {
         $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->realm_id, $memberTop->faction_id);
-        $topDps = MemberTop::where("id", "=", $cache->top_dps_encounter_member)->first();
+        $topDps = $cache->top_dps_encounter_member > 0 ? MemberTop::where("id", "=", $cache->top_dps_encounter_member)->first() : null;
         if (!$topDps || $topDps->dps < $memberTop->dps) {
             $cache->top_dps_encounter_member = $memberTop->id;
             $cache->save();
@@ -652,7 +648,7 @@ class Encounter extends Model
 
     public static function refreshLadderHps($memberTop) {
         $cache = LadderCache::getCache($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->realm_id, $memberTop->faction_id);
-        $topHps = MemberTop::where("id", "=", $cache->top_hps_encounter_member)->first();
+        $topHps = $cache->top_hps_encounter_member > 0 ? MemberTop::where("id", "=", $cache->top_hps_encounter_member)->first() : null;
         if (!$topHps || $topHps->hps < $memberTop->hps) {
             $cache->top_hps_encounter_member = $memberTop->id;
             $cache->save();

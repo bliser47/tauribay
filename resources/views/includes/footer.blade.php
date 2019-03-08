@@ -6,6 +6,7 @@
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=228') }}"/>
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=14') }}"/>
 <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+<link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
 <script>
     var URL_WEBSITE = "{{ URL::to('/') }}";
 
@@ -30,6 +31,10 @@
     var VALIDATION_LOCAL_CREDITCARD = "{{ __("Érvényes hitelkártyaszámnak kell lennie.") }}";
     var VALIDATION_LOCAL_REMOTE = "{{ __("Kérem javítsa ki ezt a mezőt.") }}";
     var VALIDATION_LOCAL_DATEISO = "{{ __("Kérem írjon be egy érvényes dátumot (ISO).") }}";
+
+    var COOKIE_POLICY = "{{ __("Ez a weboldal a felhasználói élmény javítása, valamint a zavartalan működés biztosítása érdekében sütiket (cookie-kat) használ.") }}";
+    var COOKIE_POLICY_OKAY = "{{ __("Elfogadom") }}";
+    var COOKIE_POLICY_LEARN = "{{ __("Tudj meg többet") }}";
 </script>
 <script type="application/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="application/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -37,6 +42,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
 
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/main.js?v=246') }}"></script>
@@ -62,6 +68,24 @@
             }
             $(window).resize(resizeBackground);
             resizeBackground();
+            window.cookieconsent.initialise({
+                "palette": {
+                    "popup": {
+                        "background": "rgba(0,0,0,0.85)",
+                        "text": "#ffffff"
+                    },
+                    "button": {
+                        "background": "#5cb85c",
+                        "text": "#ffffff"
+                    }
+
+                },
+                "content": {
+                    "message": COOKIE_POLICY,
+                    "dismiss": COOKIE_POLICY_OKAY,
+                    "link": COOKIE_POLICY_LEARN
+                }
+            })
         });
     });
 </script>

@@ -127,6 +127,39 @@ class EncounterController extends Controller
 
     public function fix() {
         ini_set('max_execution_time', 0);
+        do {
+            $found = false;
+            $encounters = Encounter::where("top_processed", "=", 0)->take(5000)->get();
+            foreach ($encounters as $encounter) {
+                Encounter::refreshLadderSpeedKill($encounter);
+                $encounter->top_processed = 1;
+                $encounter->save();
+                $found = true;
+            }
+        } while ( $found );
+    }
+
+    public function fix2() {
+        ini_set('max_execution_time', 0);
+        do
+        {
+            $found = false;
+            $members = MemberTop::where("top_processed","=",0)->take(5000)->get();
+            foreach ( $members as $member ) {
+                Encounter::refreshLadderHps($member);
+                Encounter::refreshLadderDps($member);
+                $member->top_processed = 1;
+                $member->save();
+                $found = true;
+            }
+
+        } while ( $found );
+    }
+
+
+
+    public function fixFactions() {
+        ini_set('max_execution_time', 0);
         $encounters = EncounterTop::where('faction_id','<',1)->get();
         foreach ( $encounters as $encounterTop ) {
             $encounter = Encounter::where("id","=",$encounterTop->fastest_encounter_id)->first();
