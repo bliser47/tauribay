@@ -86,7 +86,7 @@
                     "link": COOKIE_POLICY_LEARN
                 },
                 "cookie" : {
-                    "domain" : "tauribay.hu"
+                    "domain" : ".tauribay.hu"
                 }
             })
         });
