@@ -921,21 +921,21 @@ $(function()
         $("#ladder-filter-form input").change(function(){
             $("#ladder-filter-form").submit();
         });
-        var modeSaved = getCookie("modeSaved2");
-        if ( modeSaved !== "" )
+        var diffSaved = getCookie("diffSaved2");
+        if ( diffSaved !== "" )
         {
             $("#map-loading-container .tab-pane").removeClass("active");
-            $("#modePanel" + modeSaved + ", #difficulty-" + modeSaved).addClass("active");
+            $("#modePanel" + diffSaved + ", #difficulty-" + diffSaved).addClass("active");
         }
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
         $(".map-difficulty-tab").on("click",function(){
             prevState = window.location.href;
             history.pushState(null, '', $(this).data("url") + window.location.hash);
-            var mode = $(this).data("mode");
-            if ( mode )
+            var diff = $(this).data("diff");
+            if ( diff )
             {
-                setCookie("modeSaved2",mode);
+                setCookie("diffSaved2",diff);
             }
             if ( $(this).hasClass("unLoaded") ) {
                 $(this).removeClass("unLoaded");
