@@ -924,8 +924,8 @@ $(function()
         var diffSaved = getCookie("diffSaved2");
         if ( diffSaved !== "" )
         {
-            $("#map-loading-container .tab-pane").removeClass("active");
-            $("#modePanel" + diffSaved + ", #difficulty-" + diffSaved).addClass("active");
+            $(".map-difficulty.active").removeClass("active");
+            $("#difficultyPanel" + diffSaved + ", #difficulty-" + diffSaved).addClass("active");
         }
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
