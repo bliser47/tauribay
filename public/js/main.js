@@ -668,7 +668,7 @@ $(function()
     };
 
 
-    function setCookie(cname, cvalue, exdays) {
+    function setCookie(cname, cvalue, exdays = 1) {
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         var expires = "expires="+d.toUTCString();
@@ -921,11 +921,22 @@ $(function()
         $("#ladder-filter-form input").change(function(){
             $("#ladder-filter-form").submit();
         });
+        var modeSaved = getCookie("modeSaved2");
+        if ( modeSaved !== "" )
+        {
+            $("#map-loading-container .tab-pane").removeClass("active");
+            $("#modePanel" + modeSaved + ", #difficulty-" + modeSaved).addClass("active");
+        }
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
         loadMapDifficulty(container, data);
         $(".map-difficulty-tab").on("click",function(){
             prevState = window.location.href;
             history.pushState(null, '', $(this).data("url") + window.location.hash);
+            var mode = $(this).data("mode");
+            if ( mode )
+            {
+                setCookie("modeSaved2",mode);
+            }
             if ( $(this).hasClass("unLoaded") ) {
                 $(this).removeClass("unLoaded");
                 var id = $(this).find("a").attr("href");
