@@ -184,12 +184,10 @@ class PveLadderController extends Controller
                                 $factions = array();
                                 if ($_request->has('alliance')) {
                                     array_push($factions, 0);
+                                    array_push($factions, 2);
                                 }
                                 if ($_request->has('horde')) {
                                     array_push($factions, 1);
-                                }
-                                if ($_request->has('ismeretlen')) {
-                                    array_push($factions, 3);
                                 }
                                 $members = $members->whereIn('member_tops.faction_id', $factions);
                             }
