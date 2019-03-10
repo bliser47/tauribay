@@ -212,17 +212,6 @@ class PveLadderController extends Controller
                                 ));
                             $members = $members->paginate(10);
 
-                            foreach ( $members as $member )
-                            {
-                                if ($member->guild_id !== 0) {
-                                    $guild = Guild::where("id", "=", $member->guild_id)->first();
-                                    if ( $guild !== null ) {
-                                        $member->guild_name = $guild->name;
-                                        $member->faction = $guild->faction;
-                                    }
-                                }
-                            }
-
                             $view = view("ladder/pve/ajax/members", compact(
                                 "modeId",
                                 "members"

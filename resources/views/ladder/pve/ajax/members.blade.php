@@ -2,7 +2,7 @@
     <tr class="tHead">
         <th>{{ __("Nr") }}</th>
         <th class="cellMobile" colspan="2">{{ __("Player") }}</th>
-        <th class="cellDesktop" colspan="4">{{ __("Player") }}</th>
+        <th class="cellDesktop" colspan="3">{{ __("Player") }}</th>
         <th>{{ strtoupper($modeId) }}</th>
         <th class="cellDesktop">{{ __("Dátum") }}</th>
         <th class="cellDesktop">{{ __("iLvL") }}</th>
@@ -22,13 +22,6 @@
             </td>
             <td><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member["realm_id"]] ."/" . $member["name"] }}">{{ $member["name"] }}</a></td>
             <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[intval($member["realm_id"])] }}</td>
-            <td class="cellDesktop faction-{{ $member["faction"] }}">
-                @if ( strlen($member["guild_name"]) )
-                    <a href="{{ URL::to("/guild/" . $member["guild_id"]) }}"> {{ $member["guild_name"] }} </a>
-                @else
-                    Random
-                @endif
-            </td>
             <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId], true) }}</a></td>
             <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
             <td class="cellDesktop">{{ date('M d, Y', $member["killtime"])}}</td>
