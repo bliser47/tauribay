@@ -745,6 +745,7 @@ $(function()
 
     var listenForClassChange = function(mode, role)
     {
+        var currentXhr = null;
         var currentClass = $("#class").val();
         $("#"+ mode +" #class-container .selectpicker").change(function()
         {
@@ -763,7 +764,10 @@ $(function()
                 });
                 if ( currentClass > 0 ) {
                     var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
-                    $.ajax({
+                    if ( currentXhr ) {
+                        currentXhr.abort();
+                    }
+                    currentXhr = $.ajax({
                         type: "GET",
                         url: url,
                         headers: {
@@ -771,6 +775,7 @@ $(function()
                         },
                         success: function (classSpecsJson) {
 
+                            currentXhr = null;
                             classSpecsJson = jQuery.parseJSON(classSpecsJson);
 
                             $("#" + mode + " #spec-container").each(function(){
@@ -800,6 +805,7 @@ $(function()
 
     var listenForRoleChange = function(mode)
     {
+        var currentXhr = null;
         var currentRole = $("#role").val();
         $("#"+ mode + " #role-container .selectpicker").change(function()
         {
@@ -817,7 +823,10 @@ $(function()
 
                     $("input[type='hidden'][name='" + $(selectPicker).attr("id") + "']").val($(this).val());
                 });
-                $.ajax({
+                if ( currentXhr ) {
+                    currentXhr.abort();
+                }
+                currentXhr = $.ajax({
                     type: "GET",
                     url: URL_WEBSITE + "/role/" + set,
                     headers: {
@@ -825,6 +834,7 @@ $(function()
                     },
                     success: function(roleClassesSelectsJson)
                     {
+                        currentXhr = null;
                         roleClassesSelectsJson = jQuery.parseJSON(roleClassesSelectsJson);
                         $("#" + mode + " #class-container").each(function(){
                             var selectContainer = $(this);

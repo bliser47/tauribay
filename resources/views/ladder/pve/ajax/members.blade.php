@@ -11,25 +11,33 @@
     @foreach( $members as $index => $member )
         <tr>
             <td>
+                @if (  $index < 3 )
+                    <img alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
+                @else
+                    <b>{{ $index+1 }}</b>
+                @endif
+                {{--
                 @if (  (($members->currentPage()-1)*10)+$index < 3 )
                     <img alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
                 @else
                     <b>{{ (($members->currentPage()-1)*10)+$index+1  }}</b>
                 @endif
+                --}}
             </td>
             <td class="topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $member["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$member["spec"]] }}"/>
             </td>
             <td><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member["realm_id"]] ."/" . $member["name"] }}">{{ $member["name"] }}</a></td>
             <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[intval($member["realm_id"])] }}</td>
-            <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId], true) }}</a></td>
-            <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
-            <td class="cellDesktop">{{ date('M d, Y', $member["killtime"])}}</td>
+            <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . $encounterName . "/". $member[$modeId."_encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId], true) }}</a></td>
+            <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . $encounterName . "/". $member[$modeId."_encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
+            <td class="cellDesktop">{{ date('M d, Y', $member[$modeId."_encounter_killtime"]) }}</td>
             <td class="cellDesktop">{{ $member[$modeId."_ilvl"] }}</td>
-            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($member["encounter"]) . "/" . $member["encounter_id"] }}">{{ $member["fight_time"] / 1000 }}</a></td>
+            <td class="cellDesktop"><a target="_blank" class="encounterKillTime" href="{{ URL::to("/encounter/") . "/" . $encounterName . "/" . $member[$modeId."_encounter_id"] }}">{{ $member[$modeId."_encounter_fight_time"] / 1000 }}</a></td>
         </tr>
     @endforeach
 </table>
+{{--
 <div class="text-center paginator">
     <div class="divDesktop">
         {{ $members->appends(Illuminate\Support\Facades\Input::except('page')) }}
@@ -76,3 +84,4 @@
         </ul>
     </div>
 </div>
+--}}

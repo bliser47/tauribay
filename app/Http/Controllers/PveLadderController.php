@@ -141,13 +141,19 @@ class PveLadderController extends Controller
                     if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
 
-                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=5";
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=6";
                         $cacheValue = Cache::get($cacheKey);
                         $cacheUrlValue = Cache::get($cacheKey."URL");
                         if ( !$cacheValue ) {
 
+                            $top100LowLimitCacheKey = http_build_query($_request->all()) . "_low_limit";
+                            $top100LowLimitCache = Cache::get($top100LowLimitCacheKey);
+                            if ( !$top100LowLimitCache ) {
+                                $top100LowLimitCache = 0;
+                            }
+
                             $members = MemberTop::where("member_tops.encounter_id", "=", $encounterId)
-                                ->where("member_tops.difficulty_id", "=", $difficultyId)->where($modeId,">",0);
+                                ->where("member_tops.difficulty_id", "=", $difficultyId)->where($modeId,">",$top100LowLimitCache);
 
                             if ($_request->has("spec_id") && $_request->get("spec_id") > 0) {
                                 $members = $members->where("member_tops.spec", "=", $_request->get("spec_id"));
@@ -193,26 +199,16 @@ class PveLadderController extends Controller
                             }
 
                             $members = $members->orderBy($modeId,"desc");
-                            $members = $members->leftJoin("encounters", "encounters.id" , "=", "member_tops." . $modeId . "_encounter_id")
-                                ->select(array(
-                                    "member_tops.name as name",
-                                    "member_tops.class as class",
-                                    "member_tops.spec as spec",
-                                    "member_tops.dps as dps",
-                                    "member_tops.hps as hps",
-                                    "member_tops.faction_id as faction_id",
-                                    "encounters.guild_id as guild_id",
-                                    "encounters.id as encounter_id",
-                                    "encounters.encounter_id as encounter",
-                                    "member_tops.realm_id as realm_id",
-                                    "encounters.fight_time as fight_time",
-                                    "encounters.killtime as killtime",
-                                    "member_tops.dps_ilvl as dps_ilvl",
-                                    "member_tops.hps_ilvl as hps_ilvl"
-                                ));
-                            $members = $members->paginate(10);
+                            $members = $members->limit(100)->get();
+
+                            if ( $members->count() > 99 ) {
+                                Cache::put($top100LowLimitCacheKey, $members[99]->$modeId);
+                            }
+
+                            $encounterName = Encounter::getUrlName($encounterId);
 
                             $view = view("ladder/pve/ajax/members", compact(
+                                "encounterName",
                                 "modeId",
                                 "members"
                             ));

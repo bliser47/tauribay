@@ -570,6 +570,8 @@ class Encounter extends Model
                         if ($top->dps < $member->dps) {
                             $top->dps = $member->dps;
                             $top->dps_encounter_id = $member->encounter_id;
+                            $top->dps_encounter_fight_time = $member->fight_time;
+                            $top->dps_encounter_killtime = $member->killtime;
                             $top->dps_ilvl = $member->ilvl;
                             if ($guild !== null) {
                                 $top->dps_guild_id = $guild->id;
@@ -582,6 +584,8 @@ class Encounter extends Model
                     if ($top->hps < $member->hps) {
                         $top->hps = $member->hps;
                         $top->hps_encounter_id = $member->encounter_id;
+                        $top->hps_encounter_fight_time = $member->fight_time;
+                        $top->hps_encounter_killtime = $member->killtime;
                         $top->hps_ilvl = $member->ilvl;
                         if ($guild !== null) {
                             $top->hps_guild_id = $guild->id;
@@ -604,6 +608,8 @@ class Encounter extends Model
                     if ($member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP) {
                         $top->dps = $member->dps;
                         $top->dps_encounter_id = $member->encounter_id;
+                        $top->dps_encounter_fight_time = $member->fight_time;
+                        $top->dps_encounter_killtime = $member->killtime;
                         $top->dps_ilvl = $member->ilvl;
                         $checkDps = true;
                     }
@@ -611,6 +617,8 @@ class Encounter extends Model
                 if ($member->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP) {
                     $top->hps = $member->hps;
                     $top->hps_encounter_id = $member->encounter_id;
+                    $top->hps_encounter_fight_time = $member->fight_time;
+                    $top->hps_encounter_killtime = $member->killtime;
                     $top->hps_ilvl = $member->ilvl;
                     $checkHps = true;
                 }

@@ -129,12 +129,24 @@ class EncounterController extends Controller
         ini_set('max_execution_time', 0);
         do {
             $found = false;
-            $encounters = Encounter::where("top_processed", "=", 0)->take(5000)->get();
-            foreach ($encounters as $encounter) {
-                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                Encounter::refreshEncounterTop($encounter, $guild);
-                $found = true;
+            $memberTop = MemberTop::where("top_processed", "=", 0)->take(5000)->get();
+            foreach ($memberTop as $top) {
+                if ( $top->dps_encounter_id > 0 ) {
+                    $encounterDPS = Encounter::where("id","=",$top->dps_encounter_id)->first();
+                    $top->dps_encounter_fight_time = $encounterDPS->fight_time;
+                    $top->dps_encounter_killtime = $encounterDPS->killtime;
+                    $found = true;
+                }
+                if ( $top->hps_encounter_id > 0 ) {
+                    $encounterHPS = Encounter::where("id","=",$top->hps_encounter_id)->first();
+                    $top->hps_encounter_fight_time = $encounterHPS->fight_time;
+                    $top->hps_encounter_killtime = $encounterHPS->killtime;
+                    $found = true;
+                }
+                $top->top_processed = 1;
+                $top->save();
             }
+
         } while ( $found );
     }
 
