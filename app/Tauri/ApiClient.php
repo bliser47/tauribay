@@ -354,8 +354,8 @@ class ApiClient {
         $ch = curl_init($this->baseurl . '?apikey=' . $this->apikey);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch,CURLOPT_USERAGENT, 'Armory Public API client');
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 600);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 600);
         curl_setopt($ch, CURLOPT_POSTFIELDS, urlencode(json_encode($this->request)));
         $response = curl_exec($ch);
         $err = curl_error($ch);

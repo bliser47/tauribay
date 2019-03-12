@@ -437,8 +437,8 @@ class Encounter extends Model
             $member->save();
 
             self::logCharacter($member, $api);
-            self::refreshMemberTop($member, $guild);
             self::calculateScores($member);
+            self::refreshMemberTop($member, $guild);
 
             $member->top_processed = 1;
             $member->save();
