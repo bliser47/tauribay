@@ -788,9 +788,7 @@ $(function()
                                     var set = $(this).val();
                                     $("#" + mode + " #spec-container .selectpicker").val(set).selectpicker('refresh');
                                     $("input[type='hidden'][name='spec']").val(set);
-                                    //$(this).parent().submit();
                                 });
-                                //$(selectContainer).parent().submit();
                             });
 
                         }
@@ -840,9 +838,7 @@ $(function()
                             $(selectContainer).change(function(){
                                 var newClassId = $(this).find(".selectpicker").val();
                                 $("input[type='hidden'][name='class']").val(newClassId);
-                                //$(this).parent().submit();
                             });
-                            //$(selectContainer).parent().submit();
                         });
 
 

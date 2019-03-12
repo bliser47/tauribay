@@ -206,16 +206,18 @@ class EncounterController extends Controller
         }
     }
 
-    public function fixEncounterTopDuplicates(Request $_request) {
+    public function fixEncounterTop(Request $_request) {
         $api = new Tauri\ApiClient();
         ini_set('max_execution_time', 0);
-        $enc = EncounterTop::groupBy(array("encounter_id","difficulty_id","realm_id","guild_id"))->havingRaw("count(*) > 1")->selectRaw("min(id) as id, max(guild_id) as guild_id")->get();
-        $remove = array();
-        foreach ( $enc as $e) {
-            $remove[] = $e->id;
-        }
-        EncounterTop::whereIn("id",$remove)->delete();
-        return $remove;
+        do {
+            $found = false;
+            $encounters = Encounter::where("top_processed","=",0)->take(5000)->get();
+            foreach ( $encounters as $encounter ) {
+                $found = true;
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                Encounter::refreshEncounterTop($encounter,$guild);
+            }
+        } while ( $found );
     }
 
     public function fixEncounterFactions(Request $_request) {
