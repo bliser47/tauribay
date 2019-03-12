@@ -45,6 +45,23 @@ class ProgressController extends Controller
     {
         ini_set('max_execution_time', 0);
 
+        EncounterTop::whereIn("fastest_encounter_id",Encounter::INVALID_RAIDS)->delete();
+        LadderCache::whereIn("fastest_encounter", Encounter::INVALID_RAIDS)->delete();
+
+        foreach ( Encounter::INVALID_RAIDS as $invalidId ) {
+
+            $encounter = Encounter::where("id","=",$invalidId)->first();
+
+            $guildEncounters = Encounter::where("encounter_id", $encounter->encounter_id)
+                ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $encounter->guild_id)->get();
+
+            foreach ( $guildEncounters as $guildEncounter ) {
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                Encounter::refreshEncounterTop($guildEncounter, $guild);
+            }
+        }
+
+        /*
         $ids = Encounter::getMapEncountersIds(2, 615);
         $data = array();
         foreach ( $ids as $encounter_id ) {
@@ -54,6 +71,7 @@ class ProgressController extends Controller
             }
         }
         return $data;
+        */
         /*
         $enc = CharacterEncounters::groupBy(array("character_id","encounter_member_id"))->havingRaw("count(*) > 1")->selectRaw("min(id) as id")->get();
         $remove = array();
