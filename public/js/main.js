@@ -643,7 +643,7 @@ $(function()
                         e.preventDefault();
                         loadEncounterMode(encounterId, 1, mode, $(this).serialize());
                     });
-                    $(tab).find(".encounter-subform-form select").change(function () {
+                    $(tab).find(".encounter-subform-form").on("change", "select", function () {
                         $("input[type='hidden'][name='" + $(this).attr("id") + "']").val($(this).val());
                         if ( modeTimeout != null ) {
                             clearTimeout(modeTimeout);
@@ -711,7 +711,7 @@ $(function()
 
             var pane = $(this);
             if ( $(pane).hasClass("active") ) {
-                loadMode(pane,data, 1)
+                loadMode(pane,data, 1);
                 if ( $(pane).data("mode") === "loot" )
                 {
                     $(".encounter-sub-filter-faction, .encounter-sub-filter-realm").hide();
@@ -788,9 +788,9 @@ $(function()
                                     var set = $(this).val();
                                     $("#" + mode + " #spec-container .selectpicker").val(set).selectpicker('refresh');
                                     $("input[type='hidden'][name='spec']").val(set);
-                                    $(this).parent().submit();
+                                    //$(this).parent().submit();
                                 });
-                                $(selectContainer).parent().submit();
+                                //$(selectContainer).parent().submit();
                             });
 
                         }
@@ -840,9 +840,9 @@ $(function()
                             $(selectContainer).change(function(){
                                 var newClassId = $(this).find(".selectpicker").val();
                                 $("input[type='hidden'][name='class']").val(newClassId);
-                                $(this).parent().submit();
+                                //$(this).parent().submit();
                             });
-                            $(selectContainer).parent().submit();
+                            //$(selectContainer).parent().submit();
                         });
 
 
