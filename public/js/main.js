@@ -553,7 +553,6 @@ $(function()
         });
     };
 
-    var encounterModeXhr = null;
     var loadEncounterMode = function(encounterId, page, mode, subForm)
     {
         var container = $("#encounter-form-response-" + mode);
@@ -567,10 +566,7 @@ $(function()
             data += "&" + subForm;
         }
 
-        if ( encounterModeXhr != null ) {
-            encounterModeXhr.abort();
-        }
-        encounterModeXhr = $.ajax({
+        $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
             data: data,
@@ -579,7 +575,6 @@ $(function()
             },
             success: function(response)
             {
-                encounterModeXhr = null;
                 response = $.parseJSON(response);
                 $(container).html(response["view"]);
                 $(container).find(".pagination a").click(function(e)
@@ -657,7 +652,7 @@ $(function()
                         modeTimeout = setTimeout(function() {
                             modeTimeout = null;
                             $(select).parent().submit();
-                        },500);
+                        },1000);
                     });
 
                     listenForRoleChange(mode);
@@ -756,7 +751,6 @@ $(function()
         });
     };
 
-    var classChangeXhr = null;
     var listenForClassChange = function(mode, role)
     {
         var currentClass = $("#class").val();
@@ -777,17 +771,13 @@ $(function()
                 });
                 if ( currentClass > 0 ) {
                     var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
-                    if ( classChangeXhr != null ) {
-                        classChangeXhr.abort();
-                    }
-                    classChangeXhr = $.ajax({
+                    $.ajax({
                         type: "GET",
                         url: url,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (classSpecsJson) {
-                            classChangeXhr = null;
                             classSpecsJson = jQuery.parseJSON(classSpecsJson);
                             $("#" + mode + " #spec-container").each(function(){
                                 var selectContainer = $(this);
@@ -814,7 +804,6 @@ $(function()
         });
     };
 
-    var roleChangeXhr;
     var listenForRoleChange = function(mode)
     {
         var currentRole = $("#role").val();
@@ -834,10 +823,7 @@ $(function()
 
                     $("input[type='hidden'][name='" + $(selectPicker).attr("id") + "']").val($(this).val());
                 });
-                if ( roleChangeXhr ) {
-                    roleChangeXhr.abort();
-                }
-                roleChangeXhr = $.ajax({
+                $.ajax({
                     type: "GET",
                     url: URL_WEBSITE + "/role/" + set,
                     headers: {
@@ -845,7 +831,6 @@ $(function()
                     },
                     success: function(roleClassesSelectsJson)
                     {
-                        roleChangeXhr = null;
                         roleClassesSelectsJson = jQuery.parseJSON(roleClassesSelectsJson);
                         $("#" + mode + " #class-container").each(function(){
                             var selectContainer = $(this);
