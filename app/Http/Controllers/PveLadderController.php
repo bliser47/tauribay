@@ -362,7 +362,7 @@ class PveLadderController extends Controller
                 }
                 else if ( $modeId == "speed" )
                 {
-                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=7";
+                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=8";
                     $cacheValue = Cache::get($cacheKey);
                     if (  !$cacheValue ) {
 
