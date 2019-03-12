@@ -553,6 +553,7 @@ $(function()
         });
     };
 
+    var encounterModeXhr = null;
     var loadEncounterMode = function(encounterId, page, mode, subForm)
     {
         var container = $("#encounter-form-response-" + mode);
@@ -565,7 +566,11 @@ $(function()
         {
             data += "&" + subForm;
         }
-        $.ajax({
+
+        if ( encounterModeXhr != null ) {
+            encounterModeXhr.abort();
+        }
+        encounterModeXhr = $.ajax({
             type: "POST",
             url: URL_WEBSITE + "/ladder/pve",
             data: data,
@@ -574,6 +579,7 @@ $(function()
             },
             success: function(response)
             {
+                encounterModeXhr = null;
                 response = $.parseJSON(response);
                 $(container).html(response["view"]);
                 $(container).find(".pagination a").click(function(e)
@@ -592,6 +598,7 @@ $(function()
         });
     };
 
+    var modeTimeout;
     var loadMode = function(pane, data, page)
     {
         var tab = $(pane);
@@ -618,7 +625,6 @@ $(function()
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             success: function (response) {
-
                 response = $.parseJSON(response);
                 $(tab).html(response["view"]);
                 $(".selectpicker").selectpicker();
@@ -644,7 +650,14 @@ $(function()
                     });
                     $(tab).find(".encounter-subform-form select").change(function () {
                         $("input[type='hidden'][name='" + $(this).attr("id") + "']").val($(this).val());
-                        $(this).parent().submit();
+                        if ( modeTimeout != null ) {
+                            clearTimeout(modeTimeout);
+                        }
+                        var select = $(this);
+                        modeTimeout = setTimeout(function() {
+                            modeTimeout = null;
+                            $(select).parent().submit();
+                        },500);
                     });
 
                     listenForRoleChange(mode);
@@ -743,9 +756,9 @@ $(function()
         });
     };
 
+    var classChangeXhr = null;
     var listenForClassChange = function(mode, role)
     {
-        var currentXhr = null;
         var currentClass = $("#class").val();
         $("#"+ mode +" #class-container .selectpicker").change(function()
         {
@@ -764,20 +777,18 @@ $(function()
                 });
                 if ( currentClass > 0 ) {
                     var url = role != null ? (URL_WEBSITE + "/classAndRole/" + role + "/" + set) : (URL_WEBSITE + "/class/" + set);
-                    if ( currentXhr ) {
-                        currentXhr.abort();
+                    if ( classChangeXhr != null ) {
+                        classChangeXhr.abort();
                     }
-                    currentXhr = $.ajax({
+                    classChangeXhr = $.ajax({
                         type: "GET",
                         url: url,
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function (classSpecsJson) {
-
-                            currentXhr = null;
+                            classChangeXhr = null;
                             classSpecsJson = jQuery.parseJSON(classSpecsJson);
-
                             $("#" + mode + " #spec-container").each(function(){
                                 var selectContainer = $(this);
                                 selectContainer.html($(selectContainer).hasClass("short") ? classSpecsJson["mobile"] : classSpecsJson["desktop"]);
@@ -803,9 +814,9 @@ $(function()
         });
     };
 
+    var roleChangeXhr;
     var listenForRoleChange = function(mode)
     {
-        var currentXhr = null;
         var currentRole = $("#role").val();
         $("#"+ mode + " #role-container .selectpicker").change(function()
         {
@@ -823,10 +834,10 @@ $(function()
 
                     $("input[type='hidden'][name='" + $(selectPicker).attr("id") + "']").val($(this).val());
                 });
-                if ( currentXhr ) {
-                    currentXhr.abort();
+                if ( roleChangeXhr ) {
+                    roleChangeXhr.abort();
                 }
-                currentXhr = $.ajax({
+                roleChangeXhr = $.ajax({
                     type: "GET",
                     url: URL_WEBSITE + "/role/" + set,
                     headers: {
@@ -834,7 +845,7 @@ $(function()
                     },
                     success: function(roleClassesSelectsJson)
                     {
-                        currentXhr = null;
+                        roleChangeXhr = null;
                         roleClassesSelectsJson = jQuery.parseJSON(roleClassesSelectsJson);
                         $("#" + mode + " #class-container").each(function(){
                             var selectContainer = $(this);
