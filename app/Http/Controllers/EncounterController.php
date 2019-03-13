@@ -207,17 +207,15 @@ class EncounterController extends Controller
     }
 
     public function fixEncounterTop(Request $_request) {
-        $api = new Tauri\ApiClient();
         ini_set('max_execution_time', 0);
-        do {
-            $found = false;
-            $encounters = Encounter::where("top_processed","=",0)->take(5000)->get();
-            foreach ( $encounters as $encounter ) {
-                $found = true;
-                $guild = Guild::where("id","=",$encounter->guild_id)->first();
-                Encounter::refreshEncounterTop($encounter,$guild);
+        $totEncounterIds = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID,Defaults::MAP_ID);
+        $encounters = EncounterTop::whereIn("encounter_id",$totEncounterIds)->get();
+        foreach ( $encounters as $encounter ) {
+            $encounter = Encounter::where("id","=",$encounter->fastest_encounter_id)->first();
+            if ( $encounter ) {
+                Encounter::refreshLadderSpeedKill($encounter);
             }
-        } while ( $found );
+        }
     }
 
     public function fixEncounterFactions(Request $_request) {

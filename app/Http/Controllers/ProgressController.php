@@ -52,7 +52,7 @@ class ProgressController extends Controller
 
             $encounter = Encounter::where("id","=",$invalidId)->first();
 
-            $guildEncounters = Encounter::where("encounter_id", $encounter->encounter_id)
+            $guildEncounters = Encounter::where("encounter_id", $encounter->encounter_id)->whereNotIn("encounter_id",Encounter::INVALID_RAIDS)
                 ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $encounter->guild_id)->get();
 
             foreach ( $guildEncounters as $guildEncounter ) {

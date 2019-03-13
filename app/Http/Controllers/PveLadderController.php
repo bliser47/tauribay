@@ -490,7 +490,7 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=23";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=26";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue ) {
@@ -595,7 +595,7 @@ class PveLadderController extends Controller
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=19";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=20";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {
