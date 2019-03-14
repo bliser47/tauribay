@@ -35,7 +35,8 @@
     var REPLACE_TRANSLATIONS = {
         HEADER_PLAYER : "{{ __("Játékos") }}",
         HEADER_DATE : "{{ __("Dátum") }}",
-        HEADER_TIME : "{{ __("Idő") }}"
+        HEADER_TIME : "{{ __("Idő") }}",
+        HEADER_BEST_TIME : "{{ __("Legjobb idő") }}"
     };
 
     var COOKIE_POLICY = "{{ __("Ez a weboldal a felhasználói élmény javítása, valamint a zavartalan működés biztosítása érdekében sütiket (cookie-kat) használ.") }}";
@@ -51,7 +52,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
 
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/main.js?v=258') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=260') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
 @yield('pagespecificscripts')
 <script type="application/javascript">

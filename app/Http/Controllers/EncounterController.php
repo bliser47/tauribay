@@ -13,6 +13,7 @@ use Mockery\Exception;
 use TauriBay\Characters;
 use TauriBay\Defaults;
 use TauriBay\EncounterMember;
+use TauriBay\LadderCache;
 use TauriBay\MemberTop;
 use TauriBay\EncounterTop;
 use TauriBay\Loot;
@@ -177,6 +178,29 @@ class EncounterController extends Controller
     }
 
 
+    public function fixLaddersFromEncounterTops() {
+        ini_set('max_execution_time', 0);
+        $encounters = EncounterTop::get();
+        foreach ( $encounters as $encounterTop ) {
+            $encounter = Encounter::where("id","=",$encounterTop->fastest_encounter_id)->first();
+            Encounter::refreshLadderSpeedKill($encounter);
+        }
+    }
+
+    public function fixLaddersFromMemberTops() {
+        ini_set('max_execution_time', 0);
+        do {
+            $found = false;
+            $memberTops = MemberTop::where("top_processed","=",0)->take(5000)->get();
+            foreach ($memberTops as $top) {
+                Encounter::refreshLadderDps($top);
+                Encounter::refreshLadderHps($top);
+                $top->top_processed = 1;
+                $top->save();
+                $found = true;
+            }
+        } while ( $found );
+    }
 
     public function fixFactions() {
         ini_set('max_execution_time', 0);

@@ -1,28 +1,28 @@
 <table class="table table-bordered table-classes">
     <tr class="tHead">
-        <th>{{ __("Boss") }}</th>
-        <th colspan="2" class="cellMobile">{{ __("Legjobb idő") }}
-        <th colspan="4" class="cellDesktop">{{ __("Legjobb idő") }}
-        <th class="cellDesktop" colspan="3">{{ __("Top DPS") }}</th>
-        <th colspan="2" class="cellMobile">{{ __("Top DPS") }}</th>
+        <th>Boss</th>
+        <th colspan="2" class="cellMobile">HEADER_BEST_TIME</th>
+        <th colspan="4" class="cellDesktop">HEADER_BEST_TIME</th>
+        <th class="cellDesktop" colspan="3">Top DPS</th>
+        <th colspan="2" class="cellMobile">Top DPS</th>
     </tr>
     @foreach( $encounters as $encounter )
         <tr>
             <td class="cellDesktop" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] }}">{{ \TauriBay\Encounter::getName($encounter["encounter_id"]) }}</a></td>
             <td class="cellMobile" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId) . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] }}">{{ \TauriBay\Encounter::getNameShort($encounter["encounter_id"]) }}</a></td>
             <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[intval($encounter["realm_id"])] }}</td>
-            <td class="cellDesktop faction-{{ $encounter["faction"] }}">
+            <td class="cellDesktop faction-{{ $encounter["faction_id"] }}">
                 @if ( strlen($encounter["guild_name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["guild_name"] }} </a>
                 @else
-                    Random
+                    <span class="random">Random ({{ \TauriBay\Realm::getShortNameFromID($encounter["realm_id"]) }})</span>
                 @endif
             </td>
-            <td class="cellMobile faction-{{ $encounter["faction"] }}">
+            <td class="cellMobile faction-{{ $encounter["faction_id"] }}">
                 @if ( strlen($encounter["guild_name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ \TauriBay\Guild::getShortName($encounter["guild_name"]) }} </a>
                 @else
-                    Random
+                    <span class="random">Random ({{ \TauriBay\Realm::getShortestNameFromID($encounter["realm_id"]) }})</span>
                 @endif
             </td>
             <td><a class="encounterKillTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . $encounter["id"] }}">{{ $encounter["fight_time"]/1000 }}</a></td>

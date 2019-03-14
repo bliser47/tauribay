@@ -1115,9 +1115,16 @@ $(function()
         }
     });
 
+    String.prototype.replaceAll = function(search, replace) {
+        if (replace === undefined) {
+            return this.toString();
+        }
+        return this.split(search).join(replace);
+    };
+
     var replaceTranslations = function(html) {
         for ( var key in REPLACE_TRANSLATIONS ) {
-            html = html.replace(key, REPLACE_TRANSLATIONS[key]);
+            html = html.replaceAll(key, REPLACE_TRANSLATIONS[key]);
         }
         return html;
     }

@@ -503,7 +503,7 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=26";
+                $cacheKey = http_build_query($_request->all()) . "?v=1";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue ) {
@@ -519,37 +519,33 @@ class PveLadderController extends Controller
 
                     $difficultyId = $_request->get("difficulty_id");
 
-
                     //  Realm filter
                     $realms = array();
-                    if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-
-                        if ($_request->has('tauri')) {
-                            array_push($realms, 0);
-                        }
-                        if ($_request->has('wod')) {
-                            array_push($realms, 1);
-                        }
-                        if ($_request->has('evermoon')) {
-                            array_push($realms, 2);
-                        }
-                    } else {
+                    if ($_request->has('tauri')) {
+                        array_push($realms, 0);
+                    }
+                    if ($_request->has('wod')) {
+                        array_push($realms, 1);
+                    }
+                    if ($_request->has('evermoon')) {
+                        array_push($realms, 2);
+                    }
+                    if ( count($realms) == 0 ) {
                         $realms = Realm::getAllRealmIds();
                     }
 
                     // Faction filter
                     $factions = array();
-                    if ($_request->has('alliance') || $_request->has('horde')) {
-                        $factions = array();
-                        if ($_request->has('alliance')) {
-                            array_push($factions, Faction::ALLIANCE);
-                        }
-                        if ($_request->has('horde')) {
-                            array_push($factions, Faction::HORDE);
-                        }
-                    } else {
+                    if ($_request->has('alliance')) {
+                        array_push($factions, Faction::ALLIANCE);
+                    }
+                    if ($_request->has('horde')) {
+                        array_push($factions, Faction::HORDE);
+                    }
+                    if ( count($factions) == 0 ) {
                         $factions = Faction::getAllFactionIds();
                     }
+
 
                     $encounters = array();
                     foreach ($raidEncounters as $raidEncounter) {
