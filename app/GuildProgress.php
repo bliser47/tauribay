@@ -11,6 +11,8 @@ class GuildProgress extends Model
         $guild = Guild::where("name", "=", $_name)->where("realm", "=", $_realmId)->first();
         if ( $guild !== null )
         {
+            self::reCalculateProgression($guild,3); // 10 man
+            self::reCalculateProgression($guild,4); // 10 man
             self::reCalculateProgression($guild,5); // 10 man
             self::reCalculateProgression($guild,6); // 25 man
             return self::getProgression($guild->id);
@@ -22,6 +24,8 @@ class GuildProgress extends Model
         $guilds = Guild::all();
         foreach ( $guilds as $guild )
         {
+            self::reCalculateProgression($guild,3); // 10 man
+            self::reCalculateProgression($guild,4); // 10 man
             self::reCalculateProgression($guild,5); // 10 man
             self::reCalculateProgression($guild,6); // 25 man
         }
@@ -33,6 +37,8 @@ class GuildProgress extends Model
         foreach ( $guilds as $guild )
         {
             if ( !GuildProgress::where("guild_id","=",$guild->id)->first() ) {
+                self::reCalculateProgression($guild, 3); // 10 man
+                self::reCalculateProgression($guild, 4); // 10 man
                 self::reCalculateProgression($guild, 5); // 10 man
                 self::reCalculateProgression($guild, 6); // 25 man
             }
@@ -41,10 +47,22 @@ class GuildProgress extends Model
 
     public static function getProgression($_guildId, $_mapId = 1098)
     {
+        $size10n = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
         $size10 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
+        $size25n = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 6)->orderBy("progress")->first();
         $size25 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 6)->orderBy("progress")->first();
         return array(
             "difficulty" => array(
+                3 => array(
+                    "progress" => $size10n->progress,
+                    "clear_time" => $size10n->clear_time,
+                    "first_kill" => $size10n->first_kill_unix
+                ),
+                4 => array(
+                    "progress" => $size25n->progress,
+                    "clear_time" => $size25n->clear_time,
+                    "first_kill" => $size25n->first_kill_unix
+                ),
                 5 => array(
                     "progress" => $size10->progress,
                     "clear_time" => $size10->clear_time,

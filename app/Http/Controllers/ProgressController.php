@@ -151,45 +151,42 @@ class ProgressController extends Controller
 
         if ( $_request->has("filter") ) {
 
-            // 1. Faction filter
-            if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                $factions = array();
-                if ($_request->has('alliance')) {
-                    array_push($factions, Faction::ALLIANCE);
-                }
-                if ($_request->has('horde')) {
-                    array_push($factions, Faction::HORDE);
-                }
-                if ($_request->has('ismeretlen')) {
-                    array_push($factions, Faction::NEUTRAL);
-                }
+            $factions = array();
+            if ($_request->has('alliance')) {
+                array_push($factions, Faction::ALLIANCE);
+            }
+            if ($_request->has('horde')) {
+                array_push($factions, Faction::HORDE);
+            }
+            if ($_request->has('ismeretlen')) {
+                array_push($factions, Faction::NEUTRAL);
+            }
+            if ( count($factions) > 0 ) {
                 $guilds = $guilds->whereIn('faction', $factions);
             }
 
-            // 2. Realm filter
-            if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                $realms = array();
-                if ($_request->has('tauri')) {
-                    array_push($realms, Realm::TAURI);
-                }
-                if ($_request->has('wod')) {
-                    array_push($realms, Realm::WOD);
-                }
-                if ($_request->has('evermoon')) {
-                    array_push($realms, Realm::EVERMOON);
-                }
+            $realms = array();
+            if ($_request->has('tauri')) {
+                array_push($realms, Realm::TAURI);
+            }
+            if ($_request->has('wod')) {
+                array_push($realms, Realm::WOD);
+            }
+            if ($_request->has('evermoon')) {
+                array_push($realms, Realm::EVERMOON);
+            }
+            if ( count($realms) > 0 ) {
                 $guilds = $guilds->whereIn('realm', $realms);
             }
 
-            // 2. Size filter
-            if ($_request->has('difficulty10') || $_request->has('difficulty25') ) {
-                $difficulties = array();
-                if ($_request->has('difficulty10')) {
-                    array_push($difficulties, 5);
-                }
-                if ($_request->has('difficulty25')) {
-                    array_push($difficulties, 6);
-                }
+            $difficulties = array();
+            if ($_request->has('difficulty10')) {
+                array_push($difficulties, 5);
+            }
+            if ($_request->has('difficulty25')) {
+                array_push($difficulties, 6);
+            }
+            if ( count($difficulties) > 0 ) {
                 $guilds = $guilds->whereIn('difficulty_id', $difficulties);
             }
         }
@@ -222,12 +219,8 @@ class ProgressController extends Controller
 
         $guilds = $guilds->sortBy($orderByValue);
 
-
         $shortRealms = Realm::REALMS;
         $longRealms = Realm::REALMS_SHORT;
-
-
-
 
         return view("progress/index", compact("guilds", 'shortRealms', 'longRealms', 'sortBy'));
     }
