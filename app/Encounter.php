@@ -724,11 +724,11 @@ class Encounter extends Model
         if ( !self::isHeroicEncounter($_encounter_id) ){
             return true;
         } else {
-            if ( $_encounter_id == 1580 && $_difficulty_id == 4 ) {
+            if ( $_encounter_id == 1580 && $_difficulty_id == 5 ) {
                 return true;
             } else if ( $_encounter_id == 1581 && $_difficulty_id == 6 ) {
                 return true;
-            } else if ( $_encounter_id == 1082 && $_difficulty_id == 4 ) {
+            } else if ( $_encounter_id == 1082 && $_difficulty_id == 5 ) {
                 return true;
             } else if ( $_encounter_id == 1083 && $_difficulty_id == 6 ) {
                 return true;
