@@ -551,6 +551,7 @@ class PveLadderController extends Controller
                     foreach ($raidEncounters as $raidEncounter) {
                         $encounterId = $raidEncounter["encounter_id"];
                         $fastestEncounter = Encounter::getFastest($encounterId, $difficultyId, $realms, $factions);
+                        $added = false;
                         if ( $fastestEncounter !== null ) {
                             $encounter = Encounter::where("id", "=", $fastestEncounter->fastest_encounter)->first();
                             if ($encounter !== null) {
@@ -563,8 +564,12 @@ class PveLadderController extends Controller
                                 if ( $topDps != null && $topDps->id > 0 ) {
                                     $encounter->top_dps = $topDps;
                                     $encounters[] = $encounter;
+                                    $added = true;
                                 }
                             }
+                        }
+                        if ( !$added && Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
+                            $encounters[] = $raidEncounter;
                         }
                     }
 
