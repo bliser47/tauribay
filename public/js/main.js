@@ -463,6 +463,7 @@ $(function()
                 $(this).html((parseInt(time)).toString().toMMSS());
             }
         });
+
     }
 
     UpdateTimes();
@@ -542,7 +543,7 @@ $(function()
             {
                 response = $.parseJSON(response);
                 var newContainer = $("#map-loading-container");
-                $(newContainer).html(response["view"]);
+                $(newContainer).html(replaceTranslations(response["view"]));
                 $(".selectpicker").selectpicker();
                 prevState = window.location.href;
                 history.pushState(null, '', response["url"]  + window.location.hash);
@@ -576,13 +577,19 @@ $(function()
             success: function(response)
             {
                 response = $.parseJSON(response);
-                $(container).html(response["view"]);
+                $(container).html(replaceTranslations(response["view"]));
                 $(container).find(".pagination a").click(function(e)
                 {
                     e.preventDefault();
                     var url = new URL($(this).attr("href"));
                     var page = url.searchParams.get("page");
                     loadEncounterMode(encounterId, page, mode, subForm)
+                });
+
+                $(container).find(".refreshHeader").click(function(e){
+                    subForm += "&refresh_cache=1";
+                    loadEncounterMode(encounterId, 1, mode, subForm);
+                    e.preventDefault();
                 });
 
                 prevState = window.location.href;
@@ -621,7 +628,7 @@ $(function()
             },
             success: function (response) {
                 response = $.parseJSON(response);
-                $(tab).html(response["view"]);
+                $(tab).html(replaceTranslations(response["view"]));
                 $(".selectpicker").selectpicker();
                 if (mode === "dps" || mode === "hps") {
 
@@ -900,7 +907,7 @@ $(function()
             {
                 response = $.parseJSON(response);
                 $(container).find(".encounters_loading").hide();
-                $(container).parent().html(response["view"]);
+                $(container).parent().html(replaceTranslations(response["view"]));
                 prevState = window.location.href;
                 history.pushState(null, '', response["url"] + window.location.hash);
                 UpdateTimes();
@@ -1040,7 +1047,7 @@ $(function()
             {
                 response = $.parseJSON(response);
                 $(loader).hide();
-                $(container).html(response["view"]);
+                $(container).html(replaceTranslations(response["view"]));
 
                 prevState = window.location.href;
                 history.pushState(null, '', response["url"] + window.location.hash);
@@ -1107,4 +1114,11 @@ $(function()
             });
         }
     });
+
+    var replaceTranslations = function(html) {
+        for ( var key in REPLACE_TRANSLATIONS ) {
+            html = html.replace(key, REPLACE_TRANSLATIONS[key]);
+        }
+        return html;
+    }
 });

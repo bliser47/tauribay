@@ -55,6 +55,16 @@ class Realm extends Model
         }
     }
 
+    public static function getShortestNameFromID($id) {
+        return self::REALMS_SHORTEST[$id];
+    }
+
+    public static function getShortNameFromID($id) {
+        return self::REALMS_SHORT[$id];
+    }
+
+
+
     public static function getAllRealmIds() {
         return array(
             self::TAURI,

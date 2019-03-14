@@ -14,18 +14,18 @@
                     <b>{{ (($encounters->currentPage()-1)*10)+$index  }}</b>
                 @endif
             </td>
-            <td class="cellDesktop faction-{{ $encounter["faction"] }}">
+            <td class="cellDesktop faction-{{ $encounter["faction_id"] }}">
                 @if ( strlen($encounter["name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ $encounter["name"] }} </a>
                 @else
-                    Random
+                    <span class="random">Random ({{ \TauriBay\Realm::getShortNameFromID($encounter["realm_id"]) }})</span>
                 @endif
             </td>
-            <td class="cellMobile faction-{{ $encounter["faction"] }}">
+            <td class="cellMobile faction-{{ $encounter["faction_id"] }}">
                 @if ( strlen($encounter["name"]) )
                     <a href="{{ URL::to("/guild/" . $encounter["guild_id"]) }}"> {{ \TauriBay\Guild::getShortName($encounter["name"]) }} </a>
                 @else
-                    Random
+                    <span class="random">Random ({{ \TauriBay\Realm::getShortestNameFromID($encounter["realm_id"]) }})</span>
                 @endif
             </td>
             <td class="cellDesktop">{{ date('M d, Y', $encounter->fastest_encounter_date) }}</td>

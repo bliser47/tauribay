@@ -209,8 +209,9 @@ class EncounterController extends Controller
                 $encounter = Encounter::where("id","=",$member->encounter_id)->first();
                 if ( $encounter != null ) {
                     $member->faction_id = $encounter->faction_id;
-                    $member->save();
                 }
+                $member->top_processed = 1;
+                $member->save();
             }
         } while ( $found );
     }

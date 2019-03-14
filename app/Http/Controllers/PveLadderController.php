@@ -141,10 +141,17 @@ class PveLadderController extends Controller
 
                     if ( $_request->has("mode_filter") && $_request->has("difficulty_id"))
                     {
-
-                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=6";
-                        $cacheValue = Cache::get($cacheKey);
-                        $cacheUrlValue = Cache::get($cacheKey."URL");
+                        if (!$_request->has("refresh_cache") )
+                        {
+                            $cacheKey = http_build_query($_request->all()) . "?v=1";
+                            $cacheValue = Cache::get($cacheKey);
+                            $cacheUrlValue = Cache::get($cacheKey."URL");
+                        } else {
+                            $cacheValue = "";
+                            $cacheUrlValue = "";
+                            unset($_request['refresh_cache']);
+                            $cacheKey = http_build_query($_request->all()) . "?v=1";
+                        }
                         if ( !$cacheValue ) {
 
                             $top100LowLimitCacheKey = http_build_query($_request->all()) . "_low_limit";
@@ -171,35 +178,43 @@ class PveLadderController extends Controller
                                 $_request->session()->put($modeId.'-roleId', $_request->get("role_id"));
                             }
 
-                            //  Realm filter
-                            if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                                $realms = array();
-                                if ($_request->has('tauri')) {
-                                    array_push($realms, 0);
-                                }
-                                if ($_request->has('wod')) {
-                                    array_push($realms, 1);
-                                }
-                                if ($_request->has('evermoon')) {
-                                    array_push($realms, 2);
-                                }
+                            $realms = array();
+                            if ($_request->has('tauri')) {
+                                array_push($realms, 0);
+                            }
+                            if ($_request->has('wod')) {
+                                array_push($realms, 1);
+                            }
+                            if ($_request->has('evermoon')) {
+                                array_push($realms, 2);
+                            }
+                            if ( count($realms) > 0 ) {
                                 $members = $members->whereIn('member_tops.realm_id', $realms);
                             }
 
+                            $factions = array();
+                            if ($_request->has('alliance')) {
+                                array_push($factions, Faction::ALLIANCE);
+                            }
+                            if ($_request->has('horde')) {
+                                array_push($factions, Faction::HORDE);
+                            }
                             // Faction filter
-                            if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                                $factions = array();
-                                if ($_request->has('alliance')) {
-                                    array_push($factions, Faction::ALLIANCE);
-                                }
-                                if ($_request->has('horde')) {
-                                    array_push($factions, Faction::HORDE);
-                                }
+                            if ( count($factions) > 0 ) {
                                 $members = $members->whereIn('member_tops.faction_id', $factions);
                             }
 
                             $members = $members->orderBy($modeId,"desc");
-                            $members = $members->limit(100)->get();
+                            $members = $members->limit(100)->select(
+                                "member_tops.name",
+                                "member_tops.spec",
+                                "member_tops.realm_id",
+                                "member_tops." . $modeId,
+                                "member_tops." . $modeId . "_ilvl as ilvl",
+                                "member_tops." . $modeId . "_encounter_id as encounter_id",
+                                "member_tops." . $modeId . "_encounter_killtime as encounter_killtime",
+                                "member_tops." . $modeId . "_encounter_fight_time as encounter_fight_time"
+                            )->get();
 
                             if ( $members->count() > 99 ) {
                                 Cache::put($top100LowLimitCacheKey, $members[99]->$modeId);
@@ -214,7 +229,7 @@ class PveLadderController extends Controller
                             ));
 
                             $cacheValue = $view->render();
-                            Cache::put($cacheKey, $cacheValue, 15); // 15 minutes
+                            Cache::put($cacheKey, $cacheValue, 10080); // 15 minutes
 
                             $subQuery = "/?" . http_build_query(array(
                                     "tauri" => $_request->get("tauri"),
@@ -229,7 +244,7 @@ class PveLadderController extends Controller
 
                             $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" .
                                     Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $subQuery;
-                            Cache::put($cacheKey . "URL", $cacheUrlValue, 1200);
+                            Cache::put($cacheKey . "URL", $cacheUrlValue, 10080);
                         }
 
                         return json_encode(array(

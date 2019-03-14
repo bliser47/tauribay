@@ -514,7 +514,7 @@ a.changelog:hover, a.trello:hover
     }
 }
 
-.refreshIlvl, .refreshProgress
+.refreshIlvl, .refreshProgress, .refreshHeader
 {
     display:block;
     color: inherit;
@@ -531,7 +531,11 @@ a.changelog:hover, a.trello:hover
     background-size:cover;
 }
 
-.refreshIlvl:hover, .refreshProgress:hover
+.refreshHeader {
+    margin:2px auto;
+}
+
+.refreshIlvl:hover, .refreshProgress:hover, .refreshHeader:hover
 {
     background-position:0px 16px;
     cursor:pointer;
@@ -893,6 +897,18 @@ a.changelog:hover, a.trello:hover
 .faction-2 a[href]
 {
     color: #323cb2;
+}
+
+.faction-1 span
+{
+    text-decoration: underline;
+    text-decoration-color: #a82e1c;
+}
+
+.faction-2 span
+{
+    text-decoration: underline;
+    text-decoration-color: #323cb2;
 }
 
 .panel .table
