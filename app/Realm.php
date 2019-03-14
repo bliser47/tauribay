@@ -13,6 +13,10 @@ use Illuminate\Database\Eloquent\Model;
 class Realm extends Model
 {
 
+    const TAURI = 0;
+    const WOD = 1;
+    const EVERMOON = 2;
+
     const REALMS = array(
         0 => "[HU] Tauri WoW Server",
         1 => "[HU] Warriors of Darkness",
@@ -49,5 +53,13 @@ class Realm extends Model
         if ( $index >= 0 ) {
             return self::REALMS_SHORT[$index];
         }
+    }
+
+    public static function getAllRealmIds() {
+        return array(
+            self::TAURI,
+            self::WOD,
+            self::EVERMOON
+        );
     }
 }

@@ -20,6 +20,7 @@ class Encounter extends Model
         92775   // Ra-den Prot Pala exploit
     ];
 
+
     const DIFFICULTY_NAME = array(
         0 => "N",
         1 => "HC",
@@ -408,7 +409,7 @@ class Encounter extends Model
             $member->encounter_id = $encounter->id;
             $member->encounter = $encounter->encounter_id;
             $member->difficulty_id = $encounter->difficulty_id;
-            $member->fight_time = $fightTime;
+            $member->fight_time = $encounter->fight_time;
             $member->killtime = $encounter->killtime;
             $member->realm_id = $encounter->realm_id;
             $member->name = $memberData["name"];

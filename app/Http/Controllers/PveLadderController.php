@@ -13,6 +13,7 @@ use TauriBay\Encounter;
 use Illuminate\Http\Request;
 use TauriBay\EncounterMember;
 use TauriBay\EncounterTop;
+use TauriBay\Faction;
 use TauriBay\Guild;
 use TauriBay\LadderCache;
 use TauriBay\MemberTop;
@@ -189,11 +190,10 @@ class PveLadderController extends Controller
                             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
                                 $factions = array();
                                 if ($_request->has('alliance')) {
-                                    array_push($factions, 0);
-                                    array_push($factions, 2);
+                                    array_push($factions, Faction::ALLIANCE);
                                 }
                                 if ($_request->has('horde')) {
-                                    array_push($factions, 1);
+                                    array_push($factions, Faction::HORDE);
                                 }
                                 $members = $members->whereIn('member_tops.faction_id', $factions);
                             }
@@ -322,13 +322,13 @@ class PveLadderController extends Controller
                         if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
                             $realms = array();
                             if ($_request->has('tauri')) {
-                                array_push($realms, 0);
+                                array_push($realms, Realm::TAURI);
                             }
                             if ($_request->has('wod')) {
-                                array_push($realms, 1);
+                                array_push($realms, Realm::WOD);
                             }
                             if ($_request->has('evermoon')) {
-                                array_push($realms, 2);
+                                array_push($realms, Realm::EVERMOON);
                             }
                             $encounters = $encounters->whereIn('realm_id', $realms);
                         }
@@ -337,11 +337,10 @@ class PveLadderController extends Controller
                         $factions = array();
                         if ($_request->has('alliance') || $_request->has('horde')) {
                             if ($_request->has('alliance')) {
-                                array_push($factions, 2);
-                                array_push($factions, 0);
+                                array_push($factions, Faction::ALLIANCE);
                             }
                             if ($_request->has('horde')) {
-                                array_push($factions, 1);
+                                array_push($factions, Faction::HORDE);
                             }
                             $encounters->whereIn('faction_id', $factions);
                         }
@@ -389,11 +388,10 @@ class PveLadderController extends Controller
                         $factions = array();
                         if ($_request->has('alliance') || $_request->has('horde')) {
                             if ($_request->has('alliance')) {
-                                array_push($factions, 0);
-                                array_push($factions, 2);
+                                array_push($factions, Faction::ALLIANCE);
                             }
                             if ($_request->has('horde')) {
-                                array_push($factions, 1);
+                                array_push($factions, Faction::HORDE);
                             }
                             $encounters->whereIn('faction_id', $factions);
                         }
@@ -521,7 +519,7 @@ class PveLadderController extends Controller
                             array_push($realms, 2);
                         }
                     } else {
-                        $realms = array(0,1,2);
+                        $realms = Realm::getAllRealmIds();
                     }
 
                     // Faction filter
@@ -529,14 +527,13 @@ class PveLadderController extends Controller
                     if ($_request->has('alliance') || $_request->has('horde')) {
                         $factions = array();
                         if ($_request->has('alliance')) {
-                            array_push($factions, 0);
-                            array_push($factions, 2);
+                            array_push($factions, Faction::ALLIANCE);
                         }
                         if ($_request->has('horde')) {
-                            array_push($factions, 1);
+                            array_push($factions, Faction::HORDE);
                         }
                     } else {
-                        $factions = array(0,1,2);
+                        $factions = Faction::getAllFactionIds();
                     }
 
                     $encounters = array();

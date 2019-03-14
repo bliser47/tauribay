@@ -180,7 +180,8 @@ class EncounterController extends Controller
 
     public function fixFactions() {
         ini_set('max_execution_time', 0);
-        $encounters = EncounterTop::where('faction_id','<',1)->get();
+        /*
+        $encounters = EncounterTop::where('faction_id','>',0)->get();
         foreach ( $encounters as $encounterTop ) {
             $encounter = Encounter::where("id","=",$encounterTop->fastest_encounter_id)->first();
             if ( $encounter != null ) {
@@ -188,7 +189,9 @@ class EncounterController extends Controller
                 $encounterTop->save();
             }
         }
-        $members = MemberTop::where('faction_id','<',1)->take(20000)->get();
+        */
+        /*
+        $members = MemberTop::where('faction_id','>',0)->take(20000)->get();
         foreach ( $members as $memberTop ) {
             $encounter = Encounter::where("id","=",$memberTop->dps_encounter_id)->first();
             if ( $encounter != null ) {
@@ -196,72 +199,69 @@ class EncounterController extends Controller
                 $memberTop->save();
             }
         }
-        $embmers = EncounterMember::where("faction_id","<",1)->get();
-        foreach ( $embmers as $member ) {
-            $encounter = Encounter::where("id","=",$member->encounter_id)->first();
-            if ( $encounter != null ) {
-                $member->faction_id = $encounter->faction_id;
-                $member->save();
+        */
+        ini_set('max_execution_time', 0);
+        do {
+            $found = false;
+            $members = EncounterMember::where("top_processed","=",0)->take(5000)->get();
+            foreach ($members as $member) {
+                $found = true;
+                $encounter = Encounter::where("id","=",$member->encounter_id)->first();
+                if ( $encounter != null ) {
+                    $member->faction_id = $encounter->faction_id;
+                    $member->save();
+                }
             }
-        }
+        } while ( $found );
     }
 
     public function fixEncounterTop(Request $_request) {
         ini_set('max_execution_time', 0);
-        $totEncounterIds = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID,Defaults::MAP_ID);
-        $encounters = EncounterTop::whereIn("encounter_id",$totEncounterIds)->get();
-        foreach ( $encounters as $encounter ) {
-            $encounter = Encounter::where("id","=",$encounter->fastest_encounter_id)->first();
-            if ( $encounter ) {
-                Encounter::refreshLadderSpeedKill($encounter);
+        do {
+            $found = false;
+            $encounters = Encounter::where("top_processed","=",0)->take(5000)->get();
+            foreach ($encounters as $encounter) {
+                $found = true;
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                Encounter::refreshEncounterTop($encounter, $guild);
+                $encounter->top_processed = 1;
+                $encounter->save();
             }
+        } while ( $found );
+    }
+
+    public function fixGuildEncounterFactions(Request $_request) {
+        ini_set('max_execution_time', 0);
+        $encounters = Encounter::where('guild_id', '>', 0)->get();
+        foreach ($encounters as $encounter) {
+            $guild = Guild::where("id","=",$encounter->guild_id)->first();
+            $encounter->faction_id = $guild->faction;
+            $encounter->save();
         }
     }
 
-    public function fixEncounterFactions(Request $_request) {
-        $api = new Tauri\ApiClient();
+    public function fixRandomEncounterFactions(Request $_request) {
         ini_set('max_execution_time', 0);
-        $encounters = Encounter::where('faction_id','=',-1)->get();
-        $nulls = array();
-        foreach ( $encounters as $encounter ) {
-            $members = EncounterMember::where("encounter_id","=",$encounter->id)->get();
-            foreach ( $members as $member )
-            {
-                $factionId = $member->faction_id;
-                if ( $factionId == -1 || $factionId == 0 ) {
-                    $character = Characters::where("realm","=",$member->realm_id)->where("name","=",$member->name)->first();
-                    if ( $character != null ) {
-                        $factionId = $character->faction;
-                    }
-                    else {
-                        $characterSheet = $api->getCharacterSheet(Realm::REALMS[$member->realm_id], $member->name);
-                        if ($characterSheet && array_key_exists("response", $characterSheet)) {
-                            $characterSheetResponse = $characterSheet["response"];
-                            $character = new Characters;
-                            $character->name = $member->name;
-                            $character->ilvl = $member->ilvl;
-                            $character->faction = $member->faction;
-                            $character->class = $member->class;
-                            $character->realm = $member->realm_id;
-                            $character->achievement_points = $characterSheetResponse["pts"];
-                            $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-                            $character->guid = $characterSheetResponse["guid"];
-                            $character->save();
-                            $member->faction_id = $character->faction;
-                            $member->save();
-                            $factionId = $member->faction_id;
-                        }
-                        $nulls[] = $characterSheet;
+        do {
+            $found = false;
+            $encounters = Encounter::where('top_processed', '=', 0)->take(5000)->get();
+            foreach ($encounters as $encounter) {
+                $found = true;
+                $factions = array(0, 0, 0);
+                $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
+                foreach ($members as $member) {
+                    if ( $member->faction_id > 0 ) {
+                        $factions[$member->faction_id]++;
                     }
                 }
-                if ( $factionId > 0 ) {
-                    break;
+                $faction = array_search(max($factions), $factions);;
+                if ($encounter->faction_id != $faction) {
+                    $encounter->faction_id = $faction;
                 }
+                $encounter->top_processed = 1;
+                $encounter->save();
             }
-            $encounter->faction_id = $factionId;
-            $encounter->save();
-        }
-        return $nulls;
+        } while ( $found );
     }
 
     public function fixTopNotProcessed(Request $_request)

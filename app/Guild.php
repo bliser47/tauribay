@@ -17,7 +17,7 @@ class Guild extends Model
                     $guild = new Guild;
                     $guild->realm = $_realmId;
                     $guild->name = $guildName;
-                    $guild->faction = $_data["faction"];
+                    $guild->faction = $_data["faction"] == 1 ? Faction::HORDE : Faction::ALLIANCE;
                     $guild->save();
                 }
                 return $guild;

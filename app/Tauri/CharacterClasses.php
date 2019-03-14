@@ -2,6 +2,8 @@
 
 namespace  TauriBay\Tauri;
 
+use TauriBay\Faction;
+
 class CharacterClasses
 {
     /*
@@ -314,9 +316,9 @@ class CharacterClasses
     {
         if ( in_array($_race,array(2,5,6,8,9,10,26)) )
         {
-            return 1;
+            return Faction::HORDE;
         }
-        return 2;
+        return FACTION::ALLIANCE;
     }
 
 }

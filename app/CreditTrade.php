@@ -43,13 +43,13 @@ class CreditTrade extends Model
         if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
             $realms = array();
             if ($_request->has('tauri')) {
-                array_push($realms, 0);
+                array_push($realms, Realm::TAURI);
             }
             if ($_request->has('wod')) {
-                array_push($realms, 1);
+                array_push($realms, Realm::WOD);
             }
             if ($_request->has('evermoon')) {
-                array_push($realms, 2);
+                array_push($realms, Realm::EVERMOON);
             }
             $creditTrades = $creditTrades->whereIn('realm_id', $realms);
         }
@@ -59,13 +59,13 @@ class CreditTrade extends Model
         if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
             $factions = array();
             if ($_request->has('alliance')) {
-                array_push($factions, 2);
+                array_push($factions, Faction::ALLIANCE);
             }
             if ($_request->has('horde')) {
-                array_push($factions, 1);
+                array_push($factions, Faction::HORDE);
             }
             if ($_request->has('ismeretlen')) {
-                array_push($factions, 3);
+                array_push($factions, Faction::NEUTRAL);
             }
             $creditTrades = $creditTrades->whereIn('faction', $factions);
         }

@@ -18,15 +18,15 @@
                                 <legend>{{ __("Frakció") }}</legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
-                                        {!! Form::checkbox('alliance',2,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
+                                        {!! Form::checkbox('alliance',\TauriBay\Faction::ALLIANCE,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
                                         <label for="faction-alliance"> Alliance </label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-horde checkbox-white-tick checkbox-faction">
-                                        {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
+                                        {!! Form::checkbox('horde',\TauriBay\Faction::HORDE,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                                         <label for="faction-horde"> Horde </label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-unknown checkbox-white-tick checkbox-faction">
-                                        {!! Form::checkbox('ismeretlen',3,Input::get('ismeretlen'),array("id"=>"faction-ismeretlen","class"=>"faction")) !!}
+                                        {!! Form::checkbox('ismeretlen',\TauriBay\Faction::NEUTRAL,Input::get('ismeretlen'),array("id"=>"faction-ismeretlen","class"=>"faction")) !!}
                                         <label for="faction-ismeretlen">{{ __("Ismeretlen") }}</label>
                                     </div>
                                     <div class="checkbox checkbox-inline checkbox-all-factions">

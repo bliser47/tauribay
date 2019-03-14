@@ -41,13 +41,13 @@ class GdkpTrade extends Model
             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
                 $factions = array();
                 if ($_request->has('alliance')) {
-                    array_push($factions, 2);
+                    array_push($factions, Faction::ALLIANCE);
                 }
                 if ($_request->has('horde')) {
-                    array_push($factions, 1);
+                    array_push($factions, Faction::HORDE);
                 }
                 if ($_request->has('ismeretlen')) {
-                    array_push($factions, 3);
+                    array_push($factions, Faction::NEUTRAL);
                 }
                 $gdkpTrades = $gdkpTrades->whereIn('faction', $factions);
             }

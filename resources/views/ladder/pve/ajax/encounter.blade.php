@@ -52,11 +52,11 @@
         <div class="col-md-3 col-xs-12 pd-top-7 encounter-sub-filter-faction">
             <div class="input-group">
                 <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
-                    {!! Form::checkbox('alliance',2,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
+                    {!! Form::checkbox('alliance',\TauriBay\Faction::ALLIANCE,Input::get('alliance'),array("id"=>"faction-alliance","class"=>"faction")) !!}
                     <label for="faction-alliance"> Alliance </label>
                 </div>
                 <div class="checkbox checkbox-inline checkbox-horde checkbox-white-tick checkbox-faction">
-                    {!! Form::checkbox('horde',1,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
+                    {!! Form::checkbox('horde',\TauriBay\Faction::HORDE,Input::get('horde'),array("id"=>"faction-horde","class"=>"faction")) !!}
                     <label for="faction-horde"> Horde </label>
                 </div>
             </div>
