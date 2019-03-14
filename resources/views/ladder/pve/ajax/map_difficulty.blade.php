@@ -6,7 +6,7 @@
         <th class="cellDesktop" colspan="3">Top DPS</th>
         <th colspan="2" class="cellMobile">Top DPS</th>
     </tr>
-    @foreach( $encounters as $undefeated => $encounter )
+    @foreach( $encounters as $encounter )
         <tr>
             <td class="cellDesktop" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId). "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] }}">{{ \TauriBay\Encounter::getName($encounter["encounter_id"]) }}</a></td>
             <td class="cellMobile" style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId) . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] }}">{{ \TauriBay\Encounter::getNameShort($encounter["encounter_id"]) }}</a></td>
@@ -40,8 +40,8 @@
                     <td></td>
                 @endif
             @else
-                <td class="cellDesktop" colspan="6"><i>CELL_UNDEFEATED</i></td>
-                <td class="cellMobile" colspan="4"><i>CELL_UNDEFEATED</i></td>
+                <td class="cellDesktop" colspan="7"><i>CELL_NO_DATA</i></td>
+                <td class="cellMobile" colspan="4"><i>CELL_NO_DATA</i></td>
             @endif
         </tr>
         @endforeach

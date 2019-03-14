@@ -37,7 +37,7 @@
         HEADER_DATE : "{{ __("Dátum") }}",
         HEADER_TIME : "{{ __("Idő") }}",
         HEADER_BEST_TIME : "{{ __("Legjobb idő") }}",
-        CELL_UNDEFEATED : "{{ __("Veretlen") }}",
+        CELL_NO_DATA : "{{ __("Nincs adat") }}",
     };
 
     var COOKIE_POLICY = "{{ __("Ez a weboldal a felhasználói élmény javítása, valamint a zavartalan működés biztosítása érdekében sütiket (cookie-kat) használ.") }}";
