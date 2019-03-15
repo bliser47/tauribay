@@ -242,9 +242,9 @@ class ProgressController extends Controller
 
     public function updateGuildProgress(Request $_request)
     {
-        if ( $_request->has("name") && $_request->has("realm") )
+        if ( $_request->has("name") && $_request->has("realm") && $_request->has("difficulty_id"))
         {
-            return response()->json(GuildProgress::reCalculateProgressionFromNameAndRealm($_request->get("name"),$_request->get("realm")));
+            return response()->json(GuildProgress::reCalculateProgressionFromNameAndRealm($_request->get("name"),$_request->get("realm"), $_request->get("difficulty_id")));
         }
         return "";
     }

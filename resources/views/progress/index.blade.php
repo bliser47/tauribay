@@ -116,6 +116,7 @@
                                 {!! Form::open(array("method" => "post","class"=>"progressupdate-form")) !!}
                                 <input type="hidden" name="name" value="{{$guild->name}}">
                                 <input type="hidden" name="realm" value="{{$guild->realm}}">
+                                <input type="hidden" name="difficulty_id" value="{{$guild->difficulty_id}}">
                                 <input type="hidden" name="refreshProgress" value="1">
                                 <button class="refreshProgress" name="updateProgress" value="1" type="submit"></button>
                                 {!! Form::close() !!}

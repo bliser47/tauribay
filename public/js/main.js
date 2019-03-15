@@ -329,35 +329,17 @@ $(function()
                 }
                 else
                 {
-                    if ( response.difficulty ) {
+                    $(row).find(".guildProgress").html(response["progress"]);
 
-                        var difficultyId = 5;
-                        if ( response.difficulty[6].progress > response.difficulty[5].progress )
-                        {
-                            difficultyId = 6;
-                        }
-                        var progress = response.difficulty[difficultyId];
-
-                        $(row).find(".guildProgress").html(progress["progress"]+"/13");
-
-                        var clearTime = parseInt(progress["clear_time"]);
-                        if ( clearTime > 0 ) {
-                            $(row).find(".guildClearTime").html(clearTime.toString().toHHMMSS());
-                            $(row).find(".guildClearTimeMobile").html(clearTime.toString().toMMSS());
-                        }
-
-                        var form = $(row).find(".progressupdate-form");
-                        form.submit(function (e) {
-                            sendProgressAjaxUpdate($(this), $(this).serialize(), $(this).closest(".progressRow"));
-                            e.preventDefault();
-                        });
-                        form.show();
-                        form.parent().find(".update-loader").css("display","none");
+                    var clearTime = parseInt(response["clear_time"]);
+                    if ( clearTime > 0 ) {
+                        $(row).find(".guildClearTime").html(clearTime.toString().toHHMMSS());
+                        $(row).find(".guildClearTimeMobile").html(clearTime.toString().toMMSS());
                     }
-                    else
-                    {
-                        $(row).remove();
-                    }
+
+                    var form = $(row).find(".progressupdate-form");
+                    form.show();
+                    form.parent().find(".update-loader").css("display","none");
                 }
             },
             error: function(xhr, textStatus, errorThrown){
