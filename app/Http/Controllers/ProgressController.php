@@ -27,6 +27,8 @@ class ProgressController extends Controller
     const DEFAULT_DIFFICULTY_ID  = 5; // 10 Heroic
 
     const OVERRIDE_GUILD_FIRST_KILL_TIME = array(
+        3 => array(),
+        4 => array(),
         5 => array(
             88 => 1534968000, // Kawaii Pandas,
             19 => 1535400000, // Insane
@@ -147,7 +149,24 @@ class ProgressController extends Controller
 
     public function index(Request $_request)
     {
-        $guilds = DB::table('guild_progresses')->where("guild_progresses.map_id", "=", 1098)->whereIn("guild_progresses.difficulty_id",array(5,6))->where("guild_progresses.progress", ">", 0);
+        $isHeroic = true;
+        if ($_request->has('difficulty')) {
+            $isHeroic = $_request->get("difficulty") == "heroic";
+        }
+
+        $difficulties = array();
+        if ($_request->has('difficulty10')) {
+            array_push($difficulties, $isHeroic ? 5 : 3);
+        }
+        if ($_request->has('difficulty25')) {
+            array_push($difficulties, $isHeroic ? 6 : 4);
+        }
+        if ( count($difficulties) == 0 ) {
+            $difficulties = $isHeroic ? array(5,6) : array(3,4);
+        }
+
+        $guilds = DB::table('guild_progresses')->where("guild_progresses.map_id", "=", 1098)->
+        whereIn("guild_progresses.difficulty_id",$difficulties)->where("progress",">",0);
 
         if ( $_request->has("filter") ) {
 
@@ -178,22 +197,16 @@ class ProgressController extends Controller
             if ( count($realms) > 0 ) {
                 $guilds = $guilds->whereIn('realm', $realms);
             }
-
-            $difficulties = array();
-            if ($_request->has('difficulty10')) {
-                array_push($difficulties, 5);
-            }
-            if ($_request->has('difficulty25')) {
-                array_push($difficulties, 6);
-            }
-            if ( count($difficulties) > 0 ) {
-                $guilds = $guilds->whereIn('difficulty_id', $difficulties);
-            }
         }
 
         $sortBy = array(
             "first_kill_unix" => __("Első kill"),
             "clear_time" => __("Legjobb idő")
+        );
+
+        $difficulty = array(
+            "normal" => "Normal",
+            "heroic" => "Heroic"
         );
 
         $orderByValue = 'first_kill_unix';
@@ -204,7 +217,7 @@ class ProgressController extends Controller
 
         $guilds = $guilds->leftJoin('guilds', 'guild_progresses.guild_id', '=', 'guilds.id')->get();
 
-        foreach ( $guilds as $guild )
+        foreach ( $guilds as $index => $guild )
         {
             if ( array_key_exists($guild->id, self::OVERRIDE_GUILD_FIRST_KILL_TIME[$guild->difficulty_id]) )
             {
@@ -212,9 +225,9 @@ class ProgressController extends Controller
             }
             else if ( $guild->first_kill_unix == "" )
             {
-                $guild->first_kill_unix = 100000000000 / $guild->progress;
+                $guild->first_kill_unix = $guild->progress > 0 ? 100000000000 / $guild->progress : 100000000000 * ($index+1);
             }
-            $guild->clear_time = $guild->clear_time > 0 ? $guild->clear_time :  1/$guild->progress * 100000000000;
+            $guild->clear_time = $guild->clear_time > 0 ? $guild->clear_time :  ($guild->progress > 0 ? 1/$guild->progress * 100000000000 : 100000000000  * ($index+1));
         }
 
         $guilds = $guilds->sortBy($orderByValue);
@@ -222,7 +235,8 @@ class ProgressController extends Controller
         $shortRealms = Realm::REALMS;
         $longRealms = Realm::REALMS_SHORT;
 
-        return view("progress/index", compact("guilds", 'shortRealms', 'longRealms', 'sortBy'));
+
+        return view("progress/index", compact("guilds", 'shortRealms', 'longRealms', 'sortBy', 'difficulty', 'isHeroic'));
     }
 
 

@@ -11,7 +11,7 @@
                 @if ( ((($encounters->currentPage()-1)*10)+$index)  < 3 )
                     <img alt="" src="{{  URL::asset("img/award_small/" . ($index+1)  . ".png?v=4") }}"/>
                 @else
-                    <b>{{ (($encounters->currentPage()-1)*10)+$index  }}</b>
+                    <b>{{ (($encounters->currentPage()-1)*10)+($index+1)  }}</b>
                 @endif
             </td>
             <td class="cellDesktop faction-{{ $encounter["faction_id"] }}">

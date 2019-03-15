@@ -47,9 +47,9 @@ class GuildProgress extends Model
 
     public static function getProgression($_guildId, $_mapId = 1098)
     {
-        $size10n = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
+        $size10n = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 3)->orderBy("progress")->first();
         $size10 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 5)->orderBy("progress")->first();
-        $size25n = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 6)->orderBy("progress")->first();
+        $size25n = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 4)->orderBy("progress")->first();
         $size25 = GuildProgress::where("guild_id", "=", $_guildId)->where("map_id", "=", $_mapId)->where("difficulty_id", "=", 6)->orderBy("progress")->first();
         return array(
             "difficulty" => array(
@@ -143,16 +143,23 @@ class GuildProgress extends Model
             $progress->guild_id = $_guild->id;
             $progress->map_id = $_mapId;
             $progress->difficulty_id = $_difficultyId;
+            $progress->first_kill_unix = 0;
+            $progress->clear_time = 0;
         }
-        $progress->progress = Encounter::where("guild_id", "=", $_guild->id)
-            ->where("map_id", "=", $_mapId)
-            ->where("difficulty_id", "=", $_difficultyId)
-            ->distinct("encounter_id")->count("encounter_id");
-        $shortestClear = self::calculateClearTime($_guild->id, $_difficultyId, $_mapId);
-        $progress->clear_time = $shortestClear["time"];
 
         $firstKillUnix = self::getFirstKill($_guild->id, $_difficultyId, $_mapId);;
-        $progress->first_kill_unix = $firstKillUnix != null ? $firstKillUnix : 0;
+        if ( $firstKillUnix != null ) {
+            $progress->first_kill_unix = $firstKillUnix;
+            $mapEncounters = Encounter::MAP_ENCOUNTERS[$_mapId][$_difficultyId];
+            $progress->progress = count($mapEncounters);
+            $shortestClear = self::calculateClearTime($_guild->id, $_difficultyId, $_mapId);
+            $progress->clear_time = $shortestClear["time"];
+        } else {
+            $progress->progress = Encounter::where("guild_id", "=", $_guild->id)
+                ->where("map_id", "=", $_mapId)
+                ->where("difficulty_id", "=", $_difficultyId)
+                ->distinct("encounter_id")->count("encounter_id");
+        }
 
         $progress->save();
     }

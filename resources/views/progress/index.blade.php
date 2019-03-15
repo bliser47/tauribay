@@ -14,11 +14,19 @@
                     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                         <div class="panel-body">
                             {!! Form::open(array("method" => "get","id"=>"top-filter-form")) !!}
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-6">
                                 <legend> {{ __("Rendezés") }} </legend>
                                 <div id="top-sort-by" class="form-group">
                                     <div class="input-group col-md-12">
                                         {!! Form::select('sort', $sortBy, (!Input::has('sort') || Input::get('sort') == 'first_kill_unix') ? 'first'  : 'clear_time', ['required', 'id' => 'sort-by', 'class' => "control selectpicker input-large"]); !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <legend> {{ __("Nehézség") }} </legend>
+                                <div id="top-sort-by" class="form-group">
+                                    <div class="input-group col-md-12">
+                                        {!! Form::select('difficulty', $difficulty, (!Input::has('difficulty') || Input::get('difficulty') == 'heroic') ? 'heroic'  : 'normal', ['required', 'id' => 'difficulty', 'class' => "control selectpicker input-large"]); !!}
                                     </div>
                                 </div>
                             </div>
@@ -39,7 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <legend> {{ __("Frakció") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-alliance checkbox-white-tick checkbox-faction">
@@ -52,7 +60,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <legend> {{ __("Méret") }} </legend>
                                 <div class="input-group">
                                     <div class="checkbox checkbox-inline checkbox-10man checkbox-difficulty">
@@ -99,8 +107,8 @@
                             <td class="cellDesktop faction-{{ $guild->faction  }}">  <a href="{{ URL::to("guild/" . $guild->id) }}"> {{  $guild->name  }} </a>
                             <td class="cellMobile faction-{{ $guild->faction  }}">  <a href="{{ URL::to("guild/" . $guild->id) }}"> {{ \TauriBay\Guild::getShortName($guild->name)  }} </a>
                             </td>
-                            <td class="guildProgress"> {{ $guild->progress }}/13 </td>
-                            <td class="cellDesktop"> {{ $guild->difficulty_id == 5 ? 10 : 25 }} </td>
+                            <td class="guildProgress"> {{ $guild->progress }}/{{ $isHeroic ? 13 : 12 }} </td>
+                            <td class="cellDesktop"> {{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$guild->difficulty_id] }} </td>
                             <td class="guildClearTime">{{ $guild->clear_time > 0 && $guild->clear_time < 604800 ?  $guild->clear_time : "" }}</td>
                             <td class="firstKillTime">{{ $guild->first_kill_unix <= time() ? date('M d, Y', $guild->first_kill_unix) : "" }}</td>
                             <td class="updateLoaderContainer cellDesktop">
