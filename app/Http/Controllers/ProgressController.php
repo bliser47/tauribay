@@ -48,6 +48,7 @@ class ProgressController extends Controller
     {
         ini_set('max_execution_time', 0);
 
+        /*
         EncounterTop::whereIn("fastest_encounter_id",Encounter::INVALID_RAIDS)->delete();
         LadderCache::whereIn("fastest_encounter", Encounter::INVALID_RAIDS)->delete();
 
@@ -63,7 +64,7 @@ class ProgressController extends Controller
                 Encounter::refreshEncounterTop($guildEncounter, $guild);
             }
         }
-
+        */
         /*
         $ids = Encounter::getMapEncountersIds(2, 615);
         $data = array();
@@ -126,18 +127,17 @@ class ProgressController extends Controller
         return $ret;
         */
 
-        /*
         $api = new Tauri\ApiClient();
         $realmId = 2;//$_request->has("data") ? $_request->get("data") : 2;
 
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
 
-        $log = $api->getCharacterSheet(Realm::REALMS[0], "Blizer", 26877838);
+        $log = $api->getRaidLog(Realm::REALMS[0], 177042);
 
         return $log;
 
-
+        /*
         $items = $data["response"];
         foreach ( $items as $key => $item )
         {

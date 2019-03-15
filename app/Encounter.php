@@ -451,7 +451,8 @@ class Encounter extends Model
             $member->killtime = $encounter->killtime;
             $member->realm_id = $encounter->realm_id;
             $member->name = $memberData["name"];
-            $member->class = $memberData["race"];
+            $member->race = $memberData["race"];
+            $member->class = $memberData["class"];
             $member->spec = $memberData["spec"];
             $member->damage_done = $memberData["dmg_done"];
             $member->dps = $memberData["dmg_done"] / $fightTime;
