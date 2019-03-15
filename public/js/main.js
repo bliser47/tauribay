@@ -333,8 +333,7 @@ $(function()
 
                     var clearTime = parseInt(response["clear_time"]);
                     if ( clearTime > 0 ) {
-                        $(row).find(".guildClearTime").html(clearTime.toString().toHHMMSS());
-                        $(row).find(".guildClearTimeMobile").html(clearTime.toString().toMMSS());
+                        $(row).find(".guildClearTimeContainer").html(clearTime.toString().toHHMMSS());
                     }
 
                     var form = $(row).find(".progressupdate-form");

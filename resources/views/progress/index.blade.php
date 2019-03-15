@@ -109,7 +109,7 @@
                             </td>
                             <td class="guildProgress"> {{ $guild->progress }}/{{ $isHeroic ? 13 : 12 }} </td>
                             <td class="cellDesktop"> {{ \TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$guild->difficulty_id] }} </td>
-                            <td class="guildClearTime">{{ $guild->clear_time > 0 && $guild->clear_time < 604800 ?  $guild->clear_time : "" }}</td>
+                            <td class="guildClearTime guildClearTimeContainer">{{ $guild->clear_time > 0 && $guild->clear_time < 604800 ?  $guild->clear_time : "" }}</td>
                             <td class="firstKillTime">{{ $guild->first_kill_unix <= time() ? date('M d, Y', $guild->first_kill_unix) : "" }}</td>
                             <td class="updateLoaderContainer cellDesktop">
                                 <div class="update-loader" id="updated-loader{{$guild->id}}"></div>
