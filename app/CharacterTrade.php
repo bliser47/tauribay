@@ -47,7 +47,7 @@ class CharacterTrade extends Model
                     array_push($realms, Realm::WOD);
                 }
                 if ($_request->has('evermoon')) {
-                    array_push($realms, Realm::WOD);
+                    array_push($realms, Realm::EVERMOON);
                 }
                 $characterTrades = $characterTrades->whereIn('realm_id', $realms);
             }
