@@ -21,8 +21,8 @@
                 <td class="cellMobile">{{ TauriBay\Encounter::SIZE_AND_DIFFICULTY_SHORT[$encounter->difficulty_id] }}</td>
                 <td class="cellDesktop">{{ date('M d, Y', $encounter->killtime) }}</td>
                 <td class="cellMobile">{{ date('M d', $encounter->killtime) }}</td>
-                <td class="cellDesktop"><a class="guildClearTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time/1000  }}</a></td>
-                <td class="cellMobile"><a class="guildClearTimeMobile" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time/1000  }}</a></td>
+                <td class="cellDesktop"><a class="guildClearTime" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time  }}</a></td>
+                <td class="cellMobile"><a class="guildClearTimeMobile" target="_blank" href="{{ URL::to("/encounter/") . "/" . TauriBay\Encounter::getUrlName($encounter->encounter) . "/" . $encounter->encounter_id }}">{{ $encounter->fight_time  }}</a></td>
                 <td class="divDesktop topDpsSpecContainer">
                     <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $encounter->spec . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter->spec] }}"/>
                 </td>

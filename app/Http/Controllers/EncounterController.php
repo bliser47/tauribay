@@ -110,7 +110,6 @@ class EncounterController extends Controller
                 "membersScore",
                 "membersDamageTaken",
                 "membersDamage",
-                "membersDps",
                 "membersHealing",
                 "membersHps",
                 "totalDmg",

@@ -49,7 +49,7 @@ class OAuthController extends Controller
                         "grant_type" => "authorization_code",
                         "client_id" => env('TAURI_OAUTH_CLIENT'),
                         "client_secret" => env("TAURI_OAUTH_SECRET"),
-                        "redirect_uri" => "https://tauribay.hu/oauth",
+                        "redirect_uri" => env('APP_URL') . "/oauth",
                         "code" => $code
                     ))
                 );
