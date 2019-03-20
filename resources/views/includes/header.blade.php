@@ -23,7 +23,7 @@
                 <a class="changelog" target="_blank" href="https://github.com/bliser47/tauribay/commits/master"></a>
             </div>
             --}}
-            <a class="navbar-brand" href="/">TauriBay</a>
+            <a class="navbar-brand" href="/">{{ env("APP_NAME") }}</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
