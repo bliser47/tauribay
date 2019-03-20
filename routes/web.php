@@ -68,9 +68,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/progress', 'ProgressController@index');
     Route::get('/guild/{guild_id}', 'GuildController@index');
 
-    Route::get('/encounter/fix', 'EncounterController@fix');
-    Route::get('/encounter/fix2', 'EncounterController@fixLaddersFromEncounterTops');
-    Route::get('/encounter/fix3', 'EncounterController@fixLaddersFromMemberTops');
+    Route::get('/encounter/fixMissingEncounters', 'EncounterController@fixMissingEncounters');
     Route::get('/encounter/{encounter_name_url}', 'EncounterController@index');
     Route::get('/encounter/{encounter_name_url}/{log_id}', 'EncounterController@log');
 
