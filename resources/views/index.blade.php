@@ -5,6 +5,39 @@
             <div class="well nomargin">
                 <div class="media">
                     <a class="pull-left" href="#">
+                        <img class="media-object" src="img/cms/news/server_fixes.jpg?v=1" alt="Server & Fixes">
+                    </a>
+                    <div class="media-body">
+                        <div class="media-header">
+                            <h3 class="media-heading"> {{ __("Új szerver és fixek") }} </h3>
+                            <p class="text-left text-italic">
+                                {{ __("írta") }} <span class="warlock">Bliser</span> 2019.03.20
+                            </p>
+                        </div>
+                    </div>
+                    <div class="media-content">
+                        <p>
+                            {{ __("Ez elmúlt hónapban nagyrészt inkább javításokat végeztem valamint optimalizáltam a kódot. De sikerült egyébként új feature-eket is berakni:") }}
+                        </p>
+                        <ul>
+                            <li>{{ __("Az új PVE létra most már Realm és Frakció szinten menti el a leggyorsabb killeket és legnagyobb dps-eket.") }}</li>
+                            <li>{{ __("Sikerült megoldani, hogy a random raideknek is legyen frakciója és most már nem csak a legjobb random raid kerül be leggyorsabb killek közé hanem a 3 realmről mindkét frakcióból a legjobb (tehát 6).") }}</li>
+                            <li>{{ __("Valamint most már Normal nehézségű progress-re is lehet keresni a Guild oldalon: ") }}<a href="{{ URL::to("/progress?difficulty=normal") }}">{{ __("ITT") }}</a></li>
+                            <li>{{ __("Továbbá a Score rendszer már nem foglalkozik a játékos iLvL-vel hanem egyszerűen, a specen belűl az adott bosson és nehézségen legjobb dps (dps-ek esetén), hps (healerek esetén) hasonlít.") }}</li>
+                        </ul>
+                        <p>
+                            {{ __("Na de a legfontosabb hír, hogy a TauriBay most már Intel Xeon szerveren fut (eddig kis teljesítményű ARM proceszorokon ment). Ez összetéve a remek Cache rendszerrel, amit most már kézzel is lehet frissíteni (az a zöld kiss ikon a bal felső sarokban) szuper gyors válaszidőt biztosít.") }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 blog-main col-sm-nopadding">
+            <div class="well nomargin">
+                <div class="media">
+                    <a class="pull-left" href="#">
                         <img class="media-object" src="img/cms/news/dps_loot.jpg" alt="Loot & Score">
                     </a>
                     <div class="media-body">
@@ -54,37 +87,6 @@
                         </p>
                         <p>
                             {{ __("P.S. Lehet szűrni a Guild oldalkon belűl!") }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 blog-main col-sm-nopadding">
-            <div class="well nomargin">
-                <div class="media">
-                    <a class="pull-left" href="#">
-                        <img class="media-object" src="img/cms/news/fix_ladder.jpg" alt="PVE Ladder">
-                    </a>
-                    <div class="media-body">
-                        <div class="media-header">
-                            <h3 class="media-heading"> {{ __("Újítások") }} </h3>
-                            <p class="text-left text-italic">
-                                {{ __("írta") }} <span class="warlock">Bliser</span> 2019.01.28
-                            </p>
-                        </div>
-                    </div>
-                    <div class="media-content">
-                        <p class="nomargin">
-                        <p>
-                            {{ __("Az útóbbi hónapban egyre többen látogatjátok az oldalt és hetente ugyancsak növekszik a raidekről való adatmennyiség. Ennek én csak örülni tudok de a webszerver nem :D.") }}
-                        </p>
-                        <p>
-                            {{ __("Emiatt az utóbbi hónapban a PVE ladder optimalizálásával foglalkoztam nagyrészt és átrendeztem a keresési rendszer működését is. Remélem sokkal könnyebb és kellemesebb lesz haszálni majd!") }}
-                        </p>
-                        <p>
-                            {{ __("Egyéb hírekben: Chris megírta a supportot, hogy WoDról és Evermoonról is érkezzenek trade/world/global üzenetek így most a Hirdetések oldalon onnan jövő hirdetéseket is találtok majd. Valamint sikerült visszaraknom a Raid hirdetés keresőt, de evel még sok sok munka van még hátra!") }}
                         </p>
                     </div>
                 </div>

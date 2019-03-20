@@ -191,5 +191,21 @@
   "Ez a weboldal a felhasználói élmény javítása, valamint a zavartalan működés biztosítása érdekében sütiket (cookie-kat) használ." :
           "This website uses cookies to ensure you get the best experience on our website",
   "Elfogadom" : "I accept",
-  "Tudj meg többet" : "Learn more"
+  "Tudj meg többet" : "Learn more",
+  "Ez elmúlt hónapban nagyrészt inkább javításokat végeztem valamint optimalizáltam a kódot. De sikerült egyébként új feature-eket is berakni:" :
+          "In the past month I have mostly done fixes and optimizations on the code. However I was also able to add a few new features:",
+  "Az új PVE létra most már Realm és Frakció szinten menti el a leggyorsabb killeket és legnagyobb dps-eket.":
+          "The new PVE Ladder now saves Speed kills and Top DPSs on a Realm and Faction basis.",
+  "Sikerült megoldani, hogy a random raideknek is legyen frakciója és most már nem csak a legjobb random raid kerül be leggyorsabb killek közé hanem a 3 realmről mindkét frakcióból a legjobb (tehát 6).":
+          "I was able to assign faction data to random raids, and now instead of showing the fastest random raid in the Speed kill section, the fastest kills of all 3 realms and their factions (so 6) will be shown.",
+  "Valamint most már Normal nehézségű progress-re is lehet keresni a Guild oldalon: " :
+          "Also, from now on you can find data about Normal progression on the Guild page: ",
+  "Továbbá a Score rendszer már nem foglalkozik a játékos iLvL-vel hanem egyszerűen, a specen belűl az adott bosson és nehézségen legjobb dps (dps-ek esetén), hps (healerek esetén) hasonlít.":
+  "And finally the Score system no longer considers the iLvL of the player, it simply compares dps (for damage dealers), hps (for healers) to the top data of the same spec on the specific boss and difficulty.",
+        "Na de a legfontosabb hír, hogy a TauriBay most már Intel Xeon szerveren fut (eddig kis teljesítményű ARM proceszorokon ment). Ez összetéve a remek Cache rendszerrel, amit most már kézzel is lehet frissíteni (az a zöld kiss ikon a bal felső sarokban) szuper gyors válaszidőt biztosít.":
+                "But the most important news is that TauriBay now runs on an Intel Xeon server (it was running on low performance ARM processors before). This, combined with the awesome Cache system, which can now also be manually refreshed (the little green refresh icon) will ensure super fast response times.",
+  "Ezek az adatok nincsenek helyes sorrendben valamint a Speed Kill adataik némely esetben hiányosak mivel vagy Jin'Rokh-on vagy Lei Shen-en nem csak kizárólag Guild tagok szerepeltek.":
+          "These datas are not in a correct order and some of their Speed Kill values are missing due to random members (not only Guild) participating on either Jin'Rokh or Lei Shen.",
+  "Új szerver és fixek" : "New server and fixes"
+
 }

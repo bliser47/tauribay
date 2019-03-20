@@ -82,6 +82,11 @@
                 </div>
             </div>
             <div class="panel table-responsive nomargin">
+                @if ( Input::has('difficulty') && Input::get('difficulty') == 'normal') )
+                    <div class="alert alert-warning nomargin">
+                        {{ __("Ezek az adatok nincsenek helyes sorrendben valamint a Speed Kill adataik némely esetben hiányosak mivel vagy Jin'Rokh-on vagy Lei Shen-en nem csak kizárólag Guild tagok szerepeltek.") }}
+                    </div>
+                @endif
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
                         <th class="headDesktop">{{ __("Nr.") }}</th>
