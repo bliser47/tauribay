@@ -19,7 +19,7 @@ var messages = [];
 function sendMessages()
 {
     request({
-        url: 'http://51.15.212.167/api/receiveData',
+        url: 'http://79.172.215.87/api/receiveData',
         method: 'POST',
         headers: {
             "content-type": "application/json"
@@ -69,7 +69,7 @@ bot.addListener('error', function(message) {
 function callTauriBay(url, data)
 {
     request({
-        url: 'http://51.15.212.167/' + url,
+        url: 'http://79.172.215.87/' + url,
         method: 'POST',
         json: true,
         data : data
