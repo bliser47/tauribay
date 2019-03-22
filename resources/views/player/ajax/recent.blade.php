@@ -10,8 +10,10 @@
             <th>iLvL</th>
             <th class="headDesktop">{{ __("DPS") }}</th>
             <th class="headDesktop">{{ __("DPS Score") }}</th>
-            <th class="headDesktop">{{ __("HPS") }}</th>
-            <th class="headDesktop">{{ __("HPS Score") }}</th>
+            @if ( $canHeal )
+                <th class="headDesktop">{{ __("HPS") }}</th>
+                <th class="headDesktop">{{ __("HPS Score") }}</th>
+            @endif
         </tr>
         @foreach( $encounters as $encounter )
             <tr>
@@ -37,13 +39,15 @@
                         <span class="memberData memberData2">{{ $encounter->dps_score }}%</span>
                     </div>
                 </td>
-                <td class="cellDesktop">{{ \TauriBay\Tauri\Skada::format($encounter->hps) }}</td>
-                <td class="cellDesktop memberDataContainer playerDataContainer">
-                    <div class="memberDataWidthContainer">
-                        <div style="width:{{ min(100,$encounter->hps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
-                        <span class="memberData memberData2">{{ $encounter->hps_score }}%</span>
-                    </div>
-                </td>
+                @if ( $canHeal )
+                    <td class="cellDesktop">{{ \TauriBay\Tauri\Skada::format($encounter->hps) }}</td>
+                    <td class="cellDesktop memberDataContainer playerDataContainer">
+                        <div class="memberDataWidthContainer">
+                            <div style="width:{{ min(100,$encounter->hps_score) }}%" class="memberDataWidth memberClass{{ $encounter->class }}"></div>
+                            <span class="memberData memberData2">{{ $encounter->hps_score }}%</span>
+                        </div>
+                    </td>
+                @endif
             </tr>
             <tr class="rowMobile">
                 @if ( $canHeal )

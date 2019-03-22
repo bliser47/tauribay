@@ -1080,8 +1080,7 @@ $(function()
         e.preventDefault();
         var realm = $("#realm_url").val();
         var name = $("#player_name").val();
-        var id = $("#player_id").val();
-        window.location.href = URL_WEBSITE + "/player/" + realm + "/" + name + "/" + id;
+        window.location.href = URL_WEBSITE + "/player/" + realm + "/" + name;
     });
 
     $("#player-response-form").find(".modePanel").each(function(){
