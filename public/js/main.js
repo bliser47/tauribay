@@ -967,13 +967,14 @@ $(function()
 
             var realm = $("#realm_url").val();
             var name = $("#player_name").val();
+            var id = $("#player_id").val();
 
             var container = $("#"+mode);
             $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
 
             $.ajax({
                 type: "GET",
-                url: URL_WEBSITE + "/player/" + realm + "/" + name + "/" + mode + "?page=" + page,
+                url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + id + "/" + mode + "?page=" + page,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -1079,7 +1080,8 @@ $(function()
         e.preventDefault();
         var realm = $("#realm_url").val();
         var name = $("#player_name").val();
-        window.location.href = URL_WEBSITE + "/player/" + realm + "/" + name;
+        var id = $("#player_id").val();
+        window.location.href = URL_WEBSITE + "/player/" + realm + "/" + name + "/" + id;
     });
 
     $("#player-response-form").find(".modePanel").each(function(){

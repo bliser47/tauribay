@@ -17,6 +17,7 @@
             </div>
             <div class="col-md-6">
                 <div class="input-group">
+                    <input id="player_id" type="hidden" class="form-control" name="player_id" value="{!! Input::get('player_id',$playerId) !!}">
                     <input id="player_name" type="text" class="form-control" name="player_name" value="{!! Input::get('player_name',$playerName) !!}" placeholder="{{ __("Karakter neve") }}">
                     <span class="input-group-btn">
                     <button class="btn btn-success" name="filter" value="1" type="submit">
@@ -32,20 +33,21 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="panel nomargin">
-                <table class="table table-bordered table-classes">
-                    <tr class="tHead">
-                        <th>{{ __("Név") }}</th>
-                        <th>{{ __("Kaszt") }}</th>
-                        <th></th>
-                    </tr>
-                    @foreach ( $characters as $character )
-                        <tr>
-                            <td>{{ $character->name }}</td>
-                            <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                            <td><a href="{{ URL::to("/player/" . $realmUrl . "/" . $character->name . "/" . $character->id ) }}">{{ __("Kiválaszt") }}</a></td>
-                        </tr>
-                    @endforeach
-                </table>
+                <div id="player-response-form">
+                    <ul class="nav nav-tabs" role="tablist">
+                        @foreach ( $modes as $modeKey => $modeName )
+                            <li id="modePanel{{ $modeKey  }}" data-mode="{{ $modeKey }}" class="modePanel home-main-tab {{ $modeKey == $modeId ? "active" : "" }}" role="presentation"><a href="#{{ $modeKey }}" aria-controls="{{ $modeKey }}"  role="tab" data-toggle="tab">{{ $modeName }}</a></li>
+                        @endforeach
+                    </ul>
+                    <div class="tab-content">
+                        @foreach ( $modes as $modeKey => $modeName )
+                            <div data-mode="{{ $modeKey }}" role="tabpanel" class="tab-pane {{  $modeKey == $modeId ? "active" : "" }}" id="{{ $modeKey}}">
+                                <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
+                                <div data-mode="{{ $modeKey }}" class="encounter-mode-loading-container"></div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </div>

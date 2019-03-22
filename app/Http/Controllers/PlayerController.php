@@ -21,17 +21,16 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use TauriBay\MemberTop;
 use TauriBay\Realm;
+use TauriBay\Tauri\CharacterClasses;
 
 class PlayerController extends Controller
 {
-    public function mode(Request $_request, $_realm_short, $_player_name, $modeId)
+    public function mode(Request $_request, $_character_id, $_mode_id)
     {
-        switch($modeId)
+        switch($_mode_id)
         {
             case "recent":
-
-                $realmId = array_search($_realm_short,Realm::REALMS_URL);
-                $character = Characters::where("realm","=",$realmId)->where("name","=",$_player_name)->first();
+                $character = Characters::where("id","=",$_character_id)->first();
                 if ( $character !== null ) {
 
                     $characterClass = $character->class;
@@ -40,7 +39,7 @@ class PlayerController extends Controller
 
                     $encounters = CharacterEncounters::leftJoin("characters", "characters.id", "=", "character_encounters.character_id")
                         ->leftJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
-                        ->where("characters.realm", "=", $realmId)->where("characters.name", "=", $_player_name)->orderBy("killtime", "desc")->paginate(16);
+                        ->orderBy("killtime", "desc")->paginate(16);
                     $encounterIDs = Encounter::ENCOUNTER_IDS;
 
                     return view("player/ajax/recent", compact("encounters", "encounterIDs","canHeal"));
@@ -57,22 +56,18 @@ class PlayerController extends Controller
     }
 
 
-    public function search(Request $_request, $_realm_short, $_player_name)
-    {
-        $realmId = array_search($_realm_short, Realm::REALMS_URL);
-        $playerName = ucfirst($_player_name);
-        $character = Characters::where("realm","=",$realmId)->where("name","=",$playerName)->first();
+    public function player(Request $_request, $_realm_short, $_player_name, $id) {
+
         $playerTitle = __("Karakter keresése");
+        $playerName = $_player_name;
         $realmUrl = $_realm_short;
+        $playerId = $id;
+
         $modes = array(
             "recent" => __("Új"),
             //"top" => __("Top"),
         );
         $modeId = Defaults::PLAYER_MODE;
-        if ( $character !== null ) {
-            $playerTitle = Realm::REALMS_SHORT[$realmId] . " - " . $playerName;
-        }
-
 
         $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
         $mapId = $_request->get("map_id", Defaults::MAP_ID);
@@ -88,27 +83,41 @@ class PlayerController extends Controller
         $encounters = Encounter::getMapEncounters($expansionId, $mapId);
         $encounters[0] = __("Minden boss");
 
+        return view("player/player", compact(
+            "playerId",
+            "playerTitle",
+            "playerName",
+            "realmUrl",
+            "modes",
+            "modeId",
+            "expansions",
+            "maps",
+            "mapId",
+            "expansionId",
+            "difficulties",
+            "encounters",
+            "encounterId",
+            "difficultyId",
+            "defaultDifficultyId"));
+    }
+
+    public function search(Request $_request, $_realm_url, $search)
+    {
+        $realmId = array_search($_realm_url, Realm::REALMS_URL);
+        $characters = Characters::where("realm","=",$realmId)
+            ->whereRaw("LOWER(name) LIKE \"%" . strtolower($search) . "%\"")->get();
+        $playerTitle = __("Karakter keresése");
+        $playerName = $search;
+        $realmUrl = $_realm_url;
+
+        $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+
         return view("player/search", compact(
-        "playerTitle",
-        "playerName",
-        "realmUrl",
-        "modes",
-        "modeId",
-        "expansions",
-        "maps",
-        "mapId",
-        "expansionId",
-        "difficulties",
-        "encounters",
-        "encounterId",
-        "difficultyId",
-        "defaultDifficultyId"
-    ));
+            "characters", "search", "playerName", "playerTitle","realmUrl","characterClasses"));
     }
 
     public function index(Request $_request)
     {
-
         return view("player/index");
     }
 }
