@@ -466,6 +466,7 @@ class Encounter extends Model
             $member->interrupts = $memberData["interrupts"];
             $member->dispells = $memberData["dispells"];
             $member->ilvl = $memberData["ilvl"];
+            $member->guid = $memberData["guid"];
             if ( $guild != null && $guild->faction != null )
             {
                 $member->faction_id = $guild->faction;
@@ -499,30 +500,31 @@ class Encounter extends Model
 
     public static function logCharacter($member, $_api)
     {
-        $character = Characters::where("realm","=",$member->realm_id)->where("name","=",$member->name)->first();
+        $character = Characters::where("realm","=",$member->realm_id)->where("guid","=",$member->guid)->first();
         if ( $character == null )
         {
+            $character = new Characters;
+            $character->name = $member->name;
+            $character->ilvl = $member->ilvl;
+            $character->faction = $member->faction;
+            $character->class = $member->class;
+            $character->realm = $member->realm_id;
+            $character->guid = $member->guid;
+
             $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$member->realm_id], $member->name);
             if ($characterSheet && array_key_exists("response", $characterSheet)) {
                 $characterSheetResponse = $characterSheet["response"];
-                $character = new Characters;
-                $character->name = $member->name;
-                $character->ilvl = $member->ilvl;
-                $character->faction = $member->faction;
-                $character->class = $member->class;
-                $character->realm = $member->realm_id;
                 $character->achievement_points = $characterSheetResponse["pts"];
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-                $character->guid = $characterSheetResponse["guid"];
-                $character->save();
-
                 $member->faction_id = $character->faction;
-                Characters::addEncounter($character, $member);
+            } else {
+                $character->faction = $member->faction_id;
             }
+
+            $character->save();
+            Characters::addEncounter($character, $member);
         }
         else {
-            $character->class = $member->class;
-            $character->save();
             $member->faction_id = $character->faction;
             Characters::addEncounter($character, $member);
         }
