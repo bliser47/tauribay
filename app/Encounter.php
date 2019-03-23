@@ -499,35 +499,33 @@ class Encounter extends Model
 
     public static function logCharacter($member, $_api)
     {
-        if ( $member->guid > 0 ) {
-            $character = Characters::where("realm","=",$member->realm_id)->where("name","=",$member->name)->where("guid","=",$member->guid)->first();
-            if ( $character == null )
-            {
-                $character = new Characters;
-                $character->name = $member->name;
-                $character->ilvl = $member->ilvl;
-                $character->faction = $member->faction;
-                $character->class = $member->class;
-                $character->realm = $member->realm_id;
-                $character->guid = $member->guid;
+        $character = Characters::where("realm","=",$member->realm_id)->where("name","=",$member->name)->where("guid","=",$member->guid)->first();
+        if ( $character == null )
+        {
+            $character = new Characters;
+            $character->name = $member->name;
+            $character->ilvl = $member->ilvl;
+            $character->faction = $member->faction;
+            $character->class = $member->class;
+            $character->realm = $member->realm_id;
+            $character->guid = $member->guid;
 
-                $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$member->realm_id], $member->name);
-                if ($characterSheet && array_key_exists("response", $characterSheet)) {
-                    $characterSheetResponse = $characterSheet["response"];
-                    $character->achievement_points = $characterSheetResponse["pts"];
-                    $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-                    $member->faction_id = $character->faction;
-                } else {
-                    $character->faction = $member->faction_id;
-                }
-
-                $character->save();
-                Characters::addEncounter($character, $member);
-            }
-            else {
+            $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$member->realm_id], $member->name);
+            if ($characterSheet && array_key_exists("response", $characterSheet)) {
+                $characterSheetResponse = $characterSheet["response"];
+                $character->achievement_points = $characterSheetResponse["pts"];
+                $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $member->faction_id = $character->faction;
-                Characters::addEncounter($character, $member);
+            } else {
+                $character->faction = $member->faction_id;
             }
+
+            $character->save();
+            Characters::addEncounter($character, $member);
+        }
+        else {
+            $member->faction_id = $character->faction;
+            Characters::addEncounter($character, $member);
         }
     }
 
