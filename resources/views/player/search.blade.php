@@ -36,12 +36,14 @@
                     <tr class="tHead">
                         <th>{{ __("Név") }}</th>
                         <th>{{ __("Kaszt") }}</th>
+                        <th>Achi</th>
                         <th></th>
                     </tr>
                     @foreach ( $characters as $character )
                         <tr>
                             <td>{{ $character->name }}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
+                            <td>{{ $character->achievement_points  }}</td>
                             <td><a href="{{ URL::to("/player/" . $realmUrl . "/" . $character->name . "/" . $character->id ) }}">{{ __("Kiválaszt") }}</a></td>
                         </tr>
                     @endforeach

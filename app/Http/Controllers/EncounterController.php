@@ -221,38 +221,30 @@ class EncounterController extends Controller
         } while ( $found );
     }
 
-    public function fixFactions() {
-        ini_set('max_execution_time', 0);
-        /*
-        $encounters = EncounterTop::where('faction_id','>',0)->get();
-        foreach ( $encounters as $encounterTop ) {
-            $encounter = Encounter::where("id","=",$encounterTop->fastest_encounter_id)->first();
-            if ( $encounter != null ) {
-                $encounterTop->faction_id = $encounter->faction_id;
-                $encounterTop->save();
-            }
-        }
-        */
-        /*
-        $members = MemberTop::where('faction_id','>',0)->take(20000)->get();
-        foreach ( $members as $memberTop ) {
-            $encounter = Encounter::where("id","=",$memberTop->dps_encounter_id)->first();
-            if ( $encounter != null ) {
-                $memberTop->faction_id = $encounter->faction_id;
-                $memberTop->save();
-            }
-        }
-        */
+    public function fixCharacters() {
+        $api = new Tauri\ApiClient();
         ini_set('max_execution_time', 0);
         do {
             $found = false;
-            $members = EncounterMember::where("top_processed","=",0)->take(5000)->get();
+            $members = EncounterMember::where("top_processed","=",0)->take(1000)->get();
             foreach ($members as $member) {
                 $found = true;
-                $encounter = Encounter::where("id","=",$member->encounter_id)->first();
-                if ( $encounter != null ) {
-                    $member->faction_id = $encounter->faction_id;
+                if ( $member->guid == 0 ) {
+                    $encounter = Encounter::where("id","=",$member->encounter_id)->first();
+                    if ( $encounter ) {
+                        $log = $api->getRaidLog(Realm::REALMS[$member->realm_id],$encounter->log_id);
+                        if ( array_key_exists("response", $log) ) {
+                            $logMembers = $log["response"]["members"];
+                            foreach ( $logMembers as $logMember ) {
+                                EncounterMember::where("encounter_id","=",$member->encounter_id)
+                                    ->where("name","=",$logMember["name"])->update(array(
+                                        "guid" => $logMember["guid"]
+                                    ));
+                            }
+                        }
+                    }
                 }
+                Encounter::logCharacter($member, $api);
                 $member->top_processed = 1;
                 $member->save();
             }
