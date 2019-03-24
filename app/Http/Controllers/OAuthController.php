@@ -2,6 +2,7 @@
 
 namespace TauriBay\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Auth;
 use TauriBay\AuthorizedCharacter;
@@ -127,7 +128,7 @@ class OAuthController extends Controller
                 $result = json_decode($response,true);
                 if ( array_key_exists("error", $result) && $result["error_description"] == "The access token provided has expired." ) {
                     //self::refreshToken($user);
-                    return redirect('/home#oauth');
+                    return redirect("https://oauth.tauriwow.com/oauth/v2/auth?client_id=5_2i4bajinnracokc00480cogowgwkgwowk8os8k8ogogcw88g80&redirect_uri=" .  env('APP_URL') . "/oauth&response_type=code&scope=publicuserdata");
                 }
 
                 //$userId = $response["user_id"];
@@ -163,8 +164,13 @@ class OAuthController extends Controller
                             $authorizedCharacter->user_id = $user->id;
                             $authorizedCharacter->character_id = $character->id;
                         }
+                        $authorizedCharacter->updated_at = Carbon::now();
                         $authorizedCharacter->save();
+                    } else {
+                        return $result;
                     }
+                } else {
+                    return "Realm not found";
                 }
             }
         }

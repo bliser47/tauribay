@@ -102,6 +102,7 @@
   "Másik account autentikációja" : "Authorize different account",
   "Jelenlegi kiválasztott karakter autentikációja" : "Authenticate currently selected character",
   "óra" : "hours",
+  "perc" : "minutes",
   "Élettartam" : "Lifespan",
 
   "Kötelező megadni." : "This field is required.",
