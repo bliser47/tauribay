@@ -121,7 +121,7 @@
   "Érvényes hitelkártyaszámnak kell lennie." : "Please enter a valid credit card number.",
   "Kérem javítsa ki ezt a mezőt." : "Please fix this field.",
   "Kérem írjon be egy érvényes dátumot (ISO)." : "Please enter a valid date (ISO).",
-
+  "Armory megtekíntése" : "Open armory",
   "Kiválaszt" : "Select",
   "Progress oldal" : "Progress page",
   "ITT" : "HERE",
@@ -189,6 +189,7 @@
   "Preliminary character bossfight data is curretly being processed. Please come back later!",
   "Összes kill: " : "Total kills: ",
   "Karakter keresése" : "Search character",
+  "Más karakter keresése" : "Search different character",
   "Ezen a realm-en nem található ilyen karakter!" : "No such character exists on this realm!",
   "Végre rávettem magam pár hete, hogy elmentsem a boss fightok alatt kiesett lootot. Most már láthatjátok a DPS és Heal melletti tabban mit dobott az adott boss. Valamint a boss oldalon, a Loot tabban láthatjátok az itemeket kiesésének esélyét." :
           "I have finally taken it upon myself a few weeks ago to implement the Loot feature. From now on, on an encounter page next to the DPS and HPS tabs, you will be able to see the encounter loot as well. You will also be able to check out each bosses loot drop chances on the boss pages, on the Loot tab.",

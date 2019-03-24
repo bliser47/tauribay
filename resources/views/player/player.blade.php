@@ -3,33 +3,26 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="bossName">
-                {{ $playerTitle }}
+                {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $playerName }}
             </div>
+            <table class="table table-bordered table-classes">
+                <tr>
+                    <th>{{ __("Kaszt") }}</th>
+                    <th>{{ __("Frakció") }}</th>
+                    <th>iLvL</th>
+                    <th>Achi</th>
+                    <th>Tauri Armory</th>
+                </tr>
+                <tr>
+                    <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
+                    <td class="cellDesktop faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
+                    <td>{{ $character->ilvl }}</td>
+                    <td>{{ $character->achievement_points }}</td>
+                    <td><a target="_blank" href="{{ URL::to("https://tauriwow.com/armory#character-sheet.xml?r=" . \TauriBay\Realm::REALMS[$character->realm] . "&n=" . $playerName) }}">{{ __("Armory megtekíntése") }}</a></td>
+                </tr>
+            </table>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 col-sm-nopadding">
-            {!! Form::open(array("method" => "get","id"=>"player-form")) !!}
-            <div class="col-md-6">
-                <div id="expansions-container" class="input-group col-md-12">
-                    {!! Form::select('realm_url', \TauriBay\Realm::REALMS_URL_KEY, Input::get('realm_url', $realmUrl), ['required', 'id' => 'realm_url', 'class' => "control selectpicker input-large"]); !!}
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input id="player_id" type="hidden" class="form-control" name="player_id" value="{!! Input::get('player_id',$playerId) !!}">
-                    <input id="player_name" type="text" class="form-control" name="player_name" value="{!! Input::get('player_name',$playerName) !!}" placeholder="{{ __("Karakter neve") }}">
-                    <span class="input-group-btn">
-                    <button class="btn btn-success" name="filter" value="1" type="submit">
-                        {{ __("Keresés") }}
-                    </button>
-                  </span>
-                </div>
-            </div>
-            {!! Form::close() !!}
-        </div>
-    </div>
-    <br/>
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="panel nomargin">
