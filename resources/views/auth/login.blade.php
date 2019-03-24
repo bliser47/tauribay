@@ -53,7 +53,7 @@
                         <div class="form-group">
                             <div class="col-md-4 col-md-offset-4">
                                 <button type="submit" class="btn btn-block btn-primary">
-                                    <i class="fa fa-btn fa-sign-in"></i> {{ __("Bejelentkezés") }}
+                                    <i class="fa fa-sign-i"></i>{{ __("Bejelentkezés") }}
                                 </button>
                             </div>
                         </div>

@@ -11,7 +11,7 @@
                 <b>2) </b>
                 <a href="{{ URL::to("/oauth/character") }}">{{ __("Jelenlegi kiválasztott karakter autentikációja") }}</a>
                 <a target="_blank" href="http://devil.tauri.hu/~kimbatt/bugreport.png">
-                    <i class="tauribay far fa-question-circle"></i>
+                    <i class="tauribay fa fa-question-circle"></i>
                 </a>
             </td>
         </tr>
