@@ -226,9 +226,9 @@ class EncounterController extends Controller
         ini_set('max_execution_time', 0);
         do {
             $found = false;
-            $members = EncounterMember::where("guid","=",0)->take(1)->get();
+            $members = EncounterMember::where("guid","=",0)->take(1000)->get();
             foreach ($members as $member) {
-                $found = false;
+                $found = true;
                 $encounter = Encounter::where("id","=",$member->encounter_id)->first();
                 if ( $encounter ) {
                     $guild = Guild::where("id","=",$encounter->guild_id)->first();
