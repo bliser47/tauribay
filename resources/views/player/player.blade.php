@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="bossName">
-                {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $playerName }}
+                {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $character->name }}
             </div>
             <table class="table table-bordered table-classes">
                 <tr>
@@ -18,7 +18,7 @@
                     <td class="cellDesktop faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
                     <td>{{ $character->ilvl }}</td>
                     <td>{{ $character->achievement_points }}</td>
-                    <td><a target="_blank" href="{{ URL::to("https://tauriwow.com/armory#character-sheet.xml?r=" . \TauriBay\Realm::REALMS[$character->realm] . "&n=" . $playerName) }}">{{ __("Armory megtekíntése") }}</a></td>
+                    <td><a target="_blank" href="{{ URL::to("https://tauriwow.com/armory#character-sheet.xml?r=" . \TauriBay\Realm::REALMS[$character->realm] . "&n=" . $character->name) }}">{{ __("Armory megtekíntése") }}</a></td>
                 </tr>
             </table>
         </div>
@@ -26,6 +26,8 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="panel nomargin">
+                <input id="player_id" type="hidden" class="form-control" name="player_id" value="{!! Input::get('player_id',$character->id) !!}">
+                <input id="player_name" type="hidden" class="form-control" name="player_name" value="{!! Input::get('player_name',$character->name) !!}" placeholder="{{ __("Karakter neve") }}">
                 <div id="player-response-form">
                     <ul class="nav nav-tabs" role="tablist">
                         @foreach ( $modes as $modeKey => $modeName )
