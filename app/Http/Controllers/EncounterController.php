@@ -226,27 +226,17 @@ class EncounterController extends Controller
         ini_set('max_execution_time', 0);
         do {
             $found = false;
-            $members = EncounterMember::where("top_processed","=",0)->take(1000)->get();
+            $members = EncounterMember::where("guid","=",0)->take(1)->get();
             foreach ($members as $member) {
-                $found = true;
-                if ( $member->guid == 0 ) {
-                    $encounter = Encounter::where("id","=",$member->encounter_id)->first();
-                    if ( $encounter ) {
-                        $log = $api->getRaidLog(Realm::REALMS[$member->realm_id],$encounter->log_id);
-                        if ( array_key_exists("response", $log) ) {
-                            $logMembers = $log["response"]["members"];
-                            foreach ( $logMembers as $logMember ) {
-                                EncounterMember::where("encounter_id","=",$member->encounter_id)
-                                    ->where("name","=",$logMember["name"])->update(array(
-                                        "guid" => $logMember["guid"]
-                                    ));
-                            }
-                        }
+                $found = false;
+                $encounter = Encounter::where("id","=",$member->encounter_id)->first();
+                if ( $encounter ) {
+                    $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                    $log = $api->getRaidLog(Realm::REALMS[$member->realm_id],$encounter->log_id);
+                    if ( array_key_exists("response", $log) ) {
+                        Encounter::updateEncounterMembers($log["response"], $encounter, $guild, $api);
                     }
                 }
-                Encounter::logCharacter($member, $api);
-                $member->top_processed = 1;
-                $member->save();
             }
         } while ( $found );
     }
