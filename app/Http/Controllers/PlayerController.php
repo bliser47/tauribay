@@ -88,7 +88,6 @@ class PlayerController extends Controller
             "playerTitle",
             "character",
             "characterClasses",
-            "realmUrl",
             "modes",
             "modeId",
             "expansions",
