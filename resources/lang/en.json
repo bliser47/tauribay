@@ -98,6 +98,12 @@
   "Sikeres bejelentkezés" : "You are logged in!",
   "Üdvözlettel" : "Regards",
 
+  "Account autentikáció" : "Authorize account",
+  "Másik account autentikációja" : "Authorize different account",
+  "Jelenlegi kiválasztott karakter autentikációja" : "Authenticate currently selected character",
+  "óra" : "hours",
+  "Élettartam" : "Lifespan",
+
   "Kötelező megadni." : "This field is required.",
   "Legfeljebb {0} karakter hosszú legyen." : "Please enter no more than {0} characters.",
   "Legalább {0} karakter hosszú legyen." : "Please enter at least {0} characters.",

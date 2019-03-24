@@ -2,11 +2,13 @@
 
 namespace TauriBay\Http\Controllers;
 
+use TauriBay\AuthorizedCharacter;
 use TauriBay\Http\Requests;
 use Illuminate\Http\Request;
 use Auth;
 use Image;
 use TauriBay\Realm;
+use TauriBay\Tauri\CharacterClasses;
 use Validator;
 
 class HomeController extends Controller
@@ -35,11 +37,25 @@ class HomeController extends Controller
             4 => __("Vétel")
         );
 
+        $user = Auth::user();
+        $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+        $authorizedCharacters = AuthorizedCharacter::where("user_id","=",$user->id)->leftJoin("characters","characters.id","=","authorized_characters.character_id")
+        ->select(array(
+            "characters.class as class",
+            "characters.realm as realm",
+            "characters.name as name",
+            "authorized_characters.updated_at as updated_at"
+        ))->get();
+        $authorizationLifeTimeInHours = 168; // 1 week
+
         return view('home', array(
-            'user' => Auth::user(),
+            'user' => $user,
             'realms' => Realm::REALMS,
             'realmsShort' => Realm::REALMS_SHORT,
-            'adIntents' => $adIntents
+            'adIntents' => $adIntents,
+            'authorizedCharacters' => $authorizedCharacters,
+            'characterClasses' => $characterClasses,
+            'authorizationLifeTimeInHours' => $authorizationLifeTimeInHours
         ));
     }
 

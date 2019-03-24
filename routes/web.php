@@ -12,6 +12,7 @@
 */
 
 Route::get('oauth', 'OAuthController@auth');
+Route::get('oauth/character', 'OAuthController@char');
 Route::get('oauthd', 'OAuthController@debug');
 
 
