@@ -58,8 +58,7 @@ class EncounterController extends Controller
             ->first();
 
         if ( $encounter ) {
-            $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
-
+            $members = EncounterMember::where("encounter_id", "=", $encounter->id)->leftJoin("character_encounters","character_encounters.encounter_member_id","=","encounter_members.id")->get();
 
             foreach ($members as $member) {
                 $member->total_heal = $member->heal_done + $member->absorb_done;

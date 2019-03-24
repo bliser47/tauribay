@@ -59,8 +59,6 @@ class PlayerController extends Controller
 
     public function player(Request $_request, $_realm_short, $_player_name, $id) {
 
-        $playerTitle = __("Más karakter keresése");
-
         $character = Characters::where("id","=",$id)->first();
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
@@ -85,7 +83,6 @@ class PlayerController extends Controller
         $encounters[0] = __("Minden boss");
 
         return view("player/player", compact(
-            "playerTitle",
             "character",
             "characterClasses",
             "modes",
