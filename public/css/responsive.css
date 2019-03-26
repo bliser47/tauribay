@@ -59,10 +59,29 @@
         margin: 0px;
         display: none;
     }
+    .divSmallScreen {
+        display:none !Important;
+    }
 }
+
+.divBigScreen {
+    display:block;
+}
+
+.divSmallScreen {
+    display:none;
+}
+
 
 @media screen and (max-width: 1024px)
 {
+    .divBigScreen {
+        display: none !Important;
+    }
+
+    .divSmallScreen {
+        display:block;
+    }
 
     #navbar
     {

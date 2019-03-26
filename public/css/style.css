@@ -848,7 +848,7 @@ a.changelog:hover, a.trello:hover
     display:list-item;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 768px) {
     .rowDesktop {
         display: none;
     }
@@ -888,6 +888,7 @@ a.changelog:hover, a.trello:hover
     .amazon {
         margin: 0px !Important;
         padding:0px;
+        width:100%;
     }
 
     .amazon-container {
@@ -1368,7 +1369,7 @@ tr.spacer
 }
 
 .amazon.noblocker {
-    max-width:748px;
+    display: table;;
 }
 
 .amazon-container {
@@ -1378,13 +1379,17 @@ tr.spacer
 
 .amazon.noblocker .amazon-container {
     background: white;
-    padding:10px;
+    padding:1px;
 }
 
 .amazon-container iframe {
     margin:0px auto;
 }
 
+.amazon.noblocker .desktopAmazon {
+    clear:both;
+    height:60px;
+}
 
 #MEIGitqPUFDH {
     display: none;
@@ -1394,4 +1399,8 @@ tr.spacer
     font-weight: bold;
     color: #fff;
     border-radius: 5px;
+}
+
+.desktopAmazonSmallScreen {
+    height:90px;
 }
