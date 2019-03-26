@@ -232,10 +232,10 @@ class EncounterController extends Controller
                 $found = true;
                 $encounter = Encounter::where("id","=",$member->encounter_id)->first();
                 if ( $encounter ) {
-                    $guild = Guild::where("id","=",$encounter->guild_id)->first();
                     $log = $api->getRaidLog(Realm::REALMS[$member->realm_id],$encounter->log_id);
-                    $return[] = $log;
                     if ( array_key_exists("response", $log) ) {
+                        $return[] = $log;
+                        $guild = Guild::where("id","=",$encounter->guild_id)->first();
                         Encounter::updateEncounterMembers($log["response"], $encounter, $guild, $api);
                     }
                 }
