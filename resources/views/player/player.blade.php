@@ -5,7 +5,7 @@
             <div class="bossName">
                 {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $character->name }}
             </div>
-            <table class="table table-bordered table-classes">
+            <table class="table table-bordered table-classes nomargin">
                 <tr>
                     <th>{{ __("Kaszt") }}</th>
                     <th>{{ __("Frakció") }}</th>
