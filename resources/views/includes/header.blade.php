@@ -73,6 +73,7 @@
 <div id="amazon" class="amazon container">
     <div class="amazon-container">
         <div id="MEIGitqPUFDH">
+            <img style="float:left;position:relative;top:-2.5px;" src="{{  URL::asset("img/sadpanda.png") }}" alt=""/>
             {{ __("Honlapunkat az online hirdetések megjelenítése teszi lehetővé látogatóinknak.") }}
             <br/>
             {{ __("Kérjük, fontolja meg, hogy támogat minket a hirdetésblokkoló letiltásával.") }}
