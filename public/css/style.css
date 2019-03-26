@@ -1350,3 +1350,11 @@ tr.spacer
     padding-top: 2.5px;
     padding-bottom: 2.5px;
 }
+
+.amazon {
+    padding:10px;
+}
+
+.amazon .container iframe {
+    margin:0px auto;
+}
