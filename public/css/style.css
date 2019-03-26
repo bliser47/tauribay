@@ -1401,6 +1401,6 @@ tr.spacer
     border-radius: 5px;
 }
 
-.desktopAmazonSmallScreen {
+.amazon.noblocker .desktopAmazonSmallScreen {
     height:90px;
 }
