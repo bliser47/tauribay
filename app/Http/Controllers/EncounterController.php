@@ -227,7 +227,7 @@ class EncounterController extends Controller
         $return = array();
         do {
             $found = false;
-            $members = EncounterMember::where("guid","=",0)->where("top_processed","=",0)->take(3)->get();
+            $members = EncounterMember::where("guid","=",0)->where("top_processed","=",0)->take(1)->get();
             foreach ($members as $member) {
                 $found = true;
                 $encounter = Encounter::where("id","=",$member->encounter_id)->first();
