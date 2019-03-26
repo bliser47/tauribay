@@ -133,7 +133,7 @@ class ProgressController extends Controller
         $lastLogOnRealm = Encounter::where("realm_id","=",$realmId)->orderBy("log_id","desc")->first();
 
 
-        $log = $api->getRaidLog(Realm::REALMS[0], 177042);
+        $log = $api->getRaidLog(Realm::REALMS[0], 83069);
 
         return $log;
 
