@@ -3,7 +3,7 @@
 <link type="text/css" rel="stylesheet" href='https://fonts.googleapis.com/css?family=Play:400,700'>
 <link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=233') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=242') }}"/>
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=14') }}"/>
 <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
@@ -55,9 +55,13 @@
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/main.js?v=265') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/ads.js') }}"></script>
 @yield('pagespecificscripts')
 <script type="application/javascript">
     $(window).on('load', function() {
+        if(!document.getElementById('IsdRpWLgMNqY')){
+            document.getElementById('MEIGitqPUFDH').style.display='block';
+        }
         $(".loadWrapper").fadeTo(500,0);
         $("<img src=\"{{ URL::asset("img/back.jpg") }}\">").load(function() {
             var originalWidth = this.width;

@@ -70,9 +70,14 @@
         </div>
     </div>
 </nav>
-<nav class="navbar navbar-default amazon">
+<div class="amazon">
     <div class="container">
+        <div id="MEIGitqPUFDH">
+            {{ __("Honlapunkat az online hirdetések megjelenítése teszi lehetővé látogatóinknak.") }}
+            <br/>
+            {{ __("Kérjük, fontolja meg, hogy támogat minket a hirdetésblokkoló letiltásával.") }}
+        </div>
         <iframe class="divDesktop" src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=48&l=ez&f=ifr&linkID=927efe9b2c16b88194199e1585a10d82&t=stamas47-21&tracking_id=stamas47-21" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
         <iframe class="divMobile" src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=288&l=ez&f=ifr&linkID=66f2d6d8bad428fb96c56970c2ea5d57&t=stamas47-21&tracking_id=stamas47-21" width="320" height="50" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
     </div>
-</nav>
+</div>

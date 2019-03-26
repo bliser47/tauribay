@@ -215,6 +215,12 @@
                 "But the most important news is that TauriBay now runs on an Intel Xeon server (it was running on low performance ARM processors before). This, combined with the awesome Cache system, which can now also be manually refreshed (the little green refresh icon) will ensure super fast response times.",
   "Ezek az adatok nincsenek helyes sorrendben valamint a Speed Kill adataik némely esetben hiányosak mivel vagy Jin'Rokh-on vagy Lei Shen-en nem csak kizárólag Guild tagok szerepeltek.":
           "These datas are not in a correct order and some of their Speed Kill values are missing due to random members (not only Guild) participating on either Jin'Rokh or Lei Shen.",
-  "Új szerver és fixek" : "New server and fixes"
+  "Új szerver és fixek" : "New server and fixes",
+
+  "Honlapunkat az online hirdetések megjelenítése teszi lehetővé látogatóinknak." :
+          "Our website is made possible by displaying online advertisements to our visitors.",
+
+  "Kérjük, fontolja meg, hogy támogat minket a hirdetésblokkoló letiltásával." :
+          "Please consider supporting us by disabling your ad blocker."
 
 }

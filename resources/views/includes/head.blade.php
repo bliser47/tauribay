@@ -66,7 +66,4 @@
             transform: rotate(360deg);
         }
     }
-    .amazon {
-        background:#fff;
-    }
 </style>
