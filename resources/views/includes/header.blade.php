@@ -70,8 +70,8 @@
         </div>
     </div>
 </nav>
-<div class="amazon">
-    <div class="container">
+<div id="amazon" class="amazon container">
+    <div class="amazon-container">
         <div id="MEIGitqPUFDH">
             {{ __("Honlapunkat az online hirdetések megjelenítése teszi lehetővé látogatóinknak.") }}
             <br/>

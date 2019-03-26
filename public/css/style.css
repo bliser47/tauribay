@@ -269,7 +269,6 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 }
 
 .container {
-    max-width:1024px;
     border-radius:4px;
 }
 
@@ -888,9 +887,10 @@ a.changelog:hover, a.trello:hover
 
     .amazon {
         margin: 0px !Important;
+        padding:0px;
     }
 
-    .amazon .container {
+    .amazon-container {
         padding: 0px;
     }
 
@@ -1367,12 +1367,21 @@ tr.spacer
     margin-bottom: 15px;
 }
 
-.amazon .container {
-    position: relative;
-    max-width:1024px;
+.amazon.noblocker {
+    max-width:748px;
 }
 
-.amazon .container iframe {
+.amazon-container {
+    position: relative;
+    padding:0px;
+}
+
+.amazon.noblocker .amazon-container {
+    background: white;
+    padding:10px;
+}
+
+.amazon-container iframe {
     margin:0px auto;
 }
 
