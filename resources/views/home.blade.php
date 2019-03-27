@@ -13,11 +13,9 @@
                 </ul>
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="profile">@include('home.profile')</div>
-                    {{--
                     <div role="tabpanel" class="tab-pane" id="messages">@include('home.messages')</div>
                     <div role="tabpanel" class="tab-pane" id="mytrades">@include('home.mytrades')</div>
                     <div role="tabpanel" class="tab-pane" id="newtrade">@include('home.newtrade')</div>
-                    --}}
                     <div role="tabpanel" class="tab-pane" id="oauth">@include('home.oauth')</div>
                 </div>
             </div>

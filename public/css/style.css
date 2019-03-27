@@ -270,6 +270,7 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 
 .container {
     border-radius:4px;
+    max-width:970px;
 }
 
 .well {
@@ -321,6 +322,16 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 .panel
 {
     background:transparent;
+}
+
+.panel-group, .panel, .panel-heading {
+    margin:0px !Important;
+    border:0px;
+}
+
+.panel, .panel>.table:last-child, .panel>.table-responsive:last-child>.table:last-child, .panel>.table:first-child>thead:first-child>tr:first-child td:last-child, .panel>.table-responsive:first-child>.table:first-child>thead:first-child>tr:first-child td:last-child, .panel>.table:first-child>tbody:first-child>tr:first-child td:last-child, .panel>.table-responsive:first-child>.table:first-child>tbody:first-child>tr:first-child td:last-child, .panel>.table:first-child>thead:first-child>tr:first-child th:last-child, .panel>.table-responsive:first-child>.table:first-child>thead:first-child>tr:first-child th:last-child, .panel>.table:first-child>tbody:first-child>tr:first-child th:last-child, .panel>.table-responsive:first-child>.table:first-child>tbody:first-child>tr:first-child th:last-child,
+.panel>.table:first-child>thead:first-child>tr:first-child td:first-child, .panel>.table-responsive:first-child>.table:first-child>thead:first-child>tr:first-child td:first-child, .panel>.table:first-child>tbody:first-child>tr:first-child td:first-child, .panel>.table-responsive:first-child>.table:first-child>tbody:first-child>tr:first-child td:first-child, .panel>.table:first-child>thead:first-child>tr:first-child th:first-child, .panel>.table-responsive:first-child>.table:first-child>thead:first-child>tr:first-child th:first-child, .panel>.table:first-child>tbody:first-child>tr:first-child th:first-child, .panel>.table-responsive:first-child>.table:first-child>tbody:first-child>tr:first-child th:first-child{
+    border-radius:0px !important;;
 }
 
 .nav, .table, .encounters_loading, .panel-body
@@ -1159,7 +1170,7 @@ footer
     text-align: center;
 }
 
-tbody tr:nth-child(odd) td{
+.table tbody tr:nth-child(odd) td{
     background-color: rgba(24,150,45,0.075);
 }
 
