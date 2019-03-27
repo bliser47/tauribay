@@ -229,12 +229,12 @@ class EncounterController extends Controller
             $found = false;
             $members = EncounterMember::where("guid","=",0)->where("top_processed","=",0)->take(1)->get();
             foreach ($members as $member) {
-                $found = true;
                 $encounter = Encounter::where("id","=",$member->encounter_id)->first();
                 if ( $encounter ) {
                     $log = $api->getRaidLog(Realm::REALMS[$member->realm_id],$encounter->log_id);
                     if ( array_key_exists("response", $log) ) {
                         $return[] = $log;
+                        $found = true;
                         $guild = Guild::where("id","=",$encounter->guild_id)->first();
                         Encounter::updateEncounterMembers($log["response"], $encounter, $guild, $api);
                     }
