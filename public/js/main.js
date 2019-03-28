@@ -611,11 +611,11 @@ $(function()
                 response = $.parseJSON(response);
                 $(tab).html(replaceTranslations(response["view"]));
                 $(".selectpicker").selectpicker();
-                if (mode === "dps" || mode === "hps") {
-
+                if ( mode === "dps" || mode === "hps" || mode === "recent" || mode === "speed" ) {
                     prevState = window.location.href;
                     history.pushState(null, '', response["url"] + window.location.hash);
-
+                }
+                if (mode === "dps" || mode === "hps") {
                     var classVal = $(tab).find("#class").val();
                     if (classVal === "0") {
                         var specPicker = $(tab).find("#spec-container .selectpicker");

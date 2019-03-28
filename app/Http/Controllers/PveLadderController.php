@@ -329,6 +329,7 @@ class PveLadderController extends Controller
                 {
                     $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale();
                     $cacheValue = Cache::get($cacheKey);
+                    $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
 
                         $encounters = Encounter::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId);
@@ -368,20 +369,34 @@ class PveLadderController extends Controller
                         $encounters = $encounters->orderBy("killtime", "desc");
                         $encounters = $encounters->paginate(10);
 
+                        $subQuery = "/?" . http_build_query(array(
+                                "tauri" => $_request->get("tauri"),
+                                "wod" => $_request->get("wod"),
+                                "evermoon" => $_request->get("evermoon"),
+                                "alliance" => $_request->get("alliance"),
+                                "max_players" => $_request->get("max_players")
+                            ));
+
+
                         $view = view("ladder/pve/ajax/recent", compact("encounters", "modeId"));
 
                         $cacheValue = $view->render();
                         Cache::put($cacheKey, $cacheValue, 10); // 10 mintues
+
+                        $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" .
+                                Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $subQuery;
+                        Cache::put($cacheKey . "URL", $cacheUrlValue, 10); // 10 minutes
                     }
                     return json_encode(array(
                         "view" => $cacheValue,
-                        "url" => ""
+                        "url" => $cacheUrlValue
                     ));
                 }
                 else if ( $modeId == "speed" )
                 {
                     $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=8";
                     $cacheValue = Cache::get($cacheKey);
+                    $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
 
                         $encounters = EncounterTop::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId);
@@ -422,10 +437,21 @@ class PveLadderController extends Controller
 
                         $cacheValue = $view->render();
                         Cache::put($cacheKey, $cacheValue, 60); // 1 hour
+
+                        $subQuery = "/?" . http_build_query(array(
+                                "tauri" => $_request->get("tauri"),
+                                "wod" => $_request->get("wod"),
+                                "evermoon" => $_request->get("evermoon"),
+                                "alliance" => $_request->get("alliance")
+                            ));
+
+                        $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" .
+                                Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $subQuery;
+                        Cache::put($cacheKey . "URL", $cacheUrlValue, 60); // 1 hour
                     }
                     return json_encode(array(
                         "view" => $cacheValue,
-                        "url" => ""
+                        "url" => $cacheUrlValue
                     ));
                 }
                 else if ( $modeId == "loot" ) {
