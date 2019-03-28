@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-1 col-xs-3 encounter-sub-filter-maxplayers">
             <div id="expansions-container" class="input-group col-md-12">
-                <input type="number" placeholder="#Player" id="max_players" class="form-control" name="max_players" value="{!! Input::get('max_players', \TauriBay\Encounter::DIFFICULTY_SIZE[$difficultyId]) !!}">
+                <input type="number" placeholder="#Player" id="max_players" class="form-control" name="max_players" value="{!! Input::get('max_players') !!}">
             </div>
         </div>
         <div class="col-md-3 col-xs-12 pd-top-7 encounter-sub-filter-realm">

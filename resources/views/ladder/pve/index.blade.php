@@ -33,7 +33,7 @@
                         <input type="hidden" name="role" value="{{ Input::get('role') }}"/>
                         <input type="hidden" name="class" value="{{ Input::get('class') }}"/>
                         <input type="hidden" name="spec" value="{{ Input::get('spec') }}"/>
-                        <input type="hidden" name="max_players" value="{{ Input::get('max_players', \TauriBay\Encounter::DIFFICULTY_SIZE[$difficultyId ?: ($defaultDifficultyId ?: 4)]) }}"/>
+                        <input type="hidden" name="max_players" value="{{ Input::get('max_players') }}"/>
                         <div class="col-sm-4 col-sm-nopadding col-sm-margin">
                             <div id="expansions-container" class="input-group col-md-12">
                                 {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
