@@ -360,6 +360,10 @@ class PveLadderController extends Controller
                             $encounters->whereIn('faction_id', $factions);
                         }
 
+                        if ( $_request->has("max_players") && !empty($_request->get("max_players")) && $_request->get("max_players") < Encounter::DIFFICULTY_SIZE[$difficultyId] ) {
+                            $encounters->where("member_count","<=",$_request->get("max_players"));
+                        }
+
                         $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
                         $encounters = $encounters->orderBy("killtime", "desc");
                         $encounters = $encounters->paginate(10);
@@ -456,7 +460,7 @@ class PveLadderController extends Controller
             }
             else
             {
-                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=5";
+                $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "_" . $_request->fullUrl() . "?v=6";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue || !$cacheUrlValue ) {

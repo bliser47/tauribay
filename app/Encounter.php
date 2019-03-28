@@ -285,6 +285,14 @@ class Encounter extends Model
         9 => "40N"
     );
 
+    const DIFFICULTY_SIZE = array(
+        3 => 10,
+        4 => 25,
+        5 => 10,
+        6 => 25,
+        9 => 49
+    );
+
     const SIZE_AND_DIFFICULTY_URL = array(
         3 => "10n",
         4 => "25n",

@@ -28,9 +28,14 @@
                 {!! Form::select('encounter_id', $encounters, Input::get('encounter_id', $encounterId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
             </div>
         </div>
-        <div class="col-md-3 col-xs-6">
+        <div class="col-md-2 col-xs-3">
             <div id="expansions-container" class="input-group col-md-12">
                 {!! Form::select('difficulty_id', $difficulties, Input::get('difficulty_id', $difficultyId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
+            </div>
+        </div>
+        <div class="col-md-1 col-xs-3 encounter-sub-filter-maxplayers">
+            <div id="expansions-container" class="input-group col-md-12">
+                <input type="number" placeholder="#Player" id="max_players" class="form-control" name="max_players" value="{!! Input::get('max_players', \TauriBay\Encounter::DIFFICULTY_SIZE[$difficultyId]) !!}">
             </div>
         </div>
         <div class="col-md-3 col-xs-12 pd-top-7 encounter-sub-filter-realm">

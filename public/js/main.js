@@ -700,9 +700,12 @@ $(function()
             var pane = $(this);
             if ( $(pane).hasClass("active") ) {
                 loadMode(pane,data, 1);
-                if ( $(pane).data("mode") === "loot" )
+                var mode = $(pane).data("mode");
+                if ( mode === "loot" )
                 {
-                    $(".encounter-sub-filter-faction, .encounter-sub-filter-realm").hide();
+                    $(".encounter-sub-filter-faction, .encounter-sub-filter-realm, .encounter-sub-filter-maxplayers").hide();
+                } else if ( mode !== "recent") {
+                    $(".encounter-sub-filter-maxplayers").hide();
                 }
             }
             else
@@ -723,6 +726,11 @@ $(function()
                 }
                 else {
                     $(".encounter-sub-filter-faction, .encounter-sub-filter-realm").show();
+                    if ( mode === "recent" ) {
+                        $(".encounter-sub-filter-maxplayers").show();
+                    } else {
+                        $(".encounter-sub-filter-maxplayers").hide();
+                    }
                 }
             });
         });
@@ -906,6 +914,7 @@ $(function()
             $("input[name='evermoon']").prop("checked",$("#realm-evermoon").is(':checked'));
             $("input[name='alliance']").prop("checked",$("#faction-alliance").is(':checked'));
             $("input[name='horde']").prop("checked",$("#faction-horde").is(':checked'));
+            $("input[name='max_players']").val($("#max-players").val());
             $("#pve-ladder-form").submit();
         });
         $("#ladder-filter-form input").change(function(){
