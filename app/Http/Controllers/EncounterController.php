@@ -224,24 +224,15 @@ class EncounterController extends Controller
     public function fixCharacters() {
         $api = new Tauri\ApiClient();
         ini_set('max_execution_time', 0);
-        $return = array();
         do {
             $found = false;
-            $members = EncounterMember::where("guid","=",0)->where("top_processed","=",0)->take(1)->get();
+            $members = EncounterMember::where("top_processed","=",0)-take(1000)->get();
             foreach ($members as $member) {
-                $encounter = Encounter::where("id","=",$member->encounter_id)->first();
-                if ( $encounter ) {
-                    $log = $api->getRaidLog(Realm::REALMS[$member->realm_id],$encounter->log_id);
-                    if ( array_key_exists("response", $log) ) {
-                        $return[] = $log;
-                        $found = true;
-                        $guild = Guild::where("id","=",$encounter->guild_id)->first();
-                        Encounter::updateEncounterMembers($log["response"], $encounter, $guild, $api);
-                    }
-                }
+                Encounter::logCharacter($member,$api);
+                $member->top_processed = 1;
+                $member->save();
             }
         } while ( $found );
-        return $return;
     }
 
     public function fixEncounterTop(Request $_request) {
