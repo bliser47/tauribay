@@ -226,7 +226,7 @@ class EncounterController extends Controller
         ini_set('max_execution_time', 0);
         do {
             $found = false;
-            $members = EncounterMember::where("top_processed","=",0)-take(1000)->get();
+            $members = EncounterMember::where("top_processed","=",0)->take(1000)->get();
             foreach ($members as $member) {
                 Encounter::logCharacter($member,$api);
                 $member->top_processed = 1;
