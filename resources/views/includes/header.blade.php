@@ -79,8 +79,8 @@
             {{ __("Kérjük, fontolja meg, hogy támogat minket a hirdetésblokkoló letiltásával.") }}
         </div>
         <div class="divBigScreen desktopAmazon">
-            <iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=26&l=ur1&category=pcvideogames&banner=1EZH10GZG35XXVXEHQ02&f=ifr&linkID=3bca17ed1947c83f7a54797ae61457b2&t=stamas47-21&tracking_id=stamas47-21" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;float:left" frameborder="0"></iframe>
-            <iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=26&l=ur1&category=ce&banner=1EC852TZX4K31RRSKX02&f=ifr&linkID=e60841ca5d5bdae494d06d610a6f5bc0&t=stamas47-21&tracking_id=stamas47-21" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;float:right" frameborder="0"></iframe>
+            <iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=13&l=ur1&category=kindle_unlimited&banner=0SJ14H3FVKXQZPFEBZ82&f=ifr&linkID=f5622007f8e592aeb192710949398835&t=stamas47-21&tracking_id=stamas47-21" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
+            <iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=26&l=ur1&category=amazon_music_bounty&banner=1V57MVM19383HTG13582&f=ifr&linkID=3a0e5cdae4e2d363b5ff4dea284896a3&t=stamas47-21&tracking_id=stamas47-21" width="468" height="60" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
         </div>
         <div class="divSmallScreen desktopAmazonSmallScreen">
             <iframe src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=48&l=ez&f=ifr&linkID=415009011aefe68fa8a78f9553d902cd&t=stamas47-21&tracking_id=stamas47-21" width="728" height="90" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
