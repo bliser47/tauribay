@@ -231,6 +231,7 @@ class EncounterController extends Controller
                 Encounter::logCharacter($member,$api);
                 $member->top_processed = 1;
                 $member->save();
+                $found = true;
             }
         } while ( $found );
     }
