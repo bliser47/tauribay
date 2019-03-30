@@ -3,19 +3,17 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="bossName">
-                {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $character->name }}
+                <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $character->name }}
             </div>
             <table class="table table-bordered table-classes nomargin">
                 <tr>
                     <th>{{ __("Kaszt") }}</th>
-                    <th>{{ __("Frakció") }}</th>
                     <th>iLvL</th>
                     <th>Achi</th>
                     <th>Tauri Armory</th>
                 </tr>
                 <tr>
                     <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                    <td class="cellDesktop faction-{{ $character->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> </td>
                     <td>{{ $character->ilvl }}</td>
                     <td>{{ $character->achievement_points }}</td>
                     <td><a target="_blank" href="{{ URL::to("https://tauriwow.com/armory#character-sheet.xml?r=" . \TauriBay\Realm::REALMS[$character->realm] . "&n=" . $character->name) }}">{{ __("Armory megtekíntése") }}</a></td>
