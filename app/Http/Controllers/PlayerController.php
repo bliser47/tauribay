@@ -25,19 +25,19 @@ use TauriBay\Tauri\CharacterClasses;
 
 class PlayerController extends Controller
 {
-    public function mode(Request $_request, $_realm_short, $_player_name, $_character_id, $_mode_id)
+    public function mode(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id)
     {
         switch($_mode_id)
         {
             case "recent":
-                $character = Characters::where("id","=",$_character_id)->first();
+                $character = Characters::where("guid","=",$_character_guid)->first();
                 if ( $character !== null ) {
 
                     $characterClass = $character->class;
 
                     $canHeal = EncounterMember::canClassHeal($characterClass);
 
-                    $encounters = CharacterEncounters::where("character_id","=",$_character_id)
+                    $encounters = CharacterEncounters::where("character_id","=",$character->id)
                         ->rightJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
                         ->orderBy("killtime", "desc")->paginate(16);
 
