@@ -39,7 +39,6 @@ class PlayerController extends Controller
 
                     $encounters = CharacterEncounters::where("character_id","=",$_character_id)
                         ->rightJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
-                        ->leftJoin("guilds","encounter_members")
                         ->orderBy("killtime", "desc")->paginate(16);
 
                     $encounterIDs = Encounter::ENCOUNTER_IDS;
