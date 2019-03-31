@@ -81,9 +81,11 @@ class PlayerController extends Controller
 
         $encounters = Encounter::getMapEncounters($expansionId, $mapId);
         $encounters[0] = __("Minden boss");
+        $realmUrl = $_realm_short;
 
         return view("player/player", compact(
             "character",
+            "realmUrl",
             "characterClasses",
             "modes",
             "modeId",

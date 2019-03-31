@@ -976,14 +976,14 @@ $(function()
 
             var realm = $("#realm_url").val();
             var name = $("#player_name").val();
-            var id = $("#player_id").val();
+            var guid = $("#player_guid").val();
 
             var container = $("#"+mode);
             $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
 
             $.ajax({
                 type: "GET",
-                url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + id + "/" + mode + "?page=" + page,
+                url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "?page=" + page,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },

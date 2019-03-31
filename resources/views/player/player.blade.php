@@ -24,7 +24,8 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="panel nomargin">
-                <input id="player_id" type="hidden" class="form-control" name="player_id" value="{!! Input::get('player_id',$character->id) !!}">
+                <input id="realm_url" type="hidden" class="form-control" name="player_id" value="{{ $realmUrl }}">
+                <input id="player_guid" type="hidden" class="form-control" name="player_id" value="{{ $character->guid }}">
                 <input id="player_name" type="hidden" class="form-control" name="player_name" value="{!! Input::get('player_name',$character->name) !!}" placeholder="{{ __("Karakter neve") }}">
                 <div id="player-response-form">
                     <ul class="nav nav-tabs" role="tablist">
