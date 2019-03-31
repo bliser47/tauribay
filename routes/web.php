@@ -91,7 +91,7 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/player/', 'PlayerController@index');
     Route::get('/player/{realm_short}/{name}', 'PlayerController@search');
-    Route::get('/player/{realm_short}/{name}/{id}', 'PlayerController@player');
+    Route::get('/player/{realm_short}/{name}/{character_guid}', 'PlayerController@player');
     Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}', 'PlayerController@mode');
 
 

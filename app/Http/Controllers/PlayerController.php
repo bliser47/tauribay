@@ -57,9 +57,9 @@ class PlayerController extends Controller
     }
 
 
-    public function player(Request $_request, $_realm_short, $_player_name, $id) {
+    public function player(Request $_request, $_realm_short, $_player_name, $guid) {
 
-        $character = Characters::where("id","=",$id)->first();
+        $character = Characters::where("guid","=",$guid)->first();
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
         $modes = array(
