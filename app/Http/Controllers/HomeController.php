@@ -39,12 +39,14 @@ class HomeController extends Controller
 
         $user = Auth::user();
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
-        $authorizedCharacters = AuthorizedCharacter::where("user_id","=",$user->id)->leftJoin("characters","characters.id","=","authorized_characters.character_id")
+        $authorizedCharacters = AuthorizedCharacter::where("user_id","=",$user->id)->
+        leftJoin("characters","characters.id","=","authorized_characters.character_id")
         ->select(array(
             "characters.id as id",
             "characters.class as class",
             "characters.realm as realm",
             "characters.name as name",
+            "characters.guid as guid",
             "authorized_characters.updated_at as updated_at"
         ))->get();
         $authorizationLifeTimeInHours = 168; // 1 week
