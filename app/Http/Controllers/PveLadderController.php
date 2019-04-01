@@ -644,7 +644,6 @@ class PveLadderController extends Controller
                 if (  !$cacheValue || !$cacheUrlValue ) {
                     $defaultDifficultyIndex = 0;
                     $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
-                    $encounters = array();
                     $defaultDifficultyId = null;
                     $backUpDifficultyId = null;
                     foreach ($difficulties as $index => $difficulty) {
@@ -661,7 +660,7 @@ class PveLadderController extends Controller
 
                     $maps = Encounter::getExpansionMaps($expansionId);
 
-                    $view = view("ladder/pve/ajax/map", compact("encounters",
+                    $view = view("ladder/pve/ajax/map", compact(
                         "difficulties",
                         "defaultDifficultyIndex",
                         "mapId",

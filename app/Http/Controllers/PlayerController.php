@@ -25,33 +25,62 @@ use TauriBay\Tauri\CharacterClasses;
 
 class PlayerController extends Controller
 {
+    public function difficulty(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id) {
+        $character = Characters::where("guid","=",$_character_guid)->first();
+        if ( $character !== null ) {
+            switch ($_mode_id) {
+                case "top":
+
+                    break;
+            }
+        }
+    }
+
     public function mode(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id)
     {
-        switch($_mode_id)
-        {
-            case "recent":
-                $character = Characters::where("guid","=",$_character_guid)->first();
-                if ( $character !== null ) {
+        $character = Characters::where("guid","=",$_character_guid)->first();
+        if ( $character !== null ) {
+            switch ($_mode_id) {
+                case "recent":
 
                     $characterClass = $character->class;
 
                     $canHeal = EncounterMember::canClassHeal($characterClass);
 
-                    $encounters = CharacterEncounters::where("character_id","=",$character->id)
+                    $encounters = CharacterEncounters::where("character_id", "=", $character->id)
                         ->rightJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
                         ->orderBy("killtime", "desc")->paginate(16);
 
                     $encounterIDs = Encounter::ENCOUNTER_IDS;
 
-                    return view("player/ajax/recent", compact("encounters", "encounterIDs","canHeal"));
-                }
+                    return view("player/ajax/recent", compact("encounters", "encounterIDs", "canHeal"));
 
+                    break;
+
+                case "top":
+                    $expansionId = Defaults::EXPANSION_ID;
+                    $mapId = Defaults::MAP_ID;
+                    $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
+
+                    $defaultDifficultyIndex = 0;
+                    $defaultDifficultyId = null;
+                    $backUpDifficultyId = null;
+                    foreach ($difficulties as $index => $difficulty) {
+                        $difficultyId = $difficulty["id"];
+                        $backUpDifficultyId = $difficultyId;
+                        if ($difficultyId == 5 && !$_request->has("default_difficulty_id") || $_request->get("default_difficulty_id") == $difficultyId) {
+                            $defaultDifficultyIndex = $index;
+                            $defaultDifficultyId = $difficultyId;
+                        }
+                    }
+                    if ($defaultDifficultyId == null) {
+                        $defaultDifficultyId = $backUpDifficultyId;
+                    }
+
+
+                    return view("player/ajax/top/map", compact("difficulties","mapId","expansionId","defaultDifficultyIndex"));
                 break;
-
-            case "top":
-
-
-            break;
+            }
         }
         return view("player/ajax/notfound");
     }
@@ -64,7 +93,7 @@ class PlayerController extends Controller
 
         $modes = array(
             "recent" => __("Új"),
-            //"top" => __("Top"),
+            "top" => __("Top")
         );
         $modeId = Defaults::PLAYER_MODE;
 
