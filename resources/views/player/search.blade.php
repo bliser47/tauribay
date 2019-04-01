@@ -43,7 +43,7 @@
                             <td>{{ $character->name }}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
                             <td>{{ $character->guid  }}</td>
-                            <td><a href="{{ URL::to("/player/" . $realmUrl . "/" . $character->name . "/" . $character->id ) }}">{{ __("Kiválaszt") }}</a></td>
+                            <td><a href="{{ URL::to("/player/" . $realmUrl . "/" . $character->name . "/" . $character->guid ) }}">{{ __("Kiválaszt") }}</a></td>
                         </tr>
                     @endforeach
                 </table>

@@ -2,8 +2,8 @@
     <tr id="character{{$character->id}}" class="charRow">
         <td><b>{{ (($characters->currentPage()-1)*16)+$nr+1  }}</b></td>
         <td class="cellDesktop"> {{ $realmsShort[$character->realm]  }}</td>
-        <td class="cellDesktop"> <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] ."/" . $character->name . "/" . $character->id }}">{{ $character->name }}</a></td>
-        <td class="cellMobile"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] ."/" . $character->name . "/" . $character->id }}">{{ strlen($character->name) > 6 ? (mb_substr($character->name,0,6) . "..") : $character->name }}</a></td>
+        <td class="cellDesktop"> <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] ."/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a></td>
+        <td class="cellMobile"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] ."/" . $character->name . "/" . $character->guid }}">{{ strlen($character->name) > 6 ? (mb_substr($character->name,0,6) . "..") : $character->name }}</a></td>
         <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png?v=2") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
         <td class="topItemLevel {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnActive'  : 'columnInactive'}}"> {{ $character->ilvl }}  </td>
         <td class="topAchievementPoints {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnInactive'  : 'columnActive'}}"> {{ $character->achievement_points }}  </td>

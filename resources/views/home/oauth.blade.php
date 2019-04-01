@@ -27,7 +27,7 @@
     @foreach ( $authorizedCharacters as $character )
         <tr>
             <td>{{ \TauriBay\Realm::REALMS_SHORT[$character->realm] }}</td>
-            <td><a href="{{ URL::to("/player/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->id ) }}">{{ $character->name }}</a></td>
+            <td><a href="{{ URL::to("/player/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid ) }}">{{ $character->name }}</a></td>
             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
             <td>{{ $authorizationLifeTimeInHours - \Carbon\Carbon::now()->diffInHours(\Carbon\Carbon::parse($character->updated_at)) . " " .  __("óra") }}</td>
         </tr>
