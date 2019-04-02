@@ -62,12 +62,13 @@ class PlayerController extends Controller
                                     $score = 0;
                                     if ( $memberBest ) {
                                         $typeBest = MemberTop::where("encounter_id","=",$encounterId)
-                                            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->orderBy($topType,"desc")->first();
+                                            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
+                                            ->where($topType,">=",$memberBest->$topType)
+                                            ->orderBy($topType,"desc")->first();
                                         $score = intval(($memberBest->$topType * 100) / $typeBest->$topType);
                                     }
                                     $scores[$encounterId][$specId] = array(
-                                        "type" => "",
-                                        "typeName" => strtoupper($topType),
+                                        "link" => "",
                                         "score" => $score
                                     );
                                 }
