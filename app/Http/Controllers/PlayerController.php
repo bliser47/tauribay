@@ -66,7 +66,7 @@ class PlayerController extends Controller
                                         $score = intval(($memberBest->$topType * 100) / $typeBest->$topType);
                                     }
                                     $scores[$encounterId][$specId] = array(
-                                        "type" => $memberBest ? date() : "",
+                                        "type" => "",
                                         "typeName" => strtoupper($topType),
                                         "score" => $score
                                     );
