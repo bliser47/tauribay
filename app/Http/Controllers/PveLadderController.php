@@ -527,7 +527,7 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "?v=14";
+                $cacheKey = http_build_query($_request->all()) . "?v=15";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue ) {
