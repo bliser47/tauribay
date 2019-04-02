@@ -904,6 +904,27 @@ $(function()
         });
     };
 
+    var loadPlayerMapDifficulty = function(container, realm, name, guid, mode)
+    {
+        var difficulty = $(container).data("difficulty");
+        $.ajax({
+            type: "GET",
+            url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + difficulty,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                response = $.parseJSON(response);
+                $(container).find(".encounters_loading").hide();
+                $(container).parent().html(replaceTranslations(response["view"]));
+                prevState = window.location.href;
+                history.pushState(null, '', response["url"] + window.location.hash);
+                UpdateTimes();
+            }
+        });
+    };
+
 
     var listenForMapDifficultyLoad = function(data)
     {
@@ -999,6 +1020,25 @@ $(function()
                         loadPlayerMode(tab, mode, page);
                     });
                     UpdateTimes();
+
+                    if ( mode === "top" ) {
+                        container = $(".map-difficulty.active").find(".ajax-map-difficulty");
+                        loadPlayerMapDifficulty(container, realm, name, guid, mode);
+                        $(".map-difficulty-tab").on("click",function(){
+                            prevState = window.location.href;
+                            history.pushState(null, '', $(this).data("url") + window.location.hash);
+                            var diff = $(this).data("diff");
+                            if ( diff !== null && diff !== "")
+                            {
+                                setCookie("diffSaved2",diff);
+                            }
+                            if ( !$(this).hasClass("loaded") ) {
+                                $(this).addClass("loaded");
+                                var id = $(this).find("a").attr("href");
+                                loadPlayerMapDifficulty($(id).find(".ajax-map-difficulty"), realm, name, guid, mode)
+                            }
+                        });
+                    }
                 }
             });
 

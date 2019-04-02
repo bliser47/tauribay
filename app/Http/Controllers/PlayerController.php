@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: thoma
- * Date: 2/10/2019
- * Time: 9:54 AM
- */
 
 namespace TauriBay\Http\Controllers;
 
@@ -14,12 +8,10 @@ use TauriBay\Characters;
 use TauriBay\Defaults;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
-use TauriBay\Loot;
-use TauriBay\Item;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
-use TauriBay\MemberTop;
+use Illuminate\Support\Facades\URL;
 use TauriBay\Realm;
 use TauriBay\Tauri\CharacterClasses;
 
@@ -28,12 +20,68 @@ class PlayerController extends Controller
     public function difficulty(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id) {
         $character = Characters::where("guid","=",$_character_guid)->first();
         if ( $character !== null ) {
+
+            $specs = EncounterMember::getSpecsShort($character->class);
+
+
             switch ($_mode_id) {
                 case "top":
+
+                    $expansionId = Defaults::EXPANSION_ID;
+                    $mapId = Defaults::MAP_ID;
+
+                    $cacheKey = "playerTop" . http_build_query($_request->all()) . "?v=" . time();
+                    $cacheValue = Cache::get($cacheKey);
+                    $cacheUrlValue = Cache::get($cacheKey."URL");
+                    if (  !$cacheValue ) {
+
+                        $raidEncounters = array();
+                        $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
+                        foreach ($raids as $raid) {
+                            if ($raid["id"] == $mapId) {
+                                $raidEncounters = $raid["encounters"];
+                                break;
+                            }
+                        }
+
+                        $difficultyId = $_difficulty_id;
+
+                        $encounters = array();
+                        foreach ($raidEncounters as $raidEncounter) {
+                            $encounterId = $raidEncounter["encounter_id"];
+                            if (  Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
+                                $encounters[] = $raidEncounter;
+                            }
+                        }
+
+                        if ( count($encounters) > 0 ) {
+                            $view = view("player/ajax/top/difficulty", compact(
+                                "encounters",
+                                "specs",
+                                "expansionId",
+                                "mapId",
+                                "difficultyId"));
+                            $view = $view->render();
+                        } else {
+                            $view = "";
+                        }
+
+                        $cacheValue = $view;
+                        $cacheUrlValue = URL::to("player/" . $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/" .$difficultyId);
+                        Cache::put($cacheKey, $cacheValue, 120); // 2 hours
+                        Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
+                    }
+
+                    return json_encode(array(
+                        "view" => $cacheValue,
+                        "url" => $cacheUrlValue
+                    ));
+
 
                     break;
             }
         }
+        return "";
     }
 
     public function mode(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id)

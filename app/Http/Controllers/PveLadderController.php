@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Tamas
- * Date: 1/8/2019
- * Time: 4:46 PM
- */
 
 namespace TauriBay\Http\Controllers;
 
