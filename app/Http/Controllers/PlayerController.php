@@ -33,7 +33,6 @@ class PlayerController extends Controller
 
                     $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=5";
                     $cacheValue = Cache::get($cacheKey);
-                    $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
 
                         $raidEncounters = array();
