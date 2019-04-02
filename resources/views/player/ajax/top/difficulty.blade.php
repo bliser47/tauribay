@@ -21,8 +21,6 @@
                         <div style="width:{{ min(100, $scores[$encounter["encounter_id"]][$specId]["score"]) }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
                         @if ( strlen($scores[$encounter["encounter_id"]][$specId]["link"]) )
                             <span class="memberData memberDataMiddle"><a href="{{ $scores[$encounter["encounter_id"]][$specId]["link"] ?: "#" }}">{{ $scores[$encounter["encounter_id"]][$specId]["score"] }}%</a></span>
-                        @else
-                            <span class="memberData memberDataMiddle">CELL_NO_DATA</span>
                         @endif
                     </div>
                 </td>

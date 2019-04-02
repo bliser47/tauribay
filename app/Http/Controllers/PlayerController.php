@@ -31,7 +31,7 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=10";
+                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=11";
                     $cacheValue = Cache::get($cacheKey);
                     if (  !$cacheValue ) {
 
@@ -54,13 +54,13 @@ class PlayerController extends Controller
                                 $encounters[] = $raidEncounter;
                                 $scores[$encounterId] = array();
                                 foreach ( $specs as $specId => $specName ) {
-                                    $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
                                     $memberBest =  MemberTop::where("encounter_id","=",$encounterId)->where("realm_id","=",$character->realm)->
-                                        where("difficulty_id","=",$difficultyId)->where("name","=",$character->name)->where("spec","=",$specId)
+                                        where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->where("name","=",$character->name)
                                         ->first();
                                     $score = 0;
                                     $link = "";
                                     if ( $memberBest ) {
+                                        $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
                                         $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) :
                                             Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
                                         $score = intval(($memberBest->$topType * 100) / $best);
