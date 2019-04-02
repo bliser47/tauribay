@@ -918,9 +918,9 @@ $(function()
                 response = $.parseJSON(response);
                 $(container).find(".encounters_loading").hide();
                 $(container).parent().html(replaceTranslations(response["view"]));
-                prevState = window.location.href;
-                history.pushState(null, '', response["url"] + window.location.hash);
-                UpdateTimes();
+                //prevState = window.location.href;
+                //history.pushState(null, '', response["url"] + window.location.hash);
+                //UpdateTimes();
             }
         });
     };
@@ -1025,6 +1025,7 @@ $(function()
                         container = $(".map-difficulty.active").find(".ajax-map-difficulty");
                         loadPlayerMapDifficulty(container, realm, name, guid, mode);
                         $(".map-difficulty-tab").on("click",function(){
+                            /*
                             prevState = window.location.href;
                             history.pushState(null, '', $(this).data("url") + window.location.hash);
                             var diff = $(this).data("diff");
@@ -1032,6 +1033,7 @@ $(function()
                             {
                                 setCookie("diffSaved2",diff);
                             }
+                            */
                             if ( !$(this).hasClass("loaded") ) {
                                 $(this).addClass("loaded");
                                 var id = $(this).find("a").attr("href");

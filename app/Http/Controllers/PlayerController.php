@@ -61,11 +61,9 @@ class PlayerController extends Controller
                                         ->first();
                                     $score = 0;
                                     if ( $memberBest ) {
-                                        $typeBest = MemberTop::where("encounter_id","=",$encounterId)
-                                            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
-                                            ->where($topType,">=",$memberBest->$topType)
-                                            ->orderBy($topType,"desc")->first();
-                                        $score = intval(($memberBest->$topType * 100) / $typeBest->$topType);
+                                        $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) :
+                                            Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
+                                        $score = intval(($memberBest->$topType * 100) / $best);
                                     }
                                     $scores[$encounterId][$specId] = array(
                                         "link" => "",
@@ -90,14 +88,12 @@ class PlayerController extends Controller
                         }
 
                         $cacheValue = $view;
-                        $cacheUrlValue = URL::to("player/" . $_realm_short . "/" . $_player_name . "/" . $_character_guid);
                         Cache::put($cacheKey, $cacheValue, 120); // 2 hours
-                        Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
                     }
 
                     return json_encode(array(
                         "view" => $cacheValue,
-                        "url" => $cacheUrlValue
+                        "url" => ""
                     ));
 
 

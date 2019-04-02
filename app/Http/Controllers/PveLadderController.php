@@ -587,8 +587,15 @@ class PveLadderController extends Controller
                                 $topDps = Encounter::getTopDps($encounterId, $difficultyId, $realms, $factions);
                                 if ( $topDps != null && $topDps->id > 0 ) {
                                     $encounter->top_dps = $topDps;
-                                    $encounters[] = $encounter;
                                     $added = true;
+                                }
+                                $topHps = Encounter::getTopHps($encounterId, $difficultyId, $realms, $factions);
+                                if ( $topHps != null && $topHps->id > 0 ) {
+                                    $encounter->top_hps = $topHps;
+                                    $added = true;
+                                }
+                                if ( $added ) {
+                                    $encounters[] = $encounter;
                                 }
                             }
                         }
