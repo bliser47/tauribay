@@ -61,8 +61,8 @@
                     <td></td>
                 @endif
             @else
-                <td class="cellDesktop" colspan="8"><i>CELL_NO_DATA</i></td>
-                <td class="cellMobile" colspan="5"><i>CELL_NO_DATA</i></td>
+                <td class="cellDesktop" colspan="9"><i>CELL_NO_DATA</i></td>
+                <td class="cellMobile" colspan="6"><i>CELL_NO_DATA</i></td>
             @endif
         </tr>
         @endforeach
