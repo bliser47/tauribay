@@ -14,8 +14,9 @@
             @foreach( $specs as $specId => $specName )
                 <td  class="memberDataContainer playerDataContainer">
                     <div class="memberDataWidthContainer">
-                        <div style="width:{{ min(100, $scores[$encounter["encounter_id"]][$specId]) }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
-                        <span class="memberData memberData2">{{ $scores[$encounter["encounter_id"]][$specId] }}%</span>
+                        <div style="width:{{ min(100, $scores[$encounter["encounter_id"]][$specId]["score"]) }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
+                        <span class="memberData memberDataLeft"><b>{{ $scores[$encounter["encounter_id"]][$specId]["typeName"]  }}</b>{{ \TauriBay\Tauri\Skada::format($scores[$encounter["encounter_id"]][$specId]["type"]) }}</span>
+                        <span class="memberData memberData2">{{ $scores[$encounter["encounter_id"]][$specId]["score"] }}%</span>
                     </div>
                 </td>
             @endforeach

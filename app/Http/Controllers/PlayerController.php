@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use TauriBay\Faction;
 use TauriBay\MemberTop;
 use TauriBay\Realm;
 use TauriBay\Tauri\CharacterClasses;
@@ -31,7 +32,7 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . http_build_query($_request->all()) . "?v=1";
+                    $cacheKey = "playerTop" . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=3";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
@@ -61,11 +62,16 @@ class PlayerController extends Controller
                                         ->first();
                                     $score = 0;
                                     if ( $memberBest ) {
-                                        $typeBest = MemberTop::where("encounter_id","=",$encounterId)
-                                            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->orderBy($topType,"desc")->first();
-                                        $score = intval(($memberBest->$topType * 100) / $typeBest->$topType);
+                                         if ( $topType == "dps") {
+                                             $topDps = Encounter::getTopDps($encounterId, $difficultyId, Realm::getAllRealmIds(), Faction::getAllFactionIds());
+                                             $score = intval(($memberBest->$topType * 100) / $topDps->dps);
+                                         }
                                     }
-                                    $scores[$encounterId][$specId] = $score;
+                                    $scores[$encounterId][$specId] = array(
+                                        "type" => $memberBest ? $memberBest->$topType : 0,
+                                        "typeName" => strtoupper($topType),
+                                        "score" => $score
+                                    );
                                 }
                             }
                         }
