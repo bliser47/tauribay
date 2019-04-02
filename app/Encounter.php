@@ -724,6 +724,11 @@ class Encounter extends Model
         return LadderCache::getTopDps($encounterId,$difficultyId, $realms, $factions);
     }
 
+    public static function getTopHps($encounterId, $difficultyId, $realms, $factions)
+    {
+        return LadderCache::getTopHps($encounterId,$difficultyId, $realms, $factions);
+    }
+
     // Ra-den and Sinestra
     public static function isHeroicEncounter($_encounter_id)
     {

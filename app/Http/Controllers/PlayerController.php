@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\URL;
+use TauriBay\MemberTop;
 use TauriBay\Realm;
 use TauriBay\Tauri\CharacterClasses;
 
@@ -30,7 +31,7 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . http_build_query($_request->all()) . "?v=" . time();
+                    $cacheKey = "playerTop" . http_build_query($_request->all()) . "?v=1";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
@@ -46,17 +47,34 @@ class PlayerController extends Controller
 
                         $difficultyId = $_difficulty_id;
 
+                        $scores = array();
                         $encounters = array();
                         foreach ($raidEncounters as $raidEncounter) {
                             $encounterId = $raidEncounter["encounter_id"];
                             if (  Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
                                 $encounters[] = $raidEncounter;
+                                $scores[$encounterId] = array();
+                                foreach ( $specs as $specId => $specName ) {
+                                    $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
+                                    $memberBest =  MemberTop::where("encounter_id","=",$encounterId)->where("realm_id","=",$character->realm)->
+                                        where("difficulty_id","=",$difficultyId)->where("name","=",$character->name)->where("spec","=",$specId)
+                                        ->first();
+                                    $score = 0;
+                                    if ( $memberBest ) {
+                                        $typeBest = MemberTop::where("encounter_id","=",$encounterId)
+                                            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->orderBy($topType,"desc")->first();
+                                        $score = intval(($memberBest->$topType * 100) / $typeBest->$topType);
+                                    }
+                                    $scores[$encounterId][$specId] = $score;
+                                }
                             }
                         }
 
                         if ( count($encounters) > 0 ) {
                             $view = view("player/ajax/top/difficulty", compact(
                                 "encounters",
+                                "character",
+                                "scores",
                                 "specs",
                                 "expansionId",
                                 "mapId",
@@ -67,7 +85,7 @@ class PlayerController extends Controller
                         }
 
                         $cacheValue = $view;
-                        $cacheUrlValue = URL::to("player/" . $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/" .$difficultyId);
+                        $cacheUrlValue = URL::to("player/" . $_realm_short . "/" . $_player_name . "/" . $_character_guid);
                         Cache::put($cacheKey, $cacheValue, 120); // 2 hours
                         Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
                     }
@@ -141,7 +159,7 @@ class PlayerController extends Controller
 
         $modes = array(
             "recent" => __("Új"),
-            "top" => __("Top")
+            "top" => __("Top (Real)")
         );
         $modeId = Defaults::PLAYER_MODE;
 

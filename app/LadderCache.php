@@ -47,6 +47,13 @@ class LadderCache extends Model
             ->orderBy("dps","desc")->first();
     }
 
+    public static function getTopHps($encounterId, $difficultyId, $realms, $factions)
+    {
+        return LadderCache::where("ladder_caches.encounter_id", "=", $encounterId)->where("ladder_caches.difficulty_id", "=", $difficultyId)
+            ->whereIn("ladder_caches.realm_id",$realms)->whereIn("ladder_caches.faction_id",$factions)->leftJoin("member_tops","member_tops.id","=","ladder_caches.top_hps_encounter_member")
+            ->orderBy("hps","desc")->first();
+    }
+
     public static function calculateFastestEncounter($encounterId, $difficultyId, $realms, $factions) {
         foreach ( $realms as $realmId ) {
             foreach ($factions as $factionId) {
