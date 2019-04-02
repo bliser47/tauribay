@@ -1125,6 +1125,10 @@ a.changelog:hover, a.trello:hover
     right:90px;
 }
 
+.memberData a {
+    color:#fff;
+}
+
 .memberDataWidth
 {
     height:28px;

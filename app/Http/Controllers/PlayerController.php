@@ -31,7 +31,7 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=6";
+                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=10";
                     $cacheValue = Cache::get($cacheKey);
                     if (  !$cacheValue ) {
 
@@ -59,13 +59,16 @@ class PlayerController extends Controller
                                         where("difficulty_id","=",$difficultyId)->where("name","=",$character->name)->where("spec","=",$specId)
                                         ->first();
                                     $score = 0;
+                                    $link = "";
                                     if ( $memberBest ) {
                                         $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) :
                                             Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
                                         $score = intval(($memberBest->$topType * 100) / $best);
+                                        $encounter = $topType . "_encounter_id";
+                                        $link = URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $memberBest->$encounter;
                                     }
                                     $scores[$encounterId][$specId] = array(
-                                        "link" => "",
+                                        "link" => $link,
                                         "score" => $score
                                     );
                                 }
