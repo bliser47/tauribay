@@ -1431,3 +1431,9 @@ tr.spacer
 .amazon.noblocker .desktopAmazonSmallScreen {
     height:90px;
 }
+
+.table tbody td.bossCell {
+    width:64px !important;
+    padding:0px !important;
+    background-size:cover;
+}
