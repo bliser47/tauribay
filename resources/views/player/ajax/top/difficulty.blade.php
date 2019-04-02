@@ -3,7 +3,8 @@
         <th>Boss</th>
         @foreach( $specs as $specId => $specName )
             <th class="topDpsSpecContainer">
-                <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $specId . ".png") }}" alt="{{ $specName}}"/> {{ $specName }}
+                <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $specId . ".png") }}" alt="{{ $specName}}"/>
+                <div class="divDesktop">{{ $specName }}</div>
             </th>
         @endforeach
     </tr>
@@ -15,7 +16,7 @@
                 <td  class="memberDataContainer playerDataContainer">
                     <div class="memberDataWidthContainer">
                         <div style="width:{{ min(100, $scores[$encounter["encounter_id"]][$specId]["score"]) }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
-                        <span class="memberData memberData2">{{ $scores[$encounter["encounter_id"]][$specId]["score"] }}%</span>
+                        <span class="memberData memberDataMiddle">{{ $scores[$encounter["encounter_id"]][$specId]["score"] }}%</span>
                     </div>
                 </td>
             @endforeach

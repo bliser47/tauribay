@@ -1111,6 +1111,13 @@ a.changelog:hover, a.trello:hover
     left:10px;
 }
 
+
+.memberDataMiddle
+{
+    left:0px;
+    right:0px;
+}
+
 .memberData1
 {
     font-weight:normal !important;
