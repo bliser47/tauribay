@@ -2,10 +2,13 @@
     <tr class="tHead">
         <th>Boss</th>
         @foreach( $specs as $specId => $specName )
-            <th class="topDpsSpecContainer">
-                <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $specId . ".png") }}" alt="{{ $specName}}"/>
-                <div class="divDesktop">{{ $specName }}</div>
-            </th>
+            <td class="cellDesktop topDpsSpecContainer">
+                <img class="topDpsSpec mobile" src="{{ URL::asset("img/classes/specs/" . $specId . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$specId] }}"/>
+                {{ $specName }}
+            </td>
+            <td class="cellMobile topDpsSpecContainer">
+                <img class="topDpsSpec mobile" src="{{ URL::asset("img/classes/specs/" . $specId . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$specId] }}"/>
+            </td>
         @endforeach
     </tr>
     @foreach( $encounters as $encounter )

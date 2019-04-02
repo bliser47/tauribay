@@ -1057,7 +1057,7 @@ a.changelog:hover, a.trello:hover
 
 .memberDataContainerFirst
 {
-    border-top:2px solid rgba(0,0,0,0.5);
+    border-top:2px solid rgba(0,0,0,0.5) !important;
 }
 .memberDataContainer .memberDataWidthContainer
 {
@@ -1224,6 +1224,7 @@ footer
     padding:70px;
 }
 
+
 .topDpsSpecContainer, .lootItemContainer
 {
     width: 35px !Important;
@@ -1360,14 +1361,14 @@ tr.spacer
 .topDpsSpec.mobile
 {
     position: inherit;
-    top:3px;
+    top:0px;
     left:0px;
     width: 28px;
     height: 28px;
 }
 
 .topDpsSpecContainer.divMobile {
-    margin:auto;
+    width: 100% !important;
 }
 
 .noborder *, .noborder {
