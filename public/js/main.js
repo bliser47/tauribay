@@ -657,6 +657,14 @@ $(function()
                         var page = url.searchParams.get("page");
                         loadMode(pane, data, page);
                     });
+
+                    if ( mode === "speed" ) {
+                        $(tab).find(".refreshHeader").click(function(e){
+                            data += "&refresh_cache=1";
+                            loadMode(pane, data, page);
+                            e.preventDefault();
+                        });
+                    }
                 }
                 UpdateTimes();
             }

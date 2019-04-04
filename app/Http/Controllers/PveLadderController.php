@@ -388,9 +388,17 @@ class PveLadderController extends Controller
                 }
                 else if ( $modeId == "speed" )
                 {
-                    $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=8";
-                    $cacheValue = Cache::get($cacheKey);
-                    $cacheUrlValue = Cache::get($cacheKey."URL");
+                    if (!$_request->has("refresh_cache") )
+                    {
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=9";
+                        $cacheValue = Cache::get($cacheKey);
+                        $cacheUrlValue = Cache::get($cacheKey."URL");
+                    } else {
+                        $cacheValue = "";
+                        $cacheUrlValue = "";
+                        unset($_request['refresh_cache']);
+                        $cacheKey = http_build_query($_request->all()) . "_" . Lang::locale() . "?v=9";
+                    }
                     if (  !$cacheValue ) {
 
                         $encounters = EncounterTop::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId);

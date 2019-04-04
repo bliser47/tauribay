@@ -1,6 +1,6 @@
 <table class="table table-bordered table-classes">
     <tr class="tHead">
-        <th>{{ __("Nr") }}</th>
+        <th>  <button class="refreshHeader" type="submit"></button></th>
         <th>{{ __("Guild") }}</th>
         <th>{{ __("Dátum") }}</th>
         <th>{{ __("Idő") }}</th>
