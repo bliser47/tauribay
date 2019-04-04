@@ -39,8 +39,7 @@ Route::post('/ilvlupdate', 'TopItemLevelsController@update');
 Route::post('/raidupdate', 'ProgressController@updateRaids');
 Route::get('/raidupdate', 'ProgressController@updateRaids');
 Route::get('/raidmemberupdate', 'ProgressController@updateRaidMembers');
-
-Route::get('/progressdebug', 'ProgressController@debug');
+Route::get('/removeInvalids', 'ProgressController@deleteInvalids');
 
 
 

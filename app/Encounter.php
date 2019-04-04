@@ -18,7 +18,10 @@ class Encounter extends Model
         158853, // Animus Prot Pala exploit
         171431, // Animus Prot Pala exploit
         240304, // Animus Prot Pala exploit
-        92775   // Ra-den Prot Pala exploit
+        92775,  // Ra-den Prot Pala exploit
+        323063, // Durumu Frenzy exploit
+        320421,  // JinRokh Frenzy exploit
+        333593  // JinRokh Frenzy exploit
     ];
 
 

@@ -70,6 +70,7 @@
         </div>
     </div>
 </nav>
+{{--
 <div id="amazon" class="amazon container">
     <div class="amazon-container">
         <div id="MEIGitqPUFDH">
@@ -88,3 +89,4 @@
         <iframe class="divMobile" src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=288&l=ez&f=ifr&linkID=66f2d6d8bad428fb96c56970c2ea5d57&t=stamas47-21&tracking_id=stamas47-21" width="320" height="50" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
     </div>
 </div>
+--}}

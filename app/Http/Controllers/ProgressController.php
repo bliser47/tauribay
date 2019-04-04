@@ -43,20 +43,21 @@ class ProgressController extends Controller
         6 => array()
     );
 
+    public function deleteInvalids() {
+        $invalid = array(
+            323063, // Durumu Frenzy exploit
+            320421,  // JinRokh Frenzy exploit
+            333593  // JinRokh Frenzy exploit
+        );
 
-    public function debug(Request $_request)
-    {
-        ini_set('max_execution_time', 0);
+        LadderCache::whereIn("fastest_encounter", $invalid)->delete();
+        EncounterTop::whereIn("fastest_encounter_id",$invalid)->delete();
 
-        /*
-        EncounterTop::whereIn("fastest_encounter_id",Encounter::INVALID_RAIDS)->delete();
-        LadderCache::whereIn("fastest_encounter", Encounter::INVALID_RAIDS)->delete();
-
-        foreach ( Encounter::INVALID_RAIDS as $invalidId ) {
+        foreach ( $invalid as $invalidId ) {
 
             $encounter = Encounter::where("id","=",$invalidId)->first();
 
-            $guildEncounters = Encounter::where("encounter_id", $encounter->encounter_id)->whereNotIn("encounter_id",Encounter::INVALID_RAIDS)
+            $guildEncounters = Encounter::where("encounter_id", $encounter->encounter_id)
                 ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $encounter->guild_id)->get();
 
             foreach ( $guildEncounters as $guildEncounter ) {
@@ -64,7 +65,32 @@ class ProgressController extends Controller
                 Encounter::refreshEncounterTop($guildEncounter, $guild);
             }
         }
-        */
+
+        $memberTops = EncounterMember::whereIn("encounter_id",$invalid)->get();
+        $ret = array();
+        foreach ( $memberTops as $member )
+        {
+            MemberTop::where("dps_encounter_id","=",$member->encounter_id)->delete();
+            MemberTop::where("hps_encounter_id","=",$member->encounter_id)->delete();
+
+            $memberEncounters = EncounterMember::where("name", $member->name)->where("realm_id", $member->realm_id)->where("encounter", $member->encounter)
+                ->where("difficulty_id", $member->difficulty_id)->where("spec", $member->spec)->get();
+
+            $ret[$member->name] = array();
+
+            foreach ( $memberEncounters as $memberEncounter ) {
+                $encounter = Encounter::where("id","=",$memberEncounter->encounter_id)->first();
+                $guild = Guild::where("id","=",$encounter->guild_id)->first();
+                Encounter::refreshMemberTop($memberEncounter, $guild);
+
+                $ret[$member->name][] = $memberEncounter->id;
+            }
+        }
+    }
+
+    public function debug(Request $_request)
+    {
+        ini_set('max_execution_time', 0);
         /*
         $ids = Encounter::getMapEncountersIds(2, 615);
         $data = array();
