@@ -45,9 +45,34 @@ class ProgressController extends Controller
 
     public function deleteInvalids() {
         $invalid = array(
-            323063, // Durumu Frenzy exploit
-            320421,  // JinRokh Frenzy exploit
-            333593  // JinRokh Frenzy exploit
+            323224,  // Primordius Frenzy exploti
+            323068, // Durumu frenzy exploit
+            322976, // JiKun frenzy exploit
+            321218, // Magaera frenzy exploit,
+            321022, // Tortos frenzy exploit,
+            320725, // Council frenzy exploit
+            320534, // Horridon frenzy exploit
+            302630, // Durumu frenzy exploit
+            302513, // Magaera frenzy exploit
+            286882 , // Council frenzy exploit
+            286647, // Horridon frenzy exploit
+            286504, // JinRokh frenzy exploit
+            275689, // Twins frenzy exploit
+            275551, // Iron'Qon frenzy exploit,
+            272079, // Primo frenzy exploit
+            270587, // Durumu frenzy exploit
+            270448, // JiKun frenzy exploit
+            270511, // Primordius frenzy exploit
+            270206 , // Tortos frenzy exploit
+            270071 , // Council frenzy exploit
+            269878, // Horridon frenzy exploit
+            269933, // JinRokh frenzy exploit
+            256490, // Lei Shen frenzy exploit
+            253714, // Twins frenzy exploit
+            253616, // Iron Qon frenzy exploit
+            253017, // Primo frenzy exploit
+            252888, // Durumu frenzy exploit
+            250873, 250683, 250430, 250295
         );
 
         LadderCache::whereIn("fastest_encounter", $invalid)->delete();
