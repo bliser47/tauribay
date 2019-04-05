@@ -221,6 +221,7 @@ class EncounterController extends Controller
     }
 
     public function fixCharacters() {
+        /*
         $api = new Tauri\ApiClient();
         ini_set('max_execution_time', 0);
         do {
@@ -237,6 +238,27 @@ class EncounterController extends Controller
                 }
             }
         } while ( $found );
+        */
+        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP);
+        $ret = array();
+        foreach ( $ids as $id ) {
+            $name = Encounter::getName($id);
+            $ret[$name] = array();
+            foreach ( array(3,4,5,6) as $diff)  {
+                $diffName = Encounter::SIZE_AND_DIFFICULTY_SHORT[$diff];
+                $ret[$name][$diffName] = array();
+                foreach ( EncounterMember::CLASSES as $class ) {
+                    $ret[$name][$diffName][$class["name"]] = array();
+                    foreach ( $class["specs"] as $specId => $spec ) {
+                        $dps = Encounter::getSpecTopDps($id,$diff,$specId);
+                        $hps = Encounter::getSpecTopHps($id,$diff,$specId);
+                        $ret[$name][$diffName][$class["name"]]["dps"] = $dps;
+                        $ret[$name][$diffName][$class["name"]]["hps"] = $hps;
+                    }
+                }
+            }
+        }
+        return $ret;
     }
 
     public function fixEncounterTop(Request $_request) {
