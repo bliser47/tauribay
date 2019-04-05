@@ -1218,6 +1218,13 @@ footer
 {
     float:left;
     margin:14px;
+    position: relative;
+}
+
+#mobileLanguage .dropdown-menu
+{
+    top: 34px;
+    left: -21px;
 }
 
 #mobileChangelog, #mobileTrello
