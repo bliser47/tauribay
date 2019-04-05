@@ -74,6 +74,11 @@
                     </div>
                 @endif
             </div>
+            @if ( $isInvalid )
+                <div class="alert alert-danger nomargin">
+                    {{ __("Figyelem! Ezek az adatok bizonyos bugok miatt nem kerülnek beszámításra a Toplista rendszerbe!") }}
+                </div>
+            @endif
             <div class="panel panel-default">
                 <ul class="nav nav-tabs" role="tablist">
                     <li class="home-main-tab active" role="presentation"><a href="#damage" aria-controls="damage" role="tab" data-toggle="tab">DPS</a></li>

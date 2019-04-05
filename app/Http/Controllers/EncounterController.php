@@ -103,8 +103,10 @@ class EncounterController extends Controller
             $expansionId = Encounter::getMapExpansion($mapId);
 
             $loots = Loot::where("encounter_id", $encounter->id)->leftJoin("items", "loots.item_id", "=", "items.id")->get();
+            $isInvalid = in_array($logid, Encounter::INVALID_RAIDS);
 
             return view("encounter/encounter", compact("encounter",
+                "isInvalid",
                 "encounterData",
                 "membersScore",
                 "membersDamageTaken",

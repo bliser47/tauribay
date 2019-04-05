@@ -129,7 +129,8 @@
   "A szerver összes guildjének ToT (HC) progressje:" : "The ToT (HC) progress of all guilds on the server:",
   "A content legjobb boss kill idői:" : "The best kill times from the current content:",
   "Hamarosan a progress oldal sokkal több statisztikával bővűl!" : "Even more statistics to come!",
-
+  "Figyelem! Ezek az adatok bizonyos bugok miatt nem kerülnek beszámításra a Toplista rendszerbe!" :
+          "Warning! These datas due to certain bugs do not count towards the Toplist!",
   "Időtartam" : "Time",
   "Összes halál" : "Total deaths",
   "Halálok" : "Deaths",
