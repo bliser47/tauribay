@@ -63,6 +63,7 @@ class Encounter extends Model
         "Jin'rokh the Breaker" => "Jin'rokh",
         "Council of Elders" => "Council",
         "Durumu the Forgotten" => "Durumu",
+        "Primordius" => "Primo",
         "Dark Animus" => "Animus",
         "Twin Consorts" => "Twins",
         "The Stone Guard" => "Stone Guard",
