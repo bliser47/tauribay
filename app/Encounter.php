@@ -516,9 +516,9 @@ class Encounter extends Model
             }
             $member->save();
 
-            self::logCharacter($member, $api);
+            $character = self::logCharacter($member, $api);
             self::calculateScores($member);
-            self::refreshMemberTop($member, $guild);
+            self::refreshMemberTop($member, $guild, $character);
 
             $member->top_processed = 1;
             $member->save();
@@ -567,6 +567,7 @@ class Encounter extends Model
             $member->faction_id = $character->faction;
             Characters::addEncounter($character, $member);
         }
+        return $character;
     }
 
     public static function calculateScores($member)
@@ -637,7 +638,7 @@ class Encounter extends Model
         $encounter->save();
     }
 
-    public static function refreshMemberTop($member, $guild)
+    public static function refreshMemberTop($member, $guild, $character)
     {
         if ( !in_array($member->encounter_id,self::INVALID_RAIDS) ) {
             $top = MemberTop::where("name", $member->name)->where("realm_id", $member->realm_id)->where("encounter_id", $member->encounter)
@@ -684,6 +685,9 @@ class Encounter extends Model
                 $top->difficulty_id = $member->difficulty_id;
                 $top->encounter_id = $member->encounter;
                 $top->faction_id = $member->faction_id;
+                if ( $character ) {
+                    $top->character_id = $character->id;
+                }
                 if ($member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP) {
 
                     if ($member->spec != EncounterMember::SPEC_DRUID_BALALANCE || $member->killtime > Encounter::BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP) {

@@ -55,7 +55,7 @@ class PlayerController extends Controller
                                 $scores[$encounterId] = array();
                                 foreach ( $specs as $specId => $specName ) {
                                     $memberBest =  MemberTop::where("encounter_id","=",$encounterId)->where("realm_id","=",$character->realm)->
-                                        where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->where("name","=",$character->name)
+                                        where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->where("character_id","=",$character->id)
                                         ->first();
                                     $score = 0;
                                     $link = "";
