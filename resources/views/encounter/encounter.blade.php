@@ -59,18 +59,18 @@
                 @if ( $expansionId == 4 )
                     <div class="bossNameImg divDesktop" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
                         <img src="{{ URL::asset("img/encounters/" . $encounter->encounter_id . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounter->encounter_id)  }}"/>
-                        {{ $encounter->name ?: "Random" }} - {{ date("M d, Y") }}
+                        {{ $encounter->name ?: "Random" }} - {{ date("M d, Y", $encounter->killtime) }}
                     </div>
                     <div class="bossNameImgMobile divMobile" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
                         <img src="{{ URL::asset("img/encounters/" . $encounter->encounter_id . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounter->encounter_id)  }}"/>
-                        {{ $encounter->name ?: "Random" }} - {{ date("M d") }}
+                        {{ $encounter->name ?: "Random" }} - {{ date("M d", $encounter->killtime) }}
                     </div>
                 @else
                     <div class="bossName divDesktop" style="background-image:url('{{ URL::asset("img/maps/default.jpg") }}')">
-                        {{ $encounter->name ?: "Random" }} - {{ date("M d, Y") }}
+                        {{ $encounter->name ?: "Random" }} - {{ date("M d, Y", $encounter->killtime) }}
                     </div>
                     <div class="bossName divMobile" style="background-image:url('{{ URL::asset("img/maps/default.jpg") }}')">
-                        {{ $encounter->name?: "Random" }} - {{ date("M d") }}
+                        {{ $encounter->name?: "Random" }} - {{ date("M d", $encounter->killtime) }}
                     </div>
                 @endif
             </div>
