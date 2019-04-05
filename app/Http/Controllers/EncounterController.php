@@ -223,7 +223,6 @@ class EncounterController extends Controller
     }
 
     public function fixCharacters() {
-        /*
         $api = new Tauri\ApiClient();
         ini_set('max_execution_time', 0);
         do {
@@ -240,7 +239,7 @@ class EncounterController extends Controller
                 }
             }
         } while ( $found );
-        */
+        /*
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
         $ret = array();
         foreach ( $ids as $id ) {
@@ -261,6 +260,7 @@ class EncounterController extends Controller
             }
         }
         return $ret;
+        */
     }
 
     public function fixEncounterTop(Request $_request) {

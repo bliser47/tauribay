@@ -31,7 +31,7 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=12";
+                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=13";
                     $cacheValue = Cache::get($cacheKey);
                     if ( true || !$cacheValue ) {
 
