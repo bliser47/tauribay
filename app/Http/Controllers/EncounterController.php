@@ -225,11 +225,13 @@ class EncounterController extends Controller
         ini_set('max_execution_time', 0);
         do {
             $found = false;
-            $members = EncounterMember::where("top_processed","=",0)->take(1000)->get();
-            foreach ($members as $member) {
-                Encounter::logCharacter($member,$api);
-                $member->top_processed = 1;
-                $member->save();
+            $memberTops = MemberTop::where("top_processed","=",0)->take(5000)->get();
+            foreach ($memberTops as $top) {
+                $character = Characters::where("realm","=",$top->realm_id)->where("name","=",$top-name)->where("class","=",$top->class)->
+                orderBy("guid","desc")->first();
+                $top->character_id = $character->id;
+                $top->top_processed = 1;
+                $top->save();
                 $found = true;
             }
         } while ( $found );
