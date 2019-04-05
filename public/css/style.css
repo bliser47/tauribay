@@ -246,6 +246,8 @@ p,a,h1,h2,h3,h4,h5,h6,br,li,td,article{
 .navbar-nav>li>a {
     font-family: 'Jockey One', sans-serif;
     font-size:1.25em;
+    padding-left:7.5px;
+    padding-right:7.5px;
 }
 
 .glyphicon {
@@ -859,7 +861,17 @@ a.changelog:hover, a.trello:hover
     display:list-item;
 }
 
+.headerSearch {
+    width:250px;
+    padding:7.5px;
+}
+
 @media (max-width: 768px) {
+
+    .headerSearch {
+        width:100%;
+    }
+
     .rowDesktop {
         display: none;
     }

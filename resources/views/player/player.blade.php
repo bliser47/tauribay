@@ -26,7 +26,7 @@
             <div class="panel nomargin">
                 <input id="realm_url" type="hidden" class="form-control" name="player_id" value="{{ $realmUrl }}">
                 <input id="player_guid" type="hidden" class="form-control" name="player_id" value="{{ $character->guid }}">
-                <input id="player_name" type="hidden" class="form-control" name="player_name" value="{!! Input::get('player_name',$character->name) !!}" placeholder="{{ __("Karakter neve") }}">
+                <input id="player_name" type="hidden" class="form-control" name="player_name" value="{{ $character->name }}">
                 <div id="player-response-form">
                     <ul class="nav nav-tabs" role="tablist">
                         @foreach ( $modes as $modeKey => $modeName )

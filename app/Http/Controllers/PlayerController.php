@@ -205,23 +205,14 @@ class PlayerController extends Controller
             "defaultDifficultyId"));
     }
 
-    public function search(Request $_request, $_realm_url, $search)
+    public function index(Request $_request)
     {
-        $realmId = array_search($_realm_url, Realm::REALMS_URL);
-        $characters = Characters::where("realm","=",$realmId)
-            ->whereRaw("LOWER(name) LIKE \"%" . strtolower($search) . "%\"")->get();
-        $playerTitle = __("Karakter keresése");
-        $playerName = $search;
-        $realmUrl = $_realm_url;
+        $playerName = $_request->get("player_name");
+        $characters = Characters::whereRaw("LOWER(name) LIKE \"%" . strtolower($playerName) . "%\"")->get();
 
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
         return view("player/search", compact(
-            "characters", "search", "playerName", "playerTitle","realmUrl","characterClasses"));
-    }
-
-    public function index(Request $_request)
-    {
-        return view("player/index");
+            "characters", "search", "playerName","characterClasses"));
     }
 }

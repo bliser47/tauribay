@@ -7,7 +7,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <div class="divMobile" id="mobileLanguage">
+            <div id="mobileLanguage">
                 <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                     {!! language()->flag()  !!}<span class="caret"></span>
                 </a>
@@ -38,8 +38,7 @@
                 </li>
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
                 <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Guilds") }}</a></li>
-                <li class="{{ Request::segment(1) == 'ladder' ? 'active' : '' }}"><a href="/ladder/pve/mop/tot">{{ __("PVE Ladder") }}</a></li>
-                <li class="{{ Request::segment(1) == 'player' ? 'active' : '' }}"><a href="/player">{{ __("Player") }}</a></li>
+                <li class="{{ Request::segment(1) == 'ladder' ? 'active' : '' }}"><a href="/ladder/pve/mop/tot">{{ __("Ladder") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
@@ -58,13 +57,17 @@
                     <a class="trello" target="_blank" href="https://trello.com/b/sfKX349T/tauribay"></a>
                 </li>
                 --}}
-                <li class="dropdown listDesktop">
-                    <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        {!! language()->flag()  !!}<span class="caret"></span>
-                    </a>
-                    <ul class="dropdown-menu trade-types-dropdown-menu">
-                        {!! language()->flags() !!}
-                    </ul>
+                <li class="headerSearch">
+                    {!! Form::open(array("method" => "get","url" => URL::to("/player"))) !!}
+                    <div class="input-group">
+                        <input id="player_name" type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit">
+                                {{ __("Keresés") }}
+                            </button>
+                        </span>
+                    </div>
+                    {!! Form::close() !!}
                 </li>
             </ul>
         </div>

@@ -672,7 +672,7 @@ $(function()
     };
 
 
-    function setCookie(cname, cvalue, exdays = 1) {
+    function setCookie(cname, cvalue, exdays) {
         var d = new Date();
         d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
         var expires = "expires="+d.toUTCString();
@@ -1135,12 +1135,7 @@ $(function()
 
     listenForTabChange($("body"));
 
-    $("#player-form").submit(function(e){
-        e.preventDefault();
-        var realm = $("#realm_url").val();
-        var name = $("#player_name").val();
-        window.location.href = URL_WEBSITE + "/player/" + realm + "/" + name;
-    });
+
 
     $("#player-response-form").find(".modePanel").each(function(){
         var tab = $(this);
