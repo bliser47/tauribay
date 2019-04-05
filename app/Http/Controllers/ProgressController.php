@@ -3,6 +3,7 @@
 namespace TauriBay\Http\Controllers;
 
 use TauriBay\CharacterEncounters;
+use TauriBay\Characters;
 use TauriBay\Defaults;
 use TauriBay\Encounter;
 use TauriBay\EncounterMember;
@@ -45,6 +46,7 @@ class ProgressController extends Controller
 
     public function deleteInvalids() {
         $invalid = array(
+            231189,
             231098
         );
 
@@ -79,7 +81,8 @@ class ProgressController extends Controller
             foreach ( $memberEncounters as $memberEncounter ) {
                 $encounter = Encounter::where("id","=",$memberEncounter->encounter_id)->first();
                 $guild = Guild::where("id","=",$encounter->guild_id)->first();
-                Encounter::refreshMemberTop($memberEncounter, $guild);
+                $character = Characters::where("realm","=",$memberEncounter->realm_id)->where("guid","=",$memberEncounter->guid)->first();
+                Encounter::refreshMemberTop($memberEncounter, $guild, $character);
 
                 $ret[$member->name][] = $memberEncounter->id;
             }
