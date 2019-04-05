@@ -227,7 +227,7 @@ class EncounterController extends Controller
             $found = false;
             $memberTops = MemberTop::where("top_processed","=",0)->take(5000)->get();
             foreach ($memberTops as $top) {
-                $character = Characters::where("realm","=",$top->realm_id)->where("name","=",$top-name)->where("class","=",$top->class)->
+                $character = Characters::where("realm","=",$top->realm_id)->where("name","=",$top->name)->where("class","=",$top->class)->
                 orderBy("guid","desc")->first();
                 if ( $character) {
                     $top->character_id = $character->id;
