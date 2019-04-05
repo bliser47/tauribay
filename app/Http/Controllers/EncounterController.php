@@ -239,7 +239,7 @@ class EncounterController extends Controller
             }
         } while ( $found );
         */
-        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP);
+        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
         $ret = array();
         foreach ( $ids as $id ) {
             $name = Encounter::getName($id);
