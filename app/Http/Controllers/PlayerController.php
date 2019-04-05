@@ -54,9 +54,9 @@ class PlayerController extends Controller
                                 $encounters[] = $raidEncounter;
                                 $scores[$encounterId] = array();
                                 foreach ( $specs as $specId => $specName ) {
-                                    $memberBest =  MemberTop::where("encounter_id","=",$encounterId)->where("realm_id","=",$character->realm)->
-                                        where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->where("character_id","=",$character->id)
-                                        ->first();
+                                    $memberBest =  MemberTop::where("character_id","=",$character->id)->where("spec","=",$specId)
+                                        ->whre("encounter_id","=",$encounterId)->where("realm_id","=",$character->realm)
+                                        ->where("difficulty_id","=",$difficultyId)->first();
                                     $score = 0;
                                     $link = "";
                                     if ( $memberBest ) {
