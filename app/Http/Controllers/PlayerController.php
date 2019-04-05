@@ -213,6 +213,6 @@ class PlayerController extends Controller
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
         return view("player/search", compact(
-            "characters", "search", "playerName","characterClasses"));
+            "characters", "playerName","characterClasses"));
     }
 }
