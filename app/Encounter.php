@@ -770,11 +770,11 @@ class Encounter extends Model
     }
 
     public static function getSpecTopDpsKey($encounterId, $difficultyId, $specId) {
-        return "topSpecHps" . $encounterId . "/" . $difficultyId . "/" . $specId;
+        return "topSpecHps" . $encounterId . "&" . $difficultyId . "&" . $specId;
     }
 
     public static function getSpecTopHpsKey($encounterId, $difficultyId, $specId) {
-        return "topSpecDps" . $encounterId . "/" . $difficultyId . "/" . $specId;
+        return "topSpecDps" . $encounterId . "&" . $difficultyId . "&" . $specId;
     }
 
     public static function getSpecTopDps($encounterId, $difficultyId, $specId) {
@@ -789,7 +789,7 @@ class Encounter extends Model
                 $dps = $topDps->dps;
             }
             $specTopDps = $dps;
-            Cache::put($specTopDpsKey, $specTopDps);
+            Cache::forever($specTopDpsKey, $specTopDps);
         }
         return $specTopDps;
     }
@@ -799,14 +799,14 @@ class Encounter extends Model
         $specTopHps =  Cache::get($specTopHpsKey);
         if ( !$specTopHps ) {
             $hps = 0;
-            $topDps = MemberTop::where("encounter_id","=",$encounterId)
+            $topHps = MemberTop::where("encounter_id","=",$encounterId)
                 ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
                 ->orderBy("hps","desc")->first();
-            if ( $topDps ) {
-                $hps = $topDps->hps;
+            if ( $topHps ) {
+                $hps = $topHps->hps;
             }
             $specTopHps = $hps;
-            Cache::put($specTopHpsKey, $specTopHps);
+            Cache::forever($specTopHpsKey, $specTopHps);
         }
         return $specTopHps;
     }

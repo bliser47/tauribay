@@ -31,9 +31,9 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=11";
+                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=12";
                     $cacheValue = Cache::get($cacheKey);
-                    if (  !$cacheValue ) {
+                    if ( true || !$cacheValue ) {
 
                         $raidEncounters = array();
                         $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
@@ -48,20 +48,29 @@ class PlayerController extends Controller
 
                         $scores = array();
                         $encounters = array();
+                        $characterBests = MemberTop::where("character_id","=",$character->id)->where("difficulty_id",$difficultyId)
+                        ->whereIn("encounter_id", Encounter::getMapEncountersIds($expansionId,$mapId))->get();
+
+
                         foreach ($raidEncounters as $raidEncounter) {
                             $encounterId = $raidEncounter["encounter_id"];
                             if (  Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
                                 $encounters[] = $raidEncounter;
                                 $scores[$encounterId] = array();
                                 foreach ( $specs as $specId => $specName ) {
-                                    $memberBest = MemberTop::where("character_id","=",$character->id)->where("spec","=",$specId)
-                                        ->where("encounter_id","=",$encounterId)->where("difficulty_id","=",$difficultyId)->first();
+
                                     $score = 0;
                                     $link = "";
-                                    if ( $memberBest ) {
+
+                                    $memberBestKey = $characterBests->search(function ($item, $key) use ($encounterId, $specId) {
+                                        return $item["encounter_id"] == $encounterId && $item["spec"] ==  $specId;
+                                    });
+                                    $memberBest = $memberBestKey !== false ? $characterBests[$memberBestKey] : null;
+
+                                    if ( $memberBest) {
                                         $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
-                                        $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) :
-                                            Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
+                                        return  Encounter::getSpecTopDps($encounterId, $difficultyId, $specId);
+                                        $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
                                         $score = intval(($memberBest->$topType * 100) / $best);
                                         $encounter = $topType . "_encounter_id";
                                         $link = URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $memberBest->$encounter;
