@@ -229,10 +229,12 @@ class EncounterController extends Controller
             foreach ($memberTops as $top) {
                 $character = Characters::where("realm","=",$top->realm_id)->where("name","=",$top-name)->where("class","=",$top->class)->
                 orderBy("guid","desc")->first();
-                $top->character_id = $character->id;
-                $top->top_processed = 1;
-                $top->save();
-                $found = true;
+                if ( $character) {
+                    $top->character_id = $character->id;
+                    $top->top_processed = 1;
+                    $top->save();
+                    $found = true;
+                }
             }
         } while ( $found );
     }
