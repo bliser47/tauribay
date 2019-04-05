@@ -48,7 +48,7 @@ class PlayerController extends Controller
 
                         $scores = array();
                         $encounters = array();
-                        $characterBests = MemberTop::where("character_id","=",$character->id)->where("difficulty_id",$difficultyId)
+                        $characterBests = MemberTop::where("guid","=",$_character_guid)->where("difficulty_id",$difficultyId)
                         ->whereIn("encounter_id", Encounter::getMapEncountersIds($expansionId,$mapId))->get();
 
 
