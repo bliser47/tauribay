@@ -80,137 +80,19 @@
                 </div>
             @endif
             <div class="panel panel-default">
-                <ul class="nav nav-tabs" role="tablist">
-                    <li class="home-main-tab active" role="presentation"><a href="#damage" aria-controls="damage" role="tab" data-toggle="tab">DPS</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#healing" aria-controls="healing" role="tab" data-toggle="tab">HPS</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#score" aria-controls="score" role="tab" data-toggle="tab">Score</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#damage_taken" aria-controls="damage_taken" role="tab" data-toggle="tab">DMG</a></li>
-                    <li class="home-main-tab" role="presentation"><a href="#loot" aria-controls="loot" role="tab" data-toggle="tab">Loot</a></li>
+                <ul id="encounter-tabs" class="nav nav-tabs" role="tablist">
+                    <li data-id="{{ $encounter->id }}" data-mode="damage" class="home-main-tab active" role="presentation"><a href="#damage" aria-controls="damage" role="tab" data-toggle="tab">DPS</a></li>
+                    <li data-id="{{ $encounter->id }}" data-mode="healing" class="home-main-tab" role="presentation"><a href="#healing" aria-controls="healing" role="tab" data-toggle="tab">HPS</a></li>
+                    <li data-id="{{ $encounter->id }}" data-mode="score" class="home-main-tab" role="presentation"><a href="#score" aria-controls="score" role="tab" data-toggle="tab">Score</a></li>
+                    <li data-id="{{ $encounter->id }}" data-mode="damage_taken" class="home-main-tab" role="presentation"><a href="#damage_taken" aria-controls="damage_taken" role="tab" data-toggle="tab">DMG</a></li>
+                    <li data-id="{{ $encounter->id }}" data-mode="loot" class="home-main-tab" role="presentation"><a href="#loot" aria-controls="loot" role="tab" data-toggle="tab">Loot</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="damage">
-                        @if ( !$dpsValid )
-                            <div class="alert alert-danger nomargin">
-                                {{ __("Ezek az adatok hibásak ezért nem kerülnek megjelenítésre!") }}
-                            </div>
-                        @endif
-                        @foreach ( $membersDamage as $member )
-                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
-                                <div class="memberDataWidthContainer">
-                                    <div style="width:{{ $member->percentageDamage }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
-                                    <div class="memberSpec">
-                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
-                                    </div>
-                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
-                                    <span class="memberName">
-                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] . "/" . $member["name"] . "/" . $member->guid }}">{{ $member->name }}</a>
-                                    </span>
-                                    <span class="memberData memberData1 divDesktop">{{ number_format($member->damage_done) }}</span>
-                                    <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->damage_done) }}</span>
-                                    <span class="memberData memberData2">({{ $member->dps }})</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="healing">
-                        @if ( !$hpsValid )
-                            <div class="alert alert-danger nomargin">
-                                {{ __("Figyelem! Ezek az adatok hibásak lehetnek!") }}
-                            </div>
-                        @endif
-                        @foreach ( $membersHealing as $member )
-                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
-                                <div class="memberDataWidthContainer">
-                                    <div style="width:{{ $member->percentageHealing }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
-                                    <div class="memberSpec">
-                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
-                                    </div>
-                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
-                                    <span class="memberName">
-                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member->name . "/" . $member->guid}}">{{ $member->name }}</a>
-                                    </span>
-                                    <span class="memberData memberData1 divDesktop">{{ number_format($member->total_heal) }}</span>
-                                    <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->total_heal) }}</span>
-                                    <span class="memberData memberData2">({{ $member->hps }})</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="score">
-                        @foreach ( $membersScore as $member )
-                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
-                                <div class="memberDataWidthContainer">
-                                    <div style="width:{{ $member->percentageScore }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
-                                    <div class="memberSpec">
-                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
-                                    </div>
-                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
-                                    <span class="memberName">
-                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member["name"] . "/" . $member->guid }}">{{ $member->name }}</a>
-                                    </span>
-                                    <span class="memberData memberData1">{{ $member->ilvl }} iLvL</span>
-                                    <span class="memberData memberData2">{{ $member->score }}</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="damage_taken">
-                        @foreach ( $membersDamageTaken as $member )
-                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
-                                <div class="memberDataWidthContainer">
-                                    <div style="width:{{ $member->percentageDamageTaken }}%" class="memberDataWidth memberClass{{ $member->class }}"></div>
-                                    <div class="memberSpec">
-                                        <img src="{{ URL::asset("img/classes/specs/" . $member->spec . ".png") }}" alt="{{ $classSpecs[$member->spec] }}"/>
-                                    </div>
-                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
-                                    <span class="memberName">
-                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member["name"] . "/" . $member->guid }}">{{ $member->name }}</a>
-                                    </span>
-                                    <span class="memberData memberData1 divDesktop">{{ number_format($member->damage_absorb) }} abs</span>
-                                    <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->damage_absorb) }} abs</span>
-                                    <span class="memberData memberData2">{{  \TauriBay\Tauri\Skada::format($member->total_damage_taken) }}</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="loot">
-                        @if ( count($loots) )
-                            <table class="table table-bordered table-classes">
-                                <tr class="tHead">
-                                    <th style="width:35px"></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th class="cellDesktop">{{ __("Név") }}</th>
-                                    <th>{{ __("Típus") }}</th>
-                                    <th>{{ __("iLvL") }}</th>
-                                </tr>
-                                @foreach ( $loots as $loot )
-                                    <tr>
-                                        <td class="lootItemContainer">
-                                            <img class="lootItem" src="https://wow.zamimg.com/images/wow/icons/large/{{ $loot->icon }}.jpg">
-                                        </td>
-                                        <td>
-                                            {{ \TauriBay\Item::getInventoryType($loot->inventory_type) }}
-                                        </td>
-                                        <td>
-                                            {{ \TauriBay\Item::getSubClass($loot->inventory_type, $loot->subclass) }}
-                                        </td>
-                                        <td class="cellDesktop" style="white-space:nowrap;">
-                                            <a class="itemToolTip gearFrame" href="http://mop-shoot.tauri.hu/?item={{ $loot->item_id }}">
-                                                {{ $loot->name }}
-                                            </a>
-                                        </td>
-                                        <td> {{ $loot->description }}</td>
-                                        <td style="width:50px;">{{ $loot->ilvl }}</td>
-                                    </tr>
-                                @endforeach
-                         </table>
-                         @else
-                            <div class="alert alert-warning nomargin">
-                                {{ __("A visszamenőleges loot adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!") }}
-                            </div>
-                         @endif
-                    </div>
+                    <div role="tabpanel" class="tab-pane active" id="damage"></div>
+                    <div role="tabpanel" class="tab-pane" id="healing"></div>
+                    <div role="tabpanel" class="tab-pane" id="score"></div>
+                    <div role="tabpanel" class="tab-pane" id="damage_taken"></div>
+                    <div role="tabpanel" class="tab-pane" id="loot"></div>
                 </div>
             </div>
         </div>

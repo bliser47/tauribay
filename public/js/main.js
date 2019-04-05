@@ -1136,6 +1136,40 @@ $(function()
     listenForTabChange($("body"));
 
 
+    var loadEncounterDataMode = function(tab, id, mode) {
+        if ( !$(tab).hasClass("loadingMode") ) {
+
+            $(tab).addClass("loadingMode");
+            var container = $("#"+mode);
+            $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
+            $.ajax({
+                type: "GET",
+                url: URL_WEBSITE + "/encounter/MODE/" + id + "/" + mode,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    $(container).html(replaceTranslations(response));
+                }
+            });
+        }
+    };
+
+    $("#encounter-tabs").find("li").each(function(){
+        var tab = $(this);
+        var mode = $(tab).data("mode");
+        var id = $(tab).data("id");
+        if ($(tab).hasClass("active"))
+        {
+            loadEncounterDataMode(tab, id, mode);
+        }
+        else
+        {
+            $(this).on("click",function(){
+                loadEncounterDataMode(tab, id, mode);
+            });
+        }
+    });
 
     $("#player-response-form").find(".modePanel").each(function(){
         var tab = $(this);

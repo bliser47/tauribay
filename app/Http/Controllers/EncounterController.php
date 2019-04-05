@@ -35,6 +35,71 @@ class EncounterController extends Controller
 
     }
 
+    public function mode(Request $_request, $encounter_id, $logid, $mode) {
+        $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+        $encounter = Encounter::where("encounters.id", "=", $logid)->first();
+        switch($mode) {
+
+            case "damage":
+                $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
+                $dpsValid = $encounter->encounter_id !== 1572 || $encounter->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP;
+                $membersDamage = $members->sortByDesc("damage_done");
+                foreach ($membersDamage as $member) {
+                    $member->dps = Skada::calculatePS($encounter, $member, "damage_done");
+                    $member->dpsNonFormatted = Skada::calculatePS($encounter, $member, "damage_done", true);
+                    $member->percentageDamage = Skada::calculatePercentage($member, $membersDamage->first(), "damage_done");
+                }
+                return view("encounter/ajax/dps", compact("membersDamage", "dpsValid", "classSpecs"));
+                break;
+
+            case "healing":
+                $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
+                foreach ($members as $member) {
+                    $member->total_heal = $member->heal_done + $member->absorb_done;
+                }
+                $hpsValid = $encounter->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP;
+                $membersHealing = $members->sortByDesc("total_heal");
+                foreach ($membersHealing as $member) {
+                    $member->hps = Skada::calculatePS($encounter, $member, "total_heal");
+                    $member->hpsNonFormatted = Skada::calculatePS($encounter, $member, "total_heal", true);
+                    $member->percentageHealing = Skada::calculatePercentage($member, $membersHealing->first(), "total_heal");
+                }
+                return view("encounter/ajax/hps", compact("membersHealing", "hpsValid", "classSpecs"));
+            break;
+
+
+            case "damage_taken" :
+                $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
+                foreach ($members as $member) {
+                    $member->total_damage_taken = $member->damage_taken + $member->damage_absorb;
+                }
+                $membersDamageTaken = $members->sortByDesc("total_damage_taken");
+                foreach ($membersDamageTaken as $member) {
+                    $member->percentageDamageTaken = Skada::calculatePercentage($member, $membersDamageTaken->first(), "total_damage_taken");
+                }
+                return view("encounter/ajax/damage_taken", compact("membersDamageTaken", "classSpecs"));
+            break;
+
+            case "score":
+                $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
+                foreach ($members as $member) {
+                    $member->score = EncounterMember::isHealer($member->spec) ? $member->hps_score : $member->dps_score;
+                }
+                $membersScore = $members->sortByDesc("score");
+                foreach ($membersScore as $member) {
+                    $member->percentageScore = Skada::calculatePercentage($member, $membersScore->first(), "score");
+                }
+                return view("encounter/ajax/score", compact("membersScore", "classSpecs"));
+            break;
+
+            case "loot" :
+                $loots = Loot::where("encounter_id", $encounter->id)->leftJoin("items", "loots.item_id", "=", "items.id")->get();
+                return view("encounter/ajax/loot", compact("loots"));
+            break;
+        }
+        return "";
+    }
+
     public function log(Request $_request, $encounter_id, $logid)
     {
         $encounter = Encounter::where("encounters.id", "=", $logid)
@@ -58,69 +123,19 @@ class EncounterController extends Controller
             ->first();
 
         if ( $encounter ) {
-            $members = EncounterMember::where("encounter_id", "=", $encounter->id)->get();
-
-            foreach ($members as $member) {
-                $member->total_heal = $member->heal_done + $member->absorb_done;
-                $member->total_damage_taken = $member->damage_taken + $member->damage_absorb;
-                $member->score = EncounterMember::isHealer($member->spec) ? $member->hps_score : $member->dps_score;
-            }
-
-
-            $dpsValid = $encounter->encounter_id !== 1572 || $encounter->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP;
-            $membersDamage = $members->sortByDesc("damage_done");
-            foreach ($membersDamage as $member) {
-                $member->dps = Skada::calculatePS($encounter, $member, "damage_done");
-                $member->dpsNonFormatted = Skada::calculatePS($encounter, $member, "damage_done", true);
-                $member->percentageDamage = Skada::calculatePercentage($member, $membersDamage->first(), "damage_done");
-            }
-
-            $membersDamageTaken = $members->sortByDesc("total_damage_taken");
-            foreach ($membersDamageTaken as $member) {
-                $member->percentageDamageTaken = Skada::calculatePercentage($member, $membersDamageTaken->first(), "total_damage_taken");
-            }
-
-            $membersScore = $members->sortByDesc("score");
-            foreach ($membersScore as $member) {
-                $member->percentageScore = Skada::calculatePercentage($member, $membersScore->first(), "score");
-            }
-
-            $hpsValid = $encounter->killtime > Encounter::HPS_INVALID_BEFORE_TIMESTAMP;
-            $membersHealing = $members->sortByDesc("total_heal");
-            foreach ($membersHealing as $member) {
-                $member->hps = Skada::calculatePS($encounter, $member, "total_heal");
-                $member->hpsNonFormatted = Skada::calculatePS($encounter, $member, "total_heal", true);
-                $member->percentageHealing = Skada::calculatePercentage($member, $membersHealing->first(), "total_heal");
-            }
-
             $encounterData = Encounter::ENCOUNTER_IDS[$encounter->encounter_id];
             $realms = Realm::REALMS;
             $shortRealms = Realm::REALMS_SHORT;
-            $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
-            $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
-
             $mapId = $encounterData["map_id"];
             $expansionId = Encounter::getMapExpansion($mapId);
-
-            $loots = Loot::where("encounter_id", $encounter->id)->leftJoin("items", "loots.item_id", "=", "items.id")->get();
             $isInvalid = in_array($logid, Encounter::INVALID_RAIDS);
-
             return view("encounter/encounter", compact("encounter",
                 "isInvalid",
                 "encounterData",
-                "membersScore",
-                "membersDamageTaken",
-                "membersDamage",
-                "membersHealing",
-                "characterClasses",
-                "classSpecs",
                 "realms",
                 "shortRealms",
                 "expansionId",
-                "mapId",
-                "dpsValid",
-                "hpsValid",
-                "loots"));
+                "mapId"));
         }
     }
 

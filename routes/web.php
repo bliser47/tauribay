@@ -72,6 +72,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/encounter/fixMissingEncounters', 'EncounterController@fixMissingEncounters');
     Route::get('/encounter/{encounter_name_url}', 'EncounterController@index');
     Route::get('/encounter/{encounter_name_url}/{log_id}', 'EncounterController@log');
+    Route::get('/encounter/{encounter_name_url}/{log_id}/{mode}', 'EncounterController@mode');
 
     Route::get('/ladder/pve/', 'PveLadderController@index');
     Route::get('/ladder/pve/{expansion_name_short}/', 'PveLadderController@expansion');
