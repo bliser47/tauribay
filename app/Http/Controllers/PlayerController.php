@@ -69,7 +69,6 @@ class PlayerController extends Controller
 
                                     if ( $memberBest) {
                                         $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
-                                        return  Encounter::getSpecTopDps($encounterId, $difficultyId, $specId);
                                         $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
                                         $score = intval(($memberBest->$topType * 100) / $best);
                                         $encounter = $topType . "_encounter_id";
