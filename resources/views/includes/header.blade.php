@@ -60,7 +60,7 @@
                 <li class="headerSearch">
                     {!! Form::open(array("method" => "get","url" => URL::to("/player"))) !!}
                     <div class="input-group">
-                        <input id="player_name" type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
+                        <input type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
                         <span class="input-group-btn">
                             <button class="btn btn-success" type="submit">
                                 {{ __("Keresés") }}
