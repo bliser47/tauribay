@@ -165,51 +165,58 @@ class PlayerController extends Controller
     public function player(Request $_request, $_realm_short, $_player_name, $guid) {
 
         $character = Characters::where("guid","=",$guid)->first();
-        $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+        if ( $character ) {
+            $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
-        $modes = array(
-            "recent" => __("Új"),
-            "top" => __("Top (Real)")
-        );
-        $modeId = Defaults::PLAYER_MODE;
+            $modes = array(
+                "recent" => __("Új"),
+                "top" => __("Top (Real)")
+            );
+            $modeId = Defaults::PLAYER_MODE;
 
-        $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
-        $mapId = $_request->get("map_id", Defaults::MAP_ID);
-        $encounterId = $_request->get("encounter_id", 0);
-        $difficultyId = $_request->get("difficulty_id");
-        $defaultDifficultyId = $_request->get("difficulty_id_default");
+            $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
+            $mapId = $_request->get("map_id", Defaults::MAP_ID);
+            $encounterId = $_request->get("encounter_id", 0);
+            $difficultyId = $_request->get("difficulty_id");
+            $defaultDifficultyId = $_request->get("difficulty_id_default");
 
-        $expansions = Encounter::EXPANSIONS;
-        $maps = Encounter::getExpansionMaps($expansionId);
+            $expansions = Encounter::EXPANSIONS;
+            $maps = Encounter::getExpansionMaps($expansionId);
 
-        $difficulties = Defaults::SIZE_AND_DIFFICULTY;
+            $difficulties = Defaults::SIZE_AND_DIFFICULTY;
 
-        $encounters = Encounter::getMapEncounters($expansionId, $mapId);
-        $encounters[0] = __("Minden boss");
-        $realmUrl = $_realm_short;
+            $encounters = Encounter::getMapEncounters($expansionId, $mapId);
+            $encounters[0] = __("Minden boss");
+            $realmUrl = $_realm_short;
 
-        return view("player/player", compact(
-            "character",
-            "realmUrl",
-            "characterClasses",
-            "modes",
-            "modeId",
-            "expansions",
-            "maps",
-            "mapId",
-            "expansionId",
-            "difficulties",
-            "encounters",
-            "encounterId",
-            "difficultyId",
-            "defaultDifficultyId"));
+            return view("player/player", compact(
+                "character",
+                "realmUrl",
+                "characterClasses",
+                "modes",
+                "modeId",
+                "expansions",
+                "maps",
+                "mapId",
+                "expansionId",
+                "difficulties",
+                "encounters",
+                "encounterId",
+                "difficultyId",
+                "defaultDifficultyId"));
+        }
+        return redirect('/player');
     }
 
     public function index(Request $_request)
     {
         $playerName = $_request->get("player_name");
-        $characters = Characters::whereRaw("LOWER(name) LIKE \"%" . strtolower($playerName) . "%\"")->get();
-
+        if ( strlen($playerName) > 0 ) {
+            $characters = Characters::whereRaw("LOWER(name) LIKE \"%" . strtolower($playerName) . "%\"")->get();
+        } else {
+            $playerName = __("Nem talált karakter");
+            $characters = array();
+        }
         $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
 
         return view("player/search", compact(

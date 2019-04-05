@@ -137,14 +137,14 @@ class PveLadderController extends Controller
                     {
                         if (!$_request->has("refresh_cache") )
                         {
-                            $cacheKey = http_build_query($_request->all()) . "?v=1";
+                            $cacheKey = http_build_query($_request->all()) . "?v=2";
                             $cacheValue = Cache::get($cacheKey);
                             $cacheUrlValue = Cache::get($cacheKey."URL");
                         } else {
                             $cacheValue = "";
                             $cacheUrlValue = "";
                             unset($_request['refresh_cache']);
-                            $cacheKey = http_build_query($_request->all()) . "?v=1";
+                            $cacheKey = http_build_query($_request->all()) . "?v=2";
                         }
                         if ( !$cacheValue ) {
 
@@ -535,7 +535,7 @@ class PveLadderController extends Controller
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "?v=18";
+                $cacheKey = http_build_query($_request->all()) . "?v=19";
                 $cacheValue = Cache::get($cacheKey);
                 $cacheUrlValue = Cache::get($cacheKey."URL");
                 if (  !$cacheValue ) {

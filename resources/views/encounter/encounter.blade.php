@@ -127,7 +127,7 @@
                                     </div>
                                     <span class="memberPosition">{{ $loop->index+1 }}.</span>
                                     <span class="memberName">
-                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member->name}}">{{ $member->name }}</a>
+                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member->realm_id] ."/" . $member->name . "/" . $member->guid}}">{{ $member->name }}</a>
                                     </span>
                                     <span class="memberData memberData1 divDesktop">{{ number_format($member->total_heal) }}</span>
                                     <span class="memberData memberData1 divMobile">{{ \TauriBay\Tauri\Skada::format($member->total_heal) }}</span>

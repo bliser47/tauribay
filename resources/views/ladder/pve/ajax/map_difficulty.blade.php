@@ -42,7 +42,7 @@
                     <td class="topDpsSpecContainer">
                         <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $encounter["top_dps"]["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter["top_dps"]["spec"]] }}"/>
                     </td>
-                    <td class="cellDesktop faction-{{ $encounter["top_dps"]["faction_id"]}}"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$encounter["top_dps"]["realm_id"]] ."/" . $encounter["top_dps"]["name"] }}">{{ $encounter["top_dps"]["name"] }}</a></td>
+                    <td class="cellDesktop faction-{{ $encounter["top_dps"]["faction_id"]}}"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$encounter["top_dps"]["realm_id"]] ."/" . $encounter["top_dps"]["name"] . "/" . $encounter["top_dps"]["guid"] }}">{{ $encounter["top_dps"]["name"] }}</a></td>
                     <td><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName( $encounter["top_dps"]["encounter_id"]) . "/" . $encounter["top_dps"]["dps_encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($encounter["top_dps"]["dps"]) }}</a></td>
                 @else
                     <td></td>
@@ -53,7 +53,7 @@
                     <td class="topDpsSpecContainer">
                         <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $encounter["top_hps"]["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$encounter["top_dps"]["spec"]] }}"/>
                     </td>
-                    <td class="cellDesktop faction-{{ $encounter["top_dps"]["faction_id"]}}"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$encounter["top_hps"]["realm_id"]] ."/" . $encounter["top_hps"]["name"] }}">{{ $encounter["top_hps"]["name"] }}</a></td>
+                    <td class="cellDesktop faction-{{ $encounter["top_dps"]["faction_id"]}}"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$encounter["top_hps"]["realm_id"]] ."/" . $encounter["top_hps"]["name"] . "/" . $encounter["top_hps"]["guid"] }}">{{ $encounter["top_hps"]["name"] }}</a></td>
                     <td><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName( $encounter["top_hps"]["encounter_id"]) . "/" . $encounter["top_hps"]["hps_encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($encounter["top_hps"]["hps"]) }}</a></td>
                 @else
                     <td></td>
