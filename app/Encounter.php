@@ -687,6 +687,7 @@ class Encounter extends Model
                 $top->faction_id = $member->faction_id;
                 if ( $character ) {
                     $top->character_id = $character->id;
+                    $top->guid = $character->guid;
                 }
                 if ($member->encounter != 1572 || $member->killtime > Encounter::DURUMU_DMG_INVALID_BEFORE_TIMESTAMP) {
 
