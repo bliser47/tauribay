@@ -10,7 +10,7 @@
     </tr>
     @foreach( $encounters as $encounter )
         <tr>
-            @if ( $expansionId == 4 )
+            @if ( false && $expansionId == 4 )
                 <td class="bossCell"  style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
                     <a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId) . "/" . \TauriBay\Encounter::getUrlName($encounter["encounter_id"]) . "/" . \TauriBay\Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] }}">
                         <img height="32px" width="64px" src="{{ URL::asset("img/encounters/" . $encounter["encounter_id"] . ".png") }}" alt="{{ \TauriBay\Encounter::getName($encounter["encounter_id"])  }}"/>
