@@ -252,6 +252,8 @@ class EncounterController extends Controller
                     $top->top_processed = 1;
                     $top->save();
                     $found = true;
+                } else {
+                    return $top;
                 }
             }
         } while ( $found );
