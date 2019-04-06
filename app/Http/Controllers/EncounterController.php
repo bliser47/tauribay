@@ -251,10 +251,10 @@ class EncounterController extends Controller
                     $top->guid = $character->guid;
                     $top->top_processed = 1;
                     $top->save();
-                    $found = true;
                 } else {
-                    return $top;
+                    $top->delete();
                 }
+                $found = true;
             }
         } while ( $found );
         /*
