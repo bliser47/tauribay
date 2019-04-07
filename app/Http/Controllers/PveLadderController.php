@@ -137,14 +137,14 @@ class PveLadderController extends Controller
                     {
                         if (!$_request->has("refresh_cache") )
                         {
-                            $cacheKey = http_build_query($_request->all()) . "?v=2";
+                            $cacheKey = http_build_query($_request->all()) . "?v=3";
                             $cacheValue = Cache::get($cacheKey);
                             $cacheUrlValue = Cache::get($cacheKey."URL");
                         } else {
                             $cacheValue = "";
                             $cacheUrlValue = "";
                             unset($_request['refresh_cache']);
-                            $cacheKey = http_build_query($_request->all()) . "?v=2";
+                            $cacheKey = http_build_query($_request->all()) . "?v=3";
                         }
                         if ( !$cacheValue ) {
 
