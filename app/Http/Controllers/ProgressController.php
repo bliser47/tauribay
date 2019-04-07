@@ -46,7 +46,7 @@ class ProgressController extends Controller
 
     public function deleteInvalids() {
         $invalid = array(
-            231189, 231098, 240059, 240603
+            352609
         );
 
         LadderCache::whereIn("fastest_encounter", $invalid)->delete();

@@ -49,7 +49,7 @@ class Encounter extends Model
         253616, // Iron Qon frenzy exploit
         253017, // Primo frenzy exploit
         252888, // Durumu frenzy exploit
-        250873, 250683, 250430, 250295, 231189, 231098, 240059, 240603
+        250873, 250683, 250430, 250295, 231189, 231098, 240059, 240603, 352609
     ];
 
 
