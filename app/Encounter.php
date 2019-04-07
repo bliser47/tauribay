@@ -746,7 +746,7 @@ class Encounter extends Model
         $cacheKey = self::getSpecTopDpsKey($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->spec);
         $cacheValue = Cache::get($cacheKey);
         if ( $cacheValue < $memberTop->dps ) {
-            Cache::put($cacheKey, $cacheValue);
+            Cache::forever($cacheKey, $cacheValue);
         }
     }
 
@@ -762,7 +762,7 @@ class Encounter extends Model
         $cacheKey = self::getSpecTopHpsKey($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->spec);
         $cacheValue = Cache::get($cacheKey);
         if ( $cacheValue < $memberTop->hps ) {
-            Cache::put($cacheKey, $cacheValue);
+            Cache::forever($cacheKey, $cacheValue);
         }
     }
 
@@ -772,11 +772,11 @@ class Encounter extends Model
     }
 
     public static function getSpecTopDpsKey($encounterId, $difficultyId, $specId) {
-        return "topSpecHps" . $encounterId . "&" . $difficultyId . "&" . $specId;
+        return "topSpecHps" . $encounterId . "&" . $difficultyId . "&" . $specId . "v=1";
     }
 
     public static function getSpecTopHpsKey($encounterId, $difficultyId, $specId) {
-        return "topSpecDps" . $encounterId . "&" . $difficultyId . "&" . $specId;
+        return "topSpecDps" . $encounterId . "&" . $difficultyId . "&" . $specId . "?v=1";
     }
 
     public static function getSpecTopDps($encounterId, $difficultyId, $specId) {
