@@ -428,6 +428,16 @@ class EncounterMember extends Model
         return $classSpecs;
     }
 
+    public static function getSpecClass($_spec_id) {
+        foreach ( self::CLASSES as $classId => $class )
+        {
+            if ( array_key_exists($_spec_id,$class["specs"]) ) {
+                return $classId;
+            }
+        }
+        return 0;
+    }
+
     public static function findFaction($member) {
 
     }

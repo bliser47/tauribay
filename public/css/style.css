@@ -1456,3 +1456,18 @@ tr.spacer
     padding:0px !important;
     background-size:cover;
 }
+
+.refreshSpecTop, .refreshSpecTopCell {
+    width:16px;
+    border-radius:50%;
+    background:white;
+}
+
+.autoWidth {
+    width:auto !Important;
+}
+
+.memberDataContainer table, .memberDataContainer tr, .memberDataContainer td{
+    background: transparent !important;
+    border:none !Important;
+}

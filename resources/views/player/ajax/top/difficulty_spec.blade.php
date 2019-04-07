@@ -1,0 +1,2 @@
+<div style="width:{{ min(100, $spec["score"]) }}%" class="memberDataWidth memberClass{{ $classId }}"></div>
+<span class="memberData memberDataMiddle"><a href="{{ $spec["link"] ?: "#" }}">{{ $spec["score"] }}%</a></span>

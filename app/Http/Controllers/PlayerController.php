@@ -18,20 +18,55 @@ use TauriBay\Tauri\CharacterClasses;
 
 class PlayerController extends Controller
 {
+    public static function getSpecTopKey($guid, $encounterId, $difficultyId, $specId) {
+        return "playerSpec" . $guid. "&" . $encounterId . "&" . $difficultyId . "&" . $specId . "v=1";
+    }
+
+    public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculateCache) {
+        $specTopKey = self::getSpecTopKey($guid, $encounterId, $difficultyId, $specId);
+        $specTop = Cache::get($specTopKey);
+        if ( !$specTop && $calculateCache ) {
+            $specBest = MemberTop::where("guid","=",$guid)->where("difficulty_id",$difficultyId)->where("encounter_id", "=", $encounterId)->where("spec","=",$specId)->first();
+            if ( $specBest ) {
+                $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
+                $encounter = $topType . "_encounter_id";
+                if ( $specBest->$encounter > 0 ) {
+                    $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
+                    $specTop = array(
+                        "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
+                        "score" => intval(($specBest->$topType * 100) / $best)
+                    );
+                    Cache::forever($specTopKey,$specTop);
+                }
+            }
+            else {
+                $specTop = "";
+            }
+        }
+        return $specTop;
+    }
+
+    public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id, $_encounter_id, $_spec_id) {
+        $spec = self::getSpecTop($_character_guid, $_encounter_id, $_difficulty_id, $_spec_id, true);
+        if ( is_array($spec) ) {
+            $classId = EncounterMember::getSpecClass($_spec_id);
+            return view("player/ajax/top/difficulty_spec",compact("spec","classId"));
+        }
+        return "";
+    }
+
     public function difficulty(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id) {
         $character = Characters::where("guid","=",$_character_guid)->first();
         if ( $character !== null ) {
 
             $specs = EncounterMember::getSpecsShort($character->class);
-
-
             switch ($_mode_id) {
                 case "top":
 
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=13";
+                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=17";
                     $cacheValue = Cache::get($cacheKey);
                     if ( true || !$cacheValue ) {
 
@@ -45,38 +80,16 @@ class PlayerController extends Controller
                         }
 
                         $difficultyId = $_difficulty_id;
-
-                        $scores = array();
                         $encounters = array();
-                        $characterBests = MemberTop::where("guid","=",$_character_guid)->where("difficulty_id",$difficultyId)
-                        ->whereIn("encounter_id", Encounter::getMapEncountersIds($expansionId,$mapId))->get();
-
-
                         foreach ($raidEncounters as $raidEncounter) {
                             $encounterId = $raidEncounter["encounter_id"];
                             if (  Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
                                 $encounters[] = $raidEncounter;
                                 $scores[$encounterId] = array();
                                 foreach ( $specs as $specId => $specName ) {
-
-                                    $score = 0;
-                                    $link = "";
-
-                                    $memberBestKey = $characterBests->search(function ($item, $key) use ($encounterId, $specId) {
-                                        return $item["encounter_id"] == $encounterId && $item["spec"] ==  $specId;
-                                    });
-                                    $memberBest = $memberBestKey !== false ? $characterBests[$memberBestKey] : null;
-
-                                    if ( $memberBest) {
-                                        $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
-                                        $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
-                                        $score = intval(($memberBest->$topType * 100) / $best);
-                                        $encounter = $topType . "_encounter_id";
-                                        $link = URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $memberBest->$encounter;
-                                    }
                                     $scores[$encounterId][$specId] = array(
-                                        "link" => $link,
-                                        "score" => $score
+                                        "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $difficultyId . "/" . $encounterId . "/" . $specId),
+                                        "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, false)
                                     );
                                 }
                             }
@@ -85,8 +98,8 @@ class PlayerController extends Controller
                         if ( count($encounters) > 0 ) {
                             $view = view("player/ajax/top/difficulty", compact(
                                 "encounters",
-                                "character",
                                 "scores",
+                                "character",
                                 "specs",
                                 "expansionId",
                                 "mapId",

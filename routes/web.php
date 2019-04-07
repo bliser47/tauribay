@@ -73,6 +73,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/encounter/{encounter_name_url}', 'EncounterController@index');
     Route::get('/encounter/{encounter_name_url}/{log_id}', 'EncounterController@log');
     Route::get('/encounter/{encounter_name_url}/{log_id}/{mode}', 'EncounterController@mode');
+    Route::get('/encounter/{encounter_name_url}/{log_id}/{mode}/{encounter_id}/{spec_id}', 'EncounterController@spec');
 
     Route::get('/ladder/pve/', 'PveLadderController@index');
     Route::get('/ladder/pve/{expansion_name_short}/', 'PveLadderController@expansion');
@@ -93,6 +94,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/player/{realm_short}/{name}/{character_guid}', 'PlayerController@player');
     Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}', 'PlayerController@mode');
     Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{difficulty_id}', 'PlayerController@difficulty');
+    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{difficulty_id}/{encounter_id}/{spec_id}', 'PlayerController@spec');
 
 
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website
