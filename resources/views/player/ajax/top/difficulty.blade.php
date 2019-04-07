@@ -20,7 +20,7 @@
                         <tr>
                             <td class="autoWidth">
                                 <div class="memberDataWidthContainer memberDataWidthContainer{{ $specId }}">
-                                    @if ( is_array($scores[$encounter["encounter_id"]][$specId]["cache"]) )
+                                    @if ( is_array($scores[$encounter["encounter_id"]][$specId]["cache"]) && array_key_exists("score",$scores[$encounter["encounter_id"]][$specId]["cache"]) )
                                         <div style="width:{{ min(100, $scores[$encounter["encounter_id"]][$specId]["cache"]["score"]) }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
                                         <span class="memberData memberDataMiddle"><a href="{{ $scores[$encounter["encounter_id"]][$specId]["cache"]["link"] ?: "#" }}">{{ $scores[$encounter["encounter_id"]][$specId]["cache"]["score"] }}%</a></span>
                                     @endif

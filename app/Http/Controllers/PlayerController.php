@@ -36,19 +36,19 @@ class PlayerController extends Controller
                         "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
                         "score" => intval(($specBest->$topType * 100) / $best)
                     );
-                    Cache::forever($specTopKey,$specTop);
                 }
             }
             else {
-                $specTop = "";
+                $specTop = array();
             }
+            Cache::forever($specTopKey,$specTop);
         }
         return $specTop;
     }
 
     public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id, $_encounter_id, $_spec_id) {
         $spec = self::getSpecTop($_character_guid, $_encounter_id, $_difficulty_id, $_spec_id, true);
-        if ( is_array($spec) ) {
+        if ( is_array($spec) && array_key_exists("score",$spec)) {
             $classId = EncounterMember::getSpecClass($_spec_id);
             return view("player/ajax/top/difficulty_spec",compact("spec","classId"));
         }
