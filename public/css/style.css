@@ -1088,7 +1088,7 @@ a.changelog:hover, a.trello:hover
 }
 
 .playerDataContainer .memberDataWidth, .playerDataContainer .memberData {
-    top:1px;
+    top:1.5px;
 }
 
 .memberName, .memberPosition
@@ -1470,4 +1470,8 @@ tr.spacer
 .memberDataContainer table, .memberDataContainer tr, .memberDataContainer td{
     background: transparent !important;
     border:none !Important;
+}
+
+.memberDataContainer table tr td {
+    padding:0px !Important;
 }
