@@ -581,7 +581,6 @@ $(function()
         });
     };
 
-    var modeTimeout;
     var loadMode = function(pane, data, page)
     {
         var tab = $(pane);
@@ -633,14 +632,7 @@ $(function()
                     });
                     $(tab).find(".encounter-subform-form").on("change", "select", function () {
                         $("input[type='hidden'][name='" + $(this).attr("id") + "']").val($(this).val());
-                        if ( modeTimeout != null ) {
-                            clearTimeout(modeTimeout);
-                        }
-                        var select = $(this);
-                        modeTimeout = setTimeout(function() {
-                            modeTimeout = null;
-                            $(select).parent().submit();
-                        },1000);
+                        $(this).parent().submit();
                     });
 
                     listenForRoleChange(mode);
