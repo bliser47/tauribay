@@ -26,7 +26,7 @@ class PlayerController extends Controller
         $specTopKey = self::getSpecTopKey($guid, $encounterId, $difficultyId, $specId);
         $specTop = Cache::get($specTopKey);
         if ( !$specTop && $calculateCache ) {
-            $specBest = MemberTop::where("guid","=",$guid)->where("difficulty_id",$difficultyId)->where("encounter_id", "=", $encounterId)->where("spec","=",$specId)->first();
+            $specBest = MemberTop::where("guid","=",$guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id",$difficultyId)->where("spec","=",$specId)->first();
             if ( $specBest ) {
                 $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
                 $encounter = $topType . "_encounter_id";
