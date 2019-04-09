@@ -182,7 +182,7 @@ class PveLadderController extends Controller
                             if ($_request->has('evermoon')) {
                                 array_push($realms, 2);
                             }
-                            if ( count($realms) > 0 ) {
+                            if ( count($realms) > 0 && count($realms) < count(Realm::REALMS) ) {
                                 $members = $members->whereIn('member_tops.realm_id', $realms);
                             }
 
@@ -193,8 +193,7 @@ class PveLadderController extends Controller
                             if ($_request->has('horde')) {
                                 array_push($factions, Faction::HORDE);
                             }
-                            // Faction filter
-                            if ( count($factions) > 0 ) {
+                            if ( count($factions) == 1 ) {
                                 $members = $members->whereIn('member_tops.faction_id', $factions);
                             }
 
@@ -224,7 +223,7 @@ class PveLadderController extends Controller
                             ));
 
                             $cacheValue = $view->render();
-                            Cache::put($cacheKey, $cacheValue, 10080); // 15 minutes
+                            Cache::put($cacheKey, $cacheValue, 10); // 10 minutes
 
                             $subQuery = "/?" . http_build_query(array(
                                     "tauri" => $_request->get("tauri"),
@@ -239,7 +238,7 @@ class PveLadderController extends Controller
 
                             $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" . Encounter::getMapUrl($expansionId, $mapId) . "/" .
                                     Encounter::getUrlName($encounterId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $subQuery;
-                            Cache::put($cacheKey . "URL", $cacheUrlValue, 10080);
+                            Cache::put($cacheKey . "URL", $cacheUrlValue, 10); // 10 minutes
                         }
 
                         return json_encode(array(
@@ -329,30 +328,28 @@ class PveLadderController extends Controller
 
                         $encounters = Encounter::where("encounter_id", "=", $encounterId)->where("difficulty_id", "=", $difficultyId);
 
-                        //  Realm filter
-                        if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                            $realms = array();
-                            if ($_request->has('tauri')) {
-                                array_push($realms, Realm::TAURI);
-                            }
-                            if ($_request->has('wod')) {
-                                array_push($realms, Realm::WOD);
-                            }
-                            if ($_request->has('evermoon')) {
-                                array_push($realms, Realm::EVERMOON);
-                            }
-                            $encounters = $encounters->whereIn('realm_id', $realms);
+                        $realms = array();
+                        if ($_request->has('tauri')) {
+                            array_push($realms, Realm::TAURI);
+                        }
+                        if ($_request->has('wod')) {
+                            array_push($realms, Realm::WOD);
+                        }
+                        if ($_request->has('evermoon')) {
+                            array_push($realms, Realm::EVERMOON);
+                        }
+                        if ( count($realms) > 0 && count($realms) < count(Realm::REALMS) ) {
+                            $encounters->whereIn('realm_id', $realms);
                         }
 
-                        // Faction filter
                         $factions = array();
-                        if ($_request->has('alliance') || $_request->has('horde')) {
-                            if ($_request->has('alliance')) {
-                                array_push($factions, Faction::ALLIANCE);
-                            }
-                            if ($_request->has('horde')) {
-                                array_push($factions, Faction::HORDE);
-                            }
+                        if ($_request->has('alliance')) {
+                            array_push($factions, Faction::ALLIANCE);
+                        }
+                        if ($_request->has('horde')) {
+                            array_push($factions, Faction::HORDE);
+                        }
+                        if ( count($factions) == 1 ) {
                             $encounters->whereIn('faction_id', $factions);
                         }
 
@@ -360,9 +357,9 @@ class PveLadderController extends Controller
                             $encounters->where("member_count","<=",$_request->get("max_players"));
                         }
 
-                        $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
-                        $encounters = $encounters->orderBy("killtime", "desc");
-                        $encounters = $encounters->paginate(10);
+                        $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
+                        $encounters->orderBy("killtime", "desc");
+                        $encounters->paginate(10);
 
                         $subQuery = "/?" . http_build_query(array(
                                 "tauri" => $_request->get("tauri"),

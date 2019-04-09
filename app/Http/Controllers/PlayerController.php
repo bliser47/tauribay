@@ -137,7 +137,7 @@ class PlayerController extends Controller
                     $canHeal = EncounterMember::canClassHeal($characterClass);
 
                     $encounters = CharacterEncounters::where("character_id", "=", $character->id)
-                        ->rightJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
+                        ->leftJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
                         ->orderBy("killtime", "desc")->paginate(16);
 
                     $encounterIDs = Encounter::ENCOUNTER_IDS;
@@ -183,7 +183,7 @@ class PlayerController extends Controller
 
             $modes = array(
                 "recent" => __("Új"),
-                "top" => __("Top (Real)")
+                "top" => "Top"
             );
             $modeId = Defaults::PLAYER_MODE;
 
