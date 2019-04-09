@@ -19,10 +19,10 @@ use TauriBay\Tauri\CharacterClasses;
 class PlayerController extends Controller
 {
 
-    public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculateCache) {
+    public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
         $specBest = MemberTop::where("guid","=",$guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id",$difficultyId)->where("spec","=",$specId)->first();
-        if ( $specBest ) {
+        if ( $specBest && $calculate ) {
             $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
             $encounter = $topType . "_encounter_id";
             if ( $specBest->$encounter > 0 ) {
@@ -99,9 +99,7 @@ class PlayerController extends Controller
                         "view" => $view,
                         "url" => ""
                     ));
-
-
-                    break;
+                break;
             }
         }
         return "";
