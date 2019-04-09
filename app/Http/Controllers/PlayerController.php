@@ -22,7 +22,7 @@ class PlayerController extends Controller
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
         $specBest = MemberTop::where("guid","=",$guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id",$difficultyId)->where("spec","=",$specId)->first();
-        if ( $specBest || $calculate ) {
+        if ( $specBest && $calculate ) {
             $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
             $encounter = $topType . "_encounter_id";
             if ( $specBest->$encounter > 0 ) {
@@ -33,7 +33,7 @@ class PlayerController extends Controller
                 );
             }
         }
-        return array();
+        return null;
     }
 
     public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id, $_encounter_id, $_spec_id) {
