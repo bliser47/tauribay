@@ -1475,3 +1475,8 @@ tr.spacer
 .memberDataContainer table tr td {
     padding:0px !Important;
 }
+
+.panel.table-responsive {
+    -webkit-box-shadow:none;
+    box-shadow:none;
+}
