@@ -18,32 +18,22 @@ use TauriBay\Tauri\CharacterClasses;
 
 class PlayerController extends Controller
 {
-    public static function getSpecTopKey($guid, $encounterId, $difficultyId, $specId) {
-        return "playerSpec" . $guid. "&" . $encounterId . "&" . $difficultyId . "&" . $specId . "v=1";
-    }
 
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculateCache) {
-        $specTopKey = self::getSpecTopKey($guid, $encounterId, $difficultyId, $specId);
-        $specTop = Cache::get($specTopKey);
-        if ( !$specTop && $calculateCache ) {
-            $specBest = MemberTop::where("guid","=",$guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id",$difficultyId)->where("spec","=",$specId)->first();
-            if ( $specBest ) {
-                $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
-                $encounter = $topType . "_encounter_id";
-                if ( $specBest->$encounter > 0 ) {
-                    $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
-                    $specTop = array(
-                        "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
-                        "score" => intval(($specBest->$topType * 100) / $best)
-                    );
-                }
+
+        $specBest = MemberTop::where("guid","=",$guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id",$difficultyId)->where("spec","=",$specId)->first();
+        if ( $specBest ) {
+            $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
+            $encounter = $topType . "_encounter_id";
+            if ( $specBest->$encounter > 0 ) {
+                $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
+                return array(
+                    "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
+                    "score" => intval(($specBest->$topType * 100) / $best)
+                );
             }
-            else {
-                $specTop = array();
-            }
-            Cache::forever($specTopKey,$specTop);
         }
-        return $specTop;
+        return array();
     }
 
     public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id, $_encounter_id, $_spec_id) {
@@ -66,55 +56,47 @@ class PlayerController extends Controller
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
-                    $cacheKey = "playerTop" . $_character_guid . http_build_query($_request->all()) . "&difficulty=" . $_difficulty_id . "?v=17";
-                    $cacheValue = Cache::get($cacheKey);
-                    if ( true || !$cacheValue ) {
+                    $raidEncounters = array();
+                    $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
+                    foreach ($raids as $raid) {
+                        if ($raid["id"] == $mapId) {
+                            $raidEncounters = $raid["encounters"];
+                            break;
+                        }
+                    }
 
-                        $raidEncounters = array();
-                        $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
-                        foreach ($raids as $raid) {
-                            if ($raid["id"] == $mapId) {
-                                $raidEncounters = $raid["encounters"];
-                                break;
+                    $difficultyId = $_difficulty_id;
+                    $encounters = array();
+                    foreach ($raidEncounters as $raidEncounter) {
+                        $encounterId = $raidEncounter["encounter_id"];
+                        if (  Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
+                            $encounters[] = $raidEncounter;
+                            $scores[$encounterId] = array();
+                            foreach ( $specs as $specId => $specName ) {
+                                $scores[$encounterId][$specId] = array(
+                                    "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $difficultyId . "/" . $encounterId . "/" . $specId),
+                                    "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, false)
+                                );
                             }
                         }
+                    }
 
-                        $difficultyId = $_difficulty_id;
-                        $encounters = array();
-                        foreach ($raidEncounters as $raidEncounter) {
-                            $encounterId = $raidEncounter["encounter_id"];
-                            if (  Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
-                                $encounters[] = $raidEncounter;
-                                $scores[$encounterId] = array();
-                                foreach ( $specs as $specId => $specName ) {
-                                    $scores[$encounterId][$specId] = array(
-                                        "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $difficultyId . "/" . $encounterId . "/" . $specId),
-                                        "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, false)
-                                    );
-                                }
-                            }
-                        }
-
-                        if ( count($encounters) > 0 ) {
-                            $view = view("player/ajax/top/difficulty", compact(
-                                "encounters",
-                                "scores",
-                                "character",
-                                "specs",
-                                "expansionId",
-                                "mapId",
-                                "difficultyId"));
-                            $view = $view->render();
-                        } else {
-                            $view = "";
-                        }
-
-                        $cacheValue = $view;
-                        Cache::put($cacheKey, $cacheValue, 120); // 2 hours
+                    if ( count($encounters) > 0 ) {
+                        $view = view("player/ajax/top/difficulty", compact(
+                            "encounters",
+                            "scores",
+                            "character",
+                            "specs",
+                            "expansionId",
+                            "mapId",
+                            "difficultyId"));
+                        $view = $view->render();
+                    } else {
+                        $view = "";
                     }
 
                     return json_encode(array(
-                        "view" => $cacheValue,
+                        "view" => $view,
                         "url" => ""
                     ));
 

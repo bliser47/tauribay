@@ -744,13 +744,6 @@ class Encounter extends Model
             $cache->top_dps_encounter_member = $memberTop->id;
             $cache->save();
         }
-
-        // Cache top spec dps
-        $cacheKey = self::getSpecTopDpsKey($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->spec);
-        $cacheValue = Cache::get($cacheKey);
-        if ( $cacheValue < $memberTop->dps ) {
-            Cache::forever($cacheKey, $cacheValue);
-        }
     }
 
     public static function refreshLadderHps($memberTop) {
@@ -760,13 +753,6 @@ class Encounter extends Model
             $cache->top_hps_encounter_member = $memberTop->id;
             $cache->save();
         }
-
-        // Cache top spec hps
-        $cacheKey = self::getSpecTopHpsKey($memberTop->encounter_id, $memberTop->difficulty_id, $memberTop->spec);
-        $cacheValue = Cache::get($cacheKey);
-        if ( $cacheValue < $memberTop->hps ) {
-            Cache::forever($cacheKey, $cacheValue);
-        }
     }
 
     public static function getFastest($encounterId, $difficultyId, $realms, $factions)
@@ -774,46 +760,24 @@ class Encounter extends Model
         return LadderCache::getFastestEncounter($encounterId,$difficultyId, $realms, $factions);
     }
 
-    public static function getSpecTopDpsKey($encounterId, $difficultyId, $specId) {
-        return "topSpecHps" . $encounterId . "&" . $difficultyId . "&" . $specId . "v=1";
-    }
-
-    public static function getSpecTopHpsKey($encounterId, $difficultyId, $specId) {
-        return "topSpecDps" . $encounterId . "&" . $difficultyId . "&" . $specId . "?v=1";
-    }
-
     public static function getSpecTopDps($encounterId, $difficultyId, $specId) {
-        $specTopDpsKey = self::getSpecTopDpsKey($encounterId, $difficultyId, $specId);
-        $specTopDps = Cache::get($specTopDpsKey);
-        if ( !$specTopDps ) {
-            $dps = 0;
-            $topDps = MemberTop::where("encounter_id","=",$encounterId)
-                ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
-                ->orderBy("dps","desc")->first();
-            if ( $topDps ) {
-                $dps = $topDps->dps;
-            }
-            $specTopDps = $dps;
-            Cache::forever($specTopDpsKey, $specTopDps);
+        $topDps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
+            ->orderBy("dps","desc")->first();
+        if ( $topDps ) {
+            return $topDps->dps;
         }
-        return $specTopDps;
+        return 0;
     }
 
     public static function getSpecTopHps($encounterId, $difficultyId, $specId) {
-        $specTopHpsKey = self::getSpecTopHpsKey($encounterId, $difficultyId, $specId);
-        $specTopHps =  Cache::get($specTopHpsKey);
-        if ( !$specTopHps ) {
-            $hps = 0;
-            $topHps = MemberTop::where("encounter_id","=",$encounterId)
-                ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
-                ->orderBy("hps","desc")->first();
-            if ( $topHps ) {
-                $hps = $topHps->hps;
-            }
-            $specTopHps = $hps;
-            Cache::forever($specTopHpsKey, $specTopHps);
+        $topHps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
+            ->orderBy("hps","desc")->first();
+        if ( $topHps ) {
+           return $topHps->hps;
         }
-        return $specTopHps;
+        return 0;
     }
 
     public static function getTopDps($encounterId, $difficultyId, $realms, $factions)
