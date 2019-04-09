@@ -339,7 +339,7 @@ class PveLadderController extends Controller
                             array_push($realms, Realm::EVERMOON);
                         }
                         if ( count($realms) > 0 && count($realms) < count(Realm::REALMS) ) {
-                            $encounters->whereIn('realm_id', $realms);
+                            $encounters = $encounters->whereIn('realm_id', $realms);
                         }
 
                         $factions = array();
@@ -350,16 +350,16 @@ class PveLadderController extends Controller
                             array_push($factions, Faction::HORDE);
                         }
                         if ( count($factions) == 1 ) {
-                            $encounters->whereIn('faction_id', $factions);
+                            $encounters = $encounters->whereIn('faction_id', $factions);
                         }
 
                         if ( $_request->has("max_players") && !empty($_request->get("max_players")) && $_request->get("max_players") < Encounter::DIFFICULTY_SIZE[$difficultyId] ) {
-                            $encounters->where("member_count","<=",$_request->get("max_players"));
+                            $encounters = $encounters->where("member_count","<=",$_request->get("max_players"));
                         }
 
-                        $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
-                        $encounters->orderBy("killtime", "desc");
-                        $encounters->paginate(10);
+                        $encounters = $encounters->leftJoin('guilds', 'encounters.guild_id', '=', 'guilds.id')->select('encounters.*', 'guilds.name', 'guilds.faction');
+                        $encounters = $encounters->orderBy("killtime", "desc");
+                        $encounters = $encounters->paginate(10);
 
                         $subQuery = "/?" . http_build_query(array(
                                 "tauri" => $_request->get("tauri"),
