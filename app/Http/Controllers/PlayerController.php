@@ -21,19 +21,26 @@ class PlayerController extends Controller
 
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
-        $specBest = MemberTop::where("guid","=",$guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id",$difficultyId)->where("spec","=",$specId)->first();
-        if ( $specBest && $calculate ) {
-            $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
-            $encounter = $topType . "_encounter_id";
-            if ( $specBest->$encounter > 0 ) {
-                $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId,$difficultyId,$specId);
-                return array(
-                    "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
-                    "score" => intval(($specBest->$topType * 100) / $best)
-                );
+        $cacheKey = "playerSpecTop" . http_build_query(array(
+            $guid, $encounterId, $difficultyId, $specId
+        ));
+        $cacheValue = Cache::get($cacheKey);
+        if ( !$cacheValue ) {
+            $specBest = MemberTop::where("guid", "=", $guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id", $difficultyId)->where("spec", "=", $specId)->first();
+            if ($specBest && $calculate) {
+                $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
+                $encounter = $topType . "_encounter_id";
+                if ($specBest->$encounter > 0) {
+                    $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId, $difficultyId, $specId);
+                    $cacheValue = array(
+                        "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
+                        "score" => intval(($specBest->$topType * 100) / $best)
+                    );
+                    Cache::put($cacheKey, $cacheValue, 1440); // 1 day
+                }
             }
         }
-        return null;
+        return $cacheValue;
     }
 
     public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id, $_encounter_id, $_spec_id) {
@@ -52,7 +59,6 @@ class PlayerController extends Controller
             $specs = EncounterMember::getSpecsShort($character->class);
             switch ($_mode_id) {
                 case "top":
-
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
 
