@@ -79,7 +79,7 @@
         @endforeach
     @else
         <div class="alert alert-warning nomargin">
-            {{ __("A visszamenőleges karakter bossfight adatok jelenleg feldolgozás alatt vannak. Kérjük látogass vissza később!") }}
+            {{ __("Nincs adat") }}
         </div>
     @endif
 </table>
