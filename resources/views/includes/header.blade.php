@@ -25,6 +25,18 @@
             --}}
             <a class="navbar-brand" href="/">{{ env("APP_NAME") }}</a>
         </div>
+        <div class="headerSearch divMobile">
+            {!! Form::open(array("method" => "get","url" => URL::to("/player"))) !!}
+            <div class="input-group">
+                <input type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
+                <span class="input-group-btn">
+                            <button class="btn btn-success" type="submit">
+                                {{ __("Keresés") }}
+                            </button>
+                        </span>
+            </div>
+            {!! Form::close() !!}
+        </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
 
@@ -57,15 +69,15 @@
                     <a class="trello" target="_blank" href="https://trello.com/b/sfKX349T/tauribay"></a>
                 </li>
                 --}}
-                <li class="headerSearch">
+                <li class="headerSearch divDesktop">
                     {!! Form::open(array("method" => "get","url" => URL::to("/player"))) !!}
                     <div class="input-group">
                         <input type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
                         <span class="input-group-btn">
-                            <button class="btn btn-success" type="submit">
-                                {{ __("Keresés") }}
-                            </button>
-                        </span>
+                        <button class="btn btn-success" type="submit">
+                            {{ __("Keresés") }}
+                        </button>
+                    </span>
                     </div>
                     {!! Form::close() !!}
                 </li>

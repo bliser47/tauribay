@@ -866,6 +866,10 @@ a.changelog:hover, a.trello:hover
     padding:7.5px;
 }
 
+.headerSearch.divMobile {
+    padding:0px 0px 7.5px 0px;
+}
+
 @media (max-width: 768px) {
 
     .headerSearch {
