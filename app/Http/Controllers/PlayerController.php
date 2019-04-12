@@ -37,7 +37,9 @@ class PlayerController extends Controller
                         "score" => intval(($specBest->$topType * 100) / $best)
                     );
                 } else {
-                    $cacheValue = "";
+                    $cacheValue = array(
+                        "score" => 0
+                    );
                 }
             }
             Cache::put($cacheKey, $cacheValue, 1440); // 1 day
