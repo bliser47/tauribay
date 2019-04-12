@@ -21,7 +21,7 @@ class PlayerController extends Controller
 
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
-        $cacheKey = "playerSpecTop" . http_build_query(array(
+        $cacheKey = "playerSpecTop2" . http_build_query(array(
             $guid, $encounterId, $difficultyId, $specId
         ));
         $cacheValue = Cache::get($cacheKey);
@@ -29,7 +29,7 @@ class PlayerController extends Controller
             $specBest = MemberTop::where("guid", "=", $guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id", $difficultyId)->where("spec", "=", $specId)->first();
             $cacheValue = array(
                 "score" => 0,
-                "link" => null
+                "link" => ""
             );
             if ($specBest && $calculate) {
                 $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
