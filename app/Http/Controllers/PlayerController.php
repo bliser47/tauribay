@@ -21,7 +21,7 @@ class PlayerController extends Controller
 
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
-        $cacheKey = "playerSpecTop3" . http_build_query(array(
+        $cacheKey = "playerSpecTop4" . http_build_query(array(
             $guid, $encounterId, $difficultyId, $specId
         ));
         $cacheValue = Cache::get($cacheKey);
@@ -48,7 +48,7 @@ class PlayerController extends Controller
         return $cacheValue;
     }
 
-    public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id, $_encounter_id, $_spec_id) {
+    public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_expansion_id, $_map_id, $_difficulty_id, $_encounter_id, $_spec_id) {
         $spec = self::getSpecTop($_character_guid, $_encounter_id, $_difficulty_id, $_spec_id, true);
         if ( is_array($spec) && array_key_exists("score",$spec)) {
             $classId = EncounterMember::getSpecClass($_spec_id);
