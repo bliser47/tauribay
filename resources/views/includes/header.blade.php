@@ -15,14 +15,6 @@
                     {!! language()->flags() !!}
                 </ul>
             </div>
-            {{--
-            <div class="divMobile" id="mobileTrello">
-                <a class="trello" target="_blank" href="https://trello.com/b/sfKX349T/tauribay"></a>
-            </div>
-            <div class="divMobile" id="mobileChangelog">
-                <a class="changelog" target="_blank" href="https://github.com/bliser47/tauribay/commits/master"></a>
-            </div>
-            --}}
             <a class="navbar-brand" href="/">{{ env("APP_NAME") }}</a>
         </div>
         <div class="headerSearch divMobile">
@@ -31,7 +23,7 @@
                 <input type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
                 <span class="input-group-btn">
                             <button class="btn btn-success" type="submit">
-                                {{ __("Keresés") }}
+                                 <i class="fa fa-search"></i>
                             </button>
                         </span>
             </div>
@@ -39,7 +31,6 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-
                 <li class="dropdown {{ Request::segment(1) == 'trade' ? 'active' : '' }}">
                     <a href="/hirdetesek" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ __("Hirdetések") }}<span class="caret"></span></a>
                     <ul class="dropdown-menu trade-types-dropdown-menu">
@@ -61,21 +52,13 @@
                     <li><a href="{{URL::to('/home')}}"><span class="glyphicon glyphicon-user"></span>{{__("Profil")}}</a></li>
                     <li><a href="{{URL::to('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span>{{__("Log out")}}</a></li>
                 @endif
-                {{--
-                <li class="listDesktop">
-                    <a class="changelog" target="_blank" href="https://github.com/bliser47/tauribay/commits/master"></a>
-                </li>
-                <li class="listDesktop">
-                    <a class="trello" target="_blank" href="https://trello.com/b/sfKX349T/tauribay"></a>
-                </li>
-                --}}
                 <li class="headerSearch divDesktop">
                     {!! Form::open(array("method" => "get","url" => URL::to("/player"))) !!}
                     <div class="input-group">
                         <input type="text" class="form-control" name="player_name" value="{!! Input::get('player_name') !!}" placeholder="{{ __("Karakter neve") }}">
                         <span class="input-group-btn">
                         <button class="btn btn-success" type="submit">
-                            {{ __("Keresés") }}
+                            <i class="fa fa-search"></i>
                         </button>
                     </span>
                     </div>
