@@ -1048,8 +1048,8 @@ $(function()
                         container = $(".map-difficulty.active").find(".ajax-map-difficulty");
                         loadPlayerMapDifficulty(container, realm, name, guid, mode);
                         $(".map-difficulty-tab").on("click",function(){
-                            if ( !$(this).hasClass("loaded") ) {
-                                $(this).addClass("loaded");
+                            if ( $(this).hasClass("unLoaded") ) {
+                                $(this).removeClass("unLoaded");
                                 var id = $(this).find("a").attr("href");
                                 loadPlayerMapDifficulty($(id).find(".ajax-map-difficulty"), realm, name, guid, mode)
                             }
