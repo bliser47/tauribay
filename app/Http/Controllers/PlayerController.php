@@ -27,6 +27,9 @@ class PlayerController extends Controller
         $cacheValue = Cache::get($cacheKey);
         if ( !$cacheValue || $calculate ) {
             $specBest = MemberTop::where("guid", "=", $guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id", $difficultyId)->where("spec", "=", $specId)->first();
+            $cacheValue = array(
+                "score" => 0
+            );
             if ($specBest && $calculate) {
                 $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
                 $encounter = $topType . "_encounter_id";
@@ -35,10 +38,6 @@ class PlayerController extends Controller
                     $cacheValue = array(
                         "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
                         "score" => intval(($specBest->$topType * 100) / $best)
-                    );
-                } else {
-                    $cacheValue = array(
-                        "score" => 0
                     );
                 }
             }
