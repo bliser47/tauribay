@@ -21,27 +21,58 @@
             </table>
         </div>
     </div>
+    <br/>
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
-            <div class="panel nomargin">
-                <input id="realm_url" type="hidden" class="form-control" name="player_id" value="{{ $realmUrl }}">
-                <input id="player_guid" type="hidden" class="form-control" name="player_id" value="{{ $character->guid }}">
-                <input id="player_name" type="hidden" class="form-control" name="player_name" value="{{ $character->name }}">
-                <div id="player-response-form">
-                    <ul class="nav nav-tabs" role="tablist">
-                        @foreach ( $modes as $modeKey => $modeName )
-                            <li id="modePanel{{ $modeKey  }}" data-mode="{{ $modeKey }}" class="modePanel home-main-tab {{ $modeKey == $modeId ? "active" : "" }}" role="presentation"><a href="#{{ $modeKey }}" aria-controls="{{ $modeKey }}"  role="tab" data-toggle="tab">{{ $modeName }}</a></li>
-                        @endforeach
-                    </ul>
-                    <div class="tab-content">
-                        @foreach ( $modes as $modeKey => $modeName )
-                            <div data-mode="{{ $modeKey }}" role="tabpanel" class="tab-pane {{  $modeKey == $modeId ? "active" : "" }}" id="{{ $modeKey}}">
-                                <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
-                                <div data-mode="{{ $modeKey }}" class="encounter-mode-loading-container"></div>
+            <div class="panel panel-default">
+                <div class="panel-heading nopadding" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            {{ __("Válassz instát!") }}
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        {!! Form::open(array("method" => "get","id"=>"pve-player-form")) !!}
+                        <div class="hidden">
+                            {!! Form::checkbox('tauri',1,Input::get('tauri')) !!}
+                            {!! Form::checkbox('wod',1,Input::get('wod')) !!}
+                            {!! Form::checkbox('evermoon',1,Input::get('evermoon')) !!}
+                            {!! Form::checkbox('alliance',1,Input::get('alliance')) !!}
+                            {!! Form::checkbox('horde',1,Input::get('horde')) !!}
+                        </div>
+                        @if ( $difficultyId )
+                            <input type="hidden" name="difficulty_id" value="{{ $difficultyId }}"/>
+                        @endif
+                        @if ( $defaultDifficultyId )
+                            <input type="hidden" name="default_difficulty_id" value="{{ $defaultDifficultyId }}"/>
+                        @endif
+                        <input id="realm_url" type="hidden" class="form-control" name="player_id" value="{{ $realmUrl }}">
+                        <input id="player_guid" type="hidden" class="form-control" name="player_id" value="{{ $character->guid }}">
+                        <input id="player_name" type="hidden" class="form-control" name="player_name" value="{{ $character->name }}">
+                        <div class="col-sm-4 col-sm-nopadding col-sm-margin">
+                            <div id="expansions-container" class="input-group col-md-12">
+                                {!! Form::select('expansion_id', $expansions, Input::get('expansion_id', $expansionId), ['required', 'id' => 'expansion', 'class' => "control selectpicker input-large"]); !!}
                             </div>
-                        @endforeach
+                        </div>
+                        <div class="col-sm-4 col-sm-nopadding col-sm-margin">
+                            <div id="maps-container" class="input-group col-md-12">
+                                {!! Form::select('map_id', $maps,  Input::get('map_id', $mapId), ['required', 'id' => 'map', 'class' => "control selectpicker input-large"]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-4 nomargin col-sm-nopadding">
+                            <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
+                                {{ __("Keresés") }}
+                            </button>
+                        </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
+            </div>
+            <div class="panel table-responsive">
+                <div class="encounters_loading"><div class="loader" style="display:block"></div></div>
+                <div id="map-loading-container"></div>
             </div>
         </div>
     </div>

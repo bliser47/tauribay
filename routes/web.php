@@ -91,10 +91,11 @@ Route::group(['middleware' => 'language'], function () {
 
 
     Route::get('/player', 'PlayerController@index');
+    Route::post('/player/{realm_short}/{name}/{character_guid}', 'PlayerController@ajax');
     Route::get('/player/{realm_short}/{name}/{character_guid}', 'PlayerController@player');
-    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}', 'PlayerController@mode');
-    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{difficulty_id}', 'PlayerController@difficulty');
-    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{difficulty_id}/{encounter_id}/{spec_id}', 'PlayerController@spec');
+    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{expansion_id}/{map_id}', 'PlayerController@mode');
+    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{expansion_id}/{map_id}/{difficulty_id}', 'PlayerController@difficulty');
+    Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{expansion_id}/{map_id}/{difficulty_id}/{encounter_id}/{spec_id}', 'PlayerController@spec');
 
 
     Route::get('/ilvl', 'TopItemLevelsController@index'); // For ppl who bookmarked old website

@@ -57,15 +57,15 @@ class PlayerController extends Controller
         return "";
     }
 
-    public function difficulty(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_difficulty_id) {
+    public function difficulty(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_expansion_id, $_map_id, $_difficulty_id) {
         $character = Characters::where("guid","=",$_character_guid)->first();
         if ( $character !== null ) {
 
             $specs = EncounterMember::getSpecsShort($character->class);
             switch ($_mode_id) {
                 case "top":
-                    $expansionId = Defaults::EXPANSION_ID;
-                    $mapId = Defaults::MAP_ID;
+                    $expansionId = $_expansion_id;
+                    $mapId = $_map_id;
 
                     $raidEncounters = array();
                     $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
@@ -85,7 +85,7 @@ class PlayerController extends Controller
                             $scores[$encounterId] = array();
                             foreach ( $specs as $specId => $specName ) {
                                 $scores[$encounterId][$specId] = array(
-                                    "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $difficultyId . "/" . $encounterId . "/" . $specId),
+                                    "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $expansionId . "/" . $mapId . "/" . $difficultyId . "/" . $encounterId . "/" . $specId),
                                     "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, false)
                                 );
                             }
@@ -116,7 +116,7 @@ class PlayerController extends Controller
         return "";
     }
 
-    public function mode(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id)
+    public function mode(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_expansion_id, $_map_id)
     {
         $character = Characters::where("guid","=",$_character_guid)->first();
         if ( $character !== null ) {
@@ -126,9 +126,12 @@ class PlayerController extends Controller
                     $characterClass = $character->class;
 
                     $canHeal = EncounterMember::canClassHeal($characterClass);
+                    $mapEncounters = Encounter::getMapEncountersIds($_expansion_id, $_map_id);
+
 
                     $encounters = CharacterEncounters::where("character_id", "=", $character->id)
                         ->leftJoin("encounter_members", "character_encounters.encounter_member_id", "=", "encounter_members.id")
+                        ->whereIn("encounter_members.encounter",$mapEncounters)
                         ->orderBy("killtime", "desc")->paginate(16);
 
                     $encounterIDs = Encounter::ENCOUNTER_IDS;
@@ -138,8 +141,8 @@ class PlayerController extends Controller
                     break;
 
                 case "top":
-                    $expansionId = Defaults::EXPANSION_ID;
-                    $mapId = Defaults::MAP_ID;
+                    $expansionId = $_expansion_id;
+                    $mapId = $_map_id;
                     $difficulties = Encounter::getMapDifficulties($expansionId, $mapId);
 
                     $defaultDifficultyIndex = 0;
@@ -147,18 +150,16 @@ class PlayerController extends Controller
                     $backUpDifficultyId = null;
                     foreach ($difficulties as $index => $difficulty) {
                         $difficultyId = $difficulty["id"];
-                        $backUpDifficultyId = $difficultyId;
                         if ($difficultyId == 5 && !$_request->has("default_difficulty_id") || $_request->get("default_difficulty_id") == $difficultyId) {
                             $defaultDifficultyIndex = $index;
-                            $defaultDifficultyId = $difficultyId;
                         }
                     }
-                    if ($defaultDifficultyId == null) {
-                        $defaultDifficultyId = $backUpDifficultyId;
-                    }
 
-
-                    return view("player/ajax/top/map", compact("difficulties","mapId","expansionId","defaultDifficultyIndex"));
+                    return view("player/ajax/top/map", compact(
+                        "difficulties",
+                        "mapId",
+                        "expansionId",
+                        "defaultDifficultyIndex"));
                 break;
             }
         }
@@ -171,12 +172,6 @@ class PlayerController extends Controller
         $character = Characters::where("guid","=",$guid)->first();
         if ( $character ) {
             $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
-
-            $modes = array(
-                "recent" => __("Új"),
-                "top" => "Top"
-            );
-            $modeId = Defaults::PLAYER_MODE;
 
             $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
             $mapId = $_request->get("map_id", Defaults::MAP_ID);
@@ -197,8 +192,6 @@ class PlayerController extends Controller
                 "character",
                 "realmUrl",
                 "characterClasses",
-                "modes",
-                "modeId",
                 "expansions",
                 "maps",
                 "mapId",
@@ -210,6 +203,29 @@ class PlayerController extends Controller
                 "defaultDifficultyId"));
         }
         return redirect('/player');
+    }
+
+    public function ajax(Request $_request) {
+        $modes = array(
+            "recent" => __("Új"),
+            "top" => "Top"
+        );
+        $modeId = Defaults::PLAYER_MODE;
+
+        $expansionId = $_request->get("expansion_id", Defaults::EXPANSION_ID);
+        $mapId = $_request->get("map_id", Defaults::MAP_ID);
+
+        $view = view("player/ajax/map", compact(
+            "expansionId",
+            "mapId",
+            "modes",
+            "modeId"))->render();
+
+
+        return json_encode(array(
+            "view" => $view,
+            "url" => ""
+        ));
     }
 
     public function index(Request $_request)

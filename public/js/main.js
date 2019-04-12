@@ -922,12 +922,12 @@ $(function()
         });
     };
 
-    var loadPlayerMapDifficulty = function(container, realm, name, guid, mode)
+    var loadPlayerMapDifficulty = function(container, realm, name, guid, mode, expansion, map)
     {
         var difficulty = $(container).data("difficulty");
         $.ajax({
             type: "GET",
-            url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + difficulty,
+            url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + expansion + "/" + map + "/" + difficulty,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -1021,13 +1021,15 @@ $(function()
             var realm = $("#realm_url").val();
             var name = $("#player_name").val();
             var guid = $("#player_guid").val();
+            var expansion = $("#expansion_id").val();
+            var map = $("#map_id").val();
 
             var container = $("#"+mode);
             $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
 
             $.ajax({
                 type: "GET",
-                url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "?page=" + page,
+                url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + expansion + "/" + map + "?page=" + page,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -1046,12 +1048,12 @@ $(function()
 
                     if ( mode === "top" ) {
                         container = $(".map-difficulty.active").find(".ajax-map-difficulty");
-                        loadPlayerMapDifficulty(container, realm, name, guid, mode);
+                        loadPlayerMapDifficulty(container, realm, name, guid, mode, expansion, map);
                         $(".map-difficulty-tab").on("click",function(){
                             if ( $(this).hasClass("unLoaded") ) {
                                 $(this).removeClass("unLoaded");
                                 var id = $(this).find("a").attr("href");
-                                loadPlayerMapDifficulty($(id).find(".ajax-map-difficulty"), realm, name, guid, mode)
+                                loadPlayerMapDifficulty($(id).find(".ajax-map-difficulty"), realm, name, guid, mode, expansion, map)
                             }
                         });
                     }
@@ -1124,11 +1126,87 @@ $(function()
             }
         });
     });
+
+    var firstPlayerSubmit = true;
+    $("#pve-player-form").submit(function(e){
+        e.preventDefault();
+        var container = $("#map-loading-container");
+        container.html("");
+        var loader = $(".encounters_loading");
+        loader.show();
+        $("#pve-player-filter").attr("disabled",true);
+        var data = $(this).serializeArray();
+        var keys = ["difficulty_id","encounter_id"];
+        if ( !firstSubmit ) {
+            for (var k = 0; k < keys.length; ++k) {
+                data.forEach(function (value, i) {
+                    if (value["name"] === keys[k]) {
+                        data.splice(i, 1);
+                    }
+                });
+            }
+        }
+
+        var realm = $("#realm_url").val();
+        var name = $("#player_name").val();
+        var guid = $("#player_guid").val();
+
+        firstPlayerSubmit = false;
+        data = $.param(data);
+        setCookie("modeSaved2","");
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid,
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                response = $.parseJSON(response);
+                $(loader).hide();
+                $(container).html(replaceTranslations(response["view"]));
+
+                //prevState = window.location.href;
+                //history.pushState(null, '', response["url"] + window.location.hash);
+
+                $(".selectpicker").selectpicker();
+                $(".bossName select[name='map_id']").on("change",function(){
+                    var val = $(this).val();
+                    if ( val && val > 0 ) {
+                        firstPlayerSubmit = true;
+                        $("#pve-player-form select[name='map_id']").val(val);
+                        $("#pve-player-form").submit();
+                    }
+                });
+                $("#pve-player-filter").attr("disabled",false);
+
+
+
+                $("#player-response-form").find(".modePanel").each(function(){
+                    var tab = $(this);
+                    if ($(tab).hasClass("active"))
+                    {
+                        loadPlayerMode(tab, $(tab).data("mode"),1);
+                    }
+                    else
+                    {
+                        $(this).on("click",function(){
+                            loadPlayerMode(tab, $(tab).data("mode"),1);
+                        });
+                    }
+                });
+            }
+        });
+    });
     if ( $("#pve-ladder-form") )
     {
         $("#pve-ladder-form").submit();
     }
-
+    if ( $("#pve-player-form") )
+    {
+        $("#pve-player-form").submit();
+    }
     $("#guild-form select").change(function(){
         $("#guild-form").submit();
     });
@@ -1173,20 +1251,6 @@ $(function()
         {
             $(this).on("click",function(){
                 loadEncounterDataMode(tab, id, mode);
-            });
-        }
-    });
-
-    $("#player-response-form").find(".modePanel").each(function(){
-        var tab = $(this);
-        if ($(tab).hasClass("active"))
-        {
-            loadPlayerMode(tab, $(tab).data("mode"),1);
-        }
-        else
-        {
-            $(this).on("click",function(){
-                loadPlayerMode(tab, $(tab).data("mode"),1);
             });
         }
     });
