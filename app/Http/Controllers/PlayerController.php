@@ -36,9 +36,9 @@ class PlayerController extends Controller
                         "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
                         "score" => intval(($specBest->$topType * 100) / $best)
                     );
-                    Cache::put($cacheKey, $cacheValue, 1440); // 1 day
                 }
             }
+            Cache::put($cacheKey, $cacheValue, 1440); // 1 day
         }
         return $cacheValue;
     }
