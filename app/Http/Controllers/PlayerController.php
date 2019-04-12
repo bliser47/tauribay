@@ -21,7 +21,7 @@ class PlayerController extends Controller
 
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
-        $cacheKey = "playerSpecTop2" . http_build_query(array(
+        $cacheKey = "playerSpecTop3" . http_build_query(array(
             $guid, $encounterId, $difficultyId, $specId
         ));
         $cacheValue = Cache::get($cacheKey);
