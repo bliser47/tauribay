@@ -82,7 +82,7 @@ class PlayerController extends Controller
                             foreach ( $specs as $specId => $specName ) {
                                 $scores[$encounterId][$specId] = array(
                                     "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $difficultyId . "/" . $encounterId . "/" . $specId),
-                                    "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, false)
+                                    "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, true)
                                 );
                             }
                         }
