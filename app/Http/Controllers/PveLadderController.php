@@ -203,6 +203,7 @@ class PveLadderController extends Controller
                                 "member_tops.spec",
                                 "member_tops.realm_id",
                                 "member_tops.guid",
+                                "member_tops.faction_id",
                                 "member_tops." . $modeId,
                                 "member_tops." . $modeId . "_ilvl as ilvl",
                                 "member_tops." . $modeId . "_encounter_id as encounter_id",

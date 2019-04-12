@@ -23,7 +23,7 @@
             <td class="topDpsSpecContainer">
                 <img class="topDpsSpec" src="{{ URL::asset("img/classes/specs/" . $member["spec"] . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$member["spec"]] }}"/>
             </td>
-            <td><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member["realm_id"]] ."/" . $member["name"] ."/" . $member["guid"]}}">{{ $member["name"] }}</a></td>
+            <td class="faction-{{ $member["faction_id"] }}"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$member["realm_id"]] ."/" . $member["name"] ."/" . $member["guid"]}}">{{ $member["name"] }}</a></td>
             <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[intval($member["realm_id"])] }}</td>
             <td class="cellDesktop"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . $encounterName . "/". $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId], true) }}</a></td>
             <td class="cellMobile"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . $encounterName . "/". $member["encounter_id"] }}">{{  \TauriBay\Tauri\Skada::format($member[$modeId]) }}</a></td>
