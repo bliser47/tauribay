@@ -537,7 +537,7 @@ class PveLadderController extends Controller
             {
                 $difficultyId = $_request->get("difficulty_id");
                 if ( $_request->has("mode_id") ) {
-                    $cacheKey = http_build_query($_request->all()) . "?v=23";
+                    $cacheKey = http_build_query($_request->all()) . "?v=24";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
@@ -646,11 +646,11 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name","spec"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as total, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
-                                    ->orderBy("total","desc")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("totalMode","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
-                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"total");
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
                                 }
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
@@ -666,11 +666,11 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name","spec"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.hps) as total, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
-                                    ->orderBy("total","desc")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.hps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("totalMode","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
-                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"total");
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
                                 }
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
