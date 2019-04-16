@@ -658,6 +658,7 @@ class PveLadderController extends Controller
                                     "members","classSpecs"));
                                 $view = $view->render();
                                 $cacheValue = $view;
+                                $cacheUrlValue = "";
 
                                 break;
                             case "allstars-hps":
@@ -677,6 +678,7 @@ class PveLadderController extends Controller
                                     "members","classSpecs"));
                                 $view = $view->render();
                                 $cacheValue = $view;
+                                $cacheUrlValue = "";
 
                                 break;
                         }
