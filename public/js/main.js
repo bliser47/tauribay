@@ -1116,8 +1116,8 @@ $(function()
         var modeSaved = getCookie("modeSaved3");
         if ( modeSaved !== "" )
         {
-            $("#difficulty-form-response .modePanel, #difficulty-form-response .tab-pane").removeClass("active");
-            $("#modePanel" + modeSaved + "-" + difficulty + ", #" + modeSaved + "-" + difficulty).addClass("active");
+            $("#difficulty-form-response .modePanel, #difficulty-form-response .tab-pane").removeClass("active loaded");
+            $("#modePanel" + modeSaved + "-" + difficulty + ", #" + modeSaved + "-" + difficulty).addClass("active loaded");
         }
         var container = $(".map-difficulty-mode-"+difficulty+".active").find(".difficulty-mode-loading-container-"+difficulty);
         loadMapDifficultyMode(container, data, $(".map-difficulty-mode-"+difficulty+".active").data("mode"));
