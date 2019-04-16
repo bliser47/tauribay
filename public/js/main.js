@@ -1119,7 +1119,7 @@ $(function()
             if ( !$(this).hasClass("loaded") ) {
                 $(this).addClass("loaded");
                 var id = $(this).find("a").attr("href");
-                loadMapDifficultyMode($(id).find(".difficulty-mode-loading-container"), data, $(this).data("mode"));
+                loadMapDifficultyMode(container,$(id).find(".difficulty-mode-loading-container"), data, $(this).data("mode"));
             }
         });
     };
