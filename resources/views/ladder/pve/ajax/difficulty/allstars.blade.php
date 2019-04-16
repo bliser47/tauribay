@@ -9,7 +9,7 @@
             <span class="memberName">
                 <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
             </span>
-            <span class="memberData memberData2">{{ number_format($character->scorePercentage,2) }}%</span>
+            <span class="memberData memberData2">{{ \TauriBay\Tauri\Skada::format($character->total) }}%</span>
         </div>
     </div>
 @endforeach

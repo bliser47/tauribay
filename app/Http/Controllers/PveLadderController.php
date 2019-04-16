@@ -646,11 +646,11 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name","spec"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as totalDps, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
-                                    ->orderBy("totalDps","desc")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as total, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("total","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
-                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalDps");
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"total");
                                 }
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
@@ -666,11 +666,11 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name","spec"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.hps) as totalHps, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
-                                    ->orderBy("totalHps","desc")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.hps) as total, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("total","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
-                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalHps");
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"total");
                                 }
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
