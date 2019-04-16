@@ -928,7 +928,7 @@ $(function()
 
                 if ( $(container).find("difficulty-form-response") )
                 {
-                    listenForDifficultyMode($(container).parent(),data);
+                    listenForDifficultyMode(difficulty,data);
                 }
             }
         });
@@ -1112,14 +1112,14 @@ $(function()
         });
     };
 
-    var listenForDifficultyMode = function(parentContainer,data) {
-        var container = $(parentContainer).find(".map-difficulty-mode.active").find(".difficulty-mode-loading-container");
-        loadMapDifficultyMode(container, data, $(".map-difficulty-mode.active").data("mode"));
-        $(".map-difficulty-mode-tab").on("click",function(){
+    var listenForDifficultyMode = function(difficulty,data) {
+        var container = $(".map-difficulty-mode-"+difficulty+".active").find(".difficulty-mode-loading-container");
+        loadMapDifficultyMode(container, data, $(".map-difficulty-mode-"+difficulty+".active").data("mode"));
+        $(".map-difficulty-mode-tab-"+difficulty).on("click",function(){
             if ( !$(this).hasClass("loaded") ) {
                 $(this).addClass("loaded");
                 var id = $(this).find("a").attr("href");
-                loadMapDifficultyMode(container,$(id).find(".difficulty-mode-loading-container"), data, $(this).data("mode"));
+                loadMapDifficultyMode(container,$(id).find(".difficulty-mode-loading-container-"+difficulty), data, $(this).data("mode"));
             }
         });
     };

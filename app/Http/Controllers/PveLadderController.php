@@ -699,6 +699,7 @@ class PveLadderController extends Controller
                         $modeId = Defaults::DIFFICULTY_MODE;
 
                         $view = view("ladder/pve/ajax/map_difficulty", compact(
+                            "difficultyId",
                             "modes",
                             "modeId"
                         ));
