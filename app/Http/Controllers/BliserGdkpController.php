@@ -80,16 +80,10 @@ class BliserGdkpController extends Controller
                     $apply->score = $totalScore;
                     $apply->spec = $highestSpecId;
                     $apply->save();
-                } else {
-                    return "Mar jelentkeztel";
                 }
-            } else {
-                return "Nem a tied a kari";
             }
-        } else {
-            return "Missing valamit";
         }
-        return $this->index($_request);
+        return redirect('/gdkp');
     }
 
     public function index(Request $_request)
