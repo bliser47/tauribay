@@ -53,7 +53,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
 
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/main.js?v=317') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=318') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
 {{--<script type="application/javascript" src="{{ URL::asset('js/ads.js') }}"></script>--}}
 @yield('pagespecificscripts')

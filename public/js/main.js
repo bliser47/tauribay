@@ -928,7 +928,7 @@ $(function()
 
                 if ( $(container).find("difficulty-form-response") )
                 {
-                    listenForDifficultyMode(data);
+                    listenForDifficultyMode(container,data);
                 }
             }
         });
@@ -1112,8 +1112,8 @@ $(function()
         });
     };
 
-    var listenForDifficultyMode = function(data) {
-        var container = $(".map-difficulty-mode.active").find(".difficulty-mode-loading-container");
+    var listenForDifficultyMode = function(parentContainer,data) {
+        var container = $(parentContainer).find(".map-difficulty-mode.active").find(".difficulty-mode-loading-container");
         loadMapDifficultyMode(container, data, $(".map-difficulty-mode.active").data("mode"));
         $(".map-difficulty-mode-tab").on("click",function(){
             if ( !$(this).hasClass("loaded") ) {
