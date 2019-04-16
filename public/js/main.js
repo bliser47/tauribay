@@ -1118,7 +1118,8 @@ $(function()
         $(".map-difficulty-mode-tab-"+difficulty).on("click",function(){
             if ( !$(this).hasClass("loaded") ) {
                 $(this).addClass("loaded");
-                loadMapDifficultyMode(container, data, $(this).data("mode"));
+                var id = $(this).find("a").attr("href");
+                loadMapDifficultyMode($(id).find(".difficulty-mode-loading-container-"+difficulty), data, $(this).data("mode"));
             }
         });
     };
