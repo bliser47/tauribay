@@ -2,16 +2,35 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
-            <div class="panel">
-                {!! Form::open(array("method" => "post","class"=>"gdkp-apply-form")) !!}
-                <div class="input-group col-md-12">
-                    {!! Form::select('character_id', $characters, null, ['required', 'id' => 'authorized_characters', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz karaktert")]); !!}
+            <div class="panel panel-default">
+                <div class="panel-heading nopadding" role="tab" id="headingOne">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            {{ __("Jelentkezés") }}
+                        </a>
+                    </h4>
                 </div>
-                <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
-                    {{ __("Jelentkezés") }}
-                </button>
-                {!! Form::close() !!}
-                <br/>
+                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body">
+                        {!! Form::open(array("method" => "get","id"=>"gdkp-apply-form")) !!}
+                        <div class="col-sm-4 col-sm-nopadding col-sm-margin">
+                            <div id="characters-container" class="input-group col-md-12">
+                                {!! Form::select('character_id', $characters, null, ['required', 'id' => 'authorized_characters', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz karaktert")]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-sm-nopadding col-sm-margin">
+                            <div id="maps-container" class="input-group col-md-12">
+                                {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz role-t")]); !!}
+                            </div>
+                        </div>
+                        <div class="col-sm-4 nomargin col-sm-nopadding">
+                            <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
+                                {{ __("Jelentkezés") }}
+                            </button>
+                        </div>
+                        {!! Form::close() !!}
+                    </div>
+                </div>
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
                         <th>{{ __("Név") }}</th>

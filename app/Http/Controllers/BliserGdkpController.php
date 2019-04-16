@@ -33,8 +33,12 @@ class BliserGdkpController extends Controller
                     $totalScore = 0;
                     $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
                     foreach ( $ids as $id ) {
-                        $topScore = MemberTop::where("realm_id","=",$character->realm)->where("name","=",$character->name)
-                            ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(4,6))->orderBy("")
+                        $tops = MemberTop::where("realm_id","=",$character->realm)->where("name","=",$character->name)
+                            ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(4,6))->get();
+                        foreach ( $tops as $top ) {
+                            $dpsScore = Encounter::getSpecTopDps($id, $top->diffuclity_id, $top->spec) * $top->dps / 100;
+                            $hpsScore = Encounter::getSpecTopHps($id, $top->diffuclity_id, $top->spec) * $top->hps / 100;
+                        }
                     }
                     $score = $totalScore;
                     $apply->score = 0;
@@ -62,7 +66,8 @@ class BliserGdkpController extends Controller
                 $characters[$char->id] = "[" . Realm::REALMS_SHORT[$char->realm] . "] " . $char->name;
             }
             $characterClasses = Tauri\CharacterClasses::CHARACTER_CLASS_NAMES;
-            return view("gdkp", compact("characters", "applied", "characterClasses"));
+            $roles = array();
+            return view("gdkp", compact("characters", "applied", "characterClasses","roles"));
         }
         return redirect()->route('login');
     }
