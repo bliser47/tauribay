@@ -1113,9 +1113,16 @@ $(function()
     };
 
     var listenForDifficultyMode = function(difficulty,data) {
+        var modeSaved = getCookie("modeSaved3");
+        if ( modeSaved !== "" )
+        {
+            $("#difficulty-form-response .modePanel, #difficulty-form-response .tab-pane").removeClass("active");
+            $("#modePanel" + modeSaved + "-" + difficulty + ", #" + modeSaved + "-" + difficulty).addClass("active");
+        }
         var container = $(".map-difficulty-mode-"+difficulty+".active").find(".difficulty-mode-loading-container-"+difficulty);
         loadMapDifficultyMode(container, data, $(".map-difficulty-mode-"+difficulty+".active").data("mode"));
         $(".map-difficulty-mode-tab-"+difficulty).on("click",function(){
+            setCookie("modeSaved3",$(this).data("mode"));
             if ( !$(this).hasClass("loaded") ) {
                 $(this).addClass("loaded");
                 var id = $(this).find("a").attr("href");
