@@ -1113,7 +1113,7 @@ $(function()
     };
 
     var listenForDifficultyMode = function(difficulty,data) {
-        var container = $(".map-difficulty-mode-"+difficulty+".active").find(".difficulty-mode-loading-container");
+        var container = $(".map-difficulty-mode-"+difficulty+".active").find(".difficulty-mode-loading-container"+difficulty);
         loadMapDifficultyMode(container, data, $(".map-difficulty-mode-"+difficulty+".active").data("mode"));
         $(".map-difficulty-mode-tab-"+difficulty).on("click",function(){
             if ( !$(this).hasClass("loaded") ) {
