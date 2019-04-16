@@ -928,7 +928,7 @@ $(function()
 
                 if ( $(container).find("difficulty-form-response") )
                 {
-                    listenForDifficultyMode(container,data);
+                    listenForDifficultyMode($(container).parent(),data);
                 }
             }
         });
