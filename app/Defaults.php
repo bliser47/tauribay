@@ -16,6 +16,7 @@ class Defaults extends Model
     const MAP_ID  = 1098; // Throne of Thunder
     const DIFFICULTY_ID  = 5; // 10 Heroic
     const ENCOUNTER_SORT = "dps";
+    const DIFFICULTY_MODE = "ladder";
     const PLAYER_MODE = "recent";
     const REALM_URL = "tauri";
 

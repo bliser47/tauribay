@@ -925,6 +925,11 @@ $(function()
                 prevState = window.location.href;
                 history.pushState(null, '', response["url"] + window.location.hash);
                 UpdateTimes();
+
+                if ( $(container).find("difficulty-form-response") )
+                {
+                    listenForDifficultyMode(data);
+                }
             }
         });
     };
@@ -1086,6 +1091,37 @@ $(function()
             });
 
         }
+    };
+
+    var loadMapDifficultyMode = function(container,data, mode) {
+        data += ("&mode_id="+mode);
+        $.ajax({
+            type: "POST",
+            url: URL_WEBSITE + "/ladder/pve",
+            data: data,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response)
+            {
+                response = $.parseJSON(response);
+                $(container).find(".encounters_loading").hide();
+                $(container).parent().html(replaceTranslations(response["view"]));
+                UpdateTimes();
+            }
+        });
+    };
+
+    var listenForDifficultyMode = function(data) {
+        var container = $(".map-difficulty-mode.active").find(".difficulty-mode-loading-container");
+        loadMapDifficultyMode(container, data, $(".map-difficulty-mode.active").data("mode"));
+        $(".map-difficulty-mode-tab").on("click",function(){
+            if ( !$(this).hasClass("loaded") ) {
+                $(this).addClass("loaded");
+                var id = $(this).find("a").attr("href");
+                loadMapDifficultyMode($(id).find(".difficulty-mode-loading-container"), data, $(this).data("mode"));
+            }
+        });
     };
 
     var firstSubmit = true;

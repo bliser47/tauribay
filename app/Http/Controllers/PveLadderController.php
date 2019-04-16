@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use TauriBay\Loot;
+use TauriBay\Tauri\CharacterClasses;
+use TauriBay\Tauri\Skada;
 
 class PveLadderController extends Controller
 {
@@ -529,120 +531,187 @@ class PveLadderController extends Controller
             }
         }
         else {
-
             $expansionId = $_request->get("expansion_id", $_expansion_id);
             $mapId = $_request->get("map_id", $_map_id);
             if ( $_request->has("difficulty_id"))
             {
-                $cacheKey = http_build_query($_request->all()) . "?v=21";
-                $cacheValue = Cache::get($cacheKey);
-                $cacheUrlValue = Cache::get($cacheKey."URL");
-                if (  !$cacheValue ) {
+                $difficultyId = $_request->get("difficulty_id");
+                if ( $_request->has("mode_id") ) {
+                    $cacheKey = http_build_query($_request->all()) . "?v=21";
+                    $cacheValue = Cache::get($cacheKey);
+                    $cacheUrlValue = Cache::get($cacheKey."URL");
+                    if (  !$cacheValue ) {
 
-                    $raidEncounters = array();
-                    $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
-                    foreach ($raids as $raid) {
-                        if ($raid["id"] == $mapId) {
-                            $raidEncounters = $raid["encounters"];
-                            break;
+                        //  Realm filter
+                        $realms = array();
+                        if ($_request->has('tauri')) {
+                            array_push($realms, 0);
+                        }
+                        if ($_request->has('wod')) {
+                            array_push($realms, 1);
+                        }
+                        if ($_request->has('evermoon')) {
+                            array_push($realms, 2);
+                        }
+                        if ( count($realms) == 0 ) {
+                            $realms = Realm::getAllRealmIds();
+                        }
+
+                        // Faction filter
+                        $factions = array();
+                        if ($_request->has('alliance')) {
+                            array_push($factions, Faction::ALLIANCE);
+                        }
+                        if ($_request->has('horde')) {
+                            array_push($factions, Faction::HORDE);
+                        }
+                        if ( count($factions) == 0 ) {
+                            $factions = Faction::getAllFactionIds();
+                        }
+
+                        switch($_request->get("mode_id"))
+                        {
+                            case "ladder":
+                                $raidEncounters = array();
+                                $raids = Encounter::EXPANSION_RAIDS_COMPLEX["map_exp_" . $expansionId];
+                                foreach ($raids as $raid) {
+                                    if ($raid["id"] == $mapId) {
+                                        $raidEncounters = $raid["encounters"];
+                                        break;
+                                    }
+                                }
+
+                                $encounters = array();
+                                foreach ($raidEncounters as $raidEncounter) {
+                                    $encounterId = $raidEncounter["encounter_id"];
+                                    $fastestEncounter = Encounter::getFastest($encounterId, $difficultyId, $realms, $factions);
+                                    $added = false;
+                                    if ( $fastestEncounter !== null ) {
+                                        $encounter = Encounter::where("id", "=", $fastestEncounter->fastest_encounter)->first();
+                                        if ($encounter !== null) {
+                                            if ($encounter->guild_id !== 0) {
+                                                $guild = Guild::where("id", "=", $encounter->guild_id)->first();
+                                                $encounter->guild_name = $guild->name;
+                                                $encounter->faction = $guild->faction;
+                                            }
+                                            $topDps = Encounter::getTopDps($encounterId, $difficultyId, $realms, $factions);
+                                            if ( $topDps != null && $topDps->id > 0 ) {
+                                                $encounter->top_dps = $topDps;
+                                                $added = true;
+                                            }
+                                            $topHps = Encounter::getTopHps($encounterId, $difficultyId, $realms, $factions);
+                                            if ( $topHps != null && $topHps->id > 0 ) {
+                                                $encounter->top_hps = $topHps;
+                                                $added = true;
+                                            }
+                                            if ( $added ) {
+                                                $encounters[] = $encounter;
+                                            }
+                                        }
+                                    }
+                                    if ( !$added && Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
+                                        $encounters[] = $raidEncounter;
+                                    }
+                                }
+
+                                if ( count($encounters) > 0 ) {
+                                    $view = view("ladder/pve/ajax/difficulty/ladder", compact(
+                                        "encounters",
+                                        "expansionId",
+                                        "mapId",
+                                        "difficultyId"));
+                                    $view = $view->render();
+                                } else {
+                                    $view = "";
+                                }
+
+
+                                $realmFactionQuery = "/?" . http_build_query(array(
+                                        "tauri" => $_request->get("tauri"),
+                                        "wod" => $_request->get("wod"),
+                                        "evermoon" => $_request->get("evermoon"),
+                                        "alliance" => $_request->get("alliance"),
+                                        "horde" => $_request->get("horde")
+                                    ));
+
+                                $cacheValue = $view;
+                                $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" .
+                                        Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $realmFactionQuery;
+                                Cache::put($cacheKey, $cacheValue, 120); // 2 hours
+                                Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
+                                break;
+
+                            case "allstars-dps":
+                                $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
+                                $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
+                                    ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
+                                    ->groupBy(array("realm_id","name","spec"))
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as totalDps, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("totalDps","desc")
+                                    ->take(100)->get();
+                                foreach ( $members as $member ) {
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalDps");
+                                }
+                                $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+
+                                $view = view("ladder/pve/ajax/difficulty/allstars", compact(
+                                    "members","classSpecs"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+
+                                break;
+                            case "allstars-hps":
+                                $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
+                                $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
+                                    ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
+                                    ->groupBy(array("realm_id","name","spec"))
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.hps) as totalHps, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("totalHps","desc")
+                                    ->take(100)->get();
+                                foreach ( $members as $member ) {
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalHps");
+                                }
+                                $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+
+                                $view = view("ladder/pve/ajax/difficulty/allstars", compact(
+                                    "members","classSpecs"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+
+                                break;
                         }
                     }
 
-                    $difficultyId = $_request->get("difficulty_id");
-
-                    //  Realm filter
-                    $realms = array();
-                    if ($_request->has('tauri')) {
-                        array_push($realms, 0);
-                    }
-                    if ($_request->has('wod')) {
-                        array_push($realms, 1);
-                    }
-                    if ($_request->has('evermoon')) {
-                        array_push($realms, 2);
-                    }
-                    if ( count($realms) == 0 ) {
-                        $realms = Realm::getAllRealmIds();
-                    }
-
-                    // Faction filter
-                    $factions = array();
-                    if ($_request->has('alliance')) {
-                        array_push($factions, Faction::ALLIANCE);
-                    }
-                    if ($_request->has('horde')) {
-                        array_push($factions, Faction::HORDE);
-                    }
-                    if ( count($factions) == 0 ) {
-                        $factions = Faction::getAllFactionIds();
-                    }
-
-
-                    $encounters = array();
-                    foreach ($raidEncounters as $raidEncounter) {
-                        $encounterId = $raidEncounter["encounter_id"];
-                        $fastestEncounter = Encounter::getFastest($encounterId, $difficultyId, $realms, $factions);
-                        $added = false;
-                        if ( $fastestEncounter !== null ) {
-                            $encounter = Encounter::where("id", "=", $fastestEncounter->fastest_encounter)->first();
-                            if ($encounter !== null) {
-                                if ($encounter->guild_id !== 0) {
-                                    $guild = Guild::where("id", "=", $encounter->guild_id)->first();
-                                    $encounter->guild_name = $guild->name;
-                                    $encounter->faction = $guild->faction;
-                                }
-                                $topDps = Encounter::getTopDps($encounterId, $difficultyId, $realms, $factions);
-                                if ( $topDps != null && $topDps->id > 0 ) {
-                                    $encounter->top_dps = $topDps;
-                                    $added = true;
-                                }
-                                $topHps = Encounter::getTopHps($encounterId, $difficultyId, $realms, $factions);
-                                if ( $topHps != null && $topHps->id > 0 ) {
-                                    $encounter->top_hps = $topHps;
-                                    $added = true;
-                                }
-                                if ( $added ) {
-                                    $encounters[] = $encounter;
-                                }
-                            }
-                        }
-                        if ( !$added && Encounter::doubleCheckEncounterExistsOnDifficulty($encounterId, $difficultyId)) {
-                            $encounters[] = $raidEncounter;
-                        }
-                    }
-
-                    if ( count($encounters) > 0 ) {
-                        $view = view("ladder/pve/ajax/map_difficulty", compact(
-                            "encounters",
-                            "expansionId",
-                            "mapId",
-                            "difficultyId"));
-                        $view = $view->render();
-                    } else {
-                        $view = "";
-                    }
-
-
-                    $realmFactionQuery = "/?" . http_build_query(array(
-                        "tauri" => $_request->get("tauri"),
-                        "wod" => $_request->get("wod"),
-                        "evermoon" => $_request->get("evermoon"),
-                        "alliance" => $_request->get("alliance"),
-                        "horde" => $_request->get("horde")
+                    return json_encode(array(
+                        "view" => $cacheValue,
+                        "url" => $cacheUrlValue
                     ));
+                } else {
+                    $cacheKey = http_build_query($_request->all()) . "_" . $_request->fullUrl() . "?v=6";
+                    $cacheValue = Cache::get($cacheKey);
+                    $cacheUrlValue = Cache::get($cacheKey."URL");
+                    if (  !$cacheValue || !$cacheUrlValue ) {
+                        $modes = array(
+                            "ladder" => "Ladder",
+                            "allstars-dps" => "DPS gods",
+                            "allstars-hps" => "HPS gods"
+                        );
+                        $modeId = Defaults::DIFFICULTY_MODE;
 
-                    $cacheValue = $view;
-                    $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" .
-                        Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $realmFactionQuery;
-                    Cache::put($cacheKey, $cacheValue, 120); // 2 hours
-                    Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
+                        $view = view("ladder/pve/ajax/map_difficulty", compact(
+                            "modes",
+                            "modeId"
+                        ));
 
+                        $cacheValue = $view->render();
+                        Cache::put($cacheKey, $cacheValue, 1440); // 1 d
+                    }
+
+                    return json_encode(array(
+                        "view" => $cacheValue,
+                        "url" => ""
+                    ));
                 }
-
-                return json_encode(array(
-                    "view" => $cacheValue,
-                    "url" => $cacheUrlValue
-                ));
             }
             else
             {
