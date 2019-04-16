@@ -31,22 +31,21 @@
                         {!! Form::close() !!}
                     </div>
                 </div>
-                <table class="table table-bordered table-classes">
-                    <tr class="tHead">
-                        <th>{{ __("Név") }}</th>
-                        <th>{{ __("Kaszt") }}</th>
-                        <th>Score</th>
-                        <th>Állapot</th>
-                    </tr>
-                    @foreach ( $applied as $character )
-                        <tr id="character{{$character->id}}">
-                            <td> <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] ."/" . $character->name . "/" . $character->guid}}">{{ $character->name }}</a></td>
-                            <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png?v=2") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                            <td> {{ $character->score }}  </td>
-                            <td></td>
-                        </tr>
-                    @endforeach
-                </table>
+                @foreach ( $applied as $character )
+                    <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
+                        <div class="memberDataWidthContainer">
+                            <div style="width:{{ $character->percentageScore }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
+                            <div class="memberSpec">
+                                <img src="{{ URL::asset("img/classes/specs/" . $character->spec . ".png") }}" alt="{{ $classSpecs[$character->spec] }}"/>
+                            </div>
+                            <span class="memberPosition">{{ $loop->index+1 }}.</span>
+                            <span class="memberName">
+                                <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
+                            </span>
+                            <span class="memberData memberData2">{{ $character->score }}</span>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

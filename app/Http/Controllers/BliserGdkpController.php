@@ -15,7 +15,8 @@ use TauriBay\Tauri;
 use Auth;
 use TauriBay\Gdkp;
 use Collective\Html\FormFacade;
-
+use TauriBay\Tauri\CharacterClasses;
+use TauriBay\Tauri\Skada;
 
 class BliserGdkpController extends Controller
 {
@@ -47,10 +48,13 @@ class BliserGdkpController extends Controller
                     $apply->character_id = $_request->get("character_id");
                     $totalScore = 0;
                     $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
+                    $highestSpec = null;
+                    $roleSpecs = array_keys(EncounterMember::getRoleClassSpecs($_request->get("role_id"), $character->class));
+                    $highestSpecId = $roleSpecs[0];
                     foreach ( $ids as $id ) {
                         $bestScore = 0;
                         $tops = MemberTop::where("realm_id","=",$character->realm)->where("name","=",$character->name)
-                            ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(4,6))->get();
+                            ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(5,6))->whereIn("spec",$roleSpecs)->get();
                         foreach ( $tops as $top ) {
                             $thisScore = 0;
                             switch($_request->get("role_id")) {
@@ -66,10 +70,15 @@ class BliserGdkpController extends Controller
                             if ( $thisScore > $bestScore ) {
                                 $bestScore = $thisScore;
                             }
+                            if ( $highestSpec == null || $bestScore > $highestSpec ) {
+                                $highestSpec = $bestScore;
+                                $highestSpecId = $top->spec;
+                            }
                         }
                         $totalScore += $bestScore;
                     }
                     $apply->score = $totalScore;
+                    $apply->spec = $highestSpecId;
                     $apply->save();
                 } else {
                     return "Mar jelentkeztel";
@@ -91,6 +100,7 @@ class BliserGdkpController extends Controller
             $appliedIds = array();
             foreach ( $applied as $char ) {
                 $appliedIds[] = $char->character_id;
+                $char->percentageScore = Skada::calculatePercentage($char, $applied->first(), "score");
             }
             $charactersResult = AuthorizedCharacter::where("user_id", "=", $user->id)
                 ->where("realm", "=", Realm::TAURI)->whereNotIn("character_id",$appliedIds)
@@ -99,9 +109,10 @@ class BliserGdkpController extends Controller
             foreach ($charactersResult as $char) {
                 $characters[$char->id] = "[" . Realm::REALMS_SHORT[$char->realm] . "] " . $char->name;
             }
+            $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
             $characterClasses = Tauri\CharacterClasses::CHARACTER_CLASS_NAMES;
             $roles = array();
-            return view("gdkp", compact("characters", "applied", "characterClasses","roles"));
+            return view("gdkp", compact("characters", "applied", "characterClasses","roles","classSpecs"));
         }
         return redirect()->route('login');
     }
