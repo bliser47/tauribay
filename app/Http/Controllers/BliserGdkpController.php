@@ -45,10 +45,10 @@ class BliserGdkpController extends Controller
                     $apply = new Gdkp;
                     $apply->account_id = $user->id;
                     $apply->character_id = $_request->get("character_id");
-                    $bestScore = 0;
                     $totalScore = 0;
                     $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
                     foreach ( $ids as $id ) {
+                        $bestScore = 0;
                         $tops = MemberTop::where("realm_id","=",$character->realm)->where("name","=",$character->name)
                             ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(4,6))->get();
                         foreach ( $tops as $top ) {
