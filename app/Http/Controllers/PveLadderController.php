@@ -537,7 +537,7 @@ class PveLadderController extends Controller
             {
                 $difficultyId = $_request->get("difficulty_id");
                 if ( $_request->has("mode_id") ) {
-                    $cacheKey = http_build_query($_request->all()) . "?v=22";
+                    $cacheKey = http_build_query($_request->all()) . "?v=23";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
@@ -687,7 +687,7 @@ class PveLadderController extends Controller
                         "url" => $cacheUrlValue
                     ));
                 } else {
-                    $cacheKey = http_build_query($_request->all()) . "_" . $_request->fullUrl() . "?v=6";
+                    $cacheKey = http_build_query($_request->all()) . "_" . $_request->fullUrl() . "?v=7";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue || !$cacheUrlValue ) {
