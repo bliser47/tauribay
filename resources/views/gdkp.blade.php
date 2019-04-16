@@ -12,15 +12,15 @@
                 </div>
                 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
-                        {!! Form::open(array("method" => "get","id"=>"gdkp-apply-form")) !!}
+                        {!! Form::open(array("method" => "post","id"=>"gdkp-apply-form")) !!}
                         <div class="col-sm-4 col-sm-nopadding col-sm-margin">
                             <div id="characters-container" class="input-group col-md-12">
                                 {!! Form::select('character_id', $characters, null, ['required', 'id' => 'authorized_characters', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz karaktert")]); !!}
                             </div>
                         </div>
                         <div class="col-sm-4 col-sm-nopadding col-sm-margin">
-                            <div id="maps-container" class="input-group col-md-12">
-                                {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz role-t")]); !!}
+                            <div id="roles-container" class="input-group col-md-12">
+                                {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  "Először válassz karaktert"]); !!}
                             </div>
                         </div>
                         <div class="col-sm-4 nomargin col-sm-nopadding">

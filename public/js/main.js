@@ -798,6 +798,31 @@ $(function()
         });
     };
 
+
+    $("#authorized_characters").change(function()
+    {
+        var char_id = $(this).val();
+        $.ajax({
+            type: "GET",
+            url: URL_WEBSITE + "/gdkp/" + char_id,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(rolesSelect)
+            {
+                $("#roles-container").each(function(){
+                    var selectContainer = $(this);
+                    selectContainer.html(rolesSelect);
+                    selectContainer.find(".selectpicker").selectpicker('refresh');
+                    selectContainer.attr('disabled', false);
+                });
+
+                listenForClassChange(mode, currentRole);
+                UpdateTimes();
+            }
+        });
+    });
+
     var listenForRoleChange = function(mode)
     {
         var currentRole = $("#role").val();

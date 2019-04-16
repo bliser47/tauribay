@@ -8,6 +8,10 @@ class EncounterMember extends Model
 {
     const SPEC_DRUID_BALALANCE = 102;
 
+    const ROLE_TANK = 1;
+    const ROLE_DPS = 2;
+    const ROLE_HEAL = 3;
+
     const ROLES = array(
         1 => array(
             "name" => "Tank",
@@ -436,6 +440,16 @@ class EncounterMember extends Model
             }
         }
         return 0;
+    }
+
+    public static function getClassRoles($_class_id) {
+        $roles = array();
+        foreach ( self::ROLES as $roleId => $role ) {
+            if ( in_array($_class_id, $role["classes"]) ) {
+                $roles[$roleId] = $role["name"];
+            }
+        }
+        return $roles;
     }
 
     public static function findFaction($member) {

@@ -14,37 +14,71 @@ use TauriBay\Realm;
 use TauriBay\Tauri;
 use Auth;
 use TauriBay\Gdkp;
+use Collective\Html\FormFacade;
 
 
 class BliserGdkpController extends Controller
 {
+    public function character(Request $_request, $_character_id) {
+        if ( $_character_id  !== null ) {
+            $char = Characters::where("id","=",$_character_id)->first();
+            if ( $char ) {
+                $roles =  EncounterMember::getClassRoles($char->class);
+                return FormFacade::select('role_id', $roles, 0, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' => __("Válassz role-t")]);
+            } else {
+                return "Char not found";
+            }
+        } else {
+            return "Char id is null";
+        }
+    }
+
     public function apply(Request $_request)
     {
         $user = Auth::user();
-        if ( $user && $_request->has("character_id") ) {
+        if ( $user && $_request->has("character_id") && $_request->has("role_id") ) {
             $userHasChar = AuthorizedCharacter::where("user_id","=",$user->id)->where("character_id","=",$_request->get("character_id"))->first();
             if ( $userHasChar ) {
                 $applied = Gdkp::where("character_id","=",$_request->get("character_id"))->first();
                 if ( !$applied ) {
-                    $character = Characters::where("character_id",$_request->get("character_id"))->first();
+                    $character = Characters::where("id",$_request->get("character_id"))->first();
                     $apply = new Gdkp;
                     $apply->account_id = $user->id;
                     $apply->character_id = $_request->get("character_id");
+                    $bestScore = 0;
                     $totalScore = 0;
                     $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
                     foreach ( $ids as $id ) {
                         $tops = MemberTop::where("realm_id","=",$character->realm)->where("name","=",$character->name)
                             ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(4,6))->get();
                         foreach ( $tops as $top ) {
-                            $dpsScore = Encounter::getSpecTopDps($id, $top->diffuclity_id, $top->spec) * $top->dps / 100;
-                            $hpsScore = Encounter::getSpecTopHps($id, $top->diffuclity_id, $top->spec) * $top->hps / 100;
+                            $thisScore = 0;
+                            switch($_request->get("role_id")) {
+                                case EncounterMember::ROLE_DPS:
+                                case EncounterMember::ROLE_TANK:
+                                    $thisScore = ($top->dps *100) / Encounter::getSpecTopDps($id, $top->difficulty_id, $top->spec);
+                                break;
+
+                                case EncounterMember::ROLE_HEAL:
+                                    $thisScore = ($top->hps *100) / Encounter::getSpecTopHps($id, $top->difficulty_id, $top->spec);
+                                    break;
+                            }
+                            if ( $thisScore > $bestScore ) {
+                                $bestScore = $thisScore;
+                            }
                         }
+                        $totalScore += $bestScore;
                     }
-                    $score = $totalScore;
-                    $apply->score = 0;
+                    $apply->score = $totalScore;
                     $apply->save();
+                } else {
+                    return "Mar jelentkeztel";
                 }
+            } else {
+                return "Nem a tied a kari";
             }
+        } else {
+            return "Missing valamit";
         }
         return $this->index($_request);
     }
