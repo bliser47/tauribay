@@ -9,8 +9,7 @@
             <span class="memberName">
                 <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
             </span>
-            <span class="memberData memberData1">{{ \TauriBay\Encounter::getNameShort($character->encounter_id) }}</span>
-            <span class="memberData memberData2"><a target="_blank" href="{{ URL::to("/encounter/") . "/" . \TauriBay\Encounter::getUrlName($character->encounter_id) . "/" . $character->encounter }}">{{ \TauriBay\Tauri\Skada::format($character->totalMode) }}</a></span>
+            <span class="memberData memberData2">{{ \TauriBay\Tauri\Skada::format($character->totalMode) }}</span>
         </div>
     </div>
 @endforeach

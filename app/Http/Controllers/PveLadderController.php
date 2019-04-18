@@ -706,7 +706,7 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.hps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class, member_tops.encounter_id, member_tops.hps_encounter_id as encounter")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.hps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
