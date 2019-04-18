@@ -734,10 +734,10 @@ class PveLadderController extends Controller
                     if (  !$cacheValue || !$cacheUrlValue ) {
                         $modes = array(
                             "ladder" => "Ladder",
-                            "allstars-dps" => "Σ DPS",
-                            "allstars-hps" => "Σ HPS",
-                            "allstars-dpsMax" => "max(DPS)",
-                            "allstars-hpsMax" => "max(HPS)"
+                            "allstars-dps" => "Σdps",
+                            "allstars-hps" => "Σhps",
+                            "allstars-dpsMax" => "maxDps",
+                            "allstars-hpsMax" => "maxHps"
                         );
                         $modeId = Defaults::DIFFICULTY_MODE;
 

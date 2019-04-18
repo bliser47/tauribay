@@ -4,7 +4,7 @@
         text-align: center;
     }
 
-    #encounter-form-response .nav li a {
+    #encounter-form-response .nav li a, #difficulty-form-response .nav li a {
         padding:7.5px 7.5px;
     }
     .col-sm-nopadding
