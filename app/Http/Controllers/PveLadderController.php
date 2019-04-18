@@ -687,7 +687,7 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class, member_tops.encounter_id, member_tops.dps_encounter_id as encounter")
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
@@ -695,7 +695,7 @@ class PveLadderController extends Controller
                                 }
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
-                                $view = view("ladder/pve/ajax/difficulty/allstars", compact(
+                                $view = view("ladder/pve/ajax/difficulty/max", compact(
                                     "members","classSpecs"));
                                 $view = $view->render();
                                 $cacheValue = $view;
@@ -706,7 +706,7 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("realm_id","name"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.hps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.hps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class, member_tops.encounter_id, member_tops.hps_encounter_id as encounter")
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
@@ -714,7 +714,7 @@ class PveLadderController extends Controller
                                 }
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
-                                $view = view("ladder/pve/ajax/difficulty/allstars", compact(
+                                $view = view("ladder/pve/ajax/difficulty/max", compact(
                                     "members","classSpecs"));
                                 $view = $view->render();
                                 $cacheValue = $view;
