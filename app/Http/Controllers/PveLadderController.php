@@ -645,7 +645,7 @@ class PveLadderController extends Controller
                                 $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
-                                    ->groupBy(array("realm_id","name","spec"))
+                                    ->groupBy(array("realm_id","name","class"))
                                     ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
@@ -681,6 +681,45 @@ class PveLadderController extends Controller
                                 $cacheUrlValue = "";
 
                                 break;
+
+                            case "allstars-dpsMax":
+                                $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
+                                $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
+                                    ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
+                                    ->groupBy(array("realm_id","name"))
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("totalMode","desc")
+                                    ->take(100)->get();
+                                foreach ( $members as $member ) {
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
+                                }
+                                $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+
+                                $view = view("ladder/pve/ajax/difficulty/allstars", compact(
+                                    "members","classSpecs"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+                                $cacheUrlValue = "";
+                                break;
+                            case "allstars-hpsMax":
+                                $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
+                                $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
+                                    ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
+                                    ->groupBy(array("realm_id","name"))
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, MAX(member_tops.hps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->orderBy("totalMode","desc")
+                                    ->take(100)->get();
+                                foreach ( $members as $member ) {
+                                    $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
+                                }
+                                $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+
+                                $view = view("ladder/pve/ajax/difficulty/allstars", compact(
+                                    "members","classSpecs"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+                                $cacheUrlValue = "";
+                                break;
                         }
                     }
 
@@ -695,8 +734,10 @@ class PveLadderController extends Controller
                     if (  !$cacheValue || !$cacheUrlValue ) {
                         $modes = array(
                             "ladder" => "Ladder",
-                            "allstars-dps" => "DPS gods",
-                            "allstars-hps" => "HPS gods"
+                            "allstars-dps" => "Σ DPS",
+                            "allstars-hps" => "Σ HPS",
+                            "allstars-dpsMax" => "max(DPS)",
+                            "allstars-hpsMax" => "max(HPS)"
                         );
                         $modeId = Defaults::DIFFICULTY_MODE;
 
