@@ -92,9 +92,16 @@ class BliserGdkpController extends Controller
         if ($user) {
             $applied = Gdkp::leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("score", "desc")->get();
             $appliedIds = array();
+            $appliedRoles = array(
+                EncounterMember::ROLE_TANK => array(),
+                EncounterMember::ROLE_HEAL => array(),
+                EncounterMember::ROLE_DPS => array()
+            );
             foreach ( $applied as $char ) {
                 $appliedIds[] = $char->character_id;
                 $char->percentageScore = Skada::calculatePercentage($char, $applied->first(), "score");
+                $char->role = EncounterMember::getSpecRole($char->spec);
+                $appliedRoles[$char->role][] = $char;
             }
             $charactersResult = AuthorizedCharacter::where("user_id", "=", $user->id)
                 ->where("realm", "=", Realm::TAURI)->whereNotIn("character_id",$appliedIds)
@@ -106,7 +113,7 @@ class BliserGdkpController extends Controller
             $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
             $characterClasses = Tauri\CharacterClasses::CHARACTER_CLASS_NAMES;
             $roles = array();
-            return view("gdkp", compact("characters", "applied", "characterClasses","roles","classSpecs"));
+            return view("gdkp", compact("characters", "appliedRoles", "characterClasses","roles","classSpecs"));
         }
         return redirect()->route('login');
     }

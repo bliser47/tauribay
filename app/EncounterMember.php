@@ -312,6 +312,17 @@ class EncounterMember extends Model
         return $specs;
     }
 
+
+    public static function getSpecRole($_spec_id)
+    {
+        foreach ( self::ROLES as $roleId => $role )
+        {
+            if ( in_array($_spec_id, $role["specs"]) ) {
+                return $roleId;
+            }
+        }
+    }
+
     public static function getRoles()
     {
         $roles = array();
