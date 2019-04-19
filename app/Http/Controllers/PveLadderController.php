@@ -540,7 +540,7 @@ class PveLadderController extends Controller
                     $cacheKey = http_build_query($_request->all()) . "?v=25";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
-                    if (  !$cacheValue ) {
+                    if ( true || !$cacheValue ) {
 
                         //  Realm filter
                         $realms = array();
@@ -645,8 +645,13 @@ class PveLadderController extends Controller
                                 $mapEncounters = Encounter::getMapEncountersIds($expansionId, $mapId);
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
-                                    ->groupBy(array("realm_id","name","spec"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(member_tops.dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class")
+                                    ->groupBy(array("character_id"))
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class, member_tops.character_id, member_tops.encounter_id")
+                                    ->leftJoin(DB::raw("(SELECT character_id as c , encounter_id as e, max(dps) as maxDps FROM member_tops) as topSpec"), function($join) {
+                                        $join->on("member_tops.character_id","=","topSpec.c");
+                                        $join->on("member_tops.encounter_id","=","topSpec.e");
+                                    })
+                                    ->where("member_tops.dps","=","t.maxDps")
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
                                 foreach ( $members as $member ) {
