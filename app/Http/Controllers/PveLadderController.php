@@ -659,7 +659,6 @@ class PveLadderController extends Controller
                                     $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
                                 }
 
-                                return $members;
 
                                 $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
