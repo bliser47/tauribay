@@ -64,7 +64,7 @@ class BliserGdkpController extends Controller
                                 break;
 
                                 case EncounterMember::ROLE_HEAL:
-                                    $thisScore = ($top->hps *100) / Encounter::getSpecTopDpsOnRealm($id, $top->difficulty_id, $top->spec, $character->realm);
+                                    $thisScore = ($top->hps *100) / Encounter::getSpecTopHpsOnRealm($id, $top->difficulty_id, $top->spec, $character->realm);
                                     break;
                             }
                             if ( $thisScore > $bestScore ) {
