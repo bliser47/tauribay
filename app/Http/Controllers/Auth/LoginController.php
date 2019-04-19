@@ -2,6 +2,7 @@
 
 namespace TauriBay\Http\Controllers\Auth;
 
+use http\Env\Request;
 use TauriBay\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -26,6 +27,20 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/home';
+
+
+    /**
+     * @param $request
+     * @return string
+     */
+    public function redirectTo()
+    {
+        if (!empty($_POST['redirectTo'])) {
+            $this->redirectTo = $_POST['redirectTo'];
+        }
+
+        return $this->redirectTo ?? '/home';
+    }
 
     /**
      * Create a new controller instance.

@@ -9,7 +9,7 @@
                     <div class="login-right"></div>
                     <form class="form-horizontal" role="form" method="POST" action="{{URL::to('/login')}}">
                         {{ csrf_field() }}
-
+                        <input type="hidden" name="redirectTo" value="{{ Input::get("redirectTo") }}"/>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-md-4 control-label">{{__("E-Mail cím")}}</label>
 
