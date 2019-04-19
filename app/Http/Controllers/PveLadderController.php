@@ -646,7 +646,7 @@ class PveLadderController extends Controller
                                 $members = MemberTop::whereIn("encounter_id",$mapEncounters)->where("difficulty_id","=",$difficultyId)
                                     ->whereIn("realm_id",$realms)->whereIn("faction_id", $factions)
                                     ->groupBy(array("character_id"))
-                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(dps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class, member_tops.character_id, member_tops.encounter_id")
+                                    ->selectRaw("member_tops.realm_id as realm, member_tops.name as name, SUM(maxDps) as totalMode, MAX(member_tops.guid) as guid, member_tops.spec as spec, member_tops.class as class, member_tops.character_id, member_tops.encounter_id")
                                     ->leftJoin(DB::raw("(SELECT character_id as c , encounter_id as e, max(dps) as maxDps FROM member_tops) as topSpec"), function($join) {
                                         $join->on("member_tops.character_id","=","topSpec.c");
                                         $join->on("member_tops.encounter_id","=","topSpec.e");
@@ -654,6 +654,8 @@ class PveLadderController extends Controller
                                     ->where("member_tops.dps","=","t.maxDps")
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
+
+                                return $members;
                                 foreach ( $members as $member ) {
                                     $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
                                 }
