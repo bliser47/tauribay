@@ -655,7 +655,6 @@ class PveLadderController extends Controller
                                     ->orderBy("totalMode","desc")
                                     ->take(100)->get();
 
-                                return $members;
                                 foreach ( $members as $member ) {
                                     $member->scorePercentage = Skada::calculatePercentage($member,$members->first(),"totalMode");
                                 }
