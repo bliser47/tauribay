@@ -804,7 +804,7 @@ $(function()
         var char_id = $(this).val();
         $.ajax({
             type: "GET",
-            url: URL_WEBSITE + "/gdkp/" + char_id,
+            url: URL_WEBSITE + "/raidChar/" + char_id,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },

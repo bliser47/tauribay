@@ -16,9 +16,10 @@ Route::get('oauth/character', 'OAuthController@char');
 Route::get('oauthd', 'OAuthController@debug');
 
 
-Route::get('gdkp', 'BliserGdkpController@index');
-Route::get('gdkp/{character_id}', 'BliserGdkpController@character');
-Route::post('gdkp', 'BliserGdkpController@apply');
+Route::get('raid/{raid_id}', 'BliserGdkpController@index');
+Route::get('raidChar/{character_id}', 'BliserGdkpController@character');
+Route::post('raid/{raid_id}', 'BliserGdkpController@apply');
+
 Route::get('tooltip', 'TooltipController@Request');
 Route::get('tooltip2', 'TooltipController@ArmoryRequest');
 Route::get('online', 'OnlineController@Request');

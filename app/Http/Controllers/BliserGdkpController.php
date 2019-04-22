@@ -34,16 +34,17 @@ class BliserGdkpController extends Controller
         }
     }
 
-    public function apply(Request $_request)
+    public function apply(Request $_request, $_raid_id)
     {
         $user = Auth::user();
         if ( $user && $_request->has("character_id") && $_request->has("role_id") ) {
             $userHasChar = AuthorizedCharacter::where("user_id","=",$user->id)->where("character_id","=",$_request->get("character_id"))->first();
             if ( $userHasChar ) {
-                $applied = Gdkp::where("character_id","=",$_request->get("character_id"))->first();
+                $applied = Gdkp::where("gdkp_id","=",$_raid_id)->where("character_id","=",$_request->get("character_id"))->first();
                 if ( !$applied ) {
                     $character = Characters::where("id",$_request->get("character_id"))->first();
                     $apply = new Gdkp;
+                    $apply->gdkp_id = $_raid_id;
                     $apply->account_id = $user->id;
                     $apply->character_id = $_request->get("character_id");
                     $totalScore = 0;
@@ -83,14 +84,14 @@ class BliserGdkpController extends Controller
                 }
             }
         }
-        return redirect('/gdkp');
+        return redirect('/raid/' . $_raid_id);
     }
 
-    public function index(Request $_request)
+    public function index(Request $_request, $_raid_id)
     {
         $user = Auth::user();
         if ($user) {
-            $applied = Gdkp::leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("score", "desc")->get();
+            $applied = Gdkp::where("gdkp_id","=",$_raid_id)->leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("score", "desc")->get();
             $appliedIds = array();
             $appliedRoles = array(
                 EncounterMember::ROLE_TANK => array(),
@@ -115,6 +116,6 @@ class BliserGdkpController extends Controller
             $roles = array();
             return view("gdkp", compact("characters", "appliedRoles", "characterClasses","roles","classSpecs"));
         }
-        return redirect()->route('login', array("redirectTo"=>"/gdkp"));
+        return redirect()->route('login', array("redirectTo"=>"/raid"));
     }
 }

@@ -10,7 +10,7 @@
                         </a>
                     </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
                         {!! Form::open(array("method" => "post","id"=>"gdkp-apply-form")) !!}
                         <div class="col-sm-4 col-sm-nopadding col-sm-margin">
