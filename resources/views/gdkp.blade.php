@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-sm-4 col-sm-nopadding col-sm-margin">
                             <div id="roles-container" class="input-group col-md-12">
-                                {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  "Először válassz karaktert"]); !!}
+                                {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Először válassz karaktert") ]); !!}
                             </div>
                         </div>
                         <div class="col-sm-4 nomargin col-sm-nopadding">

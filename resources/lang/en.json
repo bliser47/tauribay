@@ -223,6 +223,11 @@
           "Our website is made possible by displaying online advertisements to our visitors.",
 
   "Kérjük, fontolja meg, hogy támogat minket a hirdetésblokkoló letiltásával." :
-          "Please consider supporting us by disabling your ad blocker."
-
+          "Please consider supporting us by disabling your ad blocker.",
+  "Healerek" : "Healers",
+  "DPS-ek" : "Damage dealers",
+  "Tankok" : "Tanks",
+  "Jelentkezés" : "Apply",
+  "Válassz karaktert" : "Choose character",
+  "Először válassz karaktert" : "First select a character"
 }
