@@ -61,11 +61,11 @@ class BliserGdkpController extends Controller
                             switch($_request->get("role_id")) {
                                 case EncounterMember::ROLE_DPS:
                                 case EncounterMember::ROLE_TANK:
-                                    $thisScore = ($top->dps *100) / Encounter::getSpecTopDps($id, $top->difficulty_id, $top->spec);
+                                    $thisScore = ($top->dps *100) / Encounter::getSpecTopDpsOnRealm($id, $top->difficulty_id, $top->spec, $character->realm);
                                 break;
 
                                 case EncounterMember::ROLE_HEAL:
-                                    $thisScore = ($top->hps *100) / Encounter::getSpecTopHps($id, $top->difficulty_id, $top->spec);
+                                    $thisScore = ($top->hps *100) / Encounter::getSpecTopHpsOnRealm($id, $top->difficulty_id, $top->spec, $character->realm);
                                     break;
                             }
                             if ( $thisScore > $bestScore ) {

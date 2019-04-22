@@ -780,6 +780,26 @@ class Encounter extends Model
         return 0;
     }
 
+    public static function getSpecTopDpsOnRealm($encounterId, $difficultyId, $specId, $realmId) {
+        $topDps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->where("realm_id",$realmId)
+            ->orderBy("dps","desc")->first();
+        if ( $topDps ) {
+            return $topDps->dps;
+        }
+        return 0;
+    }
+
+    public static function getSpecTopHpsOnRealm($encounterId, $difficultyId, $specId, $realmId) {
+        $topHps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)->where("realm_id",$realmId)
+            ->orderBy("hps","desc")->first();
+        if ( $topHps ) {
+            return $topHps->hps;
+        }
+        return 0;
+    }
+
     public static function getTopDps($encounterId, $difficultyId, $realms, $factions)
     {
         return LadderCache::getTopDps($encounterId,$difficultyId, $realms, $factions);
