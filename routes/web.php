@@ -16,9 +16,6 @@ Route::get('oauth/character', 'OAuthController@char');
 Route::get('oauthd', 'OAuthController@debug');
 
 
-Route::get('raid/{raid_id}', 'BliserGdkpController@index');
-Route::get('raidChar/{character_id}', 'BliserGdkpController@character');
-Route::post('raid/{raid_id}', 'BliserGdkpController@apply');
 
 Route::get('tooltip', 'TooltipController@Request');
 Route::get('tooltip2', 'TooltipController@ArmoryRequest');
@@ -44,13 +41,16 @@ Route::get('/raidupdate', 'ProgressController@updateRaids');
 Route::get('/raidmemberupdate', 'ProgressController@updateRaidMembers');
 Route::get('/removeInvalids', 'ProgressController@deleteInvalids');
 
-
-
 Route::get('/guildprogress', 'ProgressController@updateGuildProgressAll');
 Route::get('/guildprogressn', 'ProgressController@updateGuildProgressForNewGuilds');
 Route::post('/guildprogress', 'ProgressController@updateGuildProgress');
 
 Route::group(['middleware' => 'language'], function () {
+
+
+    Route::get('raid/{raid_id}', 'BliserGdkpController@index');
+    Route::get('raidChar/{character_id}', 'BliserGdkpController@character');
+    Route::post('raid/{raid_id}', 'BliserGdkpController@apply');
 
     Route::get('/', 'IndexController@Start');
     Route::get('/home', 'HomeController@index');
