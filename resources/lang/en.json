@@ -229,5 +229,6 @@
   "Tankok" : "Tanks",
   "Jelentkezés" : "Apply",
   "Válassz karaktert" : "Choose character",
-  "Először válassz karaktert" : "First select a character"
+  "Először válassz karaktert" : "First select a character",
+  "Ahoz, hogy jelentkezz legalább 1 karakter hitelesítened kell: " : "To apply, you must authenticate at least one character here: "
 }

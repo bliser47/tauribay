@@ -1323,6 +1323,10 @@ $(function()
         }
     });
 
+    $("#gdkp-apply-form").submit(function(e){
+        $("#gdkp-apply-form-submit").remove();
+    });
+
     String.prototype.replaceAll = function(search, replace) {
         if (replace === undefined) {
             return this.toString();

@@ -10,25 +10,32 @@
                         </a>
                     </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+                <div id="collapseOne" class="panel-collapse in" role="tabpanel" aria-labelledby="headingOne">
                     <div class="panel-body">
-                        {!! Form::open(array("method" => "post","id"=>"gdkp-apply-form")) !!}
-                        <div class="col-sm-4 col-sm-nopadding col-sm-margin">
-                            <div id="characters-container" class="input-group col-md-12">
-                                {!! Form::select('character_id', $characters, null, ['required', 'id' => 'authorized_characters', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz karaktert")]); !!}
+                        @if ( count($characters) > 0 || count($characterAppliedResults) != 0 )
+                            {!! Form::open(array("method" => "post","id"=>"gdkp-apply-form")) !!}
+                            <div class="col-sm-4 col-sm-nopadding col-sm-margin">
+                                <div id="characters-container" class="input-group col-md-12">
+                                    {!! Form::select('character_id', $characters, null, ['required', 'id' => 'authorized_characters', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz karaktert")]); !!}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4 col-sm-nopadding col-sm-margin">
-                            <div id="roles-container" class="input-group col-md-12">
-                                {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Először válassz karaktert") ]); !!}
+                            <div class="col-sm-4 col-sm-nopadding col-sm-margin">
+                                <div id="roles-container" class="input-group col-md-12">
+                                    {!! Form::select('role_id', $roles, null, ['required', 'id' => 'application_role', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Először válassz karaktert") ]); !!}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-4 nomargin col-sm-nopadding">
-                            <button class="btn btn-block btn-success" name="filter" value="1" type="submit">
-                                {{ __("Jelentkezés") }}
-                            </button>
-                        </div>
-                        {!! Form::close() !!}
+                            <div class="col-sm-4 nomargin col-sm-nopadding">
+                                <button id="gdkp-apply-form-submit" class="btn btn-block btn-success" name="filter" value="1" type="submit">
+                                    {{ __("Jelentkezés") }}
+                                </button>
+                            </div>
+                            {!! Form::close() !!}
+                        @else
+                            <div class="alert alert-warning nomargin">
+                                {{ __("Ahoz, hogy jelentkezz legalább 1 karakter hitelesítened kell: ") }}
+                                <a href="{{ URL::to("/home#oauth") }}">{{ __("ITT") }}</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <ul class="nav nav-tabs" role="tablist">

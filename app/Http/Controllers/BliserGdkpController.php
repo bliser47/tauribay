@@ -104,9 +104,9 @@ class BliserGdkpController extends Controller
                 $char->role = EncounterMember::getSpecRole($char->spec);
                 $appliedRoles[$char->role][] = $char;
             }
-            $charactersResult = AuthorizedCharacter::where("user_id", "=", $user->id)
-                ->where("realm", "=", Realm::TAURI)->whereNotIn("character_id",$appliedIds)
+            $charactersResult = AuthorizedCharacter::where("user_id", "=", $user->id)->whereNotIn("character_id",$appliedIds)
                 ->leftJoin("characters", "characters.id", "=", "authorized_characters.character_id")->get();
+            $characterAppliedResults =  AuthorizedCharacter::where("user_id", "=", $user->id)->whereIn("character_id",$appliedIds)->get();
             $characters = array();
             foreach ($charactersResult as $char) {
                 $characters[$char->id] = "[" . Realm::REALMS_SHORT[$char->realm] . "] " . $char->name;
@@ -114,7 +114,7 @@ class BliserGdkpController extends Controller
             $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
             $characterClasses = Tauri\CharacterClasses::CHARACTER_CLASS_NAMES;
             $roles = array();
-            return view("gdkp", compact("characters", "appliedRoles", "characterClasses","roles","classSpecs"));
+            return view("gdkp", compact("characters", "appliedRoles", "characterClasses","roles","classSpecs","characterAppliedResults"));
         }
         return redirect()->route('login', array("redirectTo"=>"/raid"));
     }
