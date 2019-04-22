@@ -1,10 +1,13 @@
 <div class="panel-body login">
+    {{--
     <div class="col-md-2">
         <div class="avatarContainer">
              <img src="/uploads/avatars/{{ $user->avatar }}">
         </div>
     </div>
-    <div class="col-md-10">
+    --}}
+    <div class="col-md-12">
+        {{--
          <h4>{{__("Avatar csere")}}</h4>
          <form enctype="multipart/form-data" class="change-avatar-form" action="/profile/avatar" method="POST">
              <div class="form-group">
@@ -23,6 +26,7 @@
              </div>
              <input type="hidden" name="_token" value="{{ csrf_token() }}">
          </form>
+         --}}
           <h4>{{__("Jelszó csere")}}</h4>
           <form enctype="multipart/form-data" class="change-password-form" action="/profile/password" method="POST">
                 <div class="input-group">
