@@ -226,7 +226,11 @@ class TopItemLevelsController extends Controller
             {
                 foreach ( $characters as $character )
                 {
-                    TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(Realm::REALMS[$character->realm], $character->name), $character);
+                    try {
+                        TopItemLevelsController::UpdateCharacter($api->getCharacterSheet(Realm::REALMS[$character->realm], $character->name), $character);
+                    } catch ( \Exception $e ) {
+
+                    }
                 }
                 print("Updating item levels above " . $limit . " that are older than " . $refreshTime . " hours.");
                 $refreshed = true;
