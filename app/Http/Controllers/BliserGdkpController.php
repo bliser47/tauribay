@@ -54,13 +54,16 @@ class BliserGdkpController extends Controller
                     $highestSpecId = $roleSpecs[0];
                     foreach ( $ids as $id ) {
                         $specBest = 0;
-                        $specs = EncounterMember::getRoleClassSpecs($_request->has("role_id"), $character->class);
-                        foreach ( $specs as $specId => $specData ) {
+                        foreach ( $roleSpecs as $specId ) {
                             $bestSpec10Hc = PlayerController::getSpecTop($character->guid, $id, 5, $specId, true);
                             $bestSpec25Hc = PlayerController::getSpecTop($character->guid, $id, 6, $specId, true);
                             $best = max($bestSpec10Hc["score"],$bestSpec25Hc["score"]);
                             if ( $best > $specBest ) {
                                 $specBest = $best;
+                                if ( $highestSpec > $specBest ) {
+                                    $highestSpec = $specBest;
+                                    $highestSpecId = $specId;
+                                }
                             }
                         }
                         $totalScore += $specBest;
