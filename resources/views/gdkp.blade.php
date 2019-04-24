@@ -78,6 +78,22 @@
                             </div>
                         @endforeach
                     </div>
+                    <div role="tabpanel" class="tab-pane active" id="dps">
+                        @foreach ( $appliedRoles[\TauriBay\EncounterMember::ROLE_DPS] as $character )
+                            <div class="{{ $loop->index == 0 ? "memberDataContainerFirst" : "" }} memberDataContainer">
+                                <div class="memberDataWidthContainer">
+                                    <div style="width:{{ $character->percentageScore }}%" class="memberDataWidth memberClass{{ $character->class }}"></div>
+                                    <div class="memberSpec">
+                                    </div>
+                                    <span class="memberPosition">{{ $loop->index+1 }}.</span>
+                                    <span class="memberName">
+                                <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
+                            </span>
+                                    <span class="memberData memberData2">{{ $character->score }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         </div>
