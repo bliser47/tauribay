@@ -53,30 +53,21 @@ class BliserGdkpController extends Controller
                     $roleSpecs = array_keys(EncounterMember::getRoleClassSpecs($_request->get("role_id"), $character->class));
                     $highestSpecId = $roleSpecs[0];
                     foreach ( $ids as $id ) {
-                        $bestScore = 0;
-                        $tops = MemberTop::where("realm_id","=",$character->realm)->where("name","=",$character->name)
-                            ->where("encounter_id","=",$id)->whereIn("difficulty_id",array(5,6))->whereIn("spec",$roleSpecs)->get();
-                        foreach ( $tops as $top ) {
-                            $thisScore = 0;
-                            switch($_request->get("role_id")) {
-                                case EncounterMember::ROLE_DPS:
-                                case EncounterMember::ROLE_TANK:
-                                    $thisScore = ($top->dps *100) / Encounter::getSpecTopDpsOnRealm($id, $top->difficulty_id, $top->spec, $character->realm);
-                                break;
-
-                                case EncounterMember::ROLE_HEAL:
-                                    $thisScore = ($top->hps *100) / Encounter::getSpecTopHpsOnRealm($id, $top->difficulty_id, $top->spec, $character->realm);
-                                    break;
-                            }
-                            if ( $thisScore > $bestScore ) {
-                                $bestScore = $thisScore;
-                            }
-                            if ( $highestSpec == null || $bestScore > $highestSpec ) {
-                                $highestSpec = $bestScore;
-                                $highestSpecId = $top->spec;
+                        $specBest = 0;
+                        foreach ( $roleSpecs as $specId ) {
+                            $bestSpec10Hc = PlayerController::getSpecTop($character->guid, $id, 5, $specId, true);
+                            $bestSpec25Hc = PlayerController::getSpecTop($character->guid, $id, 6, $specId, true);
+                            $best = max($bestSpec10Hc["score"],$bestSpec25Hc["score"]);
+                            if ( $best > $specBest ) {
+                                $specBest = $best;
+                                if ( $highestSpec > $specBest ) {
+                                    $highestSpec = $specBest;
+                                    $highestSpecId = $specId;
+                                }
                             }
                         }
-                        $totalScore += $bestScore;
+                        $totalScore += $specBest;
+
                     }
                     $apply->score = $totalScore;
                     $apply->spec = $highestSpecId;
@@ -116,6 +107,6 @@ class BliserGdkpController extends Controller
             $roles = array();
             return view("gdkp", compact("characters", "appliedRoles", "characterClasses","roles","classSpecs","characterAppliedResults"));
         }
-        return redirect()->route('login', array("redirectTo"=>"/raid"));
+        return redirect()->route('login', array("redirectTo"=>"/raid/" . $_raid_id));
     }
 }

@@ -30,7 +30,6 @@ class LoginController extends Controller
 
 
     /**
-     * @param $request
      * @return string
      */
     public function redirectTo()
@@ -39,7 +38,7 @@ class LoginController extends Controller
             $this->redirectTo = $_POST['redirectTo'];
         }
 
-        return $this->redirectTo ?? '/home';
+        return $this->redirectTo ?: '/home';
     }
 
     /**
