@@ -88,7 +88,12 @@
                                     </div>
                                     <span class="memberPosition">{{ $loop->index+1 }}.</span>
                                     <span class="memberName">
-                            </span>
+                                     @if ( in_array($character->realm,\TauriBay\Realm::REALMS_URL) )
+                                        <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
+                                     @else
+                                         {{ $character->name  }}
+                                     @endif
+                                    </span>
                                     <span class="memberData memberData2">{{ $character->score }}</span>
                                 </div>
                             </div>
