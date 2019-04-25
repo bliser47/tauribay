@@ -36,6 +36,8 @@ class OAuthController extends Controller
         if ( isset($responseJson["access_token"]) ) {
             $user->tauri_oauth_access_token = $responseJson["access_token"];
             $user->save();
+        } else {
+            return $responseJson;
         }
     }
 
@@ -58,8 +60,12 @@ class OAuthController extends Controller
 
                 $result = json_decode($response,true);
                 if ( array_key_exists("error", $result) && $result["error_description"] == "The access token provided has expired." ) {
-                   self::refreshToken($user);
-                    return $this->debug($_request);
+                    $refreshErrors = self::refreshToken($user);
+                    if ( $refreshErrors == null ) {
+                        return $this->debug($_request);
+                    } else {
+                        return $refreshErrors;
+                    }
                 }
                 return $response;
             }
