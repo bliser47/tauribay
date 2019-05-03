@@ -22,7 +22,7 @@ class WowInstance
     );
 
     const WOW_INSTANCE_SHORT_NAMES_NICE = array(
-        'ToT','ToES','HoF','MSV'
+        'ToT','ToES','HoF','MSV', '', '', ''
     );
 
     const WOW_INSTANCE_THRONE_OF_THUNDER = array(

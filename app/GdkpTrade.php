@@ -35,37 +35,28 @@ class GdkpTrade extends Model
 
         $gdkpTrades = DB::table('gdkp_trades')->orderBy('updated_at','desc');
 
-
-        if ( $_request->has("filter") ) {
-            // 1. Faction filter
-            if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                $factions = array();
-                if ($_request->has('alliance')) {
-                    array_push($factions, Faction::ALLIANCE);
-                }
-                if ($_request->has('horde')) {
-                    array_push($factions, Faction::HORDE);
-                }
-                if ($_request->has('ismeretlen')) {
-                    array_push($factions, Faction::NEUTRAL);
-                }
-                $gdkpTrades = $gdkpTrades->whereIn('faction', $factions);
-            }
-
-
+        $factions = array();
+        if ($_request->has('alliance')) {
+            array_push($factions, Faction::ALLIANCE);
+        }
+        if ($_request->has('horde')) {
+            array_push($factions, Faction::HORDE);
+        }
+        if ( count($factions) > 0 ) {
+            $gdkpTrades = $gdkpTrades->whereIn('faction', $factions);
         }
 
-        $instances = [];
+        $instances = array();
         $instanceNames = WowInstance::WOW_INSTANCE_SHORT_NAMES;
         foreach ($instanceNames as $instanceId => $instanceName) {
-            if (!$_request->has("filter") || $_request->has($instanceName)) {
+            if ($_request->has($instanceName) ) {
                 array_push($instances, $instanceId);
             }
         }
-
-        $gdkpTrades = $gdkpTrades->whereIn('instance', $instances);
+        if ( count($instances) > 0 ) {
+            $gdkpTrades = $gdkpTrades->whereIn('instance', $instances);
+        }
 
         return $gdkpTrades;
-
     }
 }
