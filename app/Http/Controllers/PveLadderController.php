@@ -537,7 +537,7 @@ class PveLadderController extends Controller
             {
                 $difficultyId = $_request->get("difficulty_id");
                 if ( $_request->has("mode_id") ) {
-                    $cacheKey = http_build_query($_request->all()) . "?v=25";
+                    $cacheKey = http_build_query($_request->all()) . "?v=27";
                     $cacheValue = Cache::get($cacheKey);
                     $cacheUrlValue = Cache::get($cacheKey."URL");
                     if (  !$cacheValue ) {
@@ -589,6 +589,7 @@ class PveLadderController extends Controller
                                     if ( $fastestEncounter !== null ) {
                                         $encounter = Encounter::where("id", "=", $fastestEncounter->fastest_encounter)->first();
                                         if ($encounter !== null) {
+                                            $added = true;
                                             if ($encounter->guild_id !== 0) {
                                                 $guild = Guild::where("id", "=", $encounter->guild_id)->first();
                                                 $encounter->guild_name = $guild->name;
@@ -597,12 +598,10 @@ class PveLadderController extends Controller
                                             $topDps = Encounter::getTopDps($encounterId, $difficultyId, $realms, $factions);
                                             if ( $topDps != null && $topDps->id > 0 ) {
                                                 $encounter->top_dps = $topDps;
-                                                $added = true;
                                             }
                                             $topHps = Encounter::getTopHps($encounterId, $difficultyId, $realms, $factions);
                                             if ( $topHps != null && $topHps->id > 0 ) {
                                                 $encounter->top_hps = $topHps;
-                                                $added = true;
                                             }
                                             if ( $added ) {
                                                 $encounters[] = $encounter;
