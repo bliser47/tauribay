@@ -28,24 +28,23 @@ class Characters extends Model
         {
             $characters = DB::table('characters')->where('name','NOT LIKE','M#%')->where('ilvl','>=',480)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
-        else
+        else if ( $orderBy == 'achievement_points' )
         {
             $characters = DB::table('characters')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
+        } else {
+            $characters = DB::table('characters')->where('name','NOT LIKE','M#%')->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
-        //$characters = $characters->orderBy("guid","desc")->groupBy(array("realm","name"));
+        $characters = $characters->orderBy("guid","desc")->groupBy(array("realm","name"));
         if ( $_request->has("filter") ) {
-            // 1. Faction filter
-            if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {
-                $factions = array();
-                if ($_request->has('alliance')) {
-                    array_push($factions, Faction::ALLIANCE);
-                }
-                if ($_request->has('horde')) {
-                    array_push($factions, Faction::HORDE);
-                }
-                if ($_request->has('ismeretlen')) {
-                    array_push($factions, Faction::NEUTRAL);
-                }
+
+            $factions = array();
+            if ($_request->has('alliance')) {
+                array_push($factions, Faction::ALLIANCE);
+            }
+            if ($_request->has('horde')) {
+                array_push($factions, Faction::HORDE);
+            }
+            if ( count($factions) > 0 ) {
                 $characters = $characters->whereIn('faction', $factions);
             }
 

@@ -290,7 +290,7 @@ $(function()
                         {
                             $(row).find(".topItemLevel").html(characterData.ilvl);
                             $(row).find(".topAchievementPoints").html(characterData.achievement_points);
-                            $(row).find(".topScore").html(characterData.score);
+                            $(row).find(".topScore").html(characterData.score.toFixed(2));
 
                             var form = $(row).find(".ilvlupdate-form");
                             form.submit(function (e) {
@@ -300,7 +300,7 @@ $(function()
                             form.show();
                             form.parent().find(".update-loader").css("display","none");
 
-                            parseTime($(row).find(".time").data('time',characterData.updated_at));
+                            parseTime($(row).find(".topUpdateAt").data('time',characterData.updated_at));
                         }
                     }
                     else

@@ -189,15 +189,24 @@ class TopItemLevelsController extends Controller
         $bests = EncounterMember::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
             ->whereIn("encounter",$ids)
             ->groupBy("encounter")
-            ->selectRaw("MAX(dps_score) as maxDps, MAX(hps_score) as maxHps")->get();
+            ->selectRaw("MAX(dps_score) as maxDps, MAX(hps_score) as maxHps, encounter")->get();
 
         $totalDps = 0;
         $totalHps = 0;
+        $bestHeroicDps = 0;
+        $bestHeroicHps = 0;
         foreach ( $bests as $best ) {
-            $totalDps += $best->maxDps;
-            $totalHps += $best->maxHps;
+            if ( Encounter::isHeroicEncounter($best->encounter) ) {
+                $bestHeroicDps = max($bestHeroicDps, $best->maxDps);
+                $bestHeroicHps = max($bestHeroicHps, $best->maxHps);
+            } else {
+                $totalDps += $best->maxDps;
+                $totalHps += $best->maxHps;
+            }
         }
-        return max($totalDps,$totalHps);
+        $totalDps += $bestHeroicDps;
+        $totalHps += $bestHeroicHps;
+        return max($totalDps,$totalHps) / 1300 * 100;
     }
 
     public static function UpdateCharacter($_sheet,$_character)
