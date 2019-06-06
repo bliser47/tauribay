@@ -189,10 +189,7 @@ class TopItemLevelsController extends Controller
         $bests = EncounterMember::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
             ->whereIn("encounter",$ids)
             ->groupBy("encounter")
-            ->select(array(
-                "MAX(dps_score) as maxDps",
-                "MAX(hps_score) as maxHps",
-            ))->get();
+            ->selectRaw("MAX(dps_score) as maxDps, MAX(hps_score) as maxHps")->get();
 
         $totalDps = 0;
         $totalHps = 0;
@@ -205,8 +202,7 @@ class TopItemLevelsController extends Controller
 
     public static function UpdateCharacter($_sheet,$_character)
     {
-        //$_character->score = self::getCharacterScore($_character);
-
+        $_character->score = self::getCharacterScore($_character);
         if ($_sheet && array_key_exists("response", $_sheet)) {
             $characterSheetResponse = $_sheet["response"];
             $newItemLevel = $characterSheetResponse["avgitemlevel"];
