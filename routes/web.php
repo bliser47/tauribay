@@ -48,9 +48,9 @@ Route::post('/guildprogress', 'ProgressController@updateGuildProgress');
 Route::group(['middleware' => 'language'], function () {
 
 
-    Route::get('raid/{raid_id}', 'BliserGdkpController@index');
-    Route::get('raidChar/{character_id}', 'BliserGdkpController@character');
-    Route::post('raid/{raid_id}', 'BliserGdkpController@apply');
+    Route::get('gdkp/{raid_id}', 'BliserGdkpController@index');
+    Route::get('gdkpChar/{character_id}', 'BliserGdkpController@character');
+    Route::post('gdkp/{raid_id}', 'BliserGdkpController@apply');
 
     Route::get('/', 'IndexController@Start');
     Route::get('/home', 'HomeController@index');

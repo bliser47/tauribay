@@ -90,7 +90,7 @@
                             <td class="cellMobile">{{ \TauriBay\Realm::REALMS_SHORTEST[$gdkp->realm_id] }}</td>
                             <td class="cellDesktop gdkp-faction faction-{{ $gdkp->faction  }}"> <img src="{{ URL::asset("img/factions/small/" . $gdkp->faction . ".png") }}" alt=""/> </td>
                             <td class="cellDesktop"> {{ __($gdkpIntents[$gdkp->intent]) }}</td>
-                            <td class="instance-{{ $gdkp->instance  }}"> {{ \TauriBay\Tauri\WowInstance::WOW_INSTANCE_SHORT_NAMES_NICE[$gdkp->instance] }} </td>
+                            <td class="instance-{{ $gdkp->instance  }}"> {{ array_key_exists($gdkp->instance, \TauriBay\Tauri\WowInstance::WOW_INSTANCE_SHORT_NAMES_NICE) ?  \TauriBay\Tauri\WowInstance::WOW_INSTANCE_SHORT_NAMES_NICE[$gdkp->instance] : "" }} </td>
                             <td> {{ $gdkpInstanceSizes[$gdkp->size] }} </td>
                             <td class="instance-difficulty">{{ \TauriBay\Encounter::DIFFICULTY_NAME[$gdkp->difficulty]  }}</td>
                             <td class="cellDesktop tradeMessage"> {{ $gdkp->text }} </td>

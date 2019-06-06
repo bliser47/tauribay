@@ -133,7 +133,7 @@ $(function()
     $('.sortByTop.sortInactive').click(function(){
         $("select[name='sort']").val($(this).data("sort"));
         $(".selectpicker").selectpicker("refresh");
-        $("#    top-filter-submit").click();
+        $("#top-filter-submit").click();
     });
 
     $(".register-form").validate({
@@ -290,6 +290,7 @@ $(function()
                         {
                             $(row).find(".topItemLevel").html(characterData.ilvl);
                             $(row).find(".topAchievementPoints").html(characterData.achievement_points);
+                            $(row).find(".topScore").html(characterData.score);
 
                             var form = $(row).find(".ilvlupdate-form");
                             form.submit(function (e) {

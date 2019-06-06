@@ -5,11 +5,14 @@ namespace TauriBay\Http\Controllers;
 
 use TauriBay\Characters;
 use Illuminate\Http\Request;
+use TauriBay\EncounterMember;
 use TauriBay\Realm;
 use TauriBay\Trader;
 use TauriBay\Tauri;
 use TauriBay\Tauri\CharacterClasses;
 use Carbon\Carbon;
+use TauriBay\Encounter;
+use TauriBay\Defaults;
 
 
 class TopItemLevelsController extends Controller
@@ -34,7 +37,8 @@ class TopItemLevelsController extends Controller
 
         $sortBy = array(
             "ilvl" => "iLvL",
-            "achievement_points" => "Achi"
+            "achievement_points" => "Achi",
+            "score" => "Score"
         );
 
         return view('top_item_levels')->with(compact('characters','realms', 'realmsShort', 'characterFactions', 'characterClasses','sortBy','wrapper'));
@@ -73,6 +77,7 @@ class TopItemLevelsController extends Controller
                         $character->ilvl = $characterItemLevel;
                     }
                 }
+                $character->score = self::getCharacterScore($character);
                 $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
@@ -178,8 +183,30 @@ class TopItemLevelsController extends Controller
         //
     }
 
+    public static function getCharacterScore($_character) {
+        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
+
+        $bests = EncounterMember::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
+            ->whereIn("encounter",$ids)
+            ->groupBy("encounter")
+            ->select(array(
+                "MAX(dps_score) as maxDps",
+                "MAX(hps_score) as maxHps",
+            ))->get();
+
+        $totalDps = 0;
+        $totalHps = 0;
+        foreach ( $bests as $best ) {
+            $totalDps += $best->maxDps;
+            $totalHps += $best->maxHps;
+        }
+        return max($totalDps,$totalHps);
+    }
+
     public static function UpdateCharacter($_sheet,$_character)
     {
+        //$_character->score = self::getCharacterScore($_character);
+
         if ($_sheet && array_key_exists("response", $_sheet)) {
             $characterSheetResponse = $_sheet["response"];
             $newItemLevel = $characterSheetResponse["avgitemlevel"];

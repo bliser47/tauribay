@@ -6,7 +6,8 @@
         <td class="cellMobile"><a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] ."/" . $character->name . "/" . $character->guid }}">{{ strlen($character->name) > 6 ? (mb_substr($character->name,0,6) . "..") : $character->name }}</a></td>
         <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png?v=2") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
         <td class="topItemLevel {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnActive'  : 'columnInactive'}}"> {{ $character->ilvl }}  </td>
-        <td class="topAchievementPoints {{(!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'columnInactive'  : 'columnActive'}}"> {{ $character->achievement_points }}  </td>
+        <td class="topAchievementPoints {{(Input::has('sort') || Input::get('sort') == 'achievement_points') ? 'columnActive'  : 'columnInactive'}}"> {{ $character->achievement_points }}  </td>
+        <td class="topScore {{(Input::has('sort') || Input::get('sort') == 'score') ? 'columnActive'  : 'columnInactive'}}"> {{ $character->score }}  </td>
         <td>
             <div class="update-loader" id="updated-loader{{$character->id}}"></div>
             {!! Form::open(array("method" => "post","class"=>"ilvlupdate-form")) !!}

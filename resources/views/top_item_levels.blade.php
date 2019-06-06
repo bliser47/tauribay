@@ -126,6 +126,7 @@
                         <th>{{ __("Kaszt") }}</th>
                         <th><a id="sortByLevel" data-sort="ilvl" class="sortByTop {{ (!Input::has('sort') || Input::get('sort') == 'ilvl') ? 'sortActive'  : 'sortInactive' }}">{{ __("iLvL") }}</a></th>
                         <th><a id="sortByAchi" data-sort="achievement_points" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'achievement_points') ? 'sortActive'  : 'sortInactive' }}">{{ __("Achi") }}</a></th>
+                        <th><a id="sortByScore" data-sort="score" class="sortByTop {{ (Input::has('sort') && Input::get('sort') == 'score') ? 'sortActive'  : 'sortInactive' }}">{{ __("Score") }}</a></th>
                         <th class="cellDesktop" width=32>{{ __("Frissítés") }}</th>
                         <th class="cellMobile" width=32></th>
                         <th class="cellDesktop">{{ __("Idő") }}</th>

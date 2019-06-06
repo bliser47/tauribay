@@ -32,7 +32,7 @@ class Characters extends Model
         {
             $characters = DB::table('characters')->where('name','NOT LIKE','M#%')->where('achievement_points','>=',10000)->orderBy($orderBy, 'desc')->orderBy('name', 'asc');
         }
-        $characters = $characters->orderBy("guid","desc")->groupBy(array("realm","name"));
+        //$characters = $characters->orderBy("guid","desc")->groupBy(array("realm","name"));
         if ( $_request->has("filter") ) {
             // 1. Faction filter
             if ($_request->has('alliance') || $_request->has('horde') || $_request->has('ismeretlen')) {

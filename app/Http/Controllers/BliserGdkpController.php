@@ -75,14 +75,15 @@ class BliserGdkpController extends Controller
                 }
             }
         }
-        return redirect('/raid/' . $_raid_id);
+        return redirect('/gdkp/' . $_raid_id);
     }
 
     public function index(Request $_request, $_raid_id)
     {
         $user = Auth::user();
         if ($user) {
-            $applied = Gdkp::where("gdkp_id","=",$_raid_id)->leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("score", "desc")->get();
+            $applied = Gdkp::where("gdkp_id","=",$_raid_id)->
+            leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("gdkps.score", "desc")->get();
             $appliedIds = array();
             $appliedRoles = array(
                 EncounterMember::ROLE_TANK => array(),
@@ -91,7 +92,7 @@ class BliserGdkpController extends Controller
             );
             foreach ( $applied as $char ) {
                 $appliedIds[] = $char->character_id;
-                $char->percentageScore = Skada::calculatePercentage($char, $applied->first(), "score");
+                $char->percentageScore = Skada::calculatePercentage($char, $applied->first(), "gdkps.score");
                 $char->role = EncounterMember::getSpecRole($char->spec);
                 $appliedRoles[$char->role][] = $char;
             }

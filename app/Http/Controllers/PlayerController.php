@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\URL;
 use TauriBay\MemberTop;
 use TauriBay\Realm;
 use TauriBay\Tauri\CharacterClasses;
+use TauriBay\Tauri\Skada;
 
 class PlayerController extends Controller
 {
@@ -34,13 +35,15 @@ class PlayerController extends Controller
                     $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId, $difficultyId, $specId);
                     $cacheValue = array(
                         "link" => URL::to("/encounter/") . "/" . Encounter::getUrlName($encounterId) . "/" . $specBest->$encounter,
-                        "score" => intval(($specBest->$topType * 100) / $best)
+                        "score" => intval(($specBest->$topType * 100) / $best),
+                        "dps" => Skada::format($specBest->$topType)
                     );
                 }
             } else if ( $calculate ) {
                 $cacheValue = array(
                     "score" => 0,
-                    "link" => ""
+                    "link" => "",
+                    "dps" => ""
                 );
             }
             Cache::put($cacheKey, $cacheValue, 1440); // 1 day
