@@ -53,19 +53,17 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
 
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/main.js?v=340') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=344') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
-{{--<script type="application/javascript" src="{{ URL::asset('js/ads.js') }}"></script>--}}
+<script type="application/javascript" src="{{ URL::asset('js/ads.js') }}"></script>
 @yield('pagespecificscripts')
 <script type="application/javascript">
     $(window).on('load', function() {
-        /*
         if(!document.getElementById('IsdRpWLgMNqY')){
             document.getElementById('MEIGitqPUFDH').style.display='block';
         } else {
             document.getElementById('amazon').className = "amazon noblocker";
         }
-        */
         $(".loadWrapper").fadeTo(500,0);
         $("<img src=\"{{ URL::asset("img/back.jpg") }}\">").load(function() {
             var originalWidth = this.width;

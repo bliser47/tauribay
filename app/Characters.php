@@ -60,20 +60,19 @@ class Characters extends Model
                 $characters = $characters->whereIn('class', $classes);
             }
 
-            if ($_request->has('tauri') || $_request->has('wod') || $_request->has('evermoon')) {
-                $realms = array();
-                if ($_request->has('tauri')) {
-                    array_push($realms, Realm::TAURI);
-                }
-                if ($_request->has('wod')) {
-                    array_push($realms, Realm::WOD);
-                }
-                if ($_request->has('evermoon')) {
-                    array_push($realms, Realm::EVERMOON);
-                }
+            $realms = array();
+            if ($_request->has('tauri')) {
+                array_push($realms, Realm::TAURI);
+            }
+            if ($_request->has('wod')) {
+                array_push($realms, Realm::WOD);
+            }
+            if ($_request->has('evermoon')) {
+                array_push($realms, Realm::EVERMOON);
+            }
+            if ( count($realms) > 0 ) {
                 $characters = $characters->whereIn('realm', $realms);
             }
-
 
             if ($_request->has('search')) {
                 $characters = $characters->where('name', 'LIKE', '%' . ucfirst(strtolower($_request->get('search'))) . '%');

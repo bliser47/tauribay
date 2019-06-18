@@ -230,5 +230,20 @@
   "Jelentkezés" : "Apply",
   "Válassz karaktert" : "Choose character",
   "Először válassz karaktert" : "First select a character",
-  "Ahoz, hogy jelentkezz legalább 1 karakter hitelesítened kell: " : "To apply, you must authenticate at least one character here: "
+  "Ahoz, hogy jelentkezz legalább 1 karakter hitelesítened kell: " : "To apply, you must authenticate at least one character here: ",
+
+  "Interjú Chrissel" : "Interview with Chris",
+  "Az adatok ezen az oldalon Spec alapon vannak összehasonlítva." : "Data is being compared on Spec level.",
+  "Az adatok ezen az oldalon Class alapon vannak összehasonlítva. Erre kivételt tesznek a Druidok és Shamanok akiknél Spec alapon van összehasonlítve a DPS-ek." :
+          "Data is being compared on a Class level with the exception for Druids and Shamans where DPS is compared on a Spec level.",
+
+
+  "A múlt héten sikerült Chrisszel egy rövid interjút csinálni. Megpróbáltam érdekesebb kérdéseket feltenni olyan szerverrel kapcsolatos dolgokról amikről talán nem mindenki tud. Kellemes olvasást!":
+          "Last week I sat down with Chris and asked him some of the more interesting questions a lot of people might not know about the server. Happy reading!",
+  "Mi a cég filozófiája?" : "What's the company's philosophy?",
+  "Szeretnénk maradandót alkotni. Ha valaki meghallja a Tauri szót, akkor tudja, hogy miről van szó, akár kellemes emlékek, akár rossz emlékek (De legyen inkább jobb). Tudok olyan baráti társaságokról, párokról, akik Taurin találkoztak.":
+          "We want to create something that will stand the test of time. We want everyone to know what the dilio is when they hear the word: Tauri, be that good or bad (hopefully good). I know of groups of friends, couples who've met on Tauri.'",
+  "Mi lenne ha veled bármi történne; ki örökli a Taurit?" :
+          "What if something happened to you? Who inherits Tauri?",
+  "JayD, ő vele kezdtem a taurit, és a cég is közös." : "JayD, I started the server with him and we co-own the company as well."
 }

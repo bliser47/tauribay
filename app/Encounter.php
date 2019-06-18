@@ -770,6 +770,44 @@ class Encounter extends Model
         return 0;
     }
 
+    public static function getSpecTopDpsData($encounterId, $difficultyId, $specId) {
+        return MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
+            ->orderBy("dps","desc")->first();
+    }
+
+    public static function getClassTopDpsButNotTank($encounterId, $difficultyId, $classId) {
+        $topDps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("class","=",$classId)->whereNotIn("spec",EncounterMember::SPEC_IS_TANK)
+            ->orderBy("dps","desc")->first();
+        if ( $topDps ) {
+            return $topDps->dps;
+        }
+        return 0;
+    }
+
+    public static function getClassTopDpsButNotTankData($encounterId, $difficultyId, $classId) {
+        return MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("class","=",$classId)->whereNotIn("spec",EncounterMember::SPEC_IS_TANK)
+            ->orderBy("dps","desc")->first();
+    }
+
+    public static function getClassTopDps($encounterId, $difficultyId, $classId) {
+        $topDps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("class","=",$classId)
+            ->orderBy("dps","desc")->first();
+        if ( $topDps ) {
+            return $topDps->dps;
+        }
+        return 0;
+    }
+
+    public static function getClassTopDpsData($encounterId, $difficultyId, $classId) {
+        return MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("class","=",$classId)
+            ->orderBy("dps","desc")->first();
+    }
+
     public static function getSpecTopHps($encounterId, $difficultyId, $specId) {
         $topHps = MemberTop::where("encounter_id","=",$encounterId)
             ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
@@ -778,6 +816,28 @@ class Encounter extends Model
            return $topHps->hps;
         }
         return 0;
+    }
+
+    public static function getSpecTopHpsData($encounterId, $difficultyId, $specId) {
+        return MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("spec","=",$specId)
+            ->orderBy("hps","desc")->first();
+    }
+
+    public static function getClassTopHps($encounterId, $difficultyId, $classId) {
+        $topHps = MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("class","=",$classId)
+            ->orderBy("hps","desc")->first();
+        if ( $topHps ) {
+            return $topHps->hps;
+        }
+        return 0;
+    }
+
+    public static function getClassTopHpsData($encounterId, $difficultyId, $classId) {
+        return MemberTop::where("encounter_id","=",$encounterId)
+            ->where("difficulty_id","=",$difficultyId)->where("class","=",$classId)
+            ->orderBy("hps","desc")->first();
     }
 
     public static function getSpecTopDpsOnRealm($encounterId, $difficultyId, $specId, $realmId) {

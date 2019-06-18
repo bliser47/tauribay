@@ -2,13 +2,6 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
-            <div class="bossName">
-                {{ $playerName }}
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 col-sm-nopadding">
             <div class="panel">
                 <table class="table table-bordered table-classes">
                     <tr class="tHead">
@@ -18,18 +11,15 @@
                         <th>Score</th>
                         <th>iLvL</th>
                         <th>Achi</th>
-                        <th>GUID</th>
                     </tr>
                     @foreach ( $characters as $character )
                         <tr>
                             <td><a href="{{ URL::to("/player/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid ) }}">{{ $character->name }}</a></td>
-                            <td class="cellDesktop">{{ \TauriBay\Realm::REALMS_SHORT[$character->realm]}}</td>
-                            <td class="cellMobile">{{ \TauriBay\Realm::REALMS_SHORTEST[$character->realm]}}</td>
+                            <td>{{ \TauriBay\Realm::REALMS_SHORT[$character->realm]}}</td>
                             <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
                             <td>{{ $character->score  }}</td>
                             <td>{{ $character->ilvl  }}</td>
                             <td>{{ $character->achievement_points  }}</td>
-                            <td>{{ $character->guid  }}</td>
                         </tr>
                     @endforeach
                 </table>

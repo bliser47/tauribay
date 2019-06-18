@@ -42,15 +42,16 @@
                 <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
                 <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Guilds") }}</a></li>
                 <li class="{{ Request::segment(1) == 'ladder' ? 'active' : '' }}"><a href="/ladder/pve/mop/tot">{{ __("Ladder") }}</a></li>
+                <li class="{{ Request::segment(1) == 'bmah' ? 'active' : '' }}"><a href="/bmah">{{ __("BMAH") }}</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
-                    <li><a href="{{URL::to('/register')}}"><span class="glyphicon glyphicon-user"></span>{{ __("Reg.") }} </a></li>
-                    <li><a href="{{URL::to('/login')}}"><span class="glyphicon glyphicon-log-in"></span>{{ __("Login") }} </a></li>
+                    <li><a href="{{URL::to('/register')}}"><span class="glyphicon glyphicon-user"></span></a></li>
+                    <li><a href="{{URL::to('/login')}}"><span class="glyphicon glyphicon-log-in"></span></a></li>
                 @else
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">{{ csrf_field() }}</form>
-                    <li><a href="{{URL::to('/home')}}"><span class="glyphicon glyphicon-user"></span>{{__("Profil")}}</a></li>
-                    <li><a href="{{URL::to('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span>{{__("Log out")}}</a></li>
+                    <li><a href="{{URL::to('/home')}}"><span class="glyphicon glyphicon-user"></span></a></li>
+                    <li><a href="{{URL::to('/logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span></a></li>
                 @endif
                 <li class="headerSearch divDesktop">
                     {!! Form::open(array("method" => "get","url" => URL::to("/player"))) !!}
@@ -68,7 +69,6 @@
         </div>
     </div>
 </nav>
-{{--
 <div id="amazon" class="amazon container">
     <div class="amazon-container">
         <div id="MEIGitqPUFDH">
@@ -87,4 +87,3 @@
         <iframe class="divMobile" src="https://rcm-eu.amazon-adsystem.com/e/cm?o=2&p=288&l=ez&f=ifr&linkID=66f2d6d8bad428fb96c56970c2ea5d57&t=stamas47-21&tracking_id=stamas47-21" width="320" height="50" scrolling="no" border="0" marginwidth="0" style="border:none;" frameborder="0"></iframe>
     </div>
 </div>
---}}

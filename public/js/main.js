@@ -805,7 +805,7 @@ $(function()
         var char_id = $(this).val();
         $.ajax({
             type: "GET",
-            url: URL_WEBSITE + "/raidChar/" + char_id,
+            url: URL_WEBSITE + "/gdkpChar/" + char_id,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -935,7 +935,7 @@ $(function()
         });
     };
 
-    var refreshMapDifficultySpec = function(form) {
+    var refreshMapDifficultySpec = function(form,callback) {
         $(form).find(".refreshProgress").hide();
         $(form).find(".update-loader").css("display","block");
         $.ajax({
@@ -949,8 +949,24 @@ $(function()
                 $(form).find(".refreshProgress").css("display","block").show();
                 $(form).find(".update-loader").hide();
                 $(form).parent().parent().find(".memberDataWidthContainer").html(replaceTranslations(response));
+                if ( callback ){
+                    callback();
+                }
             }
         });
+    };
+
+    var startLoad = function(loaders, index) {
+        var load = loaders[index];
+        if ( load ) {
+            if ( $(load).hasClass("autoLoad") ) {
+                refreshMapDifficultySpec(load, function(){
+                    startLoad(loaders,++index);
+                });
+            } else {
+                startLoad(loaders,++index);
+            }
+        }
     };
 
     var loadPlayerMapDifficulty = function(container, realm, name, guid, mode, expansion, map)
@@ -966,15 +982,18 @@ $(function()
             {
                 response = $.parseJSON(response);
                 $(container).find(".encounters_loading").hide();
+                var loaders = [];
                 $(container).parent().html(replaceTranslations(response["view"])).find(".refreshSpecTop").each(function(){
-                    if ( $(this).hasClass("autoLoad") ) {
-                        refreshMapDifficultySpec($(this));
-                    }
-                    $(this).submit(function(e){
+                    var load = $(this);
+                    $(load).submit(function(e){
                         e.preventDefault();
-                        refreshMapDifficultySpec($(this));
+                        refreshMapDifficultySpec(load);
                     })
+                    loaders.push(load);
                 });
+                if ( loaders.length > 0 ) {
+                    startLoad(loaders, 0);
+                }
             }
         });
     };

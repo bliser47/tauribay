@@ -6,6 +6,7 @@ namespace TauriBay\Http\Controllers;
 use TauriBay\Characters;
 use Illuminate\Http\Request;
 use TauriBay\EncounterMember;
+use TauriBay\MemberTop;
 use TauriBay\Realm;
 use TauriBay\Trader;
 use TauriBay\Tauri;
@@ -13,7 +14,7 @@ use TauriBay\Tauri\CharacterClasses;
 use Carbon\Carbon;
 use TauriBay\Encounter;
 use TauriBay\Defaults;
-
+use DB;
 
 class TopItemLevelsController extends Controller
 {
@@ -77,7 +78,7 @@ class TopItemLevelsController extends Controller
                         $character->ilvl = $characterItemLevel;
                     }
                 }
-                $character->score = self::getCharacterScore($character);
+                $character->score = self::getCharacterLiveScore($character);
                 $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
@@ -183,11 +184,211 @@ class TopItemLevelsController extends Controller
         //
     }
 
+    public function hallOfFame() {
+        $characterFactions = array("Ismeretlen", "Horde", "Alliance");
+        $characterClasses = CharacterClasses::CHARACTER_CLASS_NAMES;
+        $characters = DB::select(DB::raw("select characters.name, characters.class, characters.score, characters.realm, characters.achievement_points, characters.ilvl, characters.guid from characters right join (SELECT max(score) as score,class FROM characters group by class order by score desc) t on characters.class = t.class and characters.score = t.score where t.score > 0"));
+        return view("player/hall_of_fame")->with(compact("characters","characterClasses","characterFactions"));
+    }
+
+    public static function getCharacterLiveScore($_character) {
+        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
+
+
+        $bests = MemberTop::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
+            ->whereIn("encounter_id",$ids)->whereIn("difficulty_id",array(5,6))
+            ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec")->get();
+
+        $scores = array();
+        $bestHeroicDps = 0;
+        $bestHeroicHps = 0;
+        foreach ( $bests as $best ) {
+            $topDps = null;
+            $topHps = null;
+            switch($best->class){
+                case EncounterMember::PALADIN:
+                case EncounterMember::WARRIOR:
+                case EncounterMember::MONK:
+                case EncounterMember::DRUID:
+                case EncounterMember::SHAMAN:
+                    if ( EncounterMember::isHealer($best->spec) ) {
+                        $topHps = Encounter::getSpecTopHps($best->encounter_id, $best->difficulty_id, $best->spec);
+                    } else {
+                        $topDps = Encounter::getSpecTopDps($best->encounter_id, $best->difficulty_id, $best->spec);
+                    }
+                    break;
+
+                case EncounterMember::DEATH_KNIGHT:
+                    if ( EncounterMember::isTank($best->spec)) {
+                        $topDps = Encounter::getSpecTopDps($best->encounter_id, $best->difficulty_id, $best->spec);
+                    } else {
+                        $topDps = Encounter::getClassTopDpsButNotTank($best->encounter_id, $best->difficulty_id, $best->class);
+                    }
+                    break;
+
+                case EncounterMember::PRIEST:
+                    if ( EncounterMember::isHealer($best->spec) ) {
+                        $topHps = Encounter::getClassTopHps($best->encounter_id, $best->difficulty_id, $best->class);
+                    } else {
+                        $topDps = Encounter::getSpecTopDps($best->encounter_id, $best->difficulty_id, $best->spec);
+                    }
+
+                default:
+                    if ( EncounterMember::isHealer($best->spec) ) {
+                        $topHps = Encounter::getClassTopHps($best->encounter_id, $best->difficulty_id, $best->class);
+                    } else {
+                        $topDps = Encounter::getClassTopDps($best->encounter_id, $best->difficulty_id, $best->class);
+                    }
+                    break;
+            }
+            $dpsScore = $topDps !== null ? (($best->dps * 100) / max(1,$topDps)) : 0;
+            $hpsScore = $topHps !== null ?  ($best->hps * 100) / max(1,$topHps) : 0;
+            if ( !array_key_exists($best->encounter_id, $scores)) {
+                $scores[$best->encounter_id] = array(
+                    "dps" => 0,
+                    "hps" => 0
+                );
+            }
+            if ( Encounter::isHeroicEncounter($best->encounter_id) ) {
+                if ( $dpsScore > $bestHeroicDps ) {
+                    $bestHeroicDps = $dpsScore;
+                }
+                if ( $hpsScore > $bestHeroicHps ) {
+                    $bestHeroicHps = $hpsScore;
+                }
+            } else {
+                if ( $dpsScore > $scores[$best->encounter_id]["dps"] ) {
+                    $scores[$best->encounter_id]["dps"] = $dpsScore;
+                }
+                if ( $hpsScore > $scores[$best->encounter_id]["hps"] ) {
+                    $scores[$best->encounter_id]["hps"] = $hpsScore;
+                }
+            }
+        }
+
+        $total = max($bestHeroicDps,$bestHeroicHps);
+        foreach ( $scores as $score ) {
+            $total += max($score["dps"],$score["hps"]);
+        }
+        return ($total/1300) * 100;
+    }
+
+    public static function getCharacterLiveScores($_character) {
+        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
+
+
+        $bests = MemberTop::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
+            ->whereIn("encounter_id",$ids)->whereIn("difficulty_id",array(5,6))
+            ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec, dps_encounter_id, hps_encounter_id")->get();
+
+        $scores = array();
+        $bestHeroicDpsEncounter = null;
+        $bestHeroicHpsEncounter = null;
+        $heroicEncounterIds = [];
+        $bestHeroicDps = 0;
+        $bestHeroicHps = 0;
+        $bestHeroicDpsScore = 0;
+        $bestHeroicHpsScore = 0;
+        foreach ( $bests as $best ) {
+            $topDps = null;
+            $topHps = null;
+            switch($best->class){
+                case EncounterMember::PALADIN:
+                case EncounterMember::WARRIOR:
+                case EncounterMember::MONK:
+                case EncounterMember::DRUID:
+                case EncounterMember::SHAMAN:
+                    if ( EncounterMember::isHealer($best->spec) ) {
+                        $topHps = Encounter::getSpecTopHpsData($best->encounter_id, $best->difficulty_id, $best->spec);
+                    } else {
+                        $topDps = Encounter::getSpecTopDpsData($best->encounter_id, $best->difficulty_id, $best->spec);
+                    }
+                    break;
+
+                case EncounterMember::DEATH_KNIGHT:
+                    if ( EncounterMember::isTank($best->spec)) {
+                        $topDps = Encounter::getSpecTopDpsData($best->encounter_id, $best->difficulty_id, $best->spec);
+                    } else {
+                        $topDps = Encounter::getClassTopDpsButNotTankData($best->encounter_id, $best->difficulty_id, $best->class);
+                    }
+                    break;
+
+                case EncounterMember::PRIEST:
+                    if ( EncounterMember::isHealer($best->spec) ) {
+                        $topHps = Encounter::getClassTopHpsData($best->encounter_id, $best->difficulty_id, $best->class);
+                    } else {
+                        $topDps = Encounter::getSpecTopDpsData($best->encounter_id, $best->difficulty_id, $best->spec);
+                    }
+
+                default:
+                    if ( EncounterMember::isHealer($best->spec) ) {
+                        $topHps = Encounter::getClassTopHpsData($best->encounter_id, $best->difficulty_id, $best->class);
+                    } else {
+                        $topDps = Encounter::getClassTopDpsData($best->encounter_id, $best->difficulty_id, $best->class);
+                    }
+                    break;
+            }
+            $dpsScore = $topDps !== null ? (($best->dps * 100) / max(1,$topDps->dps)) : 0;
+            $hpsScore = $topHps !== null ?  ($best->hps * 100) / max(1,$topHps->hps) : 0;
+            if ( !array_key_exists($best->encounter_id, $scores)) {
+                $scores[$best->encounter_id] = array(
+                    "dps" => 0,
+                    "hps" => 0,
+                    "encounter_dps" => 0,
+                    "encounter_hps" => 0
+                );
+            }
+            if ( Encounter::isHeroicEncounter($best->encounter_id) ) {
+                $heroicEncounterIds[] = $best->encounter_id;
+                if ( $dpsScore > $bestHeroicDpsScore ) {
+                    $bestHeroicDps = $topDps;
+                    $bestHeroicDpsScore = $dpsScore;
+                    $bestHeroicDpsEncounter = $best;
+                }
+                if ( $hpsScore > $bestHeroicHpsScore ) {
+                    $bestHeroicHps = $topHps;
+                    $bestHeroicHpsScore = $hpsScore;
+                    $bestHeroicHpsEncounter = $best;
+                }
+            } else {
+                if ( $dpsScore > $scores[$best->encounter_id]["dps"] ) {
+                    $scores[$best->encounter_id]["dps"] = $dpsScore;
+                    $scores[$best->encounter_id]["top_dps"] = $topDps;
+                    $scores[$best->encounter_id]["encounter_dps"] = $best;
+                }
+                if ( $hpsScore > $scores[$best->encounter_id]["hps"] ) {
+                    $scores[$best->encounter_id]["hps"] = $hpsScore;
+                    $scores[$best->encounter_id]["top_hps"] = $topHps;
+                    $scores[$best->encounter_id]["encounter_hps"] = $best;
+                }
+                $scores[$best->encounter_id]["best"] = $scores[$best->encounter_id]["dps"] > $scores[$best->encounter_id]["hps"] ? "dps" : "hps";
+            }
+        }
+
+        if ( $bestHeroicDpsScore >= $bestHeroicHpsScore ) {
+            foreach ( $heroicEncounterIds as $id ) {
+                $scores[$id]["best"] = "dps";
+                $scores[$id]["dps"] = $bestHeroicDpsScore;
+                $scores[$id]["top_dps"] = $bestHeroicDps;
+                $scores[$id]["encounter_dps"] = $bestHeroicDpsEncounter;
+            }
+        } else {
+            foreach ( $heroicEncounterIds as $id ) {
+                $scores[$id]["best"] = "hps";
+                $scores[$id]["hps"] = $bestHeroicHpsScore;
+                $scores[$id]["top_hps"] = $bestHeroicHps;
+                $scores[$id]["encounter_hps"] = $bestHeroicHpsEncounter;
+            }
+        }
+
+        return $scores;
+    }
+
     public static function getCharacterScore($_character) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
         $bests = EncounterMember::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
-            ->whereIn("encounter",$ids)
+            ->whereIn("encounter",$ids)->whereIn("difficulty_id",array(5,6))
             ->groupBy("encounter")
             ->selectRaw("MAX(dps_score) as maxDps, MAX(hps_score) as maxHps, encounter")->get();
 
@@ -211,7 +412,7 @@ class TopItemLevelsController extends Controller
 
     public static function UpdateCharacter($_sheet,$_character)
     {
-        $_character->score = self::getCharacterScore($_character);
+        $_character->score = self::getCharacterLiveScore($_character);
         if ($_sheet && array_key_exists("response", $_sheet)) {
             $characterSheetResponse = $_sheet["response"];
             $newItemLevel = $characterSheetResponse["avgitemlevel"];

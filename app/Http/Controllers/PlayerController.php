@@ -20,6 +20,15 @@ use TauriBay\Tauri\Skada;
 class PlayerController extends Controller
 {
 
+    public function playLiveScore(Request $_request, $_realm_short, $_player_name, $guid) {
+
+        $character = Characters::where("guid","=",$guid)->first();
+        if ( $character ) {
+            return TopItemLevelsController::getCharacterLiveScore($character);
+        }
+        return redirect('/player');
+    }
+
     public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
 
         $cacheKey = "playerSpecTop4" . http_build_query(array(
@@ -46,7 +55,7 @@ class PlayerController extends Controller
                     "dps" => ""
                 );
             }
-            Cache::put($cacheKey, $cacheValue, 1440); // 1 day
+            Cache::put($cacheKey, $cacheValue, 10080); // 1 week
         }
         return $cacheValue;
     }
@@ -164,6 +173,21 @@ class PlayerController extends Controller
                         "expansionId",
                         "defaultDifficultyIndex"));
                 break;
+
+                case "score" :
+
+                    $expansionId = Defaults::EXPANSION_ID;
+                    $mapId = Defaults::MAP_ID;
+                    $encounters = Encounter::getMapEncounters(Defaults::EXPANSION_ID, Defaults::MAP_ID);
+                    $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
+
+                    $scores = TopItemLevelsController::getCharacterLiveScores($character);
+
+
+                    return view("player/ajax/top/score", compact(
+                        "encounters", "expansionId", "mapId", "scores","classSpecs"));
+
+                    break;
             }
         }
         return view("player/ajax/notfound");
@@ -211,7 +235,8 @@ class PlayerController extends Controller
     public function ajax(Request $_request) {
         $modes = array(
             "recent" => __("Új"),
-            "top" => "Top"
+            "top" => "Top",
+            "score" => "Score",
         );
         $modeId = Defaults::PLAYER_MODE;
 

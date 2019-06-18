@@ -65,7 +65,11 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/bg', 'BattlegroundController@index');
     Route::get('/top', 'TopItemLevelsController@index');
+    Route::get('/top/fame', 'TopItemLevelsController@hallOfFame');
     Route::get('/progress/damage', 'ProgressController@damage');
+
+    Route::get('bmah', 'BMAHController@index');
+    Route::get('bmahd', 'BMAHController@debug');
 
 
     Route::get('/progress', 'ProgressController@index');
@@ -96,6 +100,7 @@ Route::group(['middleware' => 'language'], function () {
     Route::get('/player', 'PlayerController@index');
     Route::post('/player/{realm_short}/{name}/{character_guid}', 'PlayerController@ajax');
     Route::get('/player/{realm_short}/{name}/{character_guid}', 'PlayerController@player');
+    Route::get('/player/{realm_short}/{name}/{character_guid}/score', 'PlayerController@playLiveScore');
     Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{expansion_id}/{map_id}', 'PlayerController@mode');
     Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{expansion_id}/{map_id}/{difficulty_id}', 'PlayerController@difficulty');
     Route::get('/player/{realm_short}/{name}/{character_guid}/{mode}/{expansion_id}/{map_id}/{difficulty_id}/{encounter_id}/{spec_id}', 'PlayerController@spec');

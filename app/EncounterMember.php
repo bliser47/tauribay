@@ -7,10 +7,23 @@ use Illuminate\Database\Eloquent\Model;
 class EncounterMember extends Model
 {
     const SPEC_DRUID_BALALANCE = 102;
+    const SPEC_DRUID_GUARDIAN = 104;
 
     const ROLE_TANK = 1;
     const ROLE_DPS = 2;
     const ROLE_HEAL = 3;
+
+    const WARRIOR = 1;
+    const PALADIN = 2;
+    const HUNTER = 3;
+    const ROGUE = 4;
+    const PRIEST = 5;
+    const DEATH_KNIGHT = 6;
+    const SHAMAN = 7;
+    const MAGE = 8;
+    const WARLOCK = 9;
+    const DRUID = 10;
+    const MONK = 11;
 
     const ROLES = array(
         1 => array(
@@ -264,12 +277,20 @@ class EncounterMember extends Model
         65, 256, 257, 264, 270, 105
     );
 
+    const SPEC_IS_TANK = array(
+        73, 66, 250, 268, 104
+    );
+
     public static function canClassHeal($class) {
         return in_array($class,self::CLASSES_CAN_HEAL);
     }
 
     public static function isHealer($spec) {
         return in_array($spec,self::SPEC_IS_HEAL);
+    }
+
+    public static function isTank($spec) {
+        return in_array($spec,self::SPEC_IS_TANK);
     }
 
     public static function getClasses()

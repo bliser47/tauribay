@@ -19,7 +19,7 @@
                                 <legend> {{ __("Rendezés") }} </legend>
                                 <div id="top-sort-by" class="form-group">
                                     <div class="input-group col-md-12">
-                                        {!! Form::select('sort', $sortBy, (!Input::has('sort') || Input::get('sort') == 'level') ? 'ilvl'  : 'achievement_points', ['required', 'id' => 'sort-by', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz rendezést")]); !!}
+                                        {!! Form::select('sort', $sortBy, (!Input::has('sort') || Input::get('sort') == 'level') ? 'ilvl'  : (Input::get('sort') == 'score' ? 'score' : 'achievement_points'), ['required', 'id' => 'sort-by', 'class' => "control selectpicker input-large", 'placeholder' =>  __("Válassz rendezést")]); !!}
                                      </div>
                                  </div>
                             </div>

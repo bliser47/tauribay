@@ -14,6 +14,22 @@ class ApiClient {
         'params' => array()
     );
 
+    public function getBMAuctionsInfo($realm) {
+        $this->request['url'] = 'bmauctions-info';
+        $this->request['params'] = array(
+            'r'  => $realm
+        );
+        return $this->communicate();
+    }
+
+    public function getBMAuctionsData($realm) {
+        $this->request['url'] = 'bmauctions-data';
+        $this->request['params'] = array(
+            'r'  => $realm
+        );
+        return $this->communicate();
+    }
+
     /**
      * Returns Achievement Firsts from the specified realm
      * @param string $realm - Full name of the realm

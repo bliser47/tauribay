@@ -1,3 +1,6 @@
+<div class="alert alert-info nomargin">
+    {{ __("Az adatok ezen az oldalon Spec alapon vannak összehasonlítva.") }}
+</div>
 @if ( $expansionId == 4 )
     <div class="bossName" style="background-image:url('{{ URL::asset("img/maps/" . $mapId . ".jpg") }}')">
 @else

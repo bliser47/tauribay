@@ -108,6 +108,6 @@ class BliserGdkpController extends Controller
             $roles = array();
             return view("gdkp", compact("characters", "appliedRoles", "characterClasses","roles","classSpecs","characterAppliedResults"));
         }
-        return redirect()->route('login', array("redirectTo"=>"/raid/" . $_raid_id));
+        return redirect()->route('login', array("redirectTo"=>"/gdkp/" . $_raid_id));
     }
 }
