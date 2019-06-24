@@ -83,6 +83,23 @@ class TopItemLevelsController extends Controller
                 $character->score_25n = self::getCharacterLiveScore($character, [4]);
                 $character->score_10hc = self::getCharacterLiveScore($character, [5]);
                 $character->score_25hc = self::getCharacterLiveScore($character, [6]);
+
+                $character->score10n_tank = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_TANK);
+                $character->score10n_dps = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_DPS);
+                $character->score10n_healer = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_HEAL);
+
+                $character->score25n_tank = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_TANK);
+                $character->score25n_dps = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_DPS);
+                $character->score25n_healer = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_HEAL);
+
+                $character->score10hc_tank = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_TANK);
+                $character->score10hc_dps = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_DPS);
+                $character->score10hc_healer = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_HEAL);
+
+                $character->score25hc_tank = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_TANK);
+                $character->score25hc_dps = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_DPS);
+                $character->score25hc_healer = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_HEAL);
+
                 $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
@@ -195,13 +212,18 @@ class TopItemLevelsController extends Controller
         return view("player/hall_of_fame")->with(compact("characters","characterClasses","characterFactions"));
     }
 
-    public static function getCharacterLiveScore($_character, $difficulties = array(5,6)) {
+    public static function getCharacterLiveScore($_character, $difficulties = array(5,6), $role_id = null) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
 
         $bests = MemberTop::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
             ->whereIn("encounter_id",$ids)->whereIn("difficulty_id", $difficulties)
-            ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec")->get();
+            ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec");
+        if ( $role_id !== null ) {
+            $specs = array_keys(EncounterMember::getRoleClassSpecs($role_id, $_character->class));
+            $bests->whereIn("spec",$specs);
+        }
+        $bests = $bests->get();
 
         $scores = array();
         $bestHeroicDps = 0;
@@ -427,6 +449,23 @@ class TopItemLevelsController extends Controller
         $_character->score_25n = self::getCharacterLiveScore($_character, [4]);
         $_character->score_10hc = self::getCharacterLiveScore($_character, [5]);
         $_character->score_25hc = self::getCharacterLiveScore($_character, [6]);
+
+        $_character->score10n_tank = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_TANK);
+        $_character->score10n_dps = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_DPS);
+        $_character->score10n_healer = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_HEAL);
+
+        $_character->score25n_tank = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_TANK);
+        $_character->score25n_dps = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_DPS);
+        $_character->score25n_healer = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_HEAL);
+
+        $_character->score10hc_tank = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_TANK);
+        $_character->score10hc_dps = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_DPS);
+        $_character->score10hc_healer = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_HEAL);
+
+        $_character->score25hc_tank = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_TANK);
+        $_character->score25hc_dps = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_DPS);
+        $_character->score25hc_healer = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_HEAL);
+
 
         if ($_sheet && array_key_exists("response", $_sheet)) {
             $characterSheetResponse = $_sheet["response"];

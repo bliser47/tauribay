@@ -4,6 +4,7 @@ namespace TauriBay;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use TauriBay\Http\Controllers\TopItemLevelsController;
 
 class Characters extends Model
 {
@@ -15,6 +16,11 @@ class Characters extends Model
             $characterEncounter->encounter_member_id = $member->id;
             $characterEncounter->save();
         }
+    }
+
+    public static function GetTopScore($class_id, $role_id, $difficultyId, $realms, $factions) {
+        $columnName = "score" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] . "_" . strtolower(EncounterMember::ROLES[$role_id]["name"]);
+        return Characters::where("class","=",$class_id)->whereIn("realm",$realms)->whereIn("faction",$factions)->orderBy($columnName,"DESC")->first();
     }
 
     public static function GetTopItemLevels($_request)

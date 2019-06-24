@@ -2,6 +2,7 @@
 
 namespace TauriBay\Http\Controllers;
 
+use TauriBay\Characters;
 use TauriBay\Defaults;
 use TauriBay\Encounter;
 use Illuminate\Http\Request;
@@ -719,6 +720,32 @@ class PveLadderController extends Controller
                                 $cacheValue = $view;
                                 $cacheUrlValue = "";
                                 break;
+
+                            case "class" :
+
+                                $classes = EncounterMember::getClasses();
+                                $best = array();
+                                foreach ( $classes as $classId => $className ) {
+                                    $best[$classId] = array(
+                                        "dps" => Characters::GetTopScore($classId,EncounterMember::ROLE_DPS, $difficultyId, $realms, $factions)
+                                    );
+                                    if ( EncounterMember::canClassTank($classId) ) {
+                                        $best[$classId]["tank"] = Characters::GetTopScore($classId,EncounterMember::ROLE_TANK, $difficultyId, $realms, $factions);
+                                    }
+                                    if ( EncounterMember::canClassHeal($classId)) {
+                                        $best[$classId]["healer"] = Characters::GetTopScore($classId,EncounterMember::ROLE_HEAL, $difficultyId, $realms, $factions);
+                                    }
+                                }
+                                $roles = array(
+                                    "tank", "dps", "healer"
+                                );
+
+                                $view = view("ladder/pve/class",compact("classes","best", "roles"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+                                $cacheUrlValue = "";
+
+                                break;
                         }
                     }
 
@@ -733,6 +760,7 @@ class PveLadderController extends Controller
                     if (  !$cacheValue || !$cacheUrlValue ) {
                         $modes = array(
                             "ladder" => "Ladder",
+                            "class" => "Class"
                             /*
                             "allstars-dps" => "Σdps",
                             "allstars-hps" => "Σhps",

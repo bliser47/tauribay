@@ -273,6 +273,10 @@ class EncounterMember extends Model
         2,5,7,10,11
     );
 
+    const CLASSES_CAN_TANK = array(
+        1,2,6,10,11
+    );
+
     const SPEC_IS_HEAL = array(
         65, 256, 257, 264, 270, 105
     );
@@ -283,6 +287,10 @@ class EncounterMember extends Model
 
     public static function canClassHeal($class) {
         return in_array($class,self::CLASSES_CAN_HEAL);
+    }
+
+    public static function canClassTank($class) {
+        return in_array($class,self::CLASSES_CAN_TANK);
     }
 
     public static function isHealer($spec) {
