@@ -178,7 +178,7 @@ class PlayerController extends Controller
 
                     $expansionId = Defaults::EXPANSION_ID;
                     $mapId = Defaults::MAP_ID;
-                    $encounters = Encounter::getMapEncounters(Defaults::EXPANSION_ID, Defaults::MAP_ID);
+                    $encounters = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
                     $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
                     $scores = TopItemLevelsController::getCharacterLiveScores($character);

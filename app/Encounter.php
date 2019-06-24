@@ -498,13 +498,13 @@ class Encounter extends Model
             $member->class = $memberData["class"];
             $member->spec = $memberData["spec"];
             $member->damage_done = $memberData["dmg_done"];
-            $member->dps = $memberData["dmg_done"] / $fightTime;
+            $member->dps = $memberData["dmg_done"] / max($fightTime,1);
             $member->damage_taken = $memberData["dmg_taken"];
             $member->damage_absorb = $memberData["dmg_absorb"];
             $member->heal_done = $memberData["heal_done"];
             $member->absorb_done = $memberData["absorb_done"];
             $member->overheal = $memberData["overheal"];
-            $member->hps = ($memberData["heal_done"] + $memberData["absorb_done"]) / $fightTime;
+            $member->hps = ($memberData["heal_done"] + $memberData["absorb_done"]) / max($fightTime,1);
             $member->heal_taken = $memberData["heal_taken"];
             $member->interrupts = $memberData["interrupts"];
             $member->dispells = $memberData["dispells"];

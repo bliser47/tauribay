@@ -7,7 +7,7 @@
         <th colspan="2">Personal</th>
         <th colspan="3">Best</th>
     </tr>
-    @foreach( $encounters as $encounterId => $encounter )
+    @foreach( $encounters as $encounterId )
         @if ( array_key_exists("best",$scores[$encounterId]) )
             <tr>
                 <td style="white-space:nowrap;"><a href="{{ URL::to('/ladder/pve/') . "/" . \TauriBay\Encounter::EXPANSION_SHORTS[$expansionId] . "/" . \TauriBay\Encounter::getMapUrl($expansionId, $mapId) . "/" . \TauriBay\Encounter::getUrlName($encounterId) }}">{{ \TauriBay\Encounter::getNameShort($encounterId) }}</a></td>

@@ -293,7 +293,7 @@ $(function()
                             $(row).find(".topScore").html(characterData.score.toFixed(2));
 
                             var form = $(row).find(".ilvlupdate-form");
-                            form.submit(function (e) {
+                            form.unbind().submit(function (e) {
                                 sendIlvlAjaxUpdate($(this), $(this).serialize(), $(this).closest(".charRow"));
                                 e.preventDefault();
                             });

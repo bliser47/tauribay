@@ -77,6 +77,7 @@ Route::group(['middleware' => 'language'], function () {
 
     Route::get('/encounter/fixCharacters', 'EncounterController@fixCharacters');
     Route::get('/encounter/fixMissingEncounters', 'EncounterController@fixMissingEncounters');
+    Route::get('/encounter/fixMissingEncounterMembers', 'EncounterController@fixMissingEncounterMembers');
     Route::get('/encounter/{encounter_name_url}', 'EncounterController@index');
     Route::get('/encounter/{encounter_name_url}/{log_id}', 'EncounterController@log');
     Route::get('/encounter/{encounter_name_url}/{log_id}/{mode}', 'EncounterController@mode');

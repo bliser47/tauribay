@@ -79,6 +79,10 @@ class TopItemLevelsController extends Controller
                     }
                 }
                 $character->score = self::getCharacterLiveScore($character);
+                $character->score_10n = self::getCharacterLiveScore($character, [3]);
+                $character->score_25n = self::getCharacterLiveScore($character, [4]);
+                $character->score_10hc = self::getCharacterLiveScore($character, [5]);
+                $character->score_25hc = self::getCharacterLiveScore($character, [6]);
                 $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
@@ -191,12 +195,12 @@ class TopItemLevelsController extends Controller
         return view("player/hall_of_fame")->with(compact("characters","characterClasses","characterFactions"));
     }
 
-    public static function getCharacterLiveScore($_character) {
+    public static function getCharacterLiveScore($_character, $difficulties = array(5,6)) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
 
         $bests = MemberTop::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
-            ->whereIn("encounter_id",$ids)->whereIn("difficulty_id",array(5,6))
+            ->whereIn("encounter_id",$ids)->whereIn("difficulty_id", $difficulties)
             ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec")->get();
 
         $scores = array();
@@ -270,21 +274,26 @@ class TopItemLevelsController extends Controller
         foreach ( $scores as $score ) {
             $total += max($score["dps"],$score["hps"]);
         }
-        return ($total/1300) * 100;
+
+        $maxScore = 1200;
+        if ( $difficulties == [5] || $difficulties == [6] || $difficulties == [5,6] ) {
+            $maxScore = 1300;
+        }
+        return ($total/$maxScore) * 100;
     }
 
-    public static function getCharacterLiveScores($_character) {
+    public static function getCharacterLiveScores($_character, $difficulties = array(5,6)) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
-
         $bests = MemberTop::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
-            ->whereIn("encounter_id",$ids)->whereIn("difficulty_id",array(5,6))
+            ->whereIn("encounter_id",$ids)->whereIn("difficulty_id",$difficulties)
             ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec, dps_encounter_id, hps_encounter_id")->get();
 
         $scores = array();
         $bestHeroicDpsEncounter = null;
         $bestHeroicHpsEncounter = null;
-        $heroicEncounterIds = [];
+        $bestHeroicDpsEncounterId = null;
+        $bestHeroicHpsEncounterId = null;
         $bestHeroicDps = 0;
         $bestHeroicHps = 0;
         $bestHeroicDpsScore = 0;
@@ -339,16 +348,17 @@ class TopItemLevelsController extends Controller
                 );
             }
             if ( Encounter::isHeroicEncounter($best->encounter_id) ) {
-                $heroicEncounterIds[] = $best->encounter_id;
                 if ( $dpsScore > $bestHeroicDpsScore ) {
                     $bestHeroicDps = $topDps;
                     $bestHeroicDpsScore = $dpsScore;
                     $bestHeroicDpsEncounter = $best;
+                    $bestHeroicDpsEncounterId = $best->encounter_id;
                 }
                 if ( $hpsScore > $bestHeroicHpsScore ) {
                     $bestHeroicHps = $topHps;
                     $bestHeroicHpsScore = $hpsScore;
                     $bestHeroicHpsEncounter = $best;
+                    $bestHeroicHpsEncounterId = $best->encounter_id;
                 }
             } else {
                 if ( $dpsScore > $scores[$best->encounter_id]["dps"] ) {
@@ -366,29 +376,25 @@ class TopItemLevelsController extends Controller
         }
 
         if ( $bestHeroicDpsScore >= $bestHeroicHpsScore ) {
-            foreach ( $heroicEncounterIds as $id ) {
-                $scores[$id]["best"] = "dps";
-                $scores[$id]["dps"] = $bestHeroicDpsScore;
-                $scores[$id]["top_dps"] = $bestHeroicDps;
-                $scores[$id]["encounter_dps"] = $bestHeroicDpsEncounter;
-            }
+            $scores[$bestHeroicDpsEncounterId]["best"] = "dps";
+            $scores[$bestHeroicDpsEncounterId]["dps"] = $bestHeroicDpsScore;
+            $scores[$bestHeroicDpsEncounterId]["top_dps"] = $bestHeroicDps;
+            $scores[$bestHeroicDpsEncounterId]["encounter_dps"] = $bestHeroicDpsEncounter;
         } else {
-            foreach ( $heroicEncounterIds as $id ) {
-                $scores[$id]["best"] = "hps";
-                $scores[$id]["hps"] = $bestHeroicHpsScore;
-                $scores[$id]["top_hps"] = $bestHeroicHps;
-                $scores[$id]["encounter_hps"] = $bestHeroicHpsEncounter;
-            }
+            $scores[$bestHeroicHpsEncounterId]["best"] = "hps";
+            $scores[$bestHeroicHpsEncounterId]["hps"] = $bestHeroicHpsScore;
+            $scores[$bestHeroicHpsEncounterId]["top_hps"] = $bestHeroicHps;
+            $scores[$bestHeroicHpsEncounterId]["encounter_hps"] = $bestHeroicHpsEncounter;
         }
 
         return $scores;
     }
 
-    public static function getCharacterScore($_character) {
+    public static function getCharacterScore($_character, $difficulties = array(5,6)) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
         $bests = EncounterMember::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
-            ->whereIn("encounter",$ids)->whereIn("difficulty_id",array(5,6))
+            ->whereIn("encounter",$ids)->whereIn("difficulty_id",$difficulties)
             ->groupBy("encounter")
             ->selectRaw("MAX(dps_score) as maxDps, MAX(hps_score) as maxHps, encounter")->get();
 
@@ -413,6 +419,11 @@ class TopItemLevelsController extends Controller
     public static function UpdateCharacter($_sheet,$_character)
     {
         $_character->score = self::getCharacterLiveScore($_character);
+        $_character->score_10n = self::getCharacterLiveScore($_character, [3]);
+        $_character->score_25n = self::getCharacterLiveScore($_character, [4]);
+        $_character->score_10hc = self::getCharacterLiveScore($_character, [5]);
+        $_character->score_25hc = self::getCharacterLiveScore($_character, [6]);
+
         if ($_sheet && array_key_exists("response", $_sheet)) {
             $characterSheetResponse = $_sheet["response"];
             $newItemLevel = $characterSheetResponse["avgitemlevel"];
@@ -426,7 +437,7 @@ class TopItemLevelsController extends Controller
         }
         else
         {
-            $_character->delete();
+            //$_character->delete();
         }
     }
 
