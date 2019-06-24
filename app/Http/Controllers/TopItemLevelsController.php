@@ -413,7 +413,11 @@ class TopItemLevelsController extends Controller
         }
         $totalDps += $bestHeroicDps;
         $totalHps += $bestHeroicHps;
-        return max($totalDps,$totalHps) / 1300 * 100;
+        $maxScore = 1200;
+        if ( $difficulties == [5] || $difficulties == [6] || $difficulties == [5,6] ) {
+            $maxScore = 1300;
+        }
+        return max($totalDps,$totalHps) / $maxScore * 100;
     }
 
     public static function UpdateCharacter($_sheet,$_character)

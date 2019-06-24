@@ -3,22 +3,33 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="bossName">
+                <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/>
                 <img src="{{ URL::asset("img/factions/small/" . $character->faction . ".png") }}" alt=""/> {{ \TauriBay\Realm::REALMS_SHORT[$character->realm] . " - " . $character->name }}
             </div>
             <table class="table table-bordered table-classes nomargin">
                 <tr>
-                    <th>{{ __("Kaszt") }}</th>
                     <th>iLvL</th>
                     <th>Achi</th>
                     <th>Score</th>
-                    <th>Tauri Armory</th>
+                    <th>Armory</th>
+                    <th width=32></th>
+                    <th class="cellDesktop">{{ __("Idő") }}</th>
                 </tr>
-                <tr>
-                    <td class="class-{{ $character->class  }}"> <img src="{{ URL::asset("img/classes/small/" . $character->class . ".png") }}" alt="{{ $characterClasses[$character->class] }}"/> </td>
-                    <td>{{ $character->ilvl }}</td>
-                    <td>{{ $character->achievement_points }}</td>
-                    <td>{{ $character->score }}</td>
+                <tr class="charRow">
+                    <td class="topItemLevel">{{ $character->ilvl }}</td>
+                    <td class="topAchievementPoints">{{ $character->achievement_points }}</td>
+                    <td class="topScore">{{ $character->score }}</td>
                     <td><a target="_blank" href="{{ URL::to("https://tauriwow.com/armory#character-sheet.xml?r=" . \TauriBay\Realm::REALMS[$character->realm] . "&n=" . $character->name) }}">{{ __("Armory megtekintése") }}</a></td>
+                    <td>
+                        <div class="update-loader" id="updated-loader{{$character->id}}"></div>
+                        {!! Form::open(array("method" => "post","class"=>"ilvlupdate-form")) !!}
+                        <input type="hidden" name="name" value="{{$character->name}}">
+                        <input type="hidden" name="realm" value="{{$character->realm}}">
+                        <input type="hidden" name="refreshTop" value="1">
+                        <button class="refreshIlvl" name="updateCharacter" value="1" type="submit"></button>
+                        {!! Form::close() !!}
+                    </td>
+                    <td class="time cellDesktop topUpdateAt" data-time="{{$character->updated_at}}"> {{ $character->updated_at }} </td>
                 </tr>
             </table>
         </div>
