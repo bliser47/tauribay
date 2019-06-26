@@ -541,7 +541,7 @@ class PveLadderController extends Controller
 
                     if (!$_request->has("refresh_cache") )
                     {
-                        $cacheKey = http_build_query($_request->all()) . "?v=27";
+                        $cacheKey = http_build_query($_request->all()) . "?v=30";
                         $cacheValue = Cache::get($cacheKey);
                         $cacheUrlValue = Cache::get($cacheKey."URL");
 
@@ -549,9 +549,9 @@ class PveLadderController extends Controller
                         $cacheValue = "";
                         $cacheUrlValue = "";
                         unset($_request['refresh_cache']);
-                        $cacheKey = http_build_query($_request->all()) . "?v=27";
+                        $cacheKey = http_build_query($_request->all()) . "?v=30";
                     }
-                    if (  !$cacheValue ) {
+                    if ( !$cacheValue ) {
 
                         //  Realm filter
                         $realms = array();
@@ -647,8 +647,6 @@ class PveLadderController extends Controller
                                 $cacheValue = $view;
                                 $cacheUrlValue = URL::to("ladder/pve/" . Encounter::EXPANSION_SHORTS[$expansionId] . "/" .
                                         Encounter::getMapUrl($expansionId, $mapId) . "/" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId]) . $realmFactionQuery;
-                                Cache::put($cacheKey, $cacheValue, 120); // 2 hours
-                                Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
                                 break;
 
                             case "allstars-dps":
@@ -733,7 +731,7 @@ class PveLadderController extends Controller
 
                             case "class" :
 
-                                $classes = EncounterMember::getClasses();
+                                $classes = EncounterMember::getClassesSorted();
                                 $best = array();
                                 foreach ( $classes as $classId => $className ) {
                                     $best[$classId] = array(
@@ -789,9 +787,22 @@ class PveLadderController extends Controller
                                 $cacheUrlValue = "";
 
                                 break;
+
+                            case "score" :
+
+                                $best = Characters::GetTopScoreOverallAll($difficultyId, $realms, $factions);
+                                $columnName = "score_" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId];
+
+                                $view = view("ladder/pve/all",compact("best","columnName"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+                                $cacheUrlValue = "";
+
+                                break;
                         }
                     }
-
+                    Cache::put($cacheKey, $cacheValue, 120); // 2 hours
+                    Cache::put($cacheKey . "URL", $cacheUrlValue, 120);
                     return json_encode(array(
                         "view" => $cacheValue,
                         "url" => $cacheUrlValue
@@ -805,7 +816,8 @@ class PveLadderController extends Controller
                             "ladder" => "Ladder",
                             "class" => "Class",
                             "role" => "Role",
-                            "overall" => "Overall"
+                            "overall" => "Overall",
+                            "score" => "Score"
                             /*
                             "allstars-dps" => "Σdps",
                             "allstars-hps" => "Σhps",

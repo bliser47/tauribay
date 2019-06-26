@@ -88,6 +88,7 @@ class EncounterMember extends Model
     const CLASSES = array(
         1 => array(
             "name" => "Warrior",
+            "id" => 1,
             "specs" => array(
                 71 => "Arms",
                 72 => "Fury",
@@ -96,6 +97,7 @@ class EncounterMember extends Model
         ),
         2 => array(
             "name" => "Paladin",
+            "id" => 2,
             "specs" => array(
                 65 => "Holy",
                 66 => "Protection",
@@ -104,6 +106,7 @@ class EncounterMember extends Model
         ),
         3 => array(
             "name" => "Hunter",
+            "id" => 3,
             "specs" => array(
                 253 => "Beast Mastery",
                 254 => "Marksmanship",
@@ -112,6 +115,7 @@ class EncounterMember extends Model
         ),
         4 => array(
             "name" => "Rogue",
+            "id" => 4,
             "specs" => array(
                 259 => "Assassination",
                 260 => "Combat",
@@ -120,6 +124,7 @@ class EncounterMember extends Model
         ),
         5 => array(
             "name" => "Priest",
+            "id" => 5,
             "specs" => array(
                 256 => "Discipline",
                 257 => "Holy",
@@ -128,6 +133,7 @@ class EncounterMember extends Model
         ),
         6 => array(
             "name" => "Death Knight",
+            "id" => 6,
             "specs" => array(
                 250 => "Blood",
                 251 => "Frost",
@@ -136,6 +142,7 @@ class EncounterMember extends Model
         ),
         7 => array(
             "name" => "Shaman",
+            "id" => 7,
             "specs" => array(
                 262 => "Elemental",
                 263 => "Enhancement",
@@ -144,6 +151,7 @@ class EncounterMember extends Model
         ),
         8 => array(
             "name" => "Mage",
+            "id" => 8,
             "specs" => array(
                 62 => "Arcane",
                 63 => "Fire",
@@ -152,6 +160,7 @@ class EncounterMember extends Model
         ),
         9 => array(
             "name" => "Warlock",
+            "id" => 9,
             "specs" => array(
                 265 => "Affliction",
                 266 => "Demonology",
@@ -160,6 +169,7 @@ class EncounterMember extends Model
         ),
         10 => array(
             "name" => "Monk",
+            "id" => 10,
             "specs" => array(
                 268 => "Brewmaster",
                 269 => "Windwalker",
@@ -168,6 +178,7 @@ class EncounterMember extends Model
         ),
         11 => array(
             "name" => "Druid",
+            "id" => 11,
             "specs" => array(
                 self::SPEC_DRUID_BALALANCE => "Balance",
                 103 => "Feral",
@@ -305,6 +316,20 @@ class EncounterMember extends Model
     {
         $classes = array();
         foreach ( self::CLASSES as $classId => $class )
+        {
+            $classes[$classId] = $class["name"];
+        }
+        return $classes;
+    }
+
+    public static function getClassesSorted()
+    {
+        $sorted = self::CLASSES;
+        uasort($sorted,function($s1,$s2){
+            return !self::canClassTank($s1["id"]);
+        });
+        $classes = array();
+        foreach ( $sorted as $classId => $class )
         {
             $classes[$classId] = $class["name"];
         }

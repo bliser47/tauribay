@@ -1488,3 +1488,11 @@ tr.spacer
     -webkit-box-shadow:none;
     box-shadow:none;
 }
+
+.playerRoleContainer {
+    float:left;
+}
+.playerRolesContainer {
+    display:table;
+    margin:0px auto;
+}

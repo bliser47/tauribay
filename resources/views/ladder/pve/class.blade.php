@@ -11,15 +11,17 @@
                 <td><img src="{{ URL::asset("img/classes/small/" . $classId . ".png") }}" alt="{{ $className }}"/></td>
                 @foreach ( $roles as $roleId)
                     <td>
-                    @if ( array_key_exists($roleId, $best[$classId]))
-                        @foreach ( $best[$classId][$roleId] as $index => $character )
-                            <div class="faction-{{ $character->faction }}">
-                                <img width="16px" height="16px" alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
-                                <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
-                                <br/>
-                            </div>
-                        @endforeach
-                    @endif
+                        <div class="playerRolesContainer">
+                        @if ( array_key_exists($roleId, $best[$classId]))
+                            @foreach ( $best[$classId][$roleId] as $index => $character )
+                                <div class="playerRoleContainer faction-{{ $character->faction }}">
+                                    <img width="16px" height="16px" alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
+                                    <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
+                                    <br/>
+                                </div>
+                            @endforeach
+                        @endif
+                        </div>
                     </td>
                 @endforeach
             </tr>
