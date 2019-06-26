@@ -590,13 +590,15 @@ $(function()
         var mode = $(pane).data("mode");
 
         var storeData = data;
-        storeData += "&mode_id=" + mode;
-        if ( page !== null )
+        if ( storeData.indexOf("&mode_id=" + mode) < 0 ) {
+            storeData += "&mode_id=" + mode;
+        }
+        if ( page !== null && storeData.indexOf("&page=" + page) < 0)
         {
             storeData += "&page=" + page;
         }
         var difficultyId = $("select[name='difficulty_id'] option:selected").val();
-        if (difficultyId) {
+        if (difficultyId && storeData.indexOf("&difficulty_id=" + difficultyId) < 0 ) {
             storeData += "&difficulty_id=" + difficultyId;
         }
 
@@ -653,7 +655,9 @@ $(function()
 
                     if ( mode === "speed" ) {
                         $(tab).find(".refreshHeader").click(function(e){
-                            data += "&refresh_cache=1";
+                            if ( data.indexOf("&refresh_cache=1") < 0 ) {
+                                data += "&refresh_cache=1";
+                            }
                             loadMode(pane, data, page);
                             e.preventDefault();
                         });
@@ -1023,7 +1027,10 @@ $(function()
             }
         }
         var container = $(".map-difficulty.active").find(".ajax-map-difficulty");
+        var activeDifficultyTab = $(".map-difficulty-tab.active");
+        $(activeDifficultyTab).addClass("loaded");
         loadMapDifficulty(container, data);
+        setCookie("diffSaved2",$(activeDifficultyTab).data("diff"));
         $(".map-difficulty-tab").on("click",function(){
             prevState = window.location.href;
             history.pushState(null, '', $(this).data("url") + window.location.hash);
@@ -1113,7 +1120,7 @@ $(function()
         }
     };
 
-    var loadMapDifficultyMode = function(container,data, mode) {
+    var loadMapDifficultyMode = function(container,data, mode, difficulty) {
         data += ("&mode_id="+mode);
         $.ajax({
             type: "POST",
@@ -1126,7 +1133,16 @@ $(function()
             {
                 response = $.parseJSON(response);
                 $(container).find(".encounters_loading").hide();
-                $(container).parent().html(replaceTranslations(response["view"]));
+                var parentContainer = $(container).parent();
+                $(parentContainer).html(replaceTranslations(response["view"]));
+                $(parentContainer).find(".refreshHeader").unbind().click(function(e){
+                    if ( data.indexOf("&refresh_cache=1") < 0 ) {
+                        data += "&refresh_cache=1";
+                    }
+                    $(parentContainer).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div><div data-mode=\""+mode+"\" class=\"difficulty-mode-loading-container-"+difficulty+"\"></div>");
+                    loadMapDifficultyMode($(parentContainer).find(".difficulty-mode-loading-container-"+difficulty), data, mode, difficulty);
+                    e.preventDefault();
+                });
                 UpdateTimes();
             }
         });
@@ -1136,17 +1152,22 @@ $(function()
         var modeSaved = getCookie("modeSaved3");
         if ( modeSaved !== "" )
         {
-            $("#difficulty-form-response .modePanel, #difficulty-form-response .tab-pane").removeClass("active loaded");
-            $("#modePanel" + modeSaved + "-" + difficulty + ", #" + modeSaved + "-" + difficulty).addClass("active loaded");
+            $("#difficulty-"+difficulty+" #difficulty-form-response .modePanel, #difficulty-"+difficulty+" #difficulty-form-response .tab-pane").removeClass("active loaded");
+            $("#difficulty-"+difficulty+" #modePanel" + modeSaved + "-" + difficulty + ", #difficulty-"+difficulty+" #" + modeSaved + "-" + difficulty).addClass("active loaded");
         }
-        var container = $(".map-difficulty-mode-"+difficulty+".active").find(".difficulty-mode-loading-container-"+difficulty);
-        loadMapDifficultyMode(container, data, $(".map-difficulty-mode-"+difficulty+".active").data("mode"));
+        var activeDifficultyModeContainer =  $(".map-difficulty-mode-"+difficulty+".active");
+        var container = $(activeDifficultyModeContainer).find(".difficulty-mode-loading-container-"+difficulty);
+        $(".map-difficulty-mode-tab-"+difficulty+".active").addClass("loaded");
+        var loadMode = $(activeDifficultyModeContainer).data("mode");
+        loadMapDifficultyMode(container, data, loadMode, difficulty);
+        setCookie("modeSaved3",loadMode);
         $(".map-difficulty-mode-tab-"+difficulty).on("click",function(){
-            setCookie("modeSaved3",$(this).data("mode"));
+            var newMode = $(this).data("mode");
+            setCookie("modeSaved3",newMode);
             if ( !$(this).hasClass("loaded") ) {
                 $(this).addClass("loaded");
                 var id = $(this).find("a").attr("href");
-                loadMapDifficultyMode($(id).find(".difficulty-mode-loading-container-"+difficulty), data, $(this).data("mode"));
+                loadMapDifficultyMode($(id).find(".difficulty-mode-loading-container-"+difficulty), data, newMode, difficulty);
             }
         });
     };

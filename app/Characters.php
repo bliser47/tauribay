@@ -18,9 +18,19 @@ class Characters extends Model
         }
     }
 
+    public static function GetTopScoreAll($role_id, $difficultyId, $realms, $factions) {
+        $columnName = "score" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] . "_" . strtolower(EncounterMember::ROLES[$role_id]["name"]);
+        return Characters::whereIn("realm",$realms)->whereIn("faction",$factions)->orderBy($columnName,"DESC")->take(20)->get();
+    }
+
     public static function GetTopScore($class_id, $role_id, $difficultyId, $realms, $factions) {
         $columnName = "score" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId] . "_" . strtolower(EncounterMember::ROLES[$role_id]["name"]);
-        return Characters::where("class","=",$class_id)->whereIn("realm",$realms)->whereIn("faction",$factions)->orderBy($columnName,"DESC")->first();
+        return Characters::where("class","=",$class_id)->whereIn("realm",$realms)->whereIn("faction",$factions)->orderBy($columnName,"DESC")->take(3)->get();
+    }
+
+    public static function GetTopScoreOverall($class_id, $difficultyId, $realms, $factions) {
+        $columnName = "score_" . Encounter::SIZE_AND_DIFFICULTY_URL[$difficultyId];
+        return Characters::where("class","=",$class_id)->whereIn("realm",$realms)->whereIn("faction",$factions)->orderBy($columnName,"DESC")->take(3)->get();
     }
 
     public static function GetTopItemLevels($_request)

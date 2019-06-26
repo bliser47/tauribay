@@ -1,6 +1,6 @@
 <table class="table table-bordered table-classes">
     <tr class="tHead">
-        <th>{{ __("Kaszt") }}</th>
+        <th><button style="margin:3px auto" class="refreshHeader" type="submit"></button></th>
         <th><img height="21px" src="{{ URL::asset("img/roles/tank.png") }}" alt="Tank"/></th>
         <th><img height="21px" src="{{ URL::asset("img/roles/dps.png") }}" alt="DPS"/></th>
         <th><img height="21px" src="{{ URL::asset("img/roles/healer.png") }}" alt="Heal"/></th>
@@ -12,7 +12,13 @@
                 @foreach ( $roles as $roleId)
                     <td>
                     @if ( array_key_exists($roleId, $best[$classId]))
-                            <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$best[$classId][$roleId]->realm] . "/" . $best[$classId][$roleId]->name . "/" . $best[$classId][$roleId]->guid }}">{{ $best[$classId][$roleId]->name }}</a>
+                        @foreach ( $best[$classId][$roleId] as $index => $character )
+                            <div class="faction-{{ $character->faction }}">
+                                <img width="16px" height="16px" alt="" src="{{  URL::asset("img/award_small/" . ($index+1) . ".png?v=4") }}"/>
+                                <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
+                                <br/>
+                            </div>
+                        @endforeach
                     @endif
                     </td>
                 @endforeach

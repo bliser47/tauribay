@@ -538,9 +538,19 @@ class PveLadderController extends Controller
             {
                 $difficultyId = $_request->get("difficulty_id");
                 if ( $_request->has("mode_id") ) {
-                    $cacheKey = http_build_query($_request->all()) . "?v=27";
-                    $cacheValue = Cache::get($cacheKey);
-                    $cacheUrlValue = Cache::get($cacheKey."URL");
+
+                    if (!$_request->has("refresh_cache") )
+                    {
+                        $cacheKey = http_build_query($_request->all()) . "?v=27";
+                        $cacheValue = Cache::get($cacheKey);
+                        $cacheUrlValue = Cache::get($cacheKey."URL");
+
+                    } else {
+                        $cacheValue = "";
+                        $cacheUrlValue = "";
+                        unset($_request['refresh_cache']);
+                        $cacheKey = http_build_query($_request->all()) . "?v=27";
+                    }
                     if (  !$cacheValue ) {
 
                         //  Realm filter
@@ -746,6 +756,39 @@ class PveLadderController extends Controller
                                 $cacheUrlValue = "";
 
                                 break;
+
+                            case "role" :
+
+                                $roles = array(
+                                    "tank", "dps", "healer"
+                                );
+                                $best = array(
+                                    "tank" => Characters::GetTopScoreAll(EncounterMember::ROLE_TANK, $difficultyId, $realms, $factions),
+                                    "dps" => Characters::GetTopScoreAll(EncounterMember::ROLE_DPS, $difficultyId, $realms, $factions),
+                                    "healer" => Characters::GetTopScoreAll(EncounterMember::ROLE_HEAL, $difficultyId, $realms, $factions)
+                                );
+
+                                $view = view("ladder/pve/player",compact("best", "roles"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+                                $cacheUrlValue = "";
+
+                                break;
+
+                            case "overall" :
+
+                                $classes = EncounterMember::getClasses();
+                                $best = array();
+                                foreach ( $classes as $classId => $className ) {
+                                    $best[$classId] = Characters::GetTopScoreOverall($classId, $difficultyId, $realms, $factions);
+                                }
+
+                                $view = view("ladder/pve/overall",compact("classes","best"));
+                                $view = $view->render();
+                                $cacheValue = $view;
+                                $cacheUrlValue = "";
+
+                                break;
                         }
                     }
 
@@ -760,7 +803,9 @@ class PveLadderController extends Controller
                     if (  !$cacheValue || !$cacheUrlValue ) {
                         $modes = array(
                             "ladder" => "Ladder",
-                            "class" => "Class"
+                            "class" => "Class",
+                            "role" => "Role",
+                            "overall" => "Overall"
                             /*
                             "allstars-dps" => "Σdps",
                             "allstars-hps" => "Σhps",

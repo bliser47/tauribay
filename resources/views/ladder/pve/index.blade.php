@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
-            <div class="panel panel-default">
+            <div class="panel panel-default nomargin">
                 <div class="panel-heading nopadding" role="tab" id="headingOne">
                     <h4 class="panel-title">
                         <a class="accordion-toggle" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
