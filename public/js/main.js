@@ -1380,5 +1380,14 @@ $(function()
             html = html.replaceAll(key, REPLACE_TRANSLATIONS[key]);
         }
         return html;
-    }
+    };
+
+    $("a.instaPhoto").click(function(e){
+        e.preventDefault();
+        $(this).modal({
+            escapeClose: false,
+            clickClose: false,
+            showClose: true
+        });
+    })
 });

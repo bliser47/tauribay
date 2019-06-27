@@ -49,7 +49,6 @@
                 </li>
                 <li class="{{ Request::segment(1) == 'bmah' ? 'active' : '' }}"><a href="/bmah">{{ __("BMAH") }}</a></li>
                 <li class="{{ Request::segment(1) == 'insta' ? 'active' : '' }}"><a href="/insta">Insta <i class="fa fa-instagram"></i></a></li>
-
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())

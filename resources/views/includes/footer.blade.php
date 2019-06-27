@@ -3,10 +3,11 @@
 <link type="text/css" rel="stylesheet" href='https://fonts.googleapis.com/css?family=Play:400,700'>
 <link type="text/css" rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/awesome-bootstrap-checkbox.css') }}"/>
-<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=322') }}"/>
+<link type="text/css" rel="stylesheet" href="{{ URL::asset('css/style.css?v=324') }}"/>
 <link type="text/css" rel="stylesheet" href="{{ URL::asset('css/responsive.css?v=17') }}"/>
 <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
 <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 <script>
     var URL_WEBSITE = "{{ URL::to('/') }}";
 
@@ -51,9 +52,10 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
 
 <script type="application/javascript" src="{{ URL::asset('js/responsive-paginate.js') }}"></script>
-<script type="application/javascript" src="{{ URL::asset('js/main.js?v=376') }}"></script>
+<script type="application/javascript" src="{{ URL::asset('js/main.js?v=381') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/power.js?v=26') }}"></script>
 <script type="application/javascript" src="{{ URL::asset('js/ads.js') }}"></script>
 @yield('pagespecificscripts')
@@ -61,7 +63,7 @@
     $(window).on('load', function() {
         if(!document.getElementById('IsdRpWLgMNqY')){
             document.getElementById('MEIGitqPUFDH').style.display='block';
-        } else {
+        } else if ( document.getElementById('amazon') ) {
             document.getElementById('amazon').className = "amazon noblocker";
         }
         $(".loadWrapper").fadeTo(500,0);

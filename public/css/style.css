@@ -1496,3 +1496,9 @@ tr.spacer
     display:table;
     margin:0px auto;
 }
+
+.spell_icon {
+    border-radius: 50%;
+    width:18px;
+    height:18px;
+}

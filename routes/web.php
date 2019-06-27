@@ -30,6 +30,7 @@ Route::post('api/receiveBattlegrounds', 'ApiController@ReceiveBattlegroundData')
 
 Route::post('profile/avatar', 'HomeController@ChangeAvatar');
 Route::post('profile/password', 'HomeController@ChangePassword');
+Route::post('/insta', 'InstagramController@upload');
 
 Route::post('/ilvl', 'TopItemLevelsController@store');
 
@@ -56,8 +57,12 @@ Route::group(['middleware' => 'language'], function () {
         return view("interview");
     });
 
+    Route::get('/guide', function(){
+        return view("guides/class/1");
+    });
+
     Route::get('/insta', 'InstagramController@index');
-    Route::get('/instagram', 'InstagramController@index');
+    Route::get('/insta/photo/{id}', 'InstagramController@photo');
 
     Route::get('/home', 'HomeController@index');
     Route::get('armory', 'ArmoryController@Request');
