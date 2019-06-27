@@ -56,10 +56,8 @@ Route::group(['middleware' => 'language'], function () {
         return view("interview");
     });
 
-    Route::get('/test', function(){
-        $api = new \TauriBay\Tauri\ApiClient();
-        return $api->getCharacterSheet(\TauriBay\Realm::REALMS[\TauriBay\Realm::TAURI], "Blizer");
-    });
+    Route::get('/insta', 'InstagramController@index');
+    Route::get('/instagram', 'InstagramController@index');
 
     Route::get('/home', 'HomeController@index');
     Route::get('armory', 'ArmoryController@Request');

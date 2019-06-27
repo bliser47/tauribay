@@ -39,10 +39,17 @@
                         <li><a href="/trade/credit">{{ __("Kredit") }}</a></li>
                     </ul>
                 </li>
-                <li class="{{ Request::segment(1) == 'top' ? 'active' : '' }}"><a href="/top">{{ __("Toplista") }}</a></li>
-                <li class="{{ Request::segment(1) == 'progress' ? 'active' : '' }}"><a href="/progress">{{ __("Guilds") }}</a></li>
-                <li class="{{ Request::segment(1) == 'ladder' ? 'active' : '' }}"><a href="/ladder/pve/mop/tot">{{ __("Ladder") }}</a></li>
+                <li class="dropdown {{ Request::segment(1) == 'top' || Request::segment(1) == 'progress' || Request::segment(1) == 'ladder' ? 'active' : '' }}">
+                    <a href="/hirdetesek" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ __("PVE") }}<span class="caret"></span></a>
+                    <ul class="dropdown-menu trade-types-dropdown-menu">
+                        <li><a href="/top">{{ __("Toplista") }}</a></li>
+                        <li><a href="/progress">{{ __("Guilds") }}</a></li>
+                        <li><a href="/ladder/pve/mop/tot">{{ __("Ladder") }}</a></li>
+                    </ul>
+                </li>
                 <li class="{{ Request::segment(1) == 'bmah' ? 'active' : '' }}"><a href="/bmah">{{ __("BMAH") }}</a></li>
+                <li class="{{ Request::segment(1) == 'insta' ? 'active' : '' }}"><a href="/insta">Insta <i class="fa fa-instagram"></i></a></li>
+
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @if (Auth::guest())
