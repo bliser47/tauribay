@@ -485,6 +485,7 @@ class TopItemLevelsController extends Controller
                 $_character->ilvl = $newItemLevel;
             }
             $_character->achievement_points = $characterSheetResponse["pts"];
+            $_character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
             $_character->updated_at = Carbon::now();
             $guild = Guild::getOrCreate(array(
                 "name" => $characterSheetResponse["guildName"],
