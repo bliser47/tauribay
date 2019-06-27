@@ -6,6 +6,7 @@ namespace TauriBay\Http\Controllers;
 use TauriBay\Characters;
 use Illuminate\Http\Request;
 use TauriBay\EncounterMember;
+use TauriBay\Guild;
 use TauriBay\MemberTop;
 use TauriBay\Realm;
 use TauriBay\Trader;
@@ -78,6 +79,15 @@ class TopItemLevelsController extends Controller
                         $character->ilvl = $characterItemLevel;
                     }
                 }
+
+                $guild = Guild::getOrCreate(array(
+                    "name" => $characterSheetResponse["guildName"],
+                    "faction" => $character->faction
+                ), $character->realm);
+                if ( $guild ) {
+                    $character->guild_id = $guild->id;
+                }
+
                 $character->score = self::getCharacterLiveScore($character);
                 $character->score_10n = self::getCharacterLiveScore($character, [3]);
                 $character->score_25n = self::getCharacterLiveScore($character, [4]);
@@ -476,6 +486,13 @@ class TopItemLevelsController extends Controller
             }
             $_character->achievement_points = $characterSheetResponse["pts"];
             $_character->updated_at = Carbon::now();
+            $guild = Guild::getOrCreate(array(
+                "name" => $characterSheetResponse["guildName"],
+                "faction" => $_character->faction
+            ), $_character->realm);
+            if ( $guild ) {
+                $_character->guild_id = $guild->id;
+            }
             $_character->save();
         }
         else

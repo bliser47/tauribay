@@ -52,6 +52,15 @@ Route::group(['middleware' => 'language'], function () {
     Route::post('gdkp/{raid_id}', 'BliserGdkpController@apply');
 
     Route::get('/', 'IndexController@Start');
+    Route::get('/interview', function(){
+        return view("interview");
+    });
+
+    Route::get('/test', function(){
+        $api = new \TauriBay\Tauri\ApiClient();
+        return $api->getCharacterSheet(\TauriBay\Realm::REALMS[\TauriBay\Realm::TAURI], "Blizer");
+    });
+
     Route::get('/home', 'HomeController@index');
     Route::get('armory', 'ArmoryController@Request');
 
