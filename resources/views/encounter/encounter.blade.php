@@ -49,7 +49,7 @@
                             <th>{{ __("Halálok") }}</th>
                         </tr>
                         <tr>
-                            <td colspan="2">{{ date('M d, Y H:m', $encounter->killtime) }}</td>
+                            <td colspan="2">{{ date('M d, Y H:i', $encounter->killtime) }}</td>
                             <td>{{ $encounter->wipes }}</td>
                             <td>{{ $encounter->deaths_total }}</td>
                             <td>{{ $encounter->deaths_fight }}</td>

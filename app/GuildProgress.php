@@ -91,10 +91,10 @@ class GuildProgress extends Model
             "first" => 0,
             "last" => 0
         );
-        foreach ( $firstEncounterKills as $firstKill ) {
-            foreach ( $lastEncounterKills as $lastKill )
+        foreach ( $lastEncounterKills as $lastKill ) {
+            foreach ( $firstEncounterKills as $firstKill )
             {
-                $timeDifference = $lastKill->killtime - ($firstKill->killtime - $firstKill->fight_time/1000);
+                $timeDifference = $lastKill->killtime - ($firstKill->killtime - ($firstKill->fight_time/1000));
                 if ( $timeDifference > 0 && ($shortestClear["time"] < 0 || $timeDifference < $shortestClear["time"]) )
                 {
                     $shortestClear = array(
