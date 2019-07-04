@@ -101,21 +101,34 @@ class TopItemLevelsController extends Controller
                 $character->score_10hc = self::getCharacterLiveScore($character, [5], null, false);
                 $character->score_25hc = self::getCharacterLiveScore($character, [6], null, false);
 
-                $character->score10n_tank = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_TANK, false);
-                $character->score10n_dps = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_DPS, false);
-                $character->score10n_healer = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_HEAL, false);
+                $canHeal = EncounterMember::canClassHeal($character->class);
+                $canTank = EncounterMember::canClassTank($character->class);
+                if ( !$canTank && !$canTank ) {
+                    $character->score10n_dps = $character->score_10n;
+                    $character->score25n_dps = $character->score_25n;
+                    $character->score10hc_dps = $character->score_10hc;
+                    $character->score25hc_dps =  $character->score_25hc;
+                }
+                else
+                {
+                    $character->score10n_dps = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_DPS, false);
+                    $character->score25n_dps = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_DPS, false);
+                    $character->score10hc_dps = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_DPS, false);
+                    $character->score25hc_dps = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_DPS, false);
 
-                $character->score25n_tank = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_TANK, false);
-                $character->score25n_dps = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_DPS, false);
-                $character->score25n_healer = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_HEAL, false);
-
-                $character->score10hc_tank = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_TANK, false);
-                $character->score10hc_dps = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_DPS, false);
-                $character->score10hc_healer = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_HEAL, false);
-
-                $character->score25hc_tank = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_TANK, false);
-                $character->score25hc_dps = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_DPS, false);
-                $character->score25hc_healer = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_HEAL, false);
+                    if ( $canHeal) {
+                        $character->score10n_healer = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_HEAL, false);
+                        $character->score25n_healer = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_HEAL, false);
+                        $character->score10hc_healer = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_HEAL, false);
+                        $character->score25hc_healer = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_HEAL, false);
+                    }
+                    if ( $canTank ) {
+                        $character->score10n_tank = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_TANK, false);
+                        $character->score25n_tank = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_TANK, false);
+                        $character->score10hc_tank = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_TANK, false);
+                        $character->score25hc_tank = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_TANK, false);
+                    }
+                }
 
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
@@ -541,21 +554,35 @@ class TopItemLevelsController extends Controller
         $_character->score_10hc = self::getCharacterLiveScore($_character, [5]);
         $_character->score_25hc = self::getCharacterLiveScore($_character, [6]);
 
-        $_character->score10n_tank = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_TANK);
-        $_character->score10n_dps = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_DPS);
-        $_character->score10n_healer = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_HEAL);
+        $canTank = EncounterMember::canClassTank($_character->class);
+        $canHeal = EncounterMember::canClassHeal($_character->class);
 
-        $_character->score25n_tank = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_TANK);
-        $_character->score25n_dps = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_DPS);
-        $_character->score25n_healer = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_HEAL);
+        if ( !$canTank && !$canHeal ) {
+            $_character->score10n_dps = $_character->score_10n;
+            $_character->score25n_dps = $_character->score_25n;
+            $_character->score10hc_dps = $_character->score_10hc;
+            $_character->score25hc_dps =  $_character->score_25hc;
+        }
+        else {
+            $_character->score10n_dps = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_DPS);
+            $_character->score25n_dps = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_DPS);
+            $_character->score10hc_dps = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_DPS);
+            $_character->score25hc_dps = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_DPS);
 
-        $_character->score10hc_tank = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_TANK);
-        $_character->score10hc_dps = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_DPS);
-        $_character->score10hc_healer = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_HEAL);
+            if ( $canTank ) {
+                $_character->score10n_tank = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_TANK);
+                $_character->score10hc_tank = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_TANK);
+                $_character->score25n_tank = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_TANK);
+                $_character->score25hc_tank = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_TANK);
+            }
+            if ( $cankHeal ) {
+                $_character->score10n_healer = self::getCharacterLiveScore($_character, [3], EncounterMember::ROLE_HEAL);
+                $_character->score10hc_healer = self::getCharacterLiveScore($_character, [5], EncounterMember::ROLE_HEAL);
+                $_character->score25n_healer = self::getCharacterLiveScore($_character, [4], EncounterMember::ROLE_HEAL);
+                $_character->score25hc_healer = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_HEAL);
+            }
+        }
 
-        $_character->score25hc_tank = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_TANK);
-        $_character->score25hc_dps = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_DPS);
-        $_character->score25hc_healer = self::getCharacterLiveScore($_character, [6], EncounterMember::ROLE_HEAL);
 
 
         if ($_sheet && array_key_exists("response", $_sheet)) {
