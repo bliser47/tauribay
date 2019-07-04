@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use TauriBay\Encounter;
 use TauriBay\Defaults;
 use DB;
+use Auth;
 
 class TopItemLevelsController extends Controller
 {
@@ -57,9 +58,15 @@ class TopItemLevelsController extends Controller
     }
 
 
-    public static function AddCharacter($_api, $_name, $_realmId, $_subMinutes)
+    public static function AddCharacter($_api, $_name, $_realmId, $_subMinutes, $_guid)
     {
-        $character = Characters::where("name",'=',$_name)->where('realm','=',$_realmId)->first();
+        $character = Characters::where("name",'=',$_name)->where('realm','=',$_realmId);
+        if ( $_guid ) {
+            $character = $character->where("guid","=",$_guid);
+        } else {
+            $character = $character->orderBy("guid","desc");
+        }
+        $character = $character->first();
         if ( $character === null || Carbon::parse($character->updated_at) < Carbon::now()->subMinutes($_subMinutes) )
         {
             $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$_realmId], $_name);
@@ -88,29 +95,28 @@ class TopItemLevelsController extends Controller
                     $character->guild_id = $guild->id;
                 }
 
-                $character->score = self::getCharacterLiveScore($character);
-                $character->score_10n = self::getCharacterLiveScore($character, [3]);
-                $character->score_25n = self::getCharacterLiveScore($character, [4]);
-                $character->score_10hc = self::getCharacterLiveScore($character, [5]);
-                $character->score_25hc = self::getCharacterLiveScore($character, [6]);
+                $character->score = self::getCharacterLiveScore($character,[5,6], null, true);
+                $character->score_10n = self::getCharacterLiveScore($character, [3], null, false);
+                $character->score_25n = self::getCharacterLiveScore($character, [4], null, false);
+                $character->score_10hc = self::getCharacterLiveScore($character, [5], null, false);
+                $character->score_25hc = self::getCharacterLiveScore($character, [6], null, false);
 
-                $character->score10n_tank = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_TANK);
-                $character->score10n_dps = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_DPS);
-                $character->score10n_healer = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_HEAL);
+                $character->score10n_tank = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_TANK, false);
+                $character->score10n_dps = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_DPS, false);
+                $character->score10n_healer = self::getCharacterLiveScore($character, [3], EncounterMember::ROLE_HEAL, false);
 
-                $character->score25n_tank = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_TANK);
-                $character->score25n_dps = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_DPS);
-                $character->score25n_healer = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_HEAL);
+                $character->score25n_tank = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_TANK, false);
+                $character->score25n_dps = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_DPS, false);
+                $character->score25n_healer = self::getCharacterLiveScore($character, [4], EncounterMember::ROLE_HEAL, false);
 
-                $character->score10hc_tank = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_TANK);
-                $character->score10hc_dps = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_DPS);
-                $character->score10hc_healer = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_HEAL);
+                $character->score10hc_tank = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_TANK, false);
+                $character->score10hc_dps = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_DPS, false);
+                $character->score10hc_healer = self::getCharacterLiveScore($character, [5], EncounterMember::ROLE_HEAL, false);
 
-                $character->score25hc_tank = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_TANK);
-                $character->score25hc_dps = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_DPS);
-                $character->score25hc_healer = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_HEAL);
+                $character->score25hc_tank = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_TANK, false);
+                $character->score25hc_dps = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_DPS, false);
+                $character->score25hc_healer = self::getCharacterLiveScore($character, [6], EncounterMember::ROLE_HEAL, false);
 
-                $character->updated_at = Carbon::now();
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
                 $character->class = $characterSheetResponse["class"];
                 $character->realm = $_realmId;
@@ -120,7 +126,7 @@ class TopItemLevelsController extends Controller
             }
             else if ( $character )
             {
-                $character->delete();
+                //$character->delete();
             }
         }
     }
@@ -134,6 +140,7 @@ class TopItemLevelsController extends Controller
     public function store(Request $_request)
     {
         $realmId = $_request->get('realm');
+        $guid = $_request->get("guid");
         $characters = array();
         if ( !is_null($realmId) ) {
             $realms = Realm::REALMS;
@@ -142,7 +149,7 @@ class TopItemLevelsController extends Controller
                 $guildName = $_request->get('guildName');
                 $api = new Tauri\ApiClient();
                 if (strlen($characterName)) {
-                    $char = TopItemLevelsController::AddCharacter($api, $characterName,$realmId, 0);
+                    $char = TopItemLevelsController::AddCharacter($api, $characterName,$realmId, 0, $guid);
                     if ( $char )
                     {
                         array_push($characters, $char);
@@ -156,7 +163,7 @@ class TopItemLevelsController extends Controller
                         $api = new Tauri\ApiClient();
                         foreach ( $members as $member )
                         {
-                            $char = TopItemLevelsController::AddCharacter($api,$member["name"],$realmId, 14400);
+                            $char = TopItemLevelsController::AddCharacter($api,$member["name"],$realmId, 14400, $guid);
                             if ( $char )
                             {
                                 array_push($characters, $char);
@@ -222,7 +229,7 @@ class TopItemLevelsController extends Controller
         return view("player/hall_of_fame")->with(compact("characters","characterClasses","characterFactions"));
     }
 
-    public static function getCharacterLiveScore($_character, $difficulties = array(5,6), $role_id = null) {
+    public static function getCharacterLiveScore($_character, $difficulties = array(5,6), $role_id = null, $doRecovery = false) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
 
@@ -234,6 +241,44 @@ class TopItemLevelsController extends Controller
             $bests->whereIn("spec",$specs);
         }
         $bests = $bests->get();
+
+        if ( $doRecovery )
+        {
+            $notFoundIds = array();
+            foreach ( $ids as $id ) {
+                $found = false;
+                foreach ( $bests as $best ) {
+                    if ( $best->encounter_id == $id ) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if ( !$found ) {
+                    $notFoundIds[] = $id;
+                }
+            }
+
+            foreach ( $notFoundIds as $id ) {
+                // If it's not a heroic encounter or there is data about a heroic encounter
+                if ( !Encounter::isHeroicEncounter($id) || !in_array($id, Encounter::getHeroicEncounters()) ) {
+                    $bestDps = EncounterMember::where("guid","=",$_character->guid)
+                        ->where("encounter","=",$id)->whereIn("difficulty_id", $difficulties)
+                        ->selectRaw("dps, hps, encounter as encounter_id, difficulty_id, class, spec")->orderBy("dps","desc")->first();
+                    if ( $bestDps ) {
+                        $bests->push($bestDps);
+                    }
+                    if ( EncounterMember::canClassHeal($_character->class) ) {
+                        $bestHps = EncounterMember::where("guid","=",$_character->guid)
+                            ->where("encounter","=",$id)->whereIn("difficulty_id", $difficulties)
+                            ->selectRaw("dps, hps, encounter as encounter_id, difficulty_id, class, spec")->orderBy("hps","desc")->first();
+                        if ( $bestHps ) {
+                            $bests->push($bestDps);
+                        }
+                    }
+                }
+            }
+        }
+
 
         $scores = array();
         $bestHeroicDps = 0;
@@ -314,12 +359,48 @@ class TopItemLevelsController extends Controller
         return ($total/$maxScore) * 100;
     }
 
-    public static function getCharacterLiveScores($_character, $difficulties = array(5,6)) {
+    public static function getCharacterLiveScores($_character, $difficulties = array(5,6), $doRecovery = false) {
         $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
 
         $bests = MemberTop::where("realm_id","=",$_character->realm)->where("guid","=",$_character->guid)
             ->whereIn("encounter_id",$ids)->whereIn("difficulty_id",$difficulties)
             ->selectRaw("dps, hps, encounter_id, difficulty_id, class, spec, dps_encounter_id, hps_encounter_id")->get();
+
+        if ( $doRecovery ) {
+            $notFoundIds = array();
+            foreach ( $ids as $id ) {
+                $found = false;
+                foreach ( $bests as $best ) {
+                    if ( $best->encounter_id == $id ) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if ( !$found ) {
+                    $notFoundIds[] = $id;
+                }
+            }
+            foreach ( $notFoundIds as $id ) {
+                // If it's not a heroic encounter or there is data about a heroic encounter
+                if ( !Encounter::isHeroicEncounter($id) || !in_array($id, Encounter::getHeroicEncounters()) ) {
+                    $bestDps = EncounterMember::where("guid","=",$_character->guid)
+                        ->where("encounter","=",$id)->whereIn("difficulty_id", $difficulties)
+                        ->selectRaw("dps, hps, encounter as encounter_id, encounter_id as dps_encounter_id, difficulty_id, class, spec")->orderBy("dps","desc")->first();
+                    if ( $bestDps ) {
+                        $bests->push($bestDps);
+                    }
+                    if ( EncounterMember::canClassHeal($_character->class) ) {
+                        $bestHps = EncounterMember::where("guid","=",$_character->guid)
+                            ->where("encounter","=",$id)->whereIn("difficulty_id", $difficulties)
+                            ->selectRaw("dps, hps, encounter as encounter_id, encounter_id as hps_encounter_id, difficulty_id, class, spec")->orderBy("hps","desc")->first();
+                        if ( $bestHps ) {
+                            $bests->push($bestHps);
+                        }
+                    }
+                }
+            }
+        }
+
 
         $scores = array();
         $bestHeroicDpsEncounter = null;
@@ -498,7 +579,7 @@ class TopItemLevelsController extends Controller
         }
         else
         {
-            //$_character->delete();
+            $_character->save();
         }
     }
 

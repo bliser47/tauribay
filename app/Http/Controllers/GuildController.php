@@ -63,7 +63,7 @@ class GuildController extends Controller
         $difficultiesShort[0] = __("Minden");
 
         $guildEncounters = $encounter = Encounter::where("guild_id", "=", $_guild_id)
-            ->whereNotIn("encounters.id", Encounter::INVALID_RAIDS)
+            //->whereNotIn("encounters.id", Encounter::INVALID_RAIDS)
             ->whereIn("encounters.encounter_id", $encounterIds);
 
         if ( $difficultyId > 0 )

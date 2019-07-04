@@ -12,46 +12,6 @@ class Encounter extends Model
     const HPS_INVALID_BEFORE_TIMESTAMP = 1546950226;
     const DURUMU_DMG_INVALID_BEFORE_TIMESTAMP = 1546950226;
     const BALANCE_DRUID_DMG_INVALID_BEFORE_TIMESTAMP = 1548201600;
-    const INVALID_RAIDS = [
-        43718,  // Iron Qon bug
-        141359, // Animus Prot Pala exploit
-        158853, // Animus Prot Pala exploit
-        171431, // Animus Prot Pala exploit
-        240304, // Animus Prot Pala exploit
-        92775,  // Ra-den Prot Pala exploit
-        323063, // Durumu Frenzy exploit
-        320421,  // JinRokh Frenzy exploit
-        333593,  // JinRokh Frenzy exploit
-        323224,  // Primordius Frenzy exploti
-        323068, // Durumu frenzy exploit
-        322976, // JiKun frenzy exploit
-        321218, // Magaera frenzy exploit,
-        321022, // Tortos frenzy exploit,
-        320725, // Council frenzy exploit
-        320534, // Horridon frenzy exploit
-        302630, // Durumu frenzy exploit
-        302513, // Magaera frenzy exploit
-        286882 , // Council frenzy exploit
-        286647, // Horridon frenzy exploit
-        286504, // JinRokh frenzy exploit
-        275689, // Twins frenzy exploit
-        275551, // Iron'Qon frenzy exploit,
-        272079, // Primo frenzy exploit
-        270587, // Durumu frenzy exploit
-        270448, // JiKun frenzy exploit
-        270511, // Primordius frenzy exploit
-        270206 , // Tortos frenzy exploit
-        270071 , // Council frenzy exploit
-        269878, // Horridon frenzy exploit
-        269933, // JinRokh frenzy exploit
-        256490, // Lei Shen frenzy exploit
-        253714, // Twins frenzy exploit
-        253616, // Iron Qon frenzy exploit
-        253017, // Primo frenzy exploit
-        252888, // Durumu frenzy exploit
-        250873, 250683, 250430, 250295, 231189, 231098, 240059, 240603, 352609, 286632, 120008
-    ];
-
 
     const DIFFICULTY_NAME = array(
         0 => "N",
@@ -604,10 +564,14 @@ class Encounter extends Model
         $member->save();
     }
 
+    public static function isInvalid($encounter_id) {
+        $isInvalid = EncountersReported::where("status","=",1)->where("encounter_id","=",$encounter_id)->first();
+        return $isInvalid != null;
+    }
+
     public static function refreshEncounterTop($encounter, $guild)
     {
-
-        if ( !in_array($encounter->id,self::INVALID_RAIDS) ) {
+        if ( !self::isInvalid($encounter->id) ) {
             $guildId = $guild !== null ? $guild->id : 0;
             $top = EncounterTop::where("encounter_id", $encounter->encounter_id)
                 ->where("difficulty_id", $encounter->difficulty_id)->where("guild_id", $guildId)->where("realm_id","=",$encounter->realm_id)->where("faction_id","=",$encounter->faction_id)->first();
@@ -644,7 +608,7 @@ class Encounter extends Model
 
     public static function refreshMemberTop($member, $guild, $character)
     {
-        if ( !in_array($member->encounter_id,self::INVALID_RAIDS) ) {
+        if ( !self::isInvalid($member->encounter_id) ) {
             $top = MemberTop::where("name", $member->name)->where("realm_id", $member->realm_id)->where("encounter_id", $member->encounter)
                 ->where("difficulty_id", $member->difficulty_id)->where("spec", $member->spec)->first();
 
@@ -678,6 +642,10 @@ class Encounter extends Model
                         }
                         $checkHps = true;
                     }
+                }
+                if ( $character && ($checkDps || $checkHps) ) {
+                    $top->character_id = $character->id;
+                    $top->guid = $character->guid;
                 }
                 $top->faction_id = $member->faction_id;
             } else {
@@ -874,6 +842,10 @@ class Encounter extends Model
     public static function isHeroicEncounter($_encounter_id)
     {
         return $_encounter_id == 1580 || $_encounter_id == 1581 || $_encounter_id == 1082 || $_encounter_id == 1083;
+    }
+
+    public static function getHeroicEncounters() {
+        return array(1580,1581,1082,1083);
     }
 
     public static function doubleCheckEncounterExistsOnDifficulty($_encounter_id, $_difficulty_id) {

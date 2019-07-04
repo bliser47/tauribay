@@ -128,7 +128,7 @@ class EncounterController extends Controller
             $shortRealms = Realm::REALMS_SHORT;
             $mapId = $encounterData["map_id"];
             $expansionId = Encounter::getMapExpansion($mapId);
-            $isInvalid = in_array($logid, Encounter::INVALID_RAIDS);
+            $isInvalid = Encounter::isInvalid($logid);
             return view("encounter/encounter", compact("encounter",
                 "isInvalid",
                 "encounterData",

@@ -21,7 +21,7 @@ class InstagramController extends Controller
         if ( $user ) {
             $photosToday = Photo::where("user_id","=",$user->id)->where("created_at",Carbon::today())->count();
         }
-        $photos = Photo::where("created_at",Carbon::today())->get();
+        $photos = Photo::where("photos.created_at",Carbon::today())->leftJoin("users","users.id","=","photos.user_id")->get();
         $_request->merge(array('redirectTo' => "/insta#upload"));
         return view("instagram/index",compact("photosToday","photos"));
     }

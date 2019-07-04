@@ -29,16 +29,31 @@ class PlayerController extends Controller
         return redirect('/player');
     }
 
-    public static function getSpecTop($guid, $encounterId, $difficultyId, $specId, $calculate) {
-
-        $cacheKey = "playerSpecTop4" . http_build_query(array(
-            $guid, $encounterId, $difficultyId, $specId
-        ));
-        $cacheValue = Cache::get($cacheKey);
+    public static function getSpecTop(Request $_request, $guid, $encounterId, $difficultyId, $specId, $calculate) {
+        if (!$_request->has("refresh_cache") )
+        {
+            $cacheKey = "playerSpecTop4" . http_build_query(array(
+                    $guid, $encounterId, $difficultyId, $specId
+                ));
+            $cacheValue = Cache::get($cacheKey);
+        } else {
+            $cacheValue = "";
+            unset($_request['refresh_cache']);
+            $cacheKey = "playerSpecTop4" . http_build_query(array(
+                    $guid, $encounterId, $difficultyId, $specId
+                ));
+        }
         if ( !$cacheValue || $calculate ) {
             $specBest = MemberTop::where("guid", "=", $guid)->where("encounter_id", "=", $encounterId)->where("difficulty_id", $difficultyId)->where("spec", "=", $specId)->first();
+            $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
+            if ( !$specBest && $calculate ) {
+                $specBest = EncounterMember::where("guid", "=", $guid)->where("encounter", "=", $encounterId)->where("difficulty_id", $difficultyId)->where("spec", "=", $specId)->orderBy($topType,"desc")
+                ->selectRaw(
+                    "guid,spec,dps,hps,encounter_id as dps_encounter_id, encounter_id as hps_encounter_id,encounter as encounter_id, difficulty_id"
+                )
+                ->first();
+            }
             if ($specBest && $calculate) {
-                $topType = EncounterMember::isHealer($specId) ? "hps" : "dps";
                 $encounter = $topType . "_encounter_id";
                 if ($specBest->$encounter > 0) {
                     $best = $topType == "dps" ? Encounter::getSpecTopDps($encounterId, $difficultyId, $specId) : Encounter::getSpecTopHps($encounterId, $difficultyId, $specId);
@@ -61,7 +76,7 @@ class PlayerController extends Controller
     }
 
     public function spec(Request $_request, $_realm_short, $_player_name, $_character_guid, $_mode_id, $_expansion_id, $_map_id, $_difficulty_id, $_encounter_id, $_spec_id) {
-        $spec = self::getSpecTop($_character_guid, $_encounter_id, $_difficulty_id, $_spec_id, true);
+        $spec = self::getSpecTop($_request, $_character_guid, $_encounter_id, $_difficulty_id, $_spec_id, true);
         if ( is_array($spec) && array_key_exists("score",$spec)) {
             $classId = EncounterMember::getSpecClass($_spec_id);
             return view("player/ajax/top/difficulty_spec",compact("spec","classId"));
@@ -98,7 +113,7 @@ class PlayerController extends Controller
                             foreach ( $specs as $specId => $specName ) {
                                 $scores[$encounterId][$specId] = array(
                                     "load" => URL::to("/player/". $_realm_short . "/" . $_player_name . "/" . $_character_guid . "/top/" . $expansionId . "/" . $mapId . "/" . $difficultyId . "/" . $encounterId . "/" . $specId),
-                                    "cache" => self::getSpecTop($_character_guid, $encounterId, $difficultyId, $specId, false)
+                                    "cache" => self::getSpecTop($_request, $_character_guid, $encounterId, $difficultyId, $specId, false)
                                 );
                             }
                         }
@@ -181,7 +196,7 @@ class PlayerController extends Controller
                     $encounters = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
                     $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
 
-                    $scores = TopItemLevelsController::getCharacterLiveScores($character);
+                    $scores = TopItemLevelsController::getCharacterLiveScores($character, [5,6], true);
 
 
                     return view("player/ajax/top/score", compact(

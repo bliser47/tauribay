@@ -42,35 +42,11 @@ class BliserGdkpController extends Controller
             if ( $userHasChar ) {
                 $applied = Gdkp::where("gdkp_id","=",$_raid_id)->where("character_id","=",$_request->get("character_id"))->first();
                 if ( !$applied ) {
-                    $character = Characters::where("id",$_request->get("character_id"))->first();
                     $apply = new Gdkp;
                     $apply->gdkp_id = $_raid_id;
                     $apply->account_id = $user->id;
                     $apply->character_id = $_request->get("character_id");
-                    $totalScore = 0;
-                    $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
-                    $highestSpec = null;
-                    $roleSpecs = array_keys(EncounterMember::getRoleClassSpecs($_request->get("role_id"), $character->class));
-                    $highestSpecId = $roleSpecs[0];
-                    foreach ( $ids as $id ) {
-                        $specBest = 0;
-                        foreach ( $roleSpecs as $specId ) {
-                            $bestSpec10Hc = PlayerController::getSpecTop($character->guid, $id, 5, $specId, true);
-                            $bestSpec25Hc = PlayerController::getSpecTop($character->guid, $id, 6, $specId, true);
-                            $best = max($bestSpec10Hc["score"],$bestSpec25Hc["score"]);
-                            if ( $best > $specBest ) {
-                                $specBest = $best;
-                                if ( $highestSpec > $specBest ) {
-                                    $highestSpec = $specBest;
-                                    $highestSpecId = $specId;
-                                }
-                            }
-                        }
-                        $totalScore += $specBest;
-
-                    }
-                    $apply->score = $totalScore;
-                    $apply->spec = $highestSpecId;
+                    $apply->role_id = $_request->get("role_id");
                     $apply->save();
                 }
             }
@@ -83,7 +59,7 @@ class BliserGdkpController extends Controller
         $user = Auth::user();
         if ($user) {
             $applied = Gdkp::where("gdkp_id","=",$_raid_id)->
-            leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("gdkps.score", "desc")->get();
+            leftJoin("characters", "characters.id", "=", "gdkps.character_id")->orderBy("characters.score", "desc")->get();
             $appliedIds = array();
             $appliedRoles = array(
                 EncounterMember::ROLE_TANK => array(),
@@ -92,16 +68,32 @@ class BliserGdkpController extends Controller
             );
             foreach ( $applied as $char ) {
                 $appliedIds[] = $char->character_id;
-                $char->percentageScore = Skada::calculatePercentage($char, $applied->first(), "gdkps.score");
-                $char->role = EncounterMember::getSpecRole($char->spec);
-                $appliedRoles[$char->role][] = $char;
+                $char->percentageScore = Skada::calculatePercentage($char, $applied->where("role_id","=",$char->role_id)->first(), "score");
+                $setSpec = array_keys(EncounterMember::getRoleClassSpecs($char->role_id, $char->class))[0];
+                switch($setSpec) {
+                    case 251:
+                        $char->spec = 252;
+                        break;
+                    case 253:
+                        $char->spec = 255;
+                        break;
+                    default:
+                        $char->spec = $setSpec;
+                        break;
+                }
+                $appliedRoles[$char->role_id][] = $char;
             }
             $charactersResult = AuthorizedCharacter::where("user_id", "=", $user->id)->whereNotIn("character_id",$appliedIds)
-                ->leftJoin("characters", "characters.id", "=", "authorized_characters.character_id")->get();
+                ->leftJoin("characters", "characters.id", "=", "authorized_characters.character_id")
+                ->orderBy("guid","desc")->get();
             $characterAppliedResults =  AuthorizedCharacter::where("user_id", "=", $user->id)->whereIn("character_id",$appliedIds)->get();
             $characters = array();
+            $characterGuids = array();
             foreach ($charactersResult as $char) {
-                $characters[$char->id] = "[" . Realm::REALMS_SHORT[$char->realm] . "] " . $char->name;
+                if ( !in_array($char->guid, $characterGuids) ) {
+                    $characters[$char->id] = "[" . Realm::REALMS_SHORT[0] . "] " . $char->name;
+                    $characterGuids[] = $char->guid;
+                }
             }
             $classSpecs = CharacterClasses::CLASS_SPEC_NAMES;
             $characterClasses = Tauri\CharacterClasses::CHARACTER_CLASS_NAMES;

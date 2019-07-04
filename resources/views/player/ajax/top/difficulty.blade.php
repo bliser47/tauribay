@@ -1,6 +1,6 @@
 <table class="table table-bordered table-classes">
     <tr class="tHead">
-        <th>Boss</th>
+        <th><button style="margin:3px auto" class="refreshHeader" type="submit"></button></th>
         @foreach( $specs as $specId => $specName )
             <td class="cellDesktop topDpsSpecContainer">
                 <img class="topDpsSpec mobile" src="{{ URL::asset("img/classes/specs/" . $specId . ".png") }}" alt="{{ \TauriBay\Tauri\CharacterClasses::CLASS_SPEC_NAMES[$specId] }}"/>

@@ -36,6 +36,7 @@
                                 <div class="update-loader" id="updated-loader{{$character->id}}"></div>
                                 {!! Form::open(array("method" => "post","class"=>"ilvlupdate-form")) !!}
                                 <input type="hidden" name="name" value="{{$character->name}}">
+                                <input type="hidden" name="guid" value="{{$character->guid}}">
                                 <input type="hidden" name="realm" value="{{$character->realm}}">
                                 <input type="hidden" name="refreshTop" value="1">
                                 <button class="refreshIlvl" name="updateCharacter" value="1" type="submit"></button>

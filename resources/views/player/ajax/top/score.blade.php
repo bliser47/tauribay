@@ -3,7 +3,7 @@
 </div>
 <table class="table table-bordered table-classes">
     <tr class="tHead">
-        <th>Boss</th>
+        <th><button style="margin:3px auto" class="refreshHeader" type="submit"></button></th>
         <th colspan="2">Personal</th>
         <th colspan="3">Best</th>
     </tr>

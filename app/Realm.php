@@ -55,6 +55,10 @@ class Realm extends Model
         }
     }
 
+    public static function getIdFromShort($_short_name) {
+        return array_search($_short_name, self::REALMS_URL);
+    }
+
     public static function getShortestNameFromID($id) {
         return self::REALMS_SHORTEST[$id];
     }

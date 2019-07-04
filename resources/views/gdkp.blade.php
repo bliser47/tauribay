@@ -56,7 +56,8 @@
                                     <span class="memberName">
                                 <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
                             </span>
-                                    <span class="memberData memberData2">{{ $character->score }}</span>
+                                    <span class="memberData memberData1">{{ $character->ilvl }} iLvL</span>
+                                    <span class="memberData memberData2">{{ number_format($character->score,2) }}%</span>
                                 </div>
                             </div>
                         @endforeach
@@ -73,7 +74,8 @@
                                     <span class="memberName">
                                 <a target="_blank" href="{{ URL::to("/player/") . "/" . \TauriBay\Realm::REALMS_URL[$character->realm] . "/" . $character->name . "/" . $character->guid }}">{{ $character->name }}</a>
                             </span>
-                                    <span class="memberData memberData2">{{ $character->score }}</span>
+                                    <span class="memberData memberData1">{{ $character->ilvl }} iLvL</span>
+                                    <span class="memberData memberData2">{{ number_format($character->score,2) }}%</span>
                                 </div>
                             </div>
                         @endforeach
@@ -94,7 +96,8 @@
                                          {{ $character->name  }}
                                      @endif
                                     </span>
-                                    <span class="memberData memberData2">{{ $character->score }}</span>
+                                    <span class="memberData memberData1">{{ $character->ilvl }} iLvL</span>
+                                    <span class="memberData memberData2">{{ number_format($character->score,2) }}%</span>
                                 </div>
                             </div>
                         @endforeach

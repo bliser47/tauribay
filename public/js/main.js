@@ -445,7 +445,10 @@ $(function()
                 $(this).html((parseInt(time)).toString().toMMSS());
             }
         });
-
+        $(".memberDataWidth").each(function(){
+            var set = $(this)[0].style.width;
+            $(this).css("width",set);
+        });
     }
 
     UpdateTimes();
@@ -973,12 +976,16 @@ $(function()
         }
     };
 
-    var loadPlayerMapDifficulty = function(container, realm, name, guid, mode, expansion, map)
+    var loadPlayerMapDifficulty = function(container, realm, name, guid, mode, expansion, map, refreshCache)
     {
         var difficulty = $(container).data("difficulty");
+        var getUrl = URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + expansion + "/" + map + "/" + difficulty;
+        if ( refreshCache && getUrl.indexOf("&refresh_cache=1") < 0 ) {
+            getUrl += "&refresh_cache=1";
+        }
         $.ajax({
             type: "GET",
-            url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + expansion + "/" + map + "/" + difficulty,
+            url: getUrl,
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
@@ -992,12 +999,17 @@ $(function()
                     $(load).submit(function(e){
                         e.preventDefault();
                         refreshMapDifficultySpec(load);
-                    })
+                    });
                     loaders.push(load);
+                });
+                $(container).find(".refreshHeader").unbind().click(function(e){
+                    loadPlayerMapDifficulty(container, realm, name, guid, mode, expansion, map, true);
+                    e.preventDefault();
                 });
                 if ( loaders.length > 0 ) {
                     startLoad(loaders, 0);
                 }
+                UpdateTimes();
             }
         });
     };
@@ -1068,11 +1080,10 @@ $(function()
         });
     };
 
-    var loadPlayerMode = function(tab, mode, page)
+    var loadPlayerMode = function(tab, mode, page, refreshCache)
     {
         if ( !$(tab).hasClass("loadingMode") )
         {
-
             $(tab).addClass("loadingMode");
 
             var realm = $("#realm_url").val();
@@ -1083,10 +1094,13 @@ $(function()
 
             var container = $("#"+mode);
             $(container).html("<div class=\"encounters_loading\"><div class=\"loader\" style=\"display:block\"></div></div>");
-
+            var getUrl = URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + expansion + "/" + map + "?page=" + page;
+            if ( refreshCache && getUrl.indexOf("&refresh_cache=1") < 0 ) {
+                getUrl += "&refresh_cache=1";
+            }
             $.ajax({
                 type: "GET",
-                url: URL_WEBSITE + "/player/" + realm +  "/" + name + "/" + guid + "/" + mode + "/" + expansion + "/" + map + "?page=" + page,
+                url: getUrl,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
@@ -1112,6 +1126,12 @@ $(function()
                                 var id = $(this).find("a").attr("href");
                                 loadPlayerMapDifficulty($(id).find(".ajax-map-difficulty"), realm, name, guid, mode, expansion, map)
                             }
+                        });
+                    } else {
+                        $(container).find(".refreshHeader").unbind().click(function(e){
+                            $(tab).removeClass("loadingMode");
+                            loadPlayerMode(tab, mode, page, true)
+                            e.preventDefault();
                         });
                     }
                 }
@@ -1343,6 +1363,7 @@ $(function()
                 },
                 success: function (response) {
                     $(container).html(replaceTranslations(response));
+                    UpdateTimes();
                 }
             });
         }
