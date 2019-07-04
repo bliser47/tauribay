@@ -239,46 +239,31 @@ class EncounterController extends Controller
 
     public function fixCharacters() {
         $api = new Tauri\ApiClient();
-        ini_set('max_execution_time', 0);
-        do {
-            $found = false;
-            $memberTops = MemberTop::where("guid","=",0)->take(5000)->get();
-            foreach ($memberTops as $top) {
-                $character = Characters::where("realm","=",$top->realm_id)->where("name","=",$top->name)->where("class","=",$top->class)->
-                orderBy("guid","desc")->first();
-                if ( $character) {
-                    $top->character_id = $character->id;
-                    $top->guid = $character->guid;
-                    $top->top_processed = 1;
-                    $top->save();
-                } else {
-                    $top->delete();
-                }
-                $found = true;
-            }
-        } while ( $found );
-        /*
-        $ids = Encounter::getMapEncountersIds(Defaults::EXPANSION_ID, Defaults::MAP_ID);
-        $ret = array();
-        foreach ( $ids as $id ) {
-            $name = Encounter::getName($id);
-            $ret[$name] = array();
-            foreach ( array(3,4,5,6) as $diff)  {
-                $diffName = Encounter::SIZE_AND_DIFFICULTY_SHORT[$diff];
-                $ret[$name][$diffName] = array();
-                foreach ( EncounterMember::CLASSES as $class ) {
-                    $ret[$name][$diffName][$class["name"]] = array();
-                    foreach ( $class["specs"] as $specId => $spec ) {
-                        $dps = Encounter::getSpecTopDps($id,$diff,$specId);
-                        $hps = Encounter::getSpecTopHps($id,$diff,$specId);
-                        $ret[$name][$diffName][$class["name"]]["dps"] = $dps;
-                        $ret[$name][$diffName][$class["name"]]["hps"] = $hps;
-                    }
-                }
-            }
+        //ini_set('max_execution_time', 0);
+        $dps = MemberTop::join('encounter_members', function($join)
+            {
+                $join->on('member_tops.dps_encounter_id', '=', 'encounter_members.encounter_id');
+                $join->on('member_tops.faction_id', '=', 'encounter_members.faction_id');
+                $join->on('member_tops.realm_id', '=', 'encounter_members.realm_id');
+                $join->on('member_tops.class', '=', 'encounter_members.class');
+                $join->on('member_tops.spec', '=', 'encounter_members.spec');
+                $join->on('member_tops.dps', '=', 'encounter_members.dps');
+                $join->on('member_tops.hps', '=', 'encounter_members.hps');
+                $join->on('member_tops.name', '=', 'encounter_members.name');
+                $join->on('member_tops.guid', '<>', 'encounter_members.guid');
+            })->where("member_tops.dps",">",0)->where("member_tops.encounter_id",">",1500)->select(array(
+                "member_tops.guid as guid",
+                "member_tops.id as oldId",
+                "encounter_members.guid as newGuid"
+        ))->get();
+
+        return $dps;
+
+        foreach ( $dps as $d ) {
+            $memberTop = MemberTop::where("id","=",$d->oldId)->first();
+            $memberTop->guid = $d->newGuid;
+            $memberTop->save();
         }
-        return $ret;
-        */
     }
 
     public function fixEncounterTop(Request $_request) {
