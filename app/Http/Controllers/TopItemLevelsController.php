@@ -72,10 +72,15 @@ class TopItemLevelsController extends Controller
             $characterSheet = $_api->getCharacterSheet(Realm::REALMS[$_realmId], $_name);
             if ($characterSheet && array_key_exists("response", $characterSheet)) {
                 $characterSheetResponse = $characterSheet["response"];
+                $characterGuid = $characterSheetResponse["guid"];
+                if ( $characterGuid != $character->guid ) {
+                    $character = null;
+                }
                 $characterItemLevel = $characterSheetResponse["avgitemlevel"];
                 if ($character === null) {
                     $character = new Characters;
                     $character->name = ucfirst(strtolower($_name));
+                    $character->guid = $characterGuid;
                     $character->ilvl = $characterItemLevel;
                     $character->created_at = Carbon::now();
                 }
@@ -131,7 +136,7 @@ class TopItemLevelsController extends Controller
                 }
 
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-                //$character->class = $characterSheetResponse["class"];
+                $character->class = $characterSheetResponse["class"];
                 $character->realm = $_realmId;
                 $character->achievement_points = $characterSheetResponse["pts"];
                 $character->save();
