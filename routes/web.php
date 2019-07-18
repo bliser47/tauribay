@@ -57,9 +57,7 @@ Route::group(['middleware' => 'language'], function () {
         return view("interview");
     });
 
-    Route::get('/guide', function(){
-        return view("guides/class/1");
-    });
+    Route::get('/guide', 'GuidesController@index');
 
     Route::get('/insta', 'InstagramController@index');
     Route::get('/insta/photo/{id}', 'InstagramController@photo');

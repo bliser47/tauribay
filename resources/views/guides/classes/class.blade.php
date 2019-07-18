@@ -1,4 +1,4 @@
-@extends('guides.guide')
+@extends('guides.classes.guide')
 @section('guide_content')
     <div class="panel panel-default nomargin">
         <ul class="nav nav-tabs" role="tablist">
@@ -13,10 +13,10 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="talents">
-                @include('guides.class.talents')
+                @include('guides.classes.class.talents')
             </div>
             <div role="tabpanel" class="tab-pane" id="glyphs">
-                @include('guides.class.glyphs')
+                @include('guides.classes.class.glyphs')
             </div>
         </div>
     </div>

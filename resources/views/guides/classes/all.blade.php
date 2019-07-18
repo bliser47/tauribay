@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-md-12 col-sm-nopadding">
             <div class="panel panel-default nomargin">
-                @yield('guide_content')
+                @yield('all_gudes')
             </div>
         </div>
     </div>

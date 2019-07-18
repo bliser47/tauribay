@@ -131,7 +131,7 @@ class TopItemLevelsController extends Controller
                 }
 
                 $character->faction = CharacterClasses::ConvertRaceToFaction($characterSheetResponse["race"]);
-                $character->class = $characterSheetResponse["class"];
+                //$character->class = $characterSheetResponse["class"];
                 $character->realm = $_realmId;
                 $character->achievement_points = $characterSheetResponse["pts"];
                 $character->save();
